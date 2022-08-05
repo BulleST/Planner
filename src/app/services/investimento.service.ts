@@ -73,7 +73,7 @@ export class InvestimentoService {
             this.list_Investimento.value.splice(index, 1);
             this.list_Investimento.next(this.list_Investimento.value);
         }
-        return;
+        return this.list_Investimento;
     }
 
     deleteInvestimento(model: PlanejamentoInvestimento) {

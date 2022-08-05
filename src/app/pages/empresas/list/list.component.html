@@ -1,0 +1,104 @@
+<section class="page">
+    <div class="page__header">
+        <h3 class="page__header-title">Empresas</h3>
+    </div>
+    <div class="page__body">
+        <div class="d-flex justify-content-between align-items-center">
+            <a class="btn btn-filter ml-auto" [routerLink]="['filtrar']">
+                <fa-icon [icon]="faFilter"></fa-icon>
+            </a>
+        </div>
+        <div class="content">
+            <p-table 
+                class="table" 
+                #dt 
+                [columns]="columns" 
+                [value]="list" 
+                [paginator]="list.length > 0" 
+                [rows]="10"
+                [rowHover]="true" 
+                [rowsPerPageOptions]="[10, 25, 50]" 
+                responsiveLayout="scroll"
+                [showCurrentPageReport]="true" 
+                [globalFilterFields]="filters" 
+                [(selection)]="selectedItems"
+                selectionMode="multiple" 
+                (onRowSelect)="onRowSelect($event)"
+                (onRowUnselect)="onRowUnselect($event)" 
+                [filterDelay]="100"
+                (onHeaderCheckboxToggle)="teste($event)"
+                currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)">
+                <ng-template pTemplate="caption">
+                    <div class="header-box d-flex justify-content-between align-items-end flex-wrap w-100 px-0">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 p-0">
+                            <p *ngIf="!loading">
+                                <small> {{ list.length }} resultado(s) </small>
+                            </p>
+                            <p *ngIf="selectedItems.length > 0">
+                                <small> ({{selectedItems.length}}) linhas selecionadas </small>
+                            </p>
+                        </div>
+                        <div
+                            class="p-input-icon-left col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 p-0 mb-0 pt-md-0 pt-sm-2 ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" class="form-control "
+                                (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr class="grey">
+                        <th>
+                            <p-tableHeaderCheckbox *ngIf="list.length > 0"></p-tableHeaderCheckbox>
+                        </th>
+                        <th [pSortableColumn]="item.field" *ngFor="let item of columns">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="mr-auto" [innerHTML]="item.header"></span>
+                                <p-sortIcon [field]="'item.field'"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
+                    <tr [class.selected]="item == selected" [class.selected-many]="selectedItems.includes(item)">
+                        <td [attr.data-id]="item.id">
+                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
+                        </td>
+                        <td [pSelectableRow]="item" [pSelectableRowIndex]="rowIndex" *ngFor="let col of columns">
+                            {{item[col.field]}}
+                         </td>
+                        <td class="td-actions">
+                            <div class="actions">
+                                <button class="actions__toggle" [class.active]="item == selected">
+                                    <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
+                                        <fa-icon [icon]="faEllipsisV"></fa-icon>
+                                    </span>
+                                    <span class="icon icon-times" (click)="onRowUnselect(item)">
+                                        <fa-icon [icon]="faTimes"></fa-icon>
+                                    </span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td></td>
+                        <td [attr.colspan]="columns.length" *ngIf="list.length == 0 && !loading"> Nenhum registro
+                            encontrado </td>
+                        <td [attr.colspan]="columns.length" *ngIf="loading"> Carregando.. </td>
+                        <td></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</section>
+<router-outlet></router-outlet>
+<div class="actions__nav">
+	<div class="actions__nav-inner" *ngIf="selected">
+		<a class="actions__nav-link" [routerLink]="['editar']" [queryParams]="{ id: crypto.encrypt(selected.id) }">Editar</a>
+		<a class="actions__nav-link" [routerLink]="['excluir']" [queryParams]="{ id: crypto.encrypt(selected.id) }">Excluir</a>
+	</div>
+</div>

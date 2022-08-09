@@ -206,6 +206,7 @@ a.btn-primary:not([href]):hover,
 	color: #fff;
 	background-color: var(--primary-light);
 	border-color: var(--primary-light);
+    box-shadow: 0 0px 0 3px rgb(60 134 160 / 29%);
 }
 
 .btn-primary:not(:disabled):not(.disabled):not(.btn[disabled]).active,

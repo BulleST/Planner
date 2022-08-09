@@ -1,4 +1,6 @@
-import { NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
+import { CurrencyPipe, DatePipe, registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -22,7 +24,9 @@ import { LoadingComponent } from './parts/loading/loading.component';
 import { AlertComponent } from './parts/alert/alert.component';
 import { ForgotPasswordComponent } from './pages/account/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
+import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 
+registerLocaleData(localePt);
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,9 +55,95 @@ import { ResetPasswordComponent } from './parts/reset-password/reset-password.co
       }),
     TableModule,
     ChartModule,
-    NgxMaskModule.forRoot({validation: true})
+    NgxMaskModule.forRoot({validation: true}),
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(
+    private config: PrimeNGConfig
+
+  ){
+    this.config.setTranslation({
+      startsWith: 'Começa com',
+      contains: 'Contem',
+      notContains: 'Não contem',
+      endsWith: 'Termina com',
+      equals: 'Igual a',
+      notEquals: 'Diferente de',
+      noFilter: 'Sem filtro',
+      // lt: '',
+      // lte: '',
+      // gt: '',
+      // gte: '',
+      is: 'Igual',
+      isNot: 'Diferente',
+      before: 'Anterior a',
+      after: 'Posterior a',
+      dateIs: 'Data igual a',
+      dateIsNot: 'Data diferente de',
+      dateBefore: 'Data anterior a',
+      dateAfter: 'Data posterior a',
+      clear: 'Limpar filtro',
+      apply: 'Filtrar',
+      matchAll: 'Filtrar todos',
+      matchAny: 'Filtrar qualquer um',
+      addRule: 'Adicionar filtro',
+      removeRule: 'Remover filtro',
+      // accept: '',
+      // reject: '',
+      // choose: '',
+      // upload: '',
+      // cancel: '',
+      // dayNames: [],
+      // dayNamesShort: [],
+      // dayNamesMin: [],
+      // monthNames: [],
+      // monthNamesShort: [],
+      // dateFormat: '',
+      // today: '',
+      // weekHeader: '',
+      weak: 'Fraca',
+      medium: 'Média',
+      strong: 'Forte',
+      // passwordPrompt: '',
+      emptyMessage: 'Nenhum resultado encontrado',
+      emptyFilterMessage: 'Nenhum resultado encontrado',
+    })
+    this.config.filterMatchModeOptions = {
+      text: [
+          FilterMatchMode.STARTS_WITH,
+          FilterMatchMode.CONTAINS,
+          FilterMatchMode.NOT_CONTAINS,
+          FilterMatchMode.ENDS_WITH,
+          FilterMatchMode.EQUALS,
+          FilterMatchMode.NOT_EQUALS
+      ],
+      numeric: [
+          FilterMatchMode.EQUALS,
+          FilterMatchMode.NOT_EQUALS,
+          FilterMatchMode.LESS_THAN,
+          FilterMatchMode.LESS_THAN_OR_EQUAL_TO,
+          FilterMatchMode.GREATER_THAN,
+          FilterMatchMode.GREATER_THAN_OR_EQUAL_TO,
+      ],
+      date: [
+          FilterMatchMode.DATE_IS,
+          FilterMatchMode.DATE_IS_NOT,
+          FilterMatchMode.DATE_BEFORE,
+          FilterMatchMode.DATE_AFTER,
+          FilterMatchMode.STARTS_WITH,
+          FilterMatchMode.CONTAINS,
+          FilterMatchMode.NOT_CONTAINS,
+          FilterMatchMode.ENDS_WITH,
+          FilterMatchMode.EQUALS,
+          FilterMatchMode.NOT_EQUALS
+      ]
+  }
+
+  }
+ }

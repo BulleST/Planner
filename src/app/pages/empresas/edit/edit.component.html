@@ -3,7 +3,7 @@
     <div class="modal__inner" style="max-width: 600px;">
         <div class="modal__content">
             <div class="modal__header">
-                <h3 class="text-orange">Adicionar fluxo pontual</h3>
+                <h3 class="text-orange">Editar registro</h3>
                 <a (click)="voltar()" class="modal__header-close btn-close">
                     <span></span>
                     <span></span>
@@ -12,16 +12,16 @@
             <div class="modal__body">
                 <form #form="ngForm" (ngSubmit)="send(form)">
                     <div class="form-row">
-                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group col-lg-7 col-md-7 col-sm-12 col-12">
                             <label for="nome">Razão Social: </label>
                             <input class="form-control" name="nome" id="nome" #nome="ngModel" [(ngModel)]="objeto.nome"
-                                placeholder="0" mask="0*" required popoverClass="popover-danger"
+                               required popoverClass="popover-danger"
                                 [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
                             <div *ngIf="nome.touched && nome.errors">
                                 <p *ngIf="nome.errors['required']" class="text-danger">Esse campo é obrigatório</p>
                             </div>
                         </div>
-                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group col-lg-5 col-md-5 col-sm-12 col-12">
                             <label for="cnpj">CNPJ: </label>
                             <input class="form-control" name="cnpj" id="cnpj" #cnpj="ngModel" [(ngModel)]="objeto.cnpj"
                                 placeholder="00.000.000/0000-00" mask="00.000.000/0000-00"
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                             <label for="email">E-mail: </label>
                             <input type="email" [email]="true" class="form-control" name="email" id="email" #email="ngModel" [(ngModel)]="objeto.email"
                                 placeholder="example@hotmail.com"  required popoverClass="popover-danger"

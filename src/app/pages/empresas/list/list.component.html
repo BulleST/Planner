@@ -38,8 +38,11 @@
                                 <small> ({{selectedItems.length}}) linhas selecionadas </small>
                             </p>
                         </div>
+                        <div class=" ml-auto mr-2">
+                            <a class="btn btn-primary" [routerLink]="['cadastrar']">Adicionar</a>
+                        </div>
                         <div
-                            class="p-input-icon-left col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 p-0 mb-0 pt-md-0 pt-sm-2 ml-auto">
+                            class="p-input-icon-left col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 p-0 mb-0 pt-md-0 pt-sm-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" class="form-control "
                                 (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
@@ -54,7 +57,8 @@
                         <th [pSortableColumn]="item.field" *ngFor="let item of columns">
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="mr-auto" [innerHTML]="item.header"></span>
-                                <p-sortIcon [field]="'item.field'"></p-sortIcon>
+                                <p-sortIcon [field]="item.field"></p-sortIcon>
+                                <p-columnFilter [type]="item.filterType" [field]="item.field" [display]="item.filterDisplay"></p-columnFilter>
                             </div>
                         </th>
                         <th></th>
@@ -98,7 +102,7 @@
 <router-outlet></router-outlet>
 <div class="actions__nav">
 	<div class="actions__nav-inner" *ngIf="selected">
-		<a class="actions__nav-link" [routerLink]="['editar']" [queryParams]="{ id: crypto.encrypt(selected.id) }">Editar</a>
-		<a class="actions__nav-link" [routerLink]="['excluir']" [queryParams]="{ id: crypto.encrypt(selected.id) }">Excluir</a>
+		<a class="actions__nav-link" [routerLink]="['editar', crypto.encrypt(selected.id)]">Editar</a>
+		<a class="actions__nav-link" [routerLink]="['excluir', crypto.encrypt(selected.id)]">Excluir</a>
 	</div>
 </div>

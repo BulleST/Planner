@@ -14,7 +14,7 @@ export class EmpresaService {
 
     constructor(
         private router: Router,
-        private htto: HttpClient,
+        private http: HttpClient,
         private toastr: ToastrService,
     ) { 
         this.list.next(empresas);
@@ -24,18 +24,18 @@ export class EmpresaService {
         return this.list;
     } 
 
-    get(id: number) {
+    get(id: number): BehaviorSubject<undefined | Empresa> {
         if (this.list.value.length == 0) {
-            return new BehaviorSubject('Não encontrado');
+            return new BehaviorSubject<undefined | Empresa>(undefined);
         }
 
         var index = this.list.value.findIndex(x => x.id == id);
         if (index == -1) {
-            return new BehaviorSubject('Não encontrado');
+            return new BehaviorSubject<undefined | Empresa>(undefined);
         }
 
         var item = this.list.value[index];
-        return new BehaviorSubject(item);
+        return new BehaviorSubject<undefined | Empresa>(item);
     }
 
     create(request: Empresa) {

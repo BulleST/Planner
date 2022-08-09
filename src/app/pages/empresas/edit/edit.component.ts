@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -21,13 +22,26 @@ export class EditComponent implements OnInit {
 
 	constructor(
 		private router: Router,
+		private activatedRoute: ActivatedRoute,
 		private toastr: ToastrService,
 		private modal: ModalOpen,
 		private empresaService: EmpresaService,
+		private crypto: Crypto
 	) {
 		this.modal.getOpen().subscribe(res => {
 			this.modalOpen = res;
 		});
+
+		this.activatedRoute.params.subscribe(res => {
+			if (res['id']) {
+				this.objeto.id = this.crypto.decrypt(res['id']);
+				// this.empresaService.get(this.objeto.id).subscribe({
+				// 	next: (res:string|Empresa) => {
+
+				// 	}
+				// })
+			}
+		})
 	}
 
 	ngOnInit(): void {
@@ -39,7 +53,7 @@ export class EditComponent implements OnInit {
 	voltar() {
 		this.modal.setOpen(false);
 		setTimeout(() => {
-			this.router.navigate(['..']);
+			this.router.navigate(['empresas']);
 		}, 200);
 	}
 
@@ -48,7 +62,7 @@ export class EditComponent implements OnInit {
 		this.erro = [];
 		this.empresaService.edit(this.objeto);
 		this.voltar();
-		this.toastr.success('Linha adicionada');
+		this.toastr.success('Operação concluída');
 		this.loading = false;
 	}
 }

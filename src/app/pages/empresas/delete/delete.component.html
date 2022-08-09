@@ -1,1 +1,33 @@
-<p>delete works!</p>
+<div class="modal" [class.active]="modalOpen">
+    <div class="modal__bg" (click)="voltar()"></div>
+    <div class="modal__inner" style="max-width: 600px;">
+        <div class="modal__content">
+            <div class="modal__header pb-2">
+                <h3 class="text-orange">Excluir registro</h3>
+                <p class="mt-2">Tem certeza que deseja excluir esse registro? Ele não poderá ser recuperado.</p>
+                <a (click)="voltar()" class="modal__header-close btn-close">
+                    <span></span>
+                    <span></span>
+                </a>
+            </div>
+            <div class="modal__body mt-0">
+                <ul *ngIf="erro" class="m-0 col-lg-12 mt-1">
+                    <li class="text-red" *ngFor="let err of erro">{{err}}</li>
+                </ul>
+                <div class="d-flex justify-content-center flex-wrap p-0 mt-1">
+                    <button class="btn btn-grey  mr-1" (click)="voltar()"> Voltar</button>
+                    <button class="btn btn-primary mr-0"
+                        [disabled]="loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Excluir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #setaUpDown>
+    <div class="py-3 px-4"> Acione a seta para cima ou para baixo no teclado para mudar o valor </div>
+</ng-template>
+<ng-template #campoObrigatorio>
+    <div class="py-3 px-4"> Esse campo é obrigatório </div>
+</ng-template>

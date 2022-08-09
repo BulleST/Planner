@@ -39,7 +39,7 @@ export class CreateComponent implements OnInit {
 	voltar() {
 		this.modal.setOpen(false);
 		setTimeout(() => {
-			this.router.navigate(['..']);
+			this.router.navigate(['empresas']);
 		}, 200);
 	}
 
@@ -48,7 +48,7 @@ export class CreateComponent implements OnInit {
 		this.erro = [];
 		this.empresaService.create(this.objeto);
 		this.voltar();
-		this.toastr.success('Linha adicionada');
+		this.toastr.success('Operação concluída');
 		this.loading = false;
 	}
 }

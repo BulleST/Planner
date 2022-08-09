@@ -22,10 +22,10 @@ export class ListComponent implements OnInit {
   selectedItems: Empresa[] = [];
   loading = false;
   columns = [
-    { field: 'id', header: 'Id' },
-    { field: 'nome', header: 'Razão Social' },
-    { field: 'cnpj', header: 'CNPJ' },
-    { field: 'email', header: 'E-mail' },
+    { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'nome', header: 'Razão Social', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'cnpj', header: 'CNPJ', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'email', header: 'E-mail', filterType: 'text', filterDisplay: 'menu' },
   ]
   filters: string[] = [];
 
@@ -47,6 +47,7 @@ export class ListComponent implements OnInit {
         return item;
       });
     });
+    // this.empresaService.teste();
   }
 
   ngOnInit(): void {

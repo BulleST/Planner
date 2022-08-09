@@ -57,7 +57,7 @@ export class DeleteComponent implements OnInit {
 		}, 200);
 	}
 
-	send(form: NgForm) {
+	send() {
 		this.loading = true;
 		this.erro = [];
 		this.empresaService.delete(this.objeto);

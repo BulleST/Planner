@@ -15,3 +15,11 @@ export class Usuario {
     email: string = '';
     senha: string = '';
 }
+
+
+export var userColumns = [
+    { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'nome', header: 'Nome', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'email', header: 'E-mail', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'perfil', header: 'Tipo de Acesso', filterType: 'text', filterDisplay: 'menu' },
+];

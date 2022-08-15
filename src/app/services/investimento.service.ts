@@ -6,8 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Planejamento } from '../models/planejamento.model';
 import { InvestimentoTributacaoRel } from '../models/investimento-tributacao-rel.model';
 import { BehaviorSubject } from 'rxjs';
-import { Investimento, investimentos } from '../models/investimento.model';
-import { Produto, produtos } from '../models/produto.model';
+import { Investimento } from '../models/investimento.model';
+import { Produto } from '../models/produto.model';
 import { PlanejamentoProduto, PlanejamentoProdutoRequest } from '../models/planejamento-produto.model';
 import { ProdutoTributacaoRel } from '../models/produto-tributacao-rel.model';
 import { PrincipaisObjetivos } from '../models/objetivos.model';
@@ -33,8 +33,6 @@ export class InvestimentoService {
         private htto: HttpClient,
         private toastr: ToastrService,
     ) { 
-        this.list_Investimento.next(investimentos);
-        this.list_Produto.next(produtos);
     }
 
 

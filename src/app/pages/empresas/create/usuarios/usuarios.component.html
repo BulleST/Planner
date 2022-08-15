@@ -9,11 +9,17 @@
         </div>
     </div>
     <div class="card-body">
-        <div *ngIf="objeto.usuarios.length == 0" class="p-2">
-            <p>Nenhum usuário cadastrado. <a [routerLink]="['cadastrar']">Clique aqui para adicionar</a></p>
-        </div>
-        <div class="content" *ngIf="objeto.usuarios.length > 0">
-
+        <app-list
+                          [list]="objeto.usuarios"
+                          [filterLink]="false"
+                          [filterTable]="false"
+                          [paginator]="false"
+                          [sortTable]="false"
+                          [menuTable]="false"
+                          [columns]="userColumns"></app-list>
+        <div class="d-flex justify-content-between px-2 mt-2">
+            <button class="btn btn-primary" (click)="previous()">Anterior</button>
+            <button class="btn btn-primary" (click)="next()">Próximo</button>
         </div>
     </div>
 </div>

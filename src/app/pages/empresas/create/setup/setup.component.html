@@ -1,1 +1,26 @@
-<p>setup works!</p>
+<div class="card">
+    <div class="card-header d-flex align-items-center py-2">
+        <span class="title-icon">
+            <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
+        </span>
+        <div>
+            <h3 class="card-header-title">Carteira Setup</h3>
+            <p class="card-header-subtitle"><small>Inclua um ou mais setups dessa empresa</small></p>
+        </div>
+    </div>
+    <div class="card-body">
+        <app-list
+                          [list]="objeto.usuarios"
+                          [filterLink]="false"
+                          [filterTable]="false"
+                          [paginator]="false"
+                          [sortTable]="false"
+                          [menuTable]="false"
+                          [columns]="produtoColumns"></app-list>
+        <div class="d-flex justify-content-between px-2 mt-2">
+            <button class="btn btn-primary" (click)="previous()">Anterior</button>
+            <button class="btn btn-primary" (click)="next()">Próximo</button>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

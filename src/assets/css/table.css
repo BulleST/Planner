@@ -184,11 +184,11 @@ tr.selected,
 }
 
 tr.selected-many:nth-child(even) td.td-actions {
-  background: #ffe6d9;
+  background: #daeefd;
 }
 
 tr.selected-many:nth-child(odd) td.td-actions {
-  background: #ffe6d9;
+  background: #daeefd;
 }
 
 .content .table-content {

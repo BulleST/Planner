@@ -10,6 +10,7 @@ const clientes = () => import('./pages/clientes/clientes.module').then(res => re
 const empresas = () => import('./pages/empresas/empresas.module').then(res => res.EmpresasModule);
 const investimento = () => import('./pages/investimento/investimento.module').then(res => res.InvestimentoModule);
 const usuarios = () => import('./pages/usuarios/usuarios.module').then(res => res.UsuariosModule);
+const produtos = () => import('./pages/produtos/produtos.module').then(res => res.ProdutosModule);
 
 const routes: Routes = [
   { path: '', redirectTo: 'investimento', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'clientes', loadChildren: clientes },
       { path: 'empresas', loadChildren: empresas },
       { path: 'usuarios', loadChildren: usuarios },
+      { path: 'produtos', loadChildren: produtos },
 
       { path: 'my-account', component: MyAccountComponent },
       { path: 'reset-password', component: ResetPasswordComponent },

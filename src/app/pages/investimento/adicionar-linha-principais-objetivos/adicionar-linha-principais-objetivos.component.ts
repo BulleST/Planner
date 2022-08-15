@@ -3,9 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Investimento, investimentos } from 'src/app/models/investimento.model';
-import { PlanejamentoInvestimentoRequest } from 'src/app/models/planejamento-investimento.model';
-import { tributacao, Tributacao } from 'src/app/models/tributacao.model';
+import { Tributacao } from 'src/app/models/tributacao.model';
+import { DropdownService } from 'src/app/services/dropdown.service';
 import { InvestimentoService } from 'src/app/services/investimento.service';
 import { arrowDown, arrowUp, stringToDecimal } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -32,6 +31,7 @@ export class AdicionarLinhaPrincipaisObjetivosComponent implements OnInit {
 		this.modal.getOpen().subscribe(res => {
 			this.modalOpen = res;
 		});
+
 	}
 
 	ngOnInit(): void {

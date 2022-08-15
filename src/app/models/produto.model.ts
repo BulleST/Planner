@@ -1,23 +1,26 @@
+import { Tributacao } from "./tributacao.model";
+
 export class Produto {
     id: number = 0;
     empresa_Id: number = 0;
-    tipoAtivo_Id: number = 0;
-    tipoRisco_Id: number = 0;
-    tipoLiquidez_Id: number = 0;
-    taxaADM: number = 0;
-    taxaPfee: number = 0;
+    tipoAtivo_Id: number = undefined as unknown as number;
+    tipoRisco_Id: number = undefined as unknown as number;
+    tipoLiquidez_Id: number = undefined as unknown as number;
+    tributacao_Id: number = undefined as unknown as number;
+    tributacao: Tributacao = { id: undefined as unknown as number, aliquota: '' as unknown as number, descricao: ''}
+    taxaAdm: number =  '' as unknown as number;
+    taxaPfee: number = '' as unknown as number;
     cm?: boolean;
     descricao: string = '';
 }
 
-export var produtos: Produto[] = [
-    { id: 1, empresa_Id: 1, tipoAtivo_Id: 1, tipoRisco_Id: 1, tipoLiquidez_Id: 1, taxaADM: 0.00000000, taxaPfee: 0.00000000, cm: false, descricao: 'Reserva de Emergência' },
-    { id: 2, empresa_Id: 1, tipoAtivo_Id: 1, tipoRisco_Id: 2, tipoLiquidez_Id: 4, taxaADM: 2.00000000, taxaPfee: 20.00000000, cm: true, descricao: 'C.A. Conservador' },
-    { id: 3, empresa_Id: 1, tipoAtivo_Id: 2, tipoRisco_Id: 3, tipoLiquidez_Id: 3, taxaADM: 2.00000000, taxaPfee: 20.00000000, cm: true, descricao: 'C.A. Moderado' },
-    { id: 4, empresa_Id: 1, tipoAtivo_Id: 2, tipoRisco_Id: 4, tipoLiquidez_Id: 4, taxaADM: 2.00000000, taxaPfee: 20.00000000, cm: true, descricao: 'C.A. Arrojado' },
-    { id: 7, empresa_Id: 1, tipoAtivo_Id: 1, tipoRisco_Id: 5, tipoLiquidez_Id: 2, taxaADM: 0.00000000, taxaPfee: 0.00000000, cm: false, descricao: 'Mesa Proprietária (You Capital)' },
-    { id: 8, empresa_Id: 1, tipoAtivo_Id: 2, tipoRisco_Id: 3, tipoLiquidez_Id: 5, taxaADM: 0.00000000, taxaPfee: 0.00000000, cm: false, descricao: 'Private Equity Imobiliário' },
-    { id: 10, empresa_Id: 1, tipoAtivo_Id: 1, tipoRisco_Id: 3, tipoLiquidez_Id: 2, taxaADM: 0.00000000, taxaPfee: 0.00000000, cm: false, descricao: 'Private Equity Gado' },
-    { id: 11, empresa_Id: 1, tipoAtivo_Id: 1, tipoRisco_Id: 3, tipoLiquidez_Id: 2, taxaADM: 0.00000000, taxaPfee: 0.00000000, cm: false, descricao: 'Private Equity Usina Solar' },
-    { id: 14, empresa_Id: 1, tipoAtivo_Id: 3, tipoRisco_Id: 3, tipoLiquidez_Id: 2, taxaADM: 0.00000000, taxaPfee: 0.00000000, cm: false, descricao: 'Previdência em Dólar' },
+export var produtoColumns = [
+    { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'descricao', header: 'Nome', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'tipoAtivo', header: 'Ativo', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'tipoRisco', header: 'Risco', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'tipoLiquidez', header: 'Liquidez', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'taxaAdm', header: 'Taxa ADM', filterType: 'numeric', filterDisplay: 'menu' },
+    { field: 'taxaPfee', header: 'Taxa PFEE', filterType: 'numeric', filterDisplay: 'menu' },
+    // { field: 'cm', header: 'CM', filterType: 'text', filterDisplay: 'menu' },
 ];

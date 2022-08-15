@@ -1,7 +1,3 @@
-.p-steps ul {
-    /* background: red; */
-}
-
 .p-steps-item:not(.p-steps-item:last-child)::before {
     content: '/f178';
     position: absolute;
@@ -10,9 +6,14 @@
     top: 50%;
     right: 0;
     font-weight: 900;
-    font-size: calc(1vw + 8px);
+    font-size: calc(0.8vw + 8px);
     color: var(--primary);
-    transform: translate(50%, -43%);
+    transform: translate(50%, -50%);
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .p-steps-item .p-menuitem-link {
@@ -51,7 +52,7 @@
 }
 
 .p-steps {
-    border: 1px #d6d6d6 solid;
+    /* border: 1px #d6d6d6 solid; */
     margin: 16px 0;
-    background: whitesmoke;
+    /* background: whitesmoke; */
 }

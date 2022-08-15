@@ -8,12 +8,18 @@ import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ListComponent } from './list/list.component';
+import { EditComponent } from './edit/edit.component';
+import { DeleteComponent } from './delete/delete.component';
 
 
 @NgModule({
   declarations: [
     UsuariosComponent,
-    CreateComponent
+    CreateComponent,
+    ListComponent,
+    EditComponent,
+    DeleteComponent
   ],
   imports: [
     CommonModule,

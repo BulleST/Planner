@@ -3,9 +3,10 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Investimento, investimentos } from 'src/app/models/investimento.model';
+import { Investimento } from 'src/app/models/investimento.model';
 import { PlanejamentoInvestimentoRequest } from 'src/app/models/planejamento-investimento.model';
-import { tributacao, Tributacao } from 'src/app/models/tributacao.model';
+import { Tributacao } from 'src/app/models/tributacao.model';
+import { DropdownService } from 'src/app/services/dropdown.service';
 import { InvestimentoService } from 'src/app/services/investimento.service';
 import { arrowDown, arrowUp, stringToDecimal } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -22,14 +23,15 @@ export class AdicionarLinhaInvestimentoComponent implements OnInit {
 	erro: any[] = [];
 	loading = false;
 
-	tributacoes: Tributacao[] = tributacao;
-	investimentos: Investimento[] = investimentos;
+	tributacoes: Tributacao[] = [];
+	investimentos: Investimento[] = [];
 
 	constructor(
 		private router: Router,
 		private toastr: ToastrService,
 		private modal: ModalOpen,
 		private investimentoService: InvestimentoService,
+        private dropdownService: DropdownService,
 	) {
 		this.modal.getOpen().subscribe(res => {
 			this.modalOpen = res;
@@ -38,7 +40,9 @@ export class AdicionarLinhaInvestimentoComponent implements OnInit {
 		this.investimentoService.list_Investimento.subscribe(res => {
 			res.sort((x, y) => x.id - y.id);
 			this.investimentos = res;
-		})
+		});
+        this.dropdownService.getTributacao().subscribe(res => this.tributacoes = res);
+        this.dropdownService.tributacao.subscribe(res => this.tributacoes = res);
 
 	}
 

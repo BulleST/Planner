@@ -13,22 +13,8 @@ import { Table } from 'src/app/utils/table';
   styleUrls: ['./produtos.component.css']
 })
 export class ProdutosComponent implements OnInit {
-
-    faArrowRight = faArrowRight;
-    faEllipsisV = faEllipsisV;
-    faTimes = faTimes;
     faHandHoldingDollar = faHandHoldingDollar;
-    faFilter = faFilter;
     loading = false;
-
-    produtoSelected?: Produto;
-    produtosSelected: Produto[] = [];
-    produtosColumn = [
-        { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
-        { field: 'nome', header: 'Razão Social', filterType: 'text', filterDisplay: 'menu' },
-        { field: 'cpf', header: 'CPF', filterType: 'text', filterDisplay: 'menu' },
-    ];
-    produtosFilters: string[] = [];
     objeto: Empresa = new Empresa;
 
     constructor(
@@ -37,22 +23,8 @@ export class ProdutosComponent implements OnInit {
         private toastr: ToastrService,
         private empresaService: EmpresaService,
         private table: Table) { 
-        this.produtosFilters = this.produtosColumn.map(x => x.field);
     }
 
     ngOnInit(): void {
     }
-
-    onRowSelect(event: any) {
-      this.table.onRowSelect(event);
-    }
-  
-    onRowUnselect(event: any) {
-      this.table.onRowUnselect(event)
-    }
-  
-    onAllRowToggle(event: any) {
-      this.table.onAllRowToggle(event);
-    }
-
 }

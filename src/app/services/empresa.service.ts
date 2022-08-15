@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Empresa, empresas } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
 import { Usuario } from '../models/usuario.model';
+import { Produto } from '../models/produto.model';
 
 @Injectable({
     providedIn: 'root'
@@ -41,8 +42,8 @@ export class EmpresaService {
 
     addNewUserToEmpresa(user: Usuario) {
         var empresa = this.objeto.value;
-        var users = empresa?.usuarios;
-        if (empresa && users ) {
+        var users = empresa?.usuarios ?? [];
+        if (empresa ) {
             var emails = users.map(x => x.email).find(x => x.toLowerCase() == user.email.toLowerCase());
             if (emails) {
                 this.toastr.error('Esse e-mail já está cadastrado para outro usuário!!');
@@ -55,6 +56,23 @@ export class EmpresaService {
             }
         }
     }
+    addNewProdutoToEmpresa(produto: Produto) {
+        var empresa = this.objeto.value;
+        var products = empresa?.produtos ?? [];
+        if (empresa ) {
+            // var emails = products.map(x => x.email).find(x => x.toLowerCase() == produto.email.toLowerCase());
+            // if (emails) {
+            //     this.toastr.error('Esse e-mail já está cadastrado para outro usuário!!');
+            //     return;
+            // } else {
+                products.push(produto);
+                empresa.produtos = products;
+                this.objeto.next(empresa);
+                this.toastr.success('Operação concluída');
+            // }
+        }
+    }
+
 
 
     getList() {

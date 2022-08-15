@@ -48,6 +48,7 @@
                 [ngbPopover]="campoObrigatorio" 
                 triggers="mouseenter:mouseleave">
                 <option [ngValue]="undefined">Selecione</option>
+                <option [ngValue]="item.id" *ngFor="let item of perfil">{{item.perfil}}</option>
                 </select>
             <div *ngIf="perfil_Id.touched && perfil_Id.errors">
                 <p class="text-danger" *ngIf="perfil_Id.errors['required']">Esse campo é obrigatório</p>
@@ -85,10 +86,10 @@
         </div>
     </div>
     <div class="d-flex p-0 mt-1">
-        <ul *ngIf="erro || form.invalid" class="m-0">
-            <li class="text-red" *ngFor="let err of erro">{{err}}</li>
-            <li *ngIf="form.invalid || !erro" class="text-danger">Um ou mais campos estão invpalidos</li>
-        </ul>
+        <div *ngIf="erro || form.invalid" class="m-0">
+            <p class="text-red" *ngFor="let err of erro">{{err}}</p>
+            <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+        </div>
         <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar
         </button>

@@ -1,0 +1,170 @@
+<form #form="ngForm" (ngSubmit)="send(form)">
+    <div class="form-row">
+        <div class="form-group col-lg-12 col-md-12 col-sm-12">
+            <label for="descricao">Nome: <span class="text-danger">*</span></label>
+            <input type="text"
+                   class="form-control"
+                   name="descricao"
+                   id="descricao"
+                   #descricao="ngModel"
+                   [(ngModel)]="objeto.descricao"
+                   required
+                   popoverClass="popover-danger"
+                   [ngbPopover]="campoObrigatorio"
+                   triggers="mouseenter:mouseleave">
+            <div *ngIf="descricao.touched && descricao.errors">
+                <p class="text-danger" *ngIf="descricao.errors['required']">Esse campo é obrigatório</p>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-lg-4 col-md-4 col-sm-12">
+            <label for="tipoAtivo_Id">Tipo Ativo: <span class="text-danger">*</span></label>
+            <select
+                    class="form-control"
+                    name="tipoAtivo_Id"
+                    id="tipoAtivo_Id"
+                    #tipoAtivo_Id="ngModel"
+                    [(ngModel)]="objeto.tipoAtivo_Id"
+                    required
+                    popoverClass="popover-danger"
+                    [ngbPopover]="campoObrigatorio"
+                    triggers="mouseenter:mouseleave">
+                <option [ngValue]="undefined">Selecione</option>
+                <option [ngValue]="item" *ngFor="let item of tipoAtivo">{{ item.nome }}</option>
+            </select>
+            <div *ngIf="tipoAtivo_Id.touched && tipoAtivo_Id.errors">
+                <p class="text-danger" *ngIf="tipoAtivo_Id.errors['required']">Esse campo é obrigatório</p>
+            </div>
+        </div>
+        <div class="form-group col-lg-4 col-md-4 col-sm-12">
+            <label for="tipoRisco_Id">Tipo Risco: <span class="text-danger">*</span></label>
+            <select
+                    class="form-control"
+                    name="tipoRisco_Id"
+                    id="tipoRisco_Id"
+                    #tipoRisco_Id="ngModel"
+                    [(ngModel)]="objeto.tipoRisco_Id"
+                    required
+                    popoverClass="popover-danger"
+                    [ngbPopover]="campoObrigatorio"
+                    triggers="mouseenter:mouseleave">
+                <option [ngValue]="undefined">Selecione</option>
+                <option [ngValue]="item" *ngFor="let item of tipoRisco">{{ item.nome }}</option>
+            </select>
+            <div *ngIf="tipoRisco_Id.touched && tipoRisco_Id.errors">
+                <p class="text-danger" *ngIf="tipoRisco_Id.errors['required']">Esse campo é obrigatório</p>
+            </div>
+        </div>
+        <div class="form-group col-lg-4 col-md-4 col-sm-12">
+            <label for="tipoLiquidez_Id">Tipo Liquidez: <span class="text-danger">*</span></label>
+            <select
+                    class="form-control"
+                    name="tipoLiquidez_Id"
+                    id="tipoLiquidez_Id"
+                    #tipoLiquidez_Id="ngModel"
+                    [(ngModel)]="objeto.tipoLiquidez_Id"
+                    required
+                    popoverClass="popover-danger"
+                    [ngbPopover]="campoObrigatorio"
+                    triggers="mouseenter:mouseleave">
+                <option [ngValue]="undefined">Selecione</option>
+                <option [ngValue]="item" *ngFor="let item of tipoLiquidez">{{ item.nome }}</option>
+            </select>
+            <div *ngIf="tipoLiquidez_Id.touched && tipoLiquidez_Id.errors">
+                <p class="text-danger" *ngIf="tipoLiquidez_Id.errors['required']">Esse campo é obrigatório</p>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-lg-10 col-md-10 col-sm-8">
+            <label for="tributacao">Tributacão: <span class="text-danger">*</span></label>
+            <select
+                    class="form-control"
+                    name="tributacao"
+                    id="tributacao"
+                    #_tributacao="ngModel"
+                    [(ngModel)]="objeto.tributacao"
+                    required
+                    popoverClass="popover-danger"
+                    [ngbPopover]="campoObrigatorio"
+                    triggers="mouseenter:mouseleave"
+                    (change)="objeto.tributacao_Id = objeto.tributacao.id">
+                <option [value]="objeto.tributacao">Selecione</option>
+                <option [ngValue]="item" *ngFor="let item of tributacao">{{ item.descricao }}</option>
+            </select>
+            <div *ngIf="_tributacao.touched && _tributacao.errors">
+                <p class="text-danger" *ngIf="_tributacao.errors['required']">Esse campo é obrigatório</p>
+            </div>
+        </div>
+        <div class="form-group col-lg-2 col-md-2 col-sm-4">
+            <label for="aliquota">Alíquota: </label>
+            <input type="text"
+                   class="form-control"
+                   id="aliquota"
+                   name="a liquota"
+                   mask="separator"
+                   thousandSeparator="."
+                   decimalMarker=","
+                   suffix=" %"
+                   #aliquota="ngModel"
+                   [(ngModel)]="objeto.tributacao.aliquota"
+                   readonly>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-lg-6 col-md-6 col-sm-12">
+            <label for="taxaAdm">Taxa ADM: <span class="text-danger">*</span></label>
+            <input type="text"
+                   class="form-control"
+                   name="taxaAdm"
+                   id="taxaAdm"
+                   #taxaAdm="ngModel"
+                   [(ngModel)]="objeto.taxaAdm"
+                   required
+                   popoverClass="popover-danger"
+                   [ngbPopover]="campoObrigatorio"
+                   triggers="mouseenter:mouseleave"
+                   mask="separator"
+                   thousandSeparator="."
+                   decimalMarker=","
+                   suffix=" %">
+            <div *ngIf="taxaAdm.touched && taxaAdm.errors">
+                <p class="text-danger" *ngIf="taxaAdm.errors['required']">Esse campo é obrigatório</p>
+                <p class="text-danger" *ngIf="taxaAdm.errors['mask']">Esse campo é incorreto</p>
+            </div>
+        </div>
+        <div class="form-group col-lg-6 col-md-6 col-sm-12">
+            <label for="taxaPfee">Taxa PFEE: <span class="text-danger">*</span></label>
+            <input type="text"
+                   class="form-control"
+                   name="taxaPfee"
+                   id="taxaPfee"
+                   #taxaPfee="ngModel"
+                   [(ngModel)]="objeto.taxaPfee"
+                   required
+                   popoverClass="popover-danger"
+                   [ngbPopover]="campoObrigatorio"
+                   triggers="mouseenter:mouseleave"
+                   mask="separator"
+                   thousandSeparator="."
+                   decimalMarker=","
+                   suffix=" %">
+            <div *ngIf="taxaPfee.touched && taxaPfee.errors">
+                <p class="text-danger" *ngIf="taxaPfee.errors['required']">Esse campo é obrigatório</p>
+                <p class="text-danger" *ngIf="taxaPfee.errors['mask']">Esse campo é incorreto</p>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex p-0 mt-1">
+        <div *ngIf="erro || form.invalid" class="m-0">
+            <p class="text-red" *ngFor="let err of erro">{{err}}</p>
+            <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+        </div>
+        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
+    </div>
+</form>
+<ng-template #campoObrigatorio>
+    <div class="py-3 px-4"> Esse campo é obrigatório </div>
+</ng-template>

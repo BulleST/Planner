@@ -25,9 +25,6 @@ import { MyAccountComponent } from './parts/my-account/my-account.component';
 import { LoadingComponent } from './parts/loading/loading.component';
 import { AlertComponent } from './parts/alert/alert.component';
 import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
-import { CreateUsuarioComponent } from './shared/usuarios/create/create.component';
-import { EditComponent } from './shared/usuarios/edit/edit.component';
-import { ListComponent } from './shared/usuarios/list/list.component';
 import { SharedModule } from './shared/shared.module';
 
 registerLocaleData(localePt);
@@ -42,8 +39,6 @@ registerLocaleData(localePt);
         ResetPasswordComponent,
         LoadingComponent,
         AlertComponent,
-        EditComponent,
-        ListComponent,
     ],
     imports: [
         BrowserModule,
@@ -64,8 +59,6 @@ registerLocaleData(localePt);
         TableModule,
         ChartModule,
         NgxMaskModule.forRoot({ validation: true }),
-    ],
-    exports: [
     ],
     providers: [
         { provide: LOCALE_ID, useValue: 'pt-BR' },

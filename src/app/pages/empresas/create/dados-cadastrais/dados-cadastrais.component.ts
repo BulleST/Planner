@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Empresa } from 'src/app/models/empresa.model';
@@ -16,7 +17,8 @@ export class DadosCadastraisComponent implements OnInit {
     
     constructor(
         private toastr: ToastrService,
-        private empresaService: EmpresaService
+        private empresaService: EmpresaService,
+        private router: Router
     ) { 
         // this.empresaService.getObject().subscribe(res => {
         //     this.objeto = res ?? new Empresa;
@@ -37,6 +39,7 @@ export class DadosCadastraisComponent implements OnInit {
         }
 
         this.empresaService.setObject(this.objeto);
+        this.router.navigate(['empresas', 'cadastrar', 'usuarios'])
 
     }
 

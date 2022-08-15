@@ -3,11 +3,10 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Investimento, investimentos } from 'src/app/models/investimento.model';
-import { PlanejamentoInvestimentoRequest } from 'src/app/models/planejamento-investimento.model';
 import { PlanejamentoProdutoRequest } from 'src/app/models/planejamento-produto.model';
-import { Produto, produtos } from 'src/app/models/produto.model';
-import { tributacao, Tributacao } from 'src/app/models/tributacao.model';
+import { Produto } from 'src/app/models/produto.model';
+import { Tributacao } from 'src/app/models/tributacao.model';
+import { DropdownService } from 'src/app/services/dropdown.service';
 import { InvestimentoService } from 'src/app/services/investimento.service';
 import { arrowDown, arrowUp, stringToDecimal } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -24,14 +23,15 @@ export class AdicionarLinhaProdutoComponent implements OnInit {
 	erro: any[] = [];
 	loading = false;
 
-	tributacoes: Tributacao[] = tributacao;
-	produtos: Produto[] = produtos;
+	tributacoes: Tributacao[] = [];
+	produtos: Produto[] = [];
  
 	constructor(
 		private router: Router,
 		private toastr: ToastrService,
 		private modal: ModalOpen,
 		private produtoService: InvestimentoService,
+        private dropdownService: DropdownService,
 	) {
 		this.modal.getOpen().subscribe(res => {
 			this.modalOpen = res;
@@ -40,7 +40,9 @@ export class AdicionarLinhaProdutoComponent implements OnInit {
 		this.produtoService.list_Produto.subscribe(res => {
 			res.sort((x, y) => x.id - y.id);
 			this.produtos = res;
-		})
+		});
+        this.dropdownService.getTributacao().subscribe(res => this.tributacoes = res);
+        this.dropdownService.tributacao.subscribe(res => this.tributacoes = res);
 
 	}
 

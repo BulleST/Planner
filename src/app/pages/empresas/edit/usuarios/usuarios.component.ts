@@ -22,14 +22,7 @@ export class UsuariosComponent implements OnInit {
     faFilter = faFilter;
     loading = false;
 
-    usuarioSelected?: Usuario;
-    usuariosSelected: Usuario[] = [];
-    usuariosColumn = [
-        { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
-        { field: 'nome', header: 'Razão Social', filterType: 'text', filterDisplay: 'menu' },
-        { field: 'cpf', header: 'CPF', filterType: 'text', filterDisplay: 'menu' },
-    ];
-    usuariosFilters: string[] = [];
+  
     objeto: Empresa = new Empresa;
 
     constructor(
@@ -38,22 +31,8 @@ export class UsuariosComponent implements OnInit {
         private toastr: ToastrService,
         private empresaService: EmpresaService,
         private table: Table) { 
-        this.usuariosFilters = this.usuariosColumn.map(x => x.field);
     }
 
     ngOnInit(): void {
     }
-
-    onRowSelect(event: any) {
-      this.table.onRowSelect(event);
-    }
-  
-    onRowUnselect(event: any) {
-      this.table.onRowUnselect(event)
-    }
-  
-    onAllRowToggle(event: any) {
-      this.table.onAllRowToggle(event);
-    }
-
 }

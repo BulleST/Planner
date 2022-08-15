@@ -29,7 +29,7 @@
 							<label for="tributacao">Tributacao: <span class="text-danger">*</span></label>
 							<select class="form-control" name="tributacao" id="tributacao" #tributacao="ngModel"
 								[(ngModel)]="objeto.tributacao" required>
-								<option [ngValue]="item" *ngFor="let item of tributacoes">{{ item.nome }}</option>
+								<option [ngValue]="item" *ngFor="let item of tributacoes">{{ item.descricao }}</option>
 							</select>
 							<div *ngIf="tributacao.touched && tributacao.errors">
 								<p *ngIf="tributacao.errors['required']" class="text-danger">Esse campo é obrigatório</p>

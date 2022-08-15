@@ -25,6 +25,7 @@ import { ClientesComponent as Edit_ClientesComponent } from './edit/clientes/cli
 import { ProdutosComponent as Edit_ProdutosComponent } from './edit/produtos/produtos.component';
 import { SetupComponent as Edit_SetupComponent } from './edit/setup/setup.component';
 import { UsuariosComponent as Edit_UsuariosComponent } from './edit/usuarios/usuarios.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { UsuariosComponent as Edit_UsuariosComponent } from './edit/usuarios/usu
         NgbPopoverModule,
         NgxMaskModule.forChild(),
         StepsModule,
-        CardModule
+        CardModule,
+        SharedModule
     ],
     bootstrap: [EmpresasComponent]
 })

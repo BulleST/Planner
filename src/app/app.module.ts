@@ -4,146 +4,156 @@ import localePt from '@angular/common/locales/pt';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AppRoutingModule } from './app.routing';
-import { AppComponent } from './app.component';
-import { ActionsComponent } from './parts/actions/actions.component';
-import { HeaderComponent } from './parts/header/header.component';
-import { FooterComponent } from './parts/footer/footer.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
 import { TableModule } from 'primeng/table';
 import { FieldsetModule } from 'primeng/fieldset';
-import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
-import { InitialComponent } from './parts/initial/initial.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { DropdownModule } from 'primeng/dropdown';
+import { AppRoutingModule } from './app.routing';
+import { AppComponent } from './app.component';
+import { ActionsComponent } from './parts/actions/actions.component';
+import { HeaderComponent } from './parts/header/header.component';
+import { FooterComponent } from './parts/footer/footer.component';
+import { InitialComponent } from './parts/initial/initial.component';
 import { MyAccountComponent } from './parts/my-account/my-account.component';
 import { LoadingComponent } from './parts/loading/loading.component';
 import { AlertComponent } from './parts/alert/alert.component';
-import { ForgotPasswordComponent } from './pages/account/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
-import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
+import { CreateUsuarioComponent } from './shared/usuarios/create/create.component';
+import { EditComponent } from './shared/usuarios/edit/edit.component';
+import { ListComponent } from './shared/usuarios/list/list.component';
+import { SharedModule } from './shared/shared.module';
 
 registerLocaleData(localePt);
 @NgModule({
-  declarations: [
-    AppComponent,
-    ActionsComponent,
-    HeaderComponent,
-    FooterComponent,
-    InitialComponent,
-    MyAccountComponent,
-    ResetPasswordComponent,
-    LoadingComponent,
-    AlertComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FontAwesomeModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FieldsetModule,
-    FormsModule,
-    DropdownModule,
-    ToastrModule.forRoot(
-      {
-        preventDuplicates: true,
-        timeOut: 8000
-      }),
-    TableModule,
-    ChartModule,
-    NgxMaskModule.forRoot({validation: true}),
-  ],
-  providers: [
-    { provide: LOCALE_ID, useValue: 'pt-BR' },
-    { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        ActionsComponent,
+        HeaderComponent,
+        FooterComponent,
+        InitialComponent,
+        MyAccountComponent,
+        ResetPasswordComponent,
+        LoadingComponent,
+        AlertComponent,
+        EditComponent,
+        ListComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        SharedModule,
+        FontAwesomeModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        FieldsetModule,
+        FormsModule,
+        DropdownModule,
+        NgbPopoverModule,
+        ToastrModule.forRoot(
+            {
+                preventDuplicates: true,
+                timeOut: 8000
+            }),
+        TableModule,
+        ChartModule,
+        NgxMaskModule.forRoot({ validation: true }),
+    ],
+    exports: [
+    ],
+    providers: [
+        { provide: LOCALE_ID, useValue: 'pt-BR' },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(
-    private config: PrimeNGConfig
+    constructor(
+        private config: PrimeNGConfig
 
-  ){
-    this.config.setTranslation({
-      startsWith: 'Começa com',
-      contains: 'Contem',
-      notContains: 'Não contem',
-      endsWith: 'Termina com',
-      equals: 'Igual a',
-      notEquals: 'Diferente de',
-      noFilter: 'Sem filtro',
-      // lt: '',
-      // lte: '',
-      // gt: '',
-      // gte: '',
-      is: 'Igual',
-      isNot: 'Diferente',
-      before: 'Anterior a',
-      after: 'Posterior a',
-      dateIs: 'Data igual a',
-      dateIsNot: 'Data diferente de',
-      dateBefore: 'Data anterior a',
-      dateAfter: 'Data posterior a',
-      clear: 'Limpar filtro',
-      apply: 'Filtrar',
-      matchAll: 'Filtrar todos',
-      matchAny: 'Filtrar qualquer um',
-      addRule: 'Adicionar filtro',
-      removeRule: 'Remover filtro',
-      // accept: '',
-      // reject: '',
-      // choose: '',
-      // upload: '',
-      // cancel: '',
-      // dayNames: [],
-      // dayNamesShort: [],
-      // dayNamesMin: [],
-      // monthNames: [],
-      // monthNamesShort: [],
-      // dateFormat: '',
-      // today: '',
-      // weekHeader: '',
-      weak: 'Fraca',
-      medium: 'Média',
-      strong: 'Forte',
-      // passwordPrompt: '',
-      emptyMessage: 'Nenhum resultado encontrado',
-      emptyFilterMessage: 'Nenhum resultado encontrado',
-    })
-    this.config.filterMatchModeOptions = {
-      text: [
-          FilterMatchMode.STARTS_WITH,
-          FilterMatchMode.CONTAINS,
-          FilterMatchMode.NOT_CONTAINS,
-          FilterMatchMode.ENDS_WITH,
-          FilterMatchMode.EQUALS,
-          FilterMatchMode.NOT_EQUALS
-      ],
-      numeric: [
-          FilterMatchMode.EQUALS,
-          FilterMatchMode.NOT_EQUALS,
-          FilterMatchMode.LESS_THAN,
-          FilterMatchMode.LESS_THAN_OR_EQUAL_TO,
-          FilterMatchMode.GREATER_THAN,
-          FilterMatchMode.GREATER_THAN_OR_EQUAL_TO,
-      ],
-      date: [
-          FilterMatchMode.DATE_IS,
-          FilterMatchMode.DATE_IS_NOT,
-          FilterMatchMode.DATE_BEFORE,
-          FilterMatchMode.DATE_AFTER,
-          FilterMatchMode.STARTS_WITH,
-          FilterMatchMode.CONTAINS,
-          FilterMatchMode.NOT_CONTAINS,
-          FilterMatchMode.ENDS_WITH,
-          FilterMatchMode.EQUALS,
-          FilterMatchMode.NOT_EQUALS
-      ]
-  }
+    ) {
+        this.config.setTranslation({
+            startsWith: 'Começa com',
+            contains: 'Contem',
+            notContains: 'Não contem',
+            endsWith: 'Termina com',
+            equals: 'Igual a',
+            notEquals: 'Diferente de',
+            noFilter: 'Sem filtro',
+            // lt: '',
+            // lte: '',
+            // gt: '',
+            // gte: '',
+            is: 'Igual',
+            isNot: 'Diferente',
+            before: 'Anterior a',
+            after: 'Posterior a',
+            dateIs: 'Data igual a',
+            dateIsNot: 'Data diferente de',
+            dateBefore: 'Data anterior a',
+            dateAfter: 'Data posterior a',
+            clear: 'Limpar filtro',
+            apply: 'Filtrar',
+            matchAll: 'Filtrar todos',
+            matchAny: 'Filtrar qualquer um',
+            addRule: 'Adicionar filtro',
+            removeRule: 'Remover filtro',
+            // accept: '',
+            // reject: '',
+            // choose: '',
+            // upload: '',
+            // cancel: '',
+            // dayNames: [],
+            // dayNamesShort: [],
+            // dayNamesMin: [],
+            // monthNames: [],
+            // monthNamesShort: [],
+            // dateFormat: '',
+            // today: '',
+            // weekHeader: '',
+            weak: 'Fraca',
+            medium: 'Média',
+            strong: 'Forte',
+            // passwordPrompt: '',
+            emptyMessage: 'Nenhum resultado encontrado',
+            emptyFilterMessage: 'Nenhum resultado encontrado',
+        })
+        this.config.filterMatchModeOptions = {
+            text: [
+                FilterMatchMode.STARTS_WITH,
+                FilterMatchMode.CONTAINS,
+                FilterMatchMode.NOT_CONTAINS,
+                FilterMatchMode.ENDS_WITH,
+                FilterMatchMode.EQUALS,
+                FilterMatchMode.NOT_EQUALS
+            ],
+            numeric: [
+                FilterMatchMode.EQUALS,
+                FilterMatchMode.NOT_EQUALS,
+                FilterMatchMode.LESS_THAN,
+                FilterMatchMode.LESS_THAN_OR_EQUAL_TO,
+                FilterMatchMode.GREATER_THAN,
+                FilterMatchMode.GREATER_THAN_OR_EQUAL_TO,
+            ],
+            date: [
+                FilterMatchMode.DATE_IS,
+                FilterMatchMode.DATE_IS_NOT,
+                FilterMatchMode.DATE_BEFORE,
+                FilterMatchMode.DATE_AFTER,
+                FilterMatchMode.STARTS_WITH,
+                FilterMatchMode.CONTAINS,
+                FilterMatchMode.NOT_CONTAINS,
+                FilterMatchMode.ENDS_WITH,
+                FilterMatchMode.EQUALS,
+                FilterMatchMode.NOT_EQUALS
+            ]
+        }
 
-  }
- }
+    }
+}

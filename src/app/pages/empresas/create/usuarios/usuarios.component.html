@@ -1,1 +1,20 @@
-<p>usuarios works!</p>
+<div class="card">
+    <div class="card-header d-flex align-items-center py-2">
+        <span class="title-icon">
+            <fa-icon [icon]="faUser"></fa-icon>
+        </span>
+        <div>
+            <h3 class="card-header-title">Usuários</h3>
+            <p class="card-header-subtitle"><small>Inclua usuários dessa empresa para acessar o sistema</small></p>
+        </div>
+    </div>
+    <div class="card-body">
+        <div *ngIf="objeto.usuarios.length == 0" class="p-2">
+            <p>Nenhum usuário cadastrado. <a [routerLink]="['cadastrar']">Clique aqui para adicionar</a></p>
+        </div>
+        <div class="content" *ngIf="objeto.usuarios.length > 0">
+
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

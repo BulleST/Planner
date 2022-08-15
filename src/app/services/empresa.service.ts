@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { Empresa, empresas } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
+import { Usuario } from '../models/usuario.model';
 
 @Injectable({
     providedIn: 'root'
@@ -26,7 +27,7 @@ export class EmpresaService {
     getObject() {
         var e = localStorage.getItem('empresa')
         if(e) {
-            this.objeto.next(this.crypto.decrypt(e) ?? new Empresa);
+            this.setObject(this.crypto.decrypt(e) ?? new Empresa)
         }
         return this.objeto;
     }
@@ -36,6 +37,25 @@ export class EmpresaService {
         this.objeto.next(value);
      
     }
+
+
+    addNewUserToEmpresa(user: Usuario) {
+        var empresa = this.objeto.value;
+        var users = empresa?.usuarios;
+        if (empresa && users ) {
+            var emails = users.map(x => x.email).find(x => x.toLowerCase() == user.email.toLowerCase());
+            if (emails) {
+                this.toastr.error('Esse e-mail já está cadastrado para outro usuário!!');
+                return;
+            } else {
+                users.push(user);
+                empresa.usuarios = users;
+                this.objeto.next(empresa);
+                this.toastr.success('Operação concluída');
+            }
+        }
+    }
+
 
     getList() {
         return this.list;

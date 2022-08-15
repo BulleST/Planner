@@ -8,7 +8,7 @@ export class Usuario {
     empresa_Id: number = 0;
     empresa: Empresa = new Empresa;
     
-    perfil_Id: number = 0;
+    perfil_Id: number = undefined as unknown as number;
     perfil: PerfilAcesso = new PerfilAcesso;
 
     nome: string = '';

@@ -24,34 +24,7 @@ export class CreateComponent implements OnInit {
     erro: any[] = [];
     loading = false;
 
-    items: MenuItem[] = [
-        { 
-            id: '1',
-            label: 'Dados Cadastrais',
-            routerLink: 'dados-cadastrais',
-            title: 'Oi'
-        },
-        { 
-            id: '2',
-            label: 'Usuários',
-            routerLink: 'usuarios',
-        },
-        { 
-            id: '3',
-            label: 'Produtos',
-            routerLink: 'produtos',
-        },
-        { 
-            id: '4',
-            label: 'Carteira Setup',
-            routerLink: 'setup',
-        },
-        { 
-            id: '5',
-            label: 'Revisar dados',
-            routerLink: 'finalizar',
-        },
-    ];
+    items: MenuItem[] = [];
     index: number = 1;
 
     constructor(
@@ -62,10 +35,60 @@ export class CreateComponent implements OnInit {
     ) {
         if ( this.empresaService.objeto.value == undefined)
             this.empresaService.setObject(new Empresa);
-
-        this.empresaService.getObject().subscribe(res => {
+            
+        this.empresaService.objeto.subscribe(res => {
             this.objeto = res ?? new Empresa;
+            console.log(res)
         });
+
+        this.items =  [
+            { 
+                id: '1',
+                label: 'Dados Cadastrais',
+                routerLink: 'dados-cadastrais',
+                command: (event: any) => {
+                    console.log(event)
+                }
+            },
+            { 
+                id: '2',
+                label: 'Usuários',
+                routerLink: 'usuarios',
+                command: (event: any) => {
+                    // if (   !this.objeto.nome.trim()
+                    //     || !this.objeto.email.trim()
+                    //     || !this.objeto.cnpj.toString().trim()
+                    //     ) {
+                    //         this.router.navigate(['..', 'dados-cadastrais'], { relativeTo: this.activatedRoute });
+                    //         this.toastr.info('Preencha os dados cadastrais para prosseguir')
+                    // }
+                }
+            },
+            { 
+                id: '3',
+                label: 'Produtos',
+                routerLink: 'produtos',
+                command: (event: any) => {
+                    console.log(event)
+                }
+            },
+            { 
+                id: '4',
+                label: 'Carteira Setup',
+                routerLink: 'setup',
+                command: (event: any) => {
+                    console.log(event)
+                }
+            },
+            { 
+                id: '5',
+                label: 'Revisar dados',
+                routerLink: 'finalizar',
+                command: (event: any) => {
+                    console.log(event)
+                }
+            },
+        ];
     }
 
     ngOnInit(): void {

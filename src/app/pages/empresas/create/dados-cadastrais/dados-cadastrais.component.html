@@ -22,7 +22,7 @@
                            required
                            popoverClass="popover-danger"
                            [ngbPopover]="campoObrigatorio" 
-                           triggers="click">
+                           triggers="mouseenter:mouseleave">
                     <div *ngIf="nome.touched && nome.errors">
                         <p class="text-danger" *ngIf="nome.errors['required']">Esse campo é obrigatório.</p>
                     </div>

@@ -13,7 +13,13 @@ import { ToastrModule } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule } from 'ngx-mask';
-
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { ClientesComponent } from './clientes/clientes.component';
+import { ProdutosComponent } from './produtos/produtos.component';
+import { StepsModule } from 'primeng/steps';
+import { DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
+import { SetupComponent } from './create/setup/setup.component';
+import {CardModule} from 'primeng/card';
 
 @NgModule({
   declarations: [
@@ -21,7 +27,12 @@ import { NgxMaskModule } from 'ngx-mask';
     ListComponent,
     CreateComponent,
     EditComponent,
-    DeleteComponent
+    DeleteComponent,
+    UsuariosComponent,
+    ClientesComponent,
+    ProdutosComponent,
+    DadosCadastraisComponent,
+    SetupComponent
   ],
   imports: [
     CommonModule,
@@ -32,6 +43,8 @@ import { NgxMaskModule } from 'ngx-mask';
     FormsModule,
     NgbPopoverModule,
     NgxMaskModule.forChild(),
+    StepsModule,
+    CardModule
   ],
   bootstrap: [EmpresasComponent]
 })

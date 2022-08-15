@@ -14,7 +14,7 @@
 .main-actions__items {
   display: flex;
   flex-flow: column;
-  background-color: var(--primary-dark);
+  background-color: var(--primary);
   align-items: center;
   width: 50px;
   padding: 3px 0px;
@@ -57,7 +57,7 @@
 }
 
 .main-actions__toggle:hover {
-  background-color: #258bae;
+  background-color: var(--primary-light);
 }
 
 .main-actions__toggle span {

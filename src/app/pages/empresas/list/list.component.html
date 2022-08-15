@@ -1,13 +1,14 @@
 <section class="page">
     <div class="page__header">
-        <h3 class="page__header-title">Empresas</h3>
+        <span class="title-icon">
+            <fa-icon [icon]="faCity"></fa-icon>
+        </span>
+        <div>
+            <h3 class="page__header-title">Empresas</h3>
+            <p class="page__header-subtitle"><small>Todas as empresas</small></p>
+        </div>
     </div>
     <div class="page__body">
-        <div class="d-flex justify-content-between align-items-center">
-            <a class="btn btn-filter ml-auto" [routerLink]="['filtrar']">
-                <fa-icon [icon]="faFilter"></fa-icon>
-            </a>
-        </div>
         <div class="content">
             <p-table 
                 class="table" 
@@ -25,8 +26,8 @@
                 selectionMode="multiple" 
                 (onRowSelect)="onRowSelect($event)"
                 (onRowUnselect)="onRowUnselect($event)" 
+                (onHeaderCheckboxToggle)="onAllRowToggle($event)"
                 [filterDelay]="100"
-                (onHeaderCheckboxToggle)="teste($event)"
                 currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)">
                 <ng-template pTemplate="caption">
                     <div class="header-box d-flex justify-content-between align-items-end flex-wrap w-100 px-0">
@@ -47,6 +48,9 @@
                             <input pInputText type="text" class="form-control "
                                 (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
                         </div>
+                        <a class="btn btn-filter" [routerLink]="['filtrar']">
+                            <fa-icon [icon]="faFilter"></fa-icon>
+                        </a>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>

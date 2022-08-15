@@ -1,69 +1,18 @@
-<div class="modal" [class.active]="modalOpen">
-    <div class="modal__bg" (click)="voltar()"></div>
-    <div class="modal__inner" style="max-width: 600px;">
-        <div class="modal__content">
-            <div class="modal__header">
-                <h3 class="text-orange">Adicionar empresa</h3>
-                <a (click)="voltar()" class="modal__header-close btn-close">
-                    <span></span>
-                    <span></span>
-                </a>
-            </div>
-            <div class="modal__body">
-                <form #form="ngForm" (ngSubmit)="send(form)">
-                    <div class="form-row">
-                        <div class="form-group col-lg-7 col-md-7 col-sm-12 col-12">
-                            <label for="nome">Razão Social: </label>
-                            <input class="form-control" name="nome" id="nome" #nome="ngModel" [(ngModel)]="objeto.nome"
-                               required popoverClass="popover-danger"
-                                [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
-                            <div *ngIf="nome.touched && nome.errors">
-                                <p *ngIf="nome.errors['required']" class="text-danger">Esse campo é obrigatório</p>
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-5 col-md-5 col-sm-12 col-12">
-                            <label for="cnpj">CNPJ: </label>
-                            <input class="form-control" name="cnpj" id="cnpj" #cnpj="ngModel" [(ngModel)]="objeto.cnpj"
-                                placeholder="00.000.000/0000-00" mask="00.000.000/0000-00"
-                                [dropSpecialCharacters]="false" required popoverClass="popover-danger"
-                                [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
-                            <div *ngIf="cnpj.touched && cnpj.errors">
-                                <p *ngIf="cnpj.errors['required']" class="text-danger">Esse campo é obrigatório</p>
-                                <p *ngIf="cnpj.errors['mask']" class="text-danger">CNPJ inválido</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
-                            <label for="email">E-mail: </label>
-                            <input type="email" [email]="true" class="form-control" name="email" id="email" #email="ngModel" [(ngModel)]="objeto.email"
-                                placeholder="example@hotmail.com"  required popoverClass="popover-danger"
-                                [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
-                            <div *ngIf="email.touched && email.errors">
-                                <p *ngIf="email.errors['required']" class="text-danger">Esse campo é obrigatório</p>
-                                <p *ngIf="email.errors['email']" class="text-danger">E-mail inválido</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between col-lg-12 flex-wrap p-0">
-                        <ul *ngIf="erro">
-                            <li class="text-red" *ngFor="let err of erro">{{err}}</li>
-                        </ul>
-                        <div class="d-flex col-sm-12 ml-auto mt-3 px-0">
-                            <button type="submit" class="btn btn-primary ml-auto mr-0"
-                                [disabled]="form.invalid || loading">
-                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+<section class="page">
+    <div class="page__header">
+        <span class="title-icon">
+            <fa-icon [icon]="faCity"></fa-icon>
+        </span>
+        <div>
+            <h3 class="page__header-title">Empresa</h3>
+            <p class="page__header-subtitle"><small>Cadastrar empresa</small></p>
         </div>
     </div>
-</div>
-<ng-template #setaUpDown>
-    <div class="py-3 px-4"> Acione a seta para cima ou para baixo no teclado para mudar o valor </div>
-</ng-template>
-<ng-template #campoObrigatorio>
-    <div class="py-3 px-4"> Esse campo é obrigatório </div>
-</ng-template>
+    <div class="page__body px-3">
+        <form #form="ngForm">
+            <p-steps [model]="items" [readonly]="false"
+                     [(activeIndex)]="index"></p-steps>
+            <router-outlet></router-outlet>
+        </form>
+    </div>
+</section>

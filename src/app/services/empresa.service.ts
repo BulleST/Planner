@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { Empresa, empresas } from '../models/empresa.model';
+import { Crypto } from '../utils/crypto';
 
 @Injectable({
     providedIn: 'root'
@@ -11,13 +12,29 @@ import { Empresa, empresas } from '../models/empresa.model';
 export class EmpresaService {
 
     list = new BehaviorSubject<Empresa[]>([]);
+    objeto = new BehaviorSubject<Empresa | undefined>(undefined);
 
     constructor(
         private router: Router,
         private http: HttpClient,
         private toastr: ToastrService,
+        private crypto: Crypto,
     ) { 
         this.list.next(empresas);
+    }
+
+    getObject() {
+        var e = localStorage.getItem('empresa')
+        if(e) {
+            this.objeto.next(this.crypto.decrypt(e) ?? new Empresa);
+        }
+        return this.objeto;
+    }
+
+    setObject(value: Empresa) {
+        localStorage.setItem('empresa', this.crypto.encrypt(value) ?? '')
+        this.objeto.next(value);
+     
     }
 
     getList() {

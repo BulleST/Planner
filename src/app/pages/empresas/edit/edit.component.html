@@ -1,64 +1,76 @@
-<div class="modal" [class.active]="modalOpen">
-    <div class="modal__bg" (click)="voltar()"></div>
-    <div class="modal__inner" style="max-width: 600px;">
-        <div class="modal__content">
-            <div class="modal__header">
-                <h3 class="text-orange">Editar registro</h3>
-                <a (click)="voltar()" class="modal__header-close btn-close">
-                    <span></span>
-                    <span></span>
-                </a>
-            </div>
-            <div class="modal__body">
-                <form #form="ngForm" (ngSubmit)="send(form)">
-                    <div class="form-row">
-                        <div class="form-group col-lg-7 col-md-7 col-sm-12 col-12">
-                            <label for="nome">Razão Social: </label>
-                            <input class="form-control" name="nome" id="nome" #nome="ngModel" [(ngModel)]="objeto.nome"
-                               required popoverClass="popover-danger"
-                                [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
-                            <div *ngIf="nome.touched && nome.errors">
-                                <p *ngIf="nome.errors['required']" class="text-danger">Esse campo é obrigatório</p>
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-5 col-md-5 col-sm-12 col-12">
-                            <label for="cnpj">CNPJ: </label>
-                            <input class="form-control" name="cnpj" id="cnpj" #cnpj="ngModel" [(ngModel)]="objeto.cnpj"
-                                placeholder="00.000.000/0000-00" mask="00.000.000/0000-00"
-                                [dropSpecialCharacters]="false" required popoverClass="popover-danger"
-                                [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
-                            <div *ngIf="cnpj.touched && cnpj.errors">
-                                <p *ngIf="cnpj.errors['required']" class="text-danger">Esse campo é obrigatório</p>
-                                <p *ngIf="cnpj.errors['mask']" class="text-danger">CNPJ inválido</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
-                            <label for="email">E-mail: </label>
-                            <input type="email" [email]="true" class="form-control" name="email" id="email" #email="ngModel" [(ngModel)]="objeto.email"
-                                placeholder="example@hotmail.com"  required popoverClass="popover-danger"
-                                [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
-                            <div *ngIf="email.touched && email.errors">
-                                <p *ngIf="email.errors['required']" class="text-danger">Esse campo é obrigatório</p>
-                                <p *ngIf="email.errors['email']" class="text-danger">E-mail inválido</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between col-lg-12 flex-wrap p-0">
-                        <ul *ngIf="erro">
-                            <li class="text-red" *ngFor="let err of erro">{{err}}</li>
-                        </ul>
-                        <div class="d-flex col-sm-12 ml-auto mt-3 px-0">
-                            <button type="submit" class="btn btn-primary ml-auto mr-0"
-                                [disabled]="form.invalid || loading">
-                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+<section class="page">
+    <div class="page__header">
+        <span class="title-icon">
+            <fa-icon [icon]="faCity"></fa-icon>
+        </span>
+        <div>
+            <h3 class="page__header-title">Empresa</h3>
+            <p class="page__header-subtitle"><small>Editar registros</small></p>
         </div>
+    </div>
+    <div class="page__body px-3">
+        <form #form="ngForm">
+        <div class="px-1 mb-2">
+            <h6 class="text-primary">Dados cadastrais</h6>
+            <hr>
+        </div>
+            <div class="form-row">
+                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label for="nome">Razão Social: </label>
+                    <input class="form-control" name="nome" id="nome" #nome="ngModel" [(ngModel)]="objeto.nome"
+                           required popoverClass="popover-danger"
+                           [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
+                    <div *ngIf="nome.touched && nome.errors">
+                        <p *ngIf="nome.errors['required']" class="text-danger">Esse campo é obrigatório</p>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label for="cnpj">CNPJ: </label>
+                    <input class="form-control" name="cnpj" id="cnpj" #cnpj="ngModel" [(ngModel)]="objeto.cnpj"
+                           placeholder="00.000.000/0000-00" mask="00.000.000/0000-00"
+                           [dropSpecialCharacters]="false" required popoverClass="popover-danger"
+                           [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
+                    <div *ngIf="cnpj.touched && cnpj.errors">
+                        <p *ngIf="cnpj.errors['required']" class="text-danger">Esse campo é obrigatório</p>
+                        <p *ngIf="cnpj.errors['mask']" class="text-danger">CNPJ inválido</p>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label for="email">E-mail: </label>
+                    <input type="email" [email]="true" class="form-control" name="email" id="email" #email="ngModel" [(ngModel)]="objeto.email"
+                           placeholder="example@hotmail.com" required popoverClass="popover-danger"
+                           [ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave">
+                    <div *ngIf="email.touched && email.errors">
+                        <p *ngIf="email.errors['required']" class="text-danger">Esse campo é obrigatório</p>
+                        <p *ngIf="email.errors['email']" class="text-danger">E-mail inválido</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 px-1">
+                <hr>
+            </div>
+        </form>
+        <div class="d-flex flex-wrap">
+            <div class="col-lg-6 col-md-6 col-sm-12 px-1 mb-2">
+                <app-clientes></app-clientes>
+             </div>
+             <div class="col-lg-6 col-md-6 col-sm-12 px-1 mb-2">
+                 <app-usuarios></app-usuarios>
+             </div>
+             <div class="col-lg-6 col-md-6 col-sm-12 px-1 mb-2">
+                 <app-produtos></app-produtos>
+             </div>
+        </div>
+    </div>
+</section>
+<div class="d-flex justify-content-between col-lg-12 flex-wrap p-0">
+    <ul *ngIf="erro">
+        <li class="text-red" *ngFor="let err of erro">{{err}}</li>
+    </ul>
+    <div class="d-flex col-sm-12 ml-auto mt-3 px-0">
+        <button type="submit" class="btn btn-primary ml-auto mr-0"
+                [disabled]="form.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
     </div>
 </div>
 <ng-template #setaUpDown>

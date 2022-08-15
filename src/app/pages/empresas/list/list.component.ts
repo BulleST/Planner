@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCity, faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { Empresa } from 'src/app/models/empresa.model';
 import { ClienteService } from 'src/app/services/cliente.service';
@@ -16,6 +16,7 @@ import * as $ from 'jquery';
 export class ListComponent implements OnInit {
   faFilter = faFilter;
   faEllipsisV = faEllipsisV;
+  faCity = faCity;
   faTimes = faTimes;
   list: any[] = [];
   selected?: Empresa;
@@ -61,7 +62,7 @@ export class ListComponent implements OnInit {
     this.table.onRowUnselect(event)
   }
 
-  teste(event: any) {
+  onAllRowToggle(event: any) {
     this.table.onAllRowToggle(event);
   }
 }

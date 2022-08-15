@@ -4,8 +4,8 @@
   top: 0;
   left: 0;
   width: 100vw;
-  background-color: #3c86a0;
-  z-index: 1;
+  background-color: #104456;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +45,7 @@
   height: 100%;
   padding: 0 25px;
   box-sizing: border-box;
-  background-color: #3c86a0;
+  background-color:var(--primary);
   z-index: 2;
   position: relative;
   cursor: pointer;

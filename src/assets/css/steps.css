@@ -1,0 +1,57 @@
+.p-steps ul {
+    /* background: red; */
+}
+
+.p-steps-item:not(.p-steps-item:last-child)::before {
+    content: '/f178';
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: "\f178";
+    top: 50%;
+    right: 0;
+    font-weight: 900;
+    font-size: calc(1vw + 8px);
+    color: var(--primary);
+    transform: translate(50%, -43%);
+}
+
+.p-steps-item .p-menuitem-link {
+    padding: 11px 0;
+}
+
+.p-steps-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+.p-steps-title {
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 300;
+    transition: .2s;
+}
+
+.p-steps-item .p-menuitem-link:hover .p-steps-number {
+    background: var(--primary-dark);
+    box-shadow: 1px 1px 0px 0px #00000047;
+}
+
+.p-steps-item.p-steps-current .p-menuitem-link .p-steps-number {
+    background: var(--primary-light);
+    box-shadow: 1px 1px 0px 0px #1b3de547;
+}
+
+.p-steps-item.p-steps-current .p-menuitem-link .p-steps-title, .p-steps-item:hover .p-steps-title {
+    font-weight: 500;
+}
+
+.p-steps {
+    border: 1px #d6d6d6 solid;
+    margin: 16px 0;
+    background: whitesmoke;
+}

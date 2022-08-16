@@ -27,7 +27,7 @@ export class FormProdutoComponent implements OnInit {
     tipoAtivo: TipoAtivo[] = [];
     tipoRisco: TipoRisco[] = [];
     tipoLiquidez: TipoLiquidez[] = [];
-
+    tributacaoSelected?: Tributacao;
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -75,4 +75,34 @@ export class FormProdutoComponent implements OnInit {
     send(form: NgForm) {
         this.sendData.emit(form);
     }
+
+    dragStart(event:any, product: Tributacao) {
+        this.tributacaoSelected = product;
+    }
+    drop(event: any) {
+        console.log(event)
+        if (this.tributacaoSelected) {
+            let draggedProductIndex = this.findIndex(this.tributacaoSelected);
+            this.objeto.tributacao = [...this.objeto.tributacao, this.tributacaoSelected];
+            this.tributacao = this.tributacao.filter((val,i) => i!=draggedProductIndex);
+            this.tributacaoSelected = undefined;
+        }
+    }
+    
+    dragEnd(event: any) {
+        console.log(event)
+        this.tributacaoSelected = undefined;
+    }
+    
+    findIndex(product: Tributacao) {
+        let index = -1;
+        for(let i = 0; i < this.tributacao.length; i++) {
+            if (product.id === this.tributacao[i].id) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+    
 }

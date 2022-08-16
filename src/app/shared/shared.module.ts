@@ -5,7 +5,7 @@ import { RouterModule } from "@angular/router";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { NgbPopoverModule } from "@ng-bootstrap/ng-bootstrap";
 import { TableModule } from "primeng/table";
-
+import {DragDropModule} from 'primeng/dragdrop';
 import { FormUsuarioComponent } from "./usuarios/form/form.component";
 import { FormProdutoComponent } from './produtos/form/form.component';
 import { NgxMaskModule } from "ngx-mask";
@@ -26,6 +26,7 @@ import { ListComponent } from "./list/list.component";
         FontAwesomeModule,
         TableModule,
         NgxMaskModule.forChild(),
+        DragDropModule
     ],
     exports: [
         FormUsuarioComponent,

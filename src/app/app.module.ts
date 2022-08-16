@@ -25,8 +25,9 @@ import { LoadingComponent } from './parts/loading/loading.component';
 import { AlertComponent } from './parts/alert/alert.component';
 import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
 import { SharedModule } from './shared/shared.module';
-
+import { NgbPopoverModule }  from '@ng-bootstrap/ng-bootstrap';
 registerLocaleData(localePt);
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -49,7 +50,7 @@ registerLocaleData(localePt);
         FieldsetModule,
         FormsModule,
         DropdownModule,
-        
+        NgbPopoverModule,
         ToastrModule.forRoot(
             {
                 preventDuplicates: true,

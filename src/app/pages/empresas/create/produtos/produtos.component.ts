@@ -7,10 +7,10 @@ import { produtoColumns } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
-  selector: 'app-produtos',
-  templateUrl: './produtos.component.html',
-  styleUrls: ['./produtos.component.css']
-})
+    selector: 'app-produtos',
+    templateUrl: './produtos.component.html',
+    styleUrls: ['./produtos.component.css']
+  })
 export class ProdutosComponent implements OnInit {
     faHandHoldingDollar = faHandHoldingDollar;
     objeto: Empresa = new Empresa;

@@ -700,13 +700,20 @@ form .input-group-append.valid .input-group-text {
 .form-control.ng-touched.ng-invalid:not(.novalidate .form-control.ng-touched.ng-invalid),
 .input-group-prepend.invalid .input-group-text,
 .input-group-append.invalid .input-group-text {
-    background: #fff5f5;
+    background-color: #fff5f5;
     border-color: #ed7b7b;
 }
 
 .input-group-prepend.invalid .input-group-text,
 .input-group-append.invalid .input-group-text {
     background: #f7c9c9;
+}
+
+.form-floating .input-group-prepend .input-group-text,
+.form-floating .input-group-append .input-group-text,
+.form-floating .form-control::placeholder,
+.form-floating .form-control::placeholder {
+    color: transparent!important;
 }
 
 .form-floating>label {
@@ -1661,7 +1668,7 @@ tbody.tbody-border tr {
 .btn-light:active {
     background: #4798b5;
     border-color: #4798b5;
-    color: #fff!important;
+    color: #fff !important;
     box-shadow: 0 0 0px 2px #a9d4ed;
 }
 
@@ -1716,10 +1723,6 @@ tbody.tbody-border tr {
     color: #005876;
 }
 
-.card {
-    /* padding: 25px 20px; */
-}
-
 .card-header {
     background-color: #f5f5f5;
     display: flex;
@@ -1744,7 +1747,9 @@ tbody.tbody-border tr {
 .card-header-actions {
     margin-left: auto;
 }
-.card .table td, .card .table th {
+
+.card .table td,
+.card .table th {
     padding: 4px 3px;
 }
 
@@ -1752,9 +1757,24 @@ tbody.tbody-border tr {
     background-color: white;
     color: var(--primary);
 }
+
 .card-body {
     padding: 10px 10px;
 }
+
 .text-primary {
-    color: var(--primary)!important;
+    color: var(--primary) !important;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.bg-primary {
+    background-color: var(--primary-light)!important;
+}
+
+.form-control.form-control-loading {
+    background-image: url(./assets/img/loading.gif)!important;
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: right calc(10px) center;
 }

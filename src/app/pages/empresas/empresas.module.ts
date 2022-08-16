@@ -25,6 +25,7 @@ import { ProdutosComponent as Edit_ProdutosComponent } from './edit/produtos/pro
 import { SetupComponent as Edit_SetupComponent } from './edit/setup/setup.component';
 import { UsuariosComponent as Edit_UsuariosComponent } from './edit/usuarios/usuarios.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
         FontAwesomeModule,
         ToastrModule,
         FormsModule,
-        
+        NgbPopoverModule,
         NgxMaskModule.forChild(),
         StepsModule,
         CardModule,

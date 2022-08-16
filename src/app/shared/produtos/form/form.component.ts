@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,6 +29,12 @@ export class FormProdutoComponent implements OnInit {
     tipoRisco: TipoRisco[] = [];
     tipoLiquidez: TipoLiquidez[] = [];
     tributacaoSelected?: Tributacao;
+    loadingTributacao = true;
+    loadingAtivo = true;
+    loadingRisco = true;
+    loadingLiquidez = true;
+
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -38,28 +45,30 @@ export class FormProdutoComponent implements OnInit {
         private dropdownService: DropdownService
     ) {
 
-        this.dropdownService.getTributacao().subscribe(res => this.tributacao = res);
+        this.dropdownService.getTributacao().subscribe(res => {
+            this.tributacao = res;
+            this.loadingTributacao = false;
+        });
         this.dropdownService.tributacao.subscribe(res => this.tributacao = res);
 
-        this.dropdownService.getLiquidez().subscribe(res => this.tipoLiquidez = res);
+        this.dropdownService.getLiquidez().subscribe(res => {
+            this.tipoLiquidez = res;
+            this.loadingLiquidez = false;
+        });
         this.dropdownService.tipoLiquidez.subscribe(res => this.tipoLiquidez = res);
 
-        this.dropdownService.getRisco().subscribe(res => this.tipoRisco = res);
+        var a = this.dropdownService.getRisco().subscribe(res => {
+            this.tipoRisco = res;
+            this.loadingRisco = false;
+        });
         this.dropdownService.tipoRisco.subscribe(res => this.tipoRisco = res);
 
-        this.dropdownService.getAtivo().subscribe(res => this.tipoAtivo = res);
+        this.dropdownService.getAtivo().subscribe(res => {
+            this.tipoAtivo = res;
+            this.loadingAtivo = false;
+        });
         this.dropdownService.tipoAtivo.subscribe(res => this.tipoAtivo = res);
         
-        this.activatedRoute.params.subscribe(res => {
-            if (res['id']) {
-                this.objeto.id = this.crypto.decrypt(res['id']);
-                // this.empresaService.get(this.objeto.id).subscribe({
-                // 	next: (res:string|Empresa) => {
-
-                // 	}
-                // })
-            }
-        })
     }
 
     ngOnInit(): void {
@@ -73,36 +82,29 @@ export class FormProdutoComponent implements OnInit {
     }
 
     send(form: NgForm) {
+        if (form.invalid) {
+            this.toastr.error('Campos inválidos');
+            this.erro = ['Campos inválidos'];
+            return;
+        }
+        if (this.objeto.tributacao.length == 0) {
+            this.toastr.error('Selecione pelo menos uma tributação para continuar');
+            this.erro = ['Selecione pelo menos uma tributação para continuar'];
+            return;
+        }
+        this.erro = [];
         this.sendData.emit(form);
     }
-
-    dragStart(event:any, product: Tributacao) {
-        this.tributacaoSelected = product;
-    }
-    drop(event: any) {
-        console.log(event)
-        if (this.tributacaoSelected) {
-            let draggedProductIndex = this.findIndex(this.tributacaoSelected);
-            this.objeto.tributacao = [...this.objeto.tributacao, this.tributacaoSelected];
-            this.tributacao = this.tributacao.filter((val,i) => i!=draggedProductIndex);
-            this.tributacaoSelected = undefined;
+    drop(event: CdkDragDrop<Tributacao[]>) {
+        if (event.previousContainer === event.container) {
+          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        } else {
+          transferArrayItem(
+            event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex,
+          );
         }
-    }
-    
-    dragEnd(event: any) {
-        console.log(event)
-        this.tributacaoSelected = undefined;
-    }
-    
-    findIndex(product: Tributacao) {
-        let index = -1;
-        for(let i = 0; i < this.tributacao.length; i++) {
-            if (product.id === this.tributacao[i].id) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-    
+      }
 }

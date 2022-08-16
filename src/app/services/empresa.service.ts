@@ -59,17 +59,11 @@ export class EmpresaService {
     addNewProdutoToEmpresa(produto: Produto) {
         var empresa = this.objeto.value;
         var products = empresa?.produtos ?? [];
-        if (empresa ) {
-            // var emails = products.map(x => x.email).find(x => x.toLowerCase() == produto.email.toLowerCase());
-            // if (emails) {
-            //     this.toastr.error('Esse e-mail já está cadastrado para outro usuário!!');
-            //     return;
-            // } else {
-                products.push(produto);
-                empresa.produtos = products;
-                this.objeto.next(empresa);
-                this.toastr.success('Operação concluída');
-            // }
+        if (empresa) {
+            products.push(produto);
+            empresa.produtos = products;
+            this.objeto.next(empresa);
+            this.toastr.success('Operação concluída');
         }
     }
 

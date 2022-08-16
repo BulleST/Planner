@@ -12,6 +12,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskModule } from 'ngx-mask';
 import { ToastrModule } from 'ngx-toastr';
 import { TableModule } from 'primeng/table';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { TableModule } from 'primeng/table';
     NgxMaskModule,
     ToastrModule,
     TableModule,
+    NgbPopoverModule
   ],
   bootstrap: [ClientesComponent]
 })

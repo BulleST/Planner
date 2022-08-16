@@ -1,7 +1,7 @@
-<app-header></app-header>
-<app-actions></app-actions>
-<div class="main" [class.dark]="modoEscuroAtivado">
+<app-header [ngStyle]="{'z-index': modalOpen ? '-1' : '1', 'position': 'relative'}"></app-header>
+<app-actions [ngStyle]="{'z-index': modalOpen ? '1' : '2', 'position': 'relative'}"></app-actions>
+<div class="main" [class.dark]="modoEscuroAtivado" [ngStyle]="{'z-index':'0', 'position': 'relative'}">
   <router-outlet></router-outlet>
 </div>
-<app-footer></app-footer>
+<app-footer [ngStyle]="{'z-index': modalOpen ? '-1' : '2', 'position': 'relative'}"></app-footer>
 

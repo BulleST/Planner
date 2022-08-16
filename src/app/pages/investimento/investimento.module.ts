@@ -21,6 +21,7 @@ import { AdicionarLinhaPrincipaisObjetivosComponent } from './adicionar-linha-pr
 import { DeleteLinhaPrincipaisObjetivosComponent } from './delete-linha-principais-objetivos/delete-linha-principais-objetivos.component';
 import { DeleteLinhaFluxosPontuaisComponent } from './delete-linha-fluxos-pontuais/delete-linha-fluxos-pontuais.component';
 import { AdicionarLinhaFluxosPontuaisComponent } from './adicionar-linha-fluxos-pontuais/adicionar-linha-fluxos-pontuais.component';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { AdicionarLinhaFluxosPontuaisComponent } from './adicionar-linha-fluxos-
     NgxMaskModule.forChild(),
     HttpClientModule,
     ChartModule,
+    NgbPopoverModule
     
   ]
 })

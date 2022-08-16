@@ -17,7 +17,6 @@ import { AdicionarLinhaInvestimentoComponent } from './adicionar-linha-investime
 import { AdicionarLinhaProdutoComponent } from './adicionar-linha-produto/adicionar-linha-produto.component';
 import { DeleteLinhaInvestimentoComponent } from './delete-linha-investimento/delete-linha-investimento.component';
 import { DeleteLinhaProdutoComponent } from './delete-linha-produto/delete-linha-produto.component';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdicionarLinhaPrincipaisObjetivosComponent } from './adicionar-linha-principais-objetivos/adicionar-linha-principais-objetivos.component';
 import { DeleteLinhaPrincipaisObjetivosComponent } from './delete-linha-principais-objetivos/delete-linha-principais-objetivos.component';
 import { DeleteLinhaFluxosPontuaisComponent } from './delete-linha-fluxos-pontuais/delete-linha-fluxos-pontuais.component';
@@ -48,7 +47,7 @@ import { AdicionarLinhaFluxosPontuaisComponent } from './adicionar-linha-fluxos-
     NgxMaskModule.forChild(),
     HttpClientModule,
     ChartModule,
-    NgbPopoverModule,
+    
   ]
 })
 export class InvestimentoModule { }

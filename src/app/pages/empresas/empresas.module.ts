@@ -6,7 +6,6 @@ import { TableModule } from 'primeng/table';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule } from 'ngx-mask';
 import { StepsModule } from 'primeng/steps';
 import { CardModule } from 'primeng/card';
@@ -54,7 +53,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
         FontAwesomeModule,
         ToastrModule,
         FormsModule,
-        NgbPopoverModule,
+        
         NgxMaskModule.forChild(),
         StepsModule,
         CardModule,

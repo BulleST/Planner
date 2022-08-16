@@ -13,7 +13,6 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { ChartModule } from 'primeng/chart';
 import { NgxMaskModule } from 'ngx-mask';
 import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { DropdownModule } from 'primeng/dropdown';
 import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
@@ -50,7 +49,7 @@ registerLocaleData(localePt);
         FieldsetModule,
         FormsModule,
         DropdownModule,
-        NgbPopoverModule,
+        
         ToastrModule.forRoot(
             {
                 preventDuplicates: true,

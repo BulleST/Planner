@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { NgbPopoverModule } from "@ng-bootstrap/ng-bootstrap";
 import { TableModule } from "primeng/table";
 import {DragDropModule} from 'primeng/dragdrop';
 import { FormUsuarioComponent } from "./usuarios/form/form.component";
@@ -22,7 +21,7 @@ import { ListComponent } from "./list/list.component";
         CommonModule,
         FormsModule,
         RouterModule,
-        NgbPopoverModule,
+        
         FontAwesomeModule,
         TableModule,
         NgxMaskModule.forChild(),

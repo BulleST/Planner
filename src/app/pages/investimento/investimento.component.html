@@ -104,15 +104,15 @@
                     <div class="home__container">
                         <div class="form-row">
                             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
-                                <label for="perfilInvestidor_Id">Perfil de Investidor:</label>
+                                <label for="perfilInvestidor">Perfil de Investidor:</label>
                                 <div class="form-floating">
-                                    <select class="form-control" name="perfilInvestidor_Id" id="perfilInvestidor_Id"
-                                        name="perfilInvestidor_Id" #perfilInvestidor_Id="ngModel"
-                                        [(ngModel)]="cliente.perfilInvestidor_Id" required
+                                    <select class="form-control" name="perfilInvestidor" id="perfilInvestidor"
+                                        name="perfilInvestidor" #perfilInvestidor="ngModel"
+                                        [(ngModel)]="cliente.perfilInvestidor" required
                                         [ngbPopover]="campoObrigatorio" popoverClass="popover-danger"
-                                        [disablePopover]="perfilInvestidor_Id.errors == null"
+                                        [disablePopover]="perfilInvestidor.errors == null"
                                         triggers="mouseenter:mouseleave">
-                                        <option [value]="item.id" *ngFor="let item of perfilInvestidor">{{
+                                        <option [value]="item.id" *ngFor="let item of _perfilInvestidor">{{
                                             item.descricao }} </option>
                                     </select>
                                 </div>

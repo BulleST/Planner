@@ -98,7 +98,7 @@ export class InvestimentoComponent implements OnInit, AfterContentChecked {
 
   
   cliente: Cliente = new Cliente;
-  perfilInvestidor: PerfilInvestidor[] = perfilInvestidor;
+  _perfilInvestidor: PerfilInvestidor[] = perfilInvestidor;
   planejamento: Planejamento = new Planejamento;
   principaisObjetivos: PrincipaisObjetivos[] = []
   investimentos: PlanejamentoInvestimento[] = [];

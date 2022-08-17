@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faCity, faEllipsisV, faFilter, faTimes, faUsers, faUsersRectangle } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Empresa } from 'src/app/models/empresa.model';
-import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Table } from 'src/app/utils/table';
 

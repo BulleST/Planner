@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
+import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
 import { Empresa } from 'src/app/models/empresa.model';
-import { produtoColumns } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
@@ -12,12 +12,11 @@ import { EmpresaService } from 'src/app/services/empresa.service';
     styleUrls: ['./setup.component.css']
 })
 export class SetupComponent implements OnInit {
-    faHandHoldingDollar = faHandHoldingDollar;
+    faWallet = faWallet;
     objeto: Empresa = new Empresa;
-    produtoColumns = produtoColumns;
+    setupColumns = setupColumns;
     
     constructor(
-        private toastr: ToastrService,
         private empresaService: EmpresaService,
         private router: Router
     ) {
@@ -30,7 +29,7 @@ export class SetupComponent implements OnInit {
     }
 
     next() {
-        this.router.navigate(['empresas', 'cadastrar', 'carteira-setup'])
+        this.router.navigate(['empresas', 'cadastrar', 'finalizar'])
     }
 
     previous() {

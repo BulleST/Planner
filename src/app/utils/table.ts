@@ -88,11 +88,7 @@ export class Table {
 		} else {
 			tr = $(event).parents('tr');
 		}
-        console.log(tr)
 		let td = $(tr).find('.td-actions');
-        console.log(td)
-        console.log($(td).offset())
-        console.log($(td).position())
 
 		let top = ($(td).offset()?.top ?? 0) + 25;
 		let left = ($(td).offset()?.left ?? 0) + 20;

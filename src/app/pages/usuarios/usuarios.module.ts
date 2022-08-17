@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { UsuariosRoutingModule } from './usuarios-routing.module';
+import { UsuariosRoutingModule } from './usuarios.routing';
 import { UsuariosComponent } from './usuarios.component';
 import { CreateComponent } from './create/create.component';
 import { FormsModule } from '@angular/forms';
@@ -25,9 +25,7 @@ import { DeleteComponent } from './delete/delete.component';
     UsuariosRoutingModule,
     FormsModule,
     ToastrModule,
-    
     SharedModule
-    
   ],
   exports: [
     CreateComponent

@@ -1,5 +1,5 @@
 export class EstadoCivil {
-    id: number = 0;
+    id: number = undefined as unknown as number;
     descricao: string = '';
 }
 

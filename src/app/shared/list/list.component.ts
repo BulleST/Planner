@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
 
 @Component({
@@ -11,41 +12,46 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnChanges {
 
     faFilter = faFilter;
     faTimes = faTimes;
     faEllipsisV = faEllipsisV;
+    loading = false;
 
     @Input() list: any[] = [];
-    @Input() loading = false;
     @Input() filterLink = true;
     @Input() filterTable = true;
-    @Input() paginator = true;
+    @Input() paginator: boolean = true;
     @Input() sortTable = true;
     @Input() menuTable = true;
+    @Input() canCreate = true;
     @Input() columns = [
         { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
-        { field: 'nome', header: 'Nome', filterType: 'text', filterDisplay: 'menu' },
-        { field: 'email', header: 'E-mail', filterType: 'text', filterDisplay: 'menu' },
-        { field: 'perfil', header: 'Tipo de Acesso', filterType: 'text', filterDisplay: 'menu' },
     ];
-    @Input() selected?: any;
-    @Input() itemsSelected: any[] = [];
 
+    selected?: any;
+    itemsSelected: any[] = [];
     filters: string[] = [];
 
     constructor(
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
-        private empresaService: EmpresaService,
-        private table: Table) 
-        {
+        private table: Table,
+        public crypto: Crypto) {
         this.filters = this.columns.map(x => x.field);
     }
 
     ngOnInit(): void {
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.list = changes['list'].currentValue;
+        this.filterLink = changes['filterLink'].currentValue;
+        this.filterTable = changes['filterTable'].currentValue;
+        this.paginator = changes['paginator'].currentValue;
+        this.sortTable = changes['sortTable'].currentValue;
+        this.menuTable = changes['menuTable'].currentValue;
+        this.columns = changes['columns'].currentValue;
+        this.canCreate = changes['canCreate'].currentValue;
     }
 
 
@@ -59,5 +65,15 @@ export class ListComponent implements OnInit {
 
     onAllRowToggle(event: any) {
         this.table.onAllRowToggle(event);
+    }
+
+    getCellData(row: any, col: any): any {
+        const nestedProperties: string[] = col.field.split('.');
+        let value: any = row;
+        for (const prop of nestedProperties) {
+            value = value[prop];
+        }
+
+        return value;
     }
 }

@@ -4,11 +4,10 @@ import { PerfilInvestidor } from "./perfilInvestidor.model";
 
 export class Cliente {
     id: number = 0;
-
-    empresa_Id: number = 0;
     empresa: Empresa = new Empresa;
 
-    perfilInvestidor_Id: number = '' as unknown as number;
+    empresa_Id: number  = 0
+
     perfilInvestidor: PerfilInvestidor = new PerfilInvestidor;
 
     nome: string = '';
@@ -16,7 +15,6 @@ export class Cliente {
     altura: number = '' as unknown as number;
     peso: number = '' as unknown as number;
 
-    estadoCivil_Id: number = 0;
     estadoCivil: EstadoCivil = new EstadoCivil;
     
     dataNascimento: Date = new Date;

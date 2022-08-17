@@ -22,6 +22,7 @@ export class ProdutosComponent implements OnInit {
     ) {
         this.empresaService.objeto.subscribe(res => {
             this.objeto = res ?? new Empresa;
+            console.log(this.objeto.produtos)
         });
     }
 
@@ -29,11 +30,11 @@ export class ProdutosComponent implements OnInit {
     }
 
     next() {
-        this.router.navigate(['empresas', 'cadastrar', 'carteira-setup'])
+        this.router.navigate(['empresas', 'cadastrar', 'setup'])
     }
     
     previous() {
-        this.router.navigate(['empresas', 'cadastrar', 'produtos'])
+        this.router.navigate(['empresas', 'cadastrar', 'usuarios'])
     }
 
 }

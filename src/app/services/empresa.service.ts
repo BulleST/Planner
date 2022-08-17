@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
-import { Empresa, empresas } from '../models/empresa.model';
+import { Empresa } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
 import { Usuario } from '../models/usuario.model';
 import { Produto } from '../models/produto.model';
+import { CarteiraSetupRequest } from '../models/carteiraSetup-produto.model';
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +23,6 @@ export class EmpresaService {
         private toastr: ToastrService,
         private crypto: Crypto,
     ) { 
-        this.list.next(empresas);
     }
 
     getObject() {
@@ -62,6 +62,16 @@ export class EmpresaService {
         if (empresa) {
             products.push(produto);
             empresa.produtos = products;
+            this.objeto.next(empresa);
+            this.toastr.success('Operação concluída');
+        }
+    }
+    addNewSetupToEmpresa(carteiraSetup: CarteiraSetupRequest) {
+        var empresa = this.objeto.value;
+        var setups = empresa?.carteiraSetup ?? [];
+        if (empresa) {
+            setups.push(carteiraSetup);
+            empresa.carteiraSetup = setups;
             this.objeto.next(empresa);
             this.toastr.success('Operação concluída');
         }

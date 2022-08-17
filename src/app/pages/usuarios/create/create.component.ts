@@ -3,10 +3,8 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Empresa } from 'src/app/models/empresa.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
-import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -27,23 +25,10 @@ export class CreateComponent implements OnInit {
 		private toastr: ToastrService,
 		private modal: ModalOpen,
 		private empresaService: EmpresaService,
-		private crypto: Crypto
 	) {
 		this.modal.getOpen().subscribe(res => {
 			this.modalOpen = res;
 		});
-
-
-		this.activatedRoute.params.subscribe(res => {
-			if (res['id']) {
-				this.objeto.id = this.crypto.decrypt(res['id']);
-				// this.empresaService.get(this.objeto.id).subscribe({
-				// 	next: (res:string|Empresa) => {
-
-				// 	}
-				// })
-			}
-		})
 	}
 
 	ngOnInit(): void {

@@ -1,4 +1,5 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,10 +25,11 @@ export class FormProdutoComponent implements OnInit {
     @Input() erro: any[] = [];
 
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
-    tributacao: Tributacao[] = [];
-    tipoAtivo: TipoAtivo[] = [];
-    tipoRisco: TipoRisco[] = [];
-    tipoLiquidez: TipoLiquidez[] = [];
+    
+    _tributacao: Tributacao[] = [];
+    _tipoAtivo: TipoAtivo[] = [];
+    _tipoRisco: TipoRisco[] = [];
+    _tipoLiquidez: TipoLiquidez[] = [];
     tributacaoSelected?: Tributacao;
     loadingTributacao = true;
     loadingAtivo = true;
@@ -46,28 +48,28 @@ export class FormProdutoComponent implements OnInit {
     ) {
 
         this.dropdownService.getTributacao().subscribe(res => {
-            this.tributacao = res;
+            this._tributacao = res.filter(x => !this.objeto.tributacao.map(x => x.id).includes(x.id));
             this.loadingTributacao = false;
         });
-        this.dropdownService.tributacao.subscribe(res => this.tributacao = res);
+        this.dropdownService.tributacao.subscribe(res => this._tributacao = res);
 
         this.dropdownService.getLiquidez().subscribe(res => {
-            this.tipoLiquidez = res;
+            this._tipoLiquidez = res;
             this.loadingLiquidez = false;
         });
-        this.dropdownService.tipoLiquidez.subscribe(res => this.tipoLiquidez = res);
+        this.dropdownService.tipoLiquidez.subscribe(res => this._tipoLiquidez = res);
 
         var a = this.dropdownService.getRisco().subscribe(res => {
-            this.tipoRisco = res;
+            this._tipoRisco = res;
             this.loadingRisco = false;
         });
-        this.dropdownService.tipoRisco.subscribe(res => this.tipoRisco = res);
+        this.dropdownService.tipoRisco.subscribe(res => this._tipoRisco = res);
 
         this.dropdownService.getAtivo().subscribe(res => {
-            this.tipoAtivo = res;
+            this._tipoAtivo = res;
             this.loadingAtivo = false;
         });
-        this.dropdownService.tipoAtivo.subscribe(res => this.tipoAtivo = res);
+        this.dropdownService.tipoAtivo.subscribe(res => this._tipoAtivo = res);
         
     }
 
@@ -96,6 +98,7 @@ export class FormProdutoComponent implements OnInit {
         this.sendData.emit(form);
     }
     drop(event: CdkDragDrop<Tributacao[]>) {
+        console.log(event)
         if (event.previousContainer === event.container) {
           moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
@@ -106,5 +109,8 @@ export class FormProdutoComponent implements OnInit {
             event.currentIndex,
           );
         }
+        this.objeto.tributacao.sort((x,y) => x.id - y.id)
+        this._tributacao.sort((x,y) => x.id - y.id)
       }
+
 }

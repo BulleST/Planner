@@ -14,6 +14,11 @@ import { UsuariosComponent } from './create/usuarios/usuarios.component';
 import { CreateComponent as Usuario_CreateComponent } from './../usuarios/create/create.component';
 
 import { CreateComponent as Produto_CreateComponent } from './../produtos/create/create.component';
+
+import { CreateComponent as CarteiraSetup_CreateComponent } from './../carteira-setup/create/create.component';
+import { CarteiraSetupGuard } from 'src/app/helpers/carteira-setup.guard';
+import { FinalizarComponent } from './create/finalizar/finalizar.component';
+
 const routes: Routes = [
     {
         path: '', component: ListComponent, children: [
@@ -28,9 +33,14 @@ const routes: Routes = [
         ] },
         { path: 'clientes', component: ClientesComponent },
         { path: 'usuarios', component: UsuariosComponent, children: [
-            { path: 'cadastrar', component: Usuario_CreateComponent  }
+            { path: 'cadastrar', component: Usuario_CreateComponent },
         ] },
-        { path: 'setup', component: SetupComponent },
+        { path: 'setup', component: SetupComponent, children: [
+            { path: 'cadastrar', component: CarteiraSetup_CreateComponent, 
+                // canActivate: [CarteiraSetupGuard] 
+            }
+        ] },
+        { path: 'finalizar', component: FinalizarComponent },
     ] },
 ];
 

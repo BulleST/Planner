@@ -713,7 +713,7 @@ form .input-group-append.valid .input-group-text {
 .form-floating .input-group-append .input-group-text,
 .form-floating .form-control::placeholder,
 .form-floating .form-control::placeholder {
-    color: transparent!important;
+    color: transparent !important;
 }
 
 .form-floating>label {
@@ -1291,8 +1291,8 @@ tbody tr.alert-dark:nth-of-type(even) td {
 .cdk-drag {
     margin: 5px 0;
     background: #ffffff;
-    padding: 3px 0 4px 10px;
-    border: 1px #dedede solid;
+    /* padding: 3px 0 4px 10px; */
+    /* border: 1px #dedede solid; */
     cursor: move;
 }
 
@@ -1765,16 +1765,36 @@ tbody.tbody-border tr {
 .text-primary {
     color: var(--primary) !important;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .bg-primary {
-    background-color: var(--primary-light)!important;
+    background-color: var(--primary-light) !important;
 }
 
 .form-control.form-control-loading {
-    background-image: url(./assets/img/loading.gif)!important;
+    background-image: url(./assets/img/loading.gif) !important;
     background-size: 15px;
     background-repeat: no-repeat;
     background-position: right calc(10px) center;
+}
+
+.title-icon svg {
+    width: 26px;
+    height: 26px;
+    font-size: 26px;
+}
+
+.card-header .title-icon svg {
+    width: 26px;
+    height: 26px;
+    font-size: 26px;
 }

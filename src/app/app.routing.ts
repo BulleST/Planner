@@ -11,17 +11,19 @@ const empresas = () => import('./pages/empresas/empresas.module').then(res => re
 const investimento = () => import('./pages/investimento/investimento.module').then(res => res.InvestimentoModule);
 const usuarios = () => import('./pages/usuarios/usuarios.module').then(res => res.UsuariosModule);
 const produtos = () => import('./pages/produtos/produtos.module').then(res => res.ProdutosModule);
+const setup = () => import('./pages/carteira-setup/carteira-setup.module').then(res => res.CarteiraSetupModule);
 
 const routes: Routes = [
   { path: '', redirectTo: 'investimento', pathMatch: 'full' },
   {
     path: '', component: InitialComponent, /*canActivate: [AuthGuard], */children: [
 
-      { path: 'investimento', loadChildren: investimento },
-      { path: 'clientes', loadChildren: clientes },
-      { path: 'empresas', loadChildren: empresas },
-      { path: 'usuarios', loadChildren: usuarios },
-      { path: 'produtos', loadChildren: produtos },
+        { path: 'carteira-setup', loadChildren: setup },
+        { path: 'clientes', loadChildren: clientes },
+        { path: 'empresas', loadChildren: empresas },
+        { path: 'investimento', loadChildren: investimento },
+        { path: 'produtos', loadChildren: produtos },
+        { path: 'usuarios', loadChildren: usuarios },
 
       { path: 'my-account', component: MyAccountComponent },
       { path: 'reset-password', component: ResetPasswordComponent },

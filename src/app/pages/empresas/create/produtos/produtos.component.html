@@ -10,13 +10,14 @@
     </div>
     <div class="card-body">
         <app-list
-                          [list]="objeto.produtos"
-                          [filterLink]="false"
-                          [filterTable]="false"
-                          [paginator]="false"
-                          [sortTable]="false"
-                          [menuTable]="false"
-                          [columns]="produtoColumns"
+            [list]="objeto.produtos"
+            [filterLink]="false"
+            [filterTable]="false"
+            [paginator]="false"
+            [sortTable]="false"
+            [menuTable]="false"
+            [canCreate]="true"
+            [columns]="produtoColumns"
         ></app-list>
         <div class="d-flex justify-content-between px-2 mt-2">
             <button class="btn btn-primary" (click)="previous()">Anterior</button>

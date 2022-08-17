@@ -38,7 +38,6 @@ export class CreateComponent implements OnInit {
             
         this.empresaService.objeto.subscribe(res => {
             this.objeto = res ?? new Empresa;
-            console.log(res)
         });
 
         this.items =  [
@@ -47,7 +46,6 @@ export class CreateComponent implements OnInit {
                 label: 'Dados Cadastrais',
                 routerLink: 'dados-cadastrais',
                 command: (event: any) => {
-                    console.log(event)
                 }
             },
             { 
@@ -69,7 +67,6 @@ export class CreateComponent implements OnInit {
                 label: 'Produtos',
                 routerLink: 'produtos',
                 command: (event: any) => {
-                    console.log(event)
                 }
             },
             { 
@@ -77,7 +74,6 @@ export class CreateComponent implements OnInit {
                 label: 'Carteira Setup',
                 routerLink: 'setup',
                 command: (event: any) => {
-                    console.log(event)
                 }
             },
             { 
@@ -85,7 +81,6 @@ export class CreateComponent implements OnInit {
                 label: 'Revisar dados',
                 routerLink: 'finalizar',
                 command: (event: any) => {
-                    console.log(event)
                 }
             },
         ];

@@ -11,11 +11,14 @@ import { NgxMaskModule } from "ngx-mask";
 import { ListComponent } from "./list/list.component";
 import { NgbPopoverModule } from "@ng-bootstrap/ng-bootstrap";
 import { DragDropModule as Material_DragDropModule } from '@angular/cdk/drag-drop';
+import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
+import { DropdownModule } from "primeng/dropdown";
 @NgModule({
     declarations: [
         FormUsuarioComponent,
         FormProdutoComponent,
-        ListComponent
+        FormCarteiraSetupComponent,
+        ListComponent,
     ],
     imports: [
         CommonModule,
@@ -25,13 +28,15 @@ import { DragDropModule as Material_DragDropModule } from '@angular/cdk/drag-dro
         TableModule,
         NgxMaskModule.forChild(),
         Primeng_DragDropModule,
+        Material_DragDropModule,
         NgbPopoverModule,
-        Material_DragDropModule
+        DropdownModule,
     ],
     exports: [
         FormUsuarioComponent,
         FormProdutoComponent,
-        ListComponent
+        FormCarteiraSetupComponent,
+        ListComponent,
     ],
 })
 export class SharedModule {

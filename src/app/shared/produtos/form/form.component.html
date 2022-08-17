@@ -19,63 +19,63 @@
     </div>
     <div class="form-row">
         <div class="form-group col-lg-4 col-md-4 col-sm-12">
-            <label for="tipoAtivo_Id">Tipo Ativo: <span class="text-danger">*</span></label>
+            <label for="tipoAtivo">Tipo Ativo: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
-                    name="tipoAtivo_Id"
-                    id="tipoAtivo_Id"
-                    #tipoAtivo_Id="ngModel"
-                    [(ngModel)]="objeto.tipoAtivo_Id"
+                    name="tipoAtivo"
+                    id="tipoAtivo"
+                    #tipoAtivo="ngModel"
+                    [(ngModel)]="objeto.tipoAtivo"
                     [class.form-control-loading]="loadingAtivo"
                     required
                     popoverClass="popover-danger"
                     [ngbPopover]="campoObrigatorio"
                     triggers="mouseenter:mouseleave">
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item" *ngFor="let item of tipoAtivo">{{ item.nome }}</option>
+                <option [ngValue]="item" *ngFor="let item of _tipoAtivo">{{ item.nome }}</option>
             </select>
-            <div *ngIf="tipoAtivo_Id.touched && tipoAtivo_Id.errors">
-                <p class="text-danger" *ngIf="tipoAtivo_Id.errors['required']">Esse campo é obrigatório</p>
+            <div *ngIf="tipoAtivo.touched && tipoAtivo.errors">
+                <p class="text-danger" *ngIf="tipoAtivo.errors['required']">Esse campo é obrigatório</p>
             </div>
         </div>
         <div class="form-group col-lg-4 col-md-4 col-sm-12">
-            <label for="tipoRisco_Id">Tipo Risco: <span class="text-danger">*</span></label>
+            <label for="tipoRisco">Tipo Risco: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
-                    name="tipoRisco_Id"
-                    id="tipoRisco_Id"
-                    #tipoRisco_Id="ngModel"
-                    [(ngModel)]="objeto.tipoRisco_Id"
+                    name="tipoRisco"
+                    id="tipoRisco"
+                    #tipoRisco="ngModel"
+                    [(ngModel)]="objeto.tipoRisco"
                     [class.form-control-loading]="loadingRisco"
                     required
                     popoverClass="popover-danger"
                     [ngbPopover]="campoObrigatorio"
                     triggers="mouseenter:mouseleave">
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item" *ngFor="let item of tipoRisco">{{ item.nome }}</option>
+                <option [ngValue]="item" *ngFor="let item of _tipoRisco">{{ item.nome }}</option>
             </select>
-            <div *ngIf="tipoRisco_Id.touched && tipoRisco_Id.errors">
-                <p class="text-danger" *ngIf="tipoRisco_Id.errors['required']">Esse campo é obrigatório</p>
+            <div *ngIf="tipoRisco.touched && tipoRisco.errors">
+                <p class="text-danger" *ngIf="tipoRisco.errors['required']">Esse campo é obrigatório</p>
             </div>
         </div>
         <div class="form-group col-lg-4 col-md-4 col-sm-12">
-            <label for="tipoLiquidez_Id">Tipo Liquidez: <span class="text-danger">*</span></label>
+            <label for="tipoLiquidez">Tipo Liquidez: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
-                    name="tipoLiquidez_Id"
-                    id="tipoLiquidez_Id"
-                    #tipoLiquidez_Id="ngModel"
-                    [(ngModel)]="objeto.tipoLiquidez_Id"
+                    name="tipoLiquidez"
+                    id="tipoLiquidez"
+                    #tipoLiquidez="ngModel"
+                    [(ngModel)]="objeto.tipoLiquidez"
                     [class.form-control-loading]="loadingLiquidez"
                     required
                     popoverClass="popover-danger"
                     [ngbPopover]="campoObrigatorio"
                     triggers="mouseenter:mouseleave">
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item" *ngFor="let item of tipoLiquidez">{{ item.nome }}</option>
+                <option [ngValue]="item" *ngFor="let item of _tipoLiquidez">{{ item.nome }}</option>
             </select>
-            <div *ngIf="tipoLiquidez_Id.touched && tipoLiquidez_Id.errors">
-                <p class="text-danger" *ngIf="tipoLiquidez_Id.errors['required']">Esse campo é obrigatório</p>
+            <div *ngIf="tipoLiquidez.touched && tipoLiquidez.errors">
+                <p class="text-danger" *ngIf="tipoLiquidez.errors['required']">Esse campo é obrigatório</p>
             </div>
         </div>
     </div>
@@ -124,25 +124,27 @@
         </div>
     </div>
     <div class="form-row d-flex w-100 flex-wrap align-items-stretch">
-        <div class="col-12 mb-1">Tributação: <span class="text-danger">*</span></div>
+        <p class="col-12 mb-1">Tributação: <span class="text-danger">*</span></p>
+        <p class="col-12 mb-1"><small>Clique e arraste para selecionar as tributações aplicadas a esse produto</small></p>
+        
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="w-100 bg-light"
                  cdkDropList
                  #listOne="cdkDropList"
-                 [cdkDropListData]="tributacao"
+                 [cdkDropListData]="_tributacao"
                  [cdkDropListConnectedTo]="[listTwo]"
                  (cdkDropListDropped)="drop($event)">
-                 <div *ngIf="tributacao.length == 0 && loadingTributacao" class="bg-light d-flex align-items-center justify-content-center flex-column" style="height: 300px;">
+                 <div *ngIf="_tributacao.length == 0 && loadingTributacao" class="bg-light d-flex align-items-center justify-content-center flex-column" style="height: 300px;">
                     <span class="spinner-border spinner-border-sm"></span>
                     <p class="mt-1">Carregando...</p>
                  </div>
-                 <div *ngIf="tributacao.length > 0 && !loadingTributacao">
-                     <div class="p-0 d-flex" *ngFor="let item of tributacao" cdkDrag>
-                         <div class="bg-primary text-light px-2 d-flex align-items-center justify-content-center mr-2"> {{item.id}} </div>
-                         <div class="py-1 px-2">
-                             <p class="mb-0"><small><strong>{{item.descricao}}</strong></small></p>
-                             <p class="mb-0"><small><strong>Alíquota: </strong> {{ item.aliquota | currency : 'BRL' : '' : '1.2-2' }}%</small></p>
-                         </div>
+                 <div *ngIf="_tributacao.length > 0 && !loadingTributacao">
+                     <div class="p-0 d-flex" *ngFor="let item of _tributacao" cdkDrag>
+                        <div class="d-flex align-items-center justify-content-center px-2 mr-2 bg-primary text-light border-bottom"> {{item.id}} </div>
+                        <div class=" w-100 pl-3 py-1 border-bottom">
+                            <p class="mb-0"><small><strong>{{item.descricao}}</strong></small></p>
+                            <p class="mb-0"><small><strong>Alíquota: </strong> {{ item.aliquota | currency : 'BRL' : '' : '1.2-2' }}%</small></p>
+                        </div>
                      </div>
                  </div>
             </div>
@@ -156,8 +158,8 @@
                  (cdkDropListDropped)="drop($event)"
                  [class.empty]="objeto.tributacao.length == 0">
                 <div class="p-0 d-flex" *ngFor="let item of objeto.tributacao" cdkDrag>
-                    <div class="bg-primary text-light px-2 d-flex align-items-center justify-content-center mr-2"> {{item.id}} </div>
-                    <div class="py-1 px-2">
+                    <div class="d-flex align-items-center justify-content-center px-2 mr-2 bg-primary text-light border-bottom"> {{item.id}} </div>
+                    <div class=" w-100 pl-3 py-1 border-bottom">
                         <p class="mb-0"><small><strong>{{item.descricao}}</strong></small></p>
                         <p class="mb-0"><small><strong>Alíquota: </strong> {{ item.aliquota | currency : 'BRL' : '' : '1.2-2' }}%</small></p>
                     </div>

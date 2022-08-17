@@ -31,18 +31,6 @@ export class CreateComponent implements OnInit {
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
-
-
-        this.activatedRoute.params.subscribe(res => {
-            if (res['id']) {
-                this.objeto.id = this.crypto.decrypt(res['id']);
-                // this.empresaService.get(this.objeto.id).subscribe({
-                // 	next: (res:string|Empresa) => {
-
-                // 	}
-                // })
-            }
-        })
     }
 
     ngOnInit(): void {
@@ -61,7 +49,7 @@ export class CreateComponent implements OnInit {
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
-
+        console.log(this.objeto)
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar')) {
             // Adicionar a empresaService.objeto

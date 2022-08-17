@@ -9,17 +9,17 @@
         </div>
     </div>
     <div class="card-body">
-        <div *ngIf="objeto.clientes.length == 0" class="d-flex flex-wrap justify-content-between align-items-center">
+        <div *ngIf="objeto.cliente.length == 0" class="d-flex flex-wrap justify-content-between align-items-center">
             <p>Nenhum cliente cadastrado</p>
             <a class="btn btn-primary" [routerLink]="['cadastrar']">Adicionar</a>
         </div>
         <p-table
-                 *ngIf="objeto.clientes.length > 0"
+                 *ngIf="objeto.cliente.length > 0"
                  class="table"
                  #dt
                  [columns]="clientesColumn"
-                 [value]="objeto.clientes"
-                 [paginator]="objeto.clientes.length > 0"
+                 [value]="objeto.cliente"
+                 [paginator]="objeto.cliente.length > 0"
                  [rows]="10"
                  [rowHover]="true"
                  [rowsPerPageOptions]="[10, 25, 50]"
@@ -37,7 +37,7 @@
                 <div class="header-box d-flex justify-content-between align-items-end flex-wrap w-100 px-0">
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 p-0">
                         <p *ngIf="!loading">
-                            <small> {{ objeto.clientes.length }} resultado(s) </small>
+                            <small> {{ objeto.cliente.length }} resultado(s) </small>
                         </p>
                         <p *ngIf="clientesSelected.length > 0">
                             <small> ({{clientesSelected.length}}) linhas selecionadas </small>
@@ -46,21 +46,21 @@
                     <div class=" ml-auto mr-2">
                         <a class="btn btn-primary" [routerLink]="['cadastrar']">Adicionar</a>
                     </div>
-                    <div *ngIf="objeto.clientes.length > 0"
+                    <div *ngIf="objeto.cliente.length > 0"
                          class="p-input-icon-left col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 p-0 mb-0 pt-md-0 pt-sm-2">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" class="form-control "
                                (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
                     </div>
-                    <a class="btn btn-filter" [routerLink]="['filtrar']" *ngIf="objeto.clientes.length > 0">
+                    <a class="btn btn-filter" [routerLink]="['filtrar']" *ngIf="objeto.cliente.length > 0">
                         <fa-icon [icon]="faFilter"></fa-icon>
                     </a>
                 </div>
             </ng-template>
-            <ng-template pTemplate="header" let-columns *ngIf="objeto.clientes.length > 0">
+            <ng-template pTemplate="header" let-columns *ngIf="objeto.cliente.length > 0">
                 <tr class="grey">
                     <th>
-                        <p-tableHeaderCheckbox *ngIf="objeto.clientes.length > 0"></p-tableHeaderCheckbox>
+                        <p-tableHeaderCheckbox *ngIf="objeto.cliente.length > 0"></p-tableHeaderCheckbox>
                     </th>
                     <th [pSortableColumn]="item.field" *ngFor="let item of columns">
                         <div class="d-flex align-items-center justify-content-between">
@@ -95,7 +95,7 @@
             <ng-template pTemplate="emptymessage" let-columns>
                 <tr>
                     <td></td>
-                    <td [attr.colspan]="columns.length" *ngIf="objeto.clientes.length == 0 && !loading"> Nenhum registro encontrado </td>
+                    <td [attr.colspan]="columns.length" *ngIf="objeto.cliente.length == 0 && !loading"> Nenhum registro encontrado </td>
                     <td [attr.colspan]="columns.length" *ngIf="loading"> Carregando.. </td>
                     <td></td>
                 </tr>

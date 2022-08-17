@@ -10,16 +10,16 @@
     </div>
     <div class="card-body">
         <app-list
-                          [list]="objeto.usuarios"
-                          [filterLink]="false"
-                          [filterTable]="false"
-                          [paginator]="false"
-                          [sortTable]="false"
-                          [menuTable]="false"
-                          [canCreate]="true"
-                          [columns]="userColumns"></app-list>
+                  [list]="objeto.usuario"
+                  [filterLink]="false"
+                  [filterTable]="false"
+                  [paginator]="false"
+                  [sortTable]="false"
+                  [menuTable]="false"
+                  [canCreate]="true"
+                  [columns]="userColumns"></app-list>
         <div class="d-flex justify-content-between px-2 mt-2">
-            <button class="btn btn-primary" (click)="previous()">Anterior</button>
+            <button class="btn btn-grey" (click)="previous()">Anterior</button>
             <button class="btn btn-primary" (click)="next()">Próximo</button>
         </div>
     </div>

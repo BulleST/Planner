@@ -1,1 +1,23 @@
-<p>list works!</p>
+<div class="card">
+    <div class="card-header d-flex align-items-center py-2">
+        <span class="title-icon">
+            <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
+        </span>
+        <div>
+            <h3 class="card-header-title">Produtos</h3>
+            <p class="card-header-subtitle"><small>Inclua produtos para essa empresa</small></p>
+        </div>
+    </div>
+    <div class="card-body">
+        <app-list
+                  [list]="objeto.produto"
+                  [filterLink]="true"
+                  [filterTable]="true"
+                  [paginator]="true"
+                  [sortTable]="true"
+                  [menuTable]="true"
+                  [canCreate]="true"
+                  [columns]="produtoColumns"></app-list>
+    </div>
+</div>
+<router-outlet></router-outlet>

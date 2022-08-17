@@ -89,9 +89,10 @@ export class Table {
 			tr = $(event).parents('tr');
 		}
 		let td = $(tr).find('.td-actions');
-
-		let top = ($(td).offset()?.top ?? 0) + 25;
-		let left = ($(td).offset()?.left ?? 0) + 20;
+        
+		let top = ($(td).offset()?.top ?? 0) - ($(td).height() ?? 0);
+		// let left = ($(td).offset()?.left ?? 0);
+        let left = ($(tr).parents('.content').width() ?? 0) + ($(tr).parents('.content').offset()?.left ?? 0);
 		$('.actions__nav').css({
 			'display': 'flex',
 			'top': top + 'px',

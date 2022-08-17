@@ -6,10 +6,19 @@ import { Usuario } from "./usuario.model";
 export class Empresa {
     id: number = undefined as unknown as number;
     nome: string = '';
-    email: string = '';
     cnpj: number = '' as unknown as number;
-    clientes: Cliente[] = [];
-    usuarios: Usuario[] = [];
-    produtos: Produto[] = [];
+    email: string = '';
+    cliente: Cliente[] = [];
+    usuario: Usuario[] = [];
+    produto: Produto[] = [];
     carteiraSetup: CarteiraSetupRequest[] = [];
+    percentualRisco: any[] = [];
 }
+
+
+export var empresaColumns = [
+    { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'nome', header: 'Razão Social', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'cnpj', header: 'CNPJ', filterType: 'text', filterDisplay: 'menu' },
+    { field: 'email', header: 'E-mail', filterType: 'text', filterDisplay: 'menu' },
+  ]

@@ -6,41 +6,52 @@ import { DeleteComponent } from './delete/delete.component';
 import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 
-import { DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
-import { ProdutosComponent } from './create/produtos/produtos.component';
-import { SetupComponent } from './create/setup/setup.component';
 
+// Usuarios
 import { UsuariosComponent } from './create/usuarios/usuarios.component';
 import { CreateComponent as Usuario_CreateComponent } from './../usuarios/create/create.component';
+import { EditComponent as Usuario_EditComponent } from './../usuarios/edit/edit.component';
+import { DeleteComponent as Usuario_DeleteComponent } from './../usuarios/delete/delete.component';
 
+// Produtos
+import { ProdutosComponent } from './create/produtos/produtos.component';
 import { CreateComponent as Produto_CreateComponent } from './../produtos/create/create.component';
+import { EditComponent as Produto_EditComponent } from './../produtos/edit/edit.component';
+import { DeleteComponent as Produto_DeleteComponent } from './../produtos/delete/delete.component';
 
 import { CreateComponent as CarteiraSetup_CreateComponent } from './../carteira-setup/create/create.component';
+import { EditComponent as CarteiraSetup_EditComponent } from './../carteira-setup/edit/edit.component';
+import { DeleteComponent as CarteiraSetup_DeleteComponent } from './../carteira-setup/delete/delete.component';
+
+
+import { DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
+import { SetupComponent } from './create/setup/setup.component';
 import { CarteiraSetupGuard } from 'src/app/helpers/carteira-setup.guard';
-import { FinalizarComponent } from './create/finalizar/finalizar.component';
+import { PercentualRiscoComponent } from './create/percentual-risco/percentual-risco.component';
 
 const routes: Routes = [
-    {
-        path: '', component: ListComponent, children: [
-        ]
-    },
+    { path: '', component: ListComponent, children: [] },
     { path: 'excluir/:id', component: DeleteComponent },
     { path: 'editar/:id', component: EditComponent },
     { path: 'cadastrar', component: CreateComponent, children: [
         { path: 'dados-cadastrais', component: DadosCadastraisComponent },
         { path: 'produtos', component: ProdutosComponent, children: [
-            { path: 'cadastrar', component: Produto_CreateComponent  }
+            { path: 'cadastrar', component: Produto_CreateComponent  },
+            { path: 'editar/:id', component: Produto_EditComponent  },
+            { path: 'excluir/:id', component: Produto_DeleteComponent  },
         ] },
         { path: 'clientes', component: ClientesComponent },
         { path: 'usuarios', component: UsuariosComponent, children: [
             { path: 'cadastrar', component: Usuario_CreateComponent },
+            { path: 'editar/:id', component: Usuario_EditComponent  },
+            { path: 'excluir/:id', component: Usuario_DeleteComponent  },
         ] },
         { path: 'setup', component: SetupComponent, children: [
-            { path: 'cadastrar', component: CarteiraSetup_CreateComponent, 
-                // canActivate: [CarteiraSetupGuard] 
-            }
+            { path: 'cadastrar', component: CarteiraSetup_CreateComponent, canActivate: [CarteiraSetupGuard] },
+            { path: 'editar/:id', component: CarteiraSetup_EditComponent  },
+            { path: 'excluir/:id', component: CarteiraSetup_DeleteComponent  },
         ] },
-        { path: 'finalizar', component: FinalizarComponent },
+        { path: 'percentual-risco', component: PercentualRiscoComponent },
     ] },
 ];
 

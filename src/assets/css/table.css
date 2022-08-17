@@ -141,7 +141,7 @@ td.td-actions {
   top: 0;
   right: 0;
   left: 0;
-  transform: translate(-80px, 0%);
+  transform: translate(-100%, 0%);
   z-index: 5;
   opacity: 0;
   visibility: hidden;
@@ -242,6 +242,18 @@ td {
   background-color: var(--grey);
   color: #fff;
 }
+
+.table .white th,
+.table th.white{
+    background-color: white;
+    color: var(--primary);
+}
+
+.card .table td,
+.card .table th {
+    padding: 4px 3px;
+}
+
 
 .content .table td {
   vertical-align: middle;
@@ -916,7 +928,7 @@ tr.selected td,
 tr.selected td.td-actions,
 tr.selected:nth-child(even) td.td-actions,
 tr.selected:nth-child(odd) td.td-actions {
-  background: #f3bea3;
+  background: #b9c8f3;
 }
 
 .modal~.filtros .filter-menu {
@@ -945,4 +957,8 @@ tr.selected:nth-child(odd) td.td-actions {
   .filter-menu {
     max-width: 80vw;
   }
+}
+
+.card {
+    position: static!important;
 }

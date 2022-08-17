@@ -22,6 +22,7 @@ export class FormUsuarioComponent implements OnInit {
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
 
     perfil: PerfilAcesso[] = [];
+    loadingPerfil = true;
 
     constructor(
         private router: Router,
@@ -32,9 +33,12 @@ export class FormUsuarioComponent implements OnInit {
         private modal: ModalOpen,
         private dropdownService: DropdownService,
     ) {
-        
-this.dropdownService.getPerfilAcesso().subscribe(res => this.perfil = res);
-this.dropdownService.perfilAcesso.subscribe(res => this.perfil = res);
+
+        this.dropdownService.getPerfilAcesso().subscribe(res => {
+            this.perfil = res;
+            this.loadingPerfil = false;
+        });
+        this.dropdownService.perfilAcesso.subscribe(res => this.perfil = res);
 
         this.activatedRoute.params.subscribe(res => {
             if (res['id']) {

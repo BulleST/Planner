@@ -1174,22 +1174,6 @@ a.btn:not([href]):not() {
     background-color: transparent;
 }
 
-.alert {
-    margin-bottom: 0;
-    animation: grow .6s both;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    position: fixed;
-    float: revert;
-    background: #fff;
-    box-shadow: 2px 2px 6px #00000057;
-    max-width: 650px;
-    width: 90%;
-    min-height: 100px;
-    max-height: 50vh;
-    z-index: 99999;
-}
 
 .alert-dark,
 tbody tr.alert-dark:nth-of-type(odd) td,
@@ -1209,45 +1193,14 @@ tbody tr.alert-dark:nth-of-type(even) td {
     }
 }
 
-.alert-bg {
-    position: fixed;
-    background: #000000a1;
-    width: 300%;
-    height: 300%;
-    z-index: 0;
-    top: 0;
-    left: 0;
-}
-
-.alert.alert-danger {
-    background: #ffecee;
-}
-
-.alert-header {
-    font-size: 19px;
-    margin-top: -7px;
-}
-
-.alert-danger .alert-header {
-    color: var(--red);
-    font-weight: 800;
-}
-
-.alert-danger .btn-close {
-    color: #696767;
-    font-weight: 100;
-}
-
-.alert-danger p {
-    color: var(--red);
-}
-
 .w-0 {
     width: 0;
 }
-
+.toast-container .ngx-toastr {
+    box-shadow: 0 0 12px #000000;
+  }
 .toast-container .ngx-toastr:not(.toast-warning):not(.toast-success):not(.toast-error):not(.toast-info):not(.toast-show) {
-    background-color: var(--purple);
+    background-color: var(--primary);
     padding: 42px 15px 15px;
 }
 
@@ -1266,7 +1219,7 @@ tbody tr.alert-dark:nth-of-type(even) td {
 }
 
 .toast-info {
-    background-color: var(--pink);
+    background-color: var(--grey-light);
 }
 
 .toast-warning {
@@ -1748,15 +1701,6 @@ tbody.tbody-border tr {
     margin-left: auto;
 }
 
-.card .table td,
-.card .table th {
-    padding: 4px 3px;
-}
-
-.card .table th {
-    background-color: white;
-    color: var(--primary);
-}
 
 .card-body {
     padding: 10px 10px;

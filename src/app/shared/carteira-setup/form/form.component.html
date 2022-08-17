@@ -61,8 +61,8 @@
                     [(ngModel)]="objeto.produto"
                     required="true">
                 <option [ngValue]="undefined">Selecione</option>
-                <optgroup *ngIf="empresa && empresa.produtos.length > 0">
-                    <option [ngValue]="item" *ngFor="let item of empresa.produtos">{{ item.descricao }}</option>
+                <optgroup *ngIf="empresa && empresa.produto.length > 0">
+                    <option [ngValue]="item" *ngFor="let item of empresa.produto">{{ item.descricao }}</option>
                 </optgroup>
             </select>
             <div *ngIf="produto.touched && produto.errors">

@@ -31,13 +31,17 @@ export class ListComponent implements OnInit, OnChanges {
     ];
 
     selected?: any;
-    itemsSelected: any[] = [];
+    selectedItems: any[] = [];
     filters: string[] = [];
 
     constructor(
         private table: Table,
         public crypto: Crypto) {
         this.filters = this.columns.map(x => x.field);
+
+        this.table.loading.subscribe(res => this.loading = res);
+        this.table.selected.subscribe(res => this.selected = res);
+        this.table.selectedItems.subscribe(res => this.selectedItems = res);
     }
 
     ngOnInit(): void {

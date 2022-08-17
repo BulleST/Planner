@@ -6,8 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
 import { Cliente } from 'src/app/models/cliente.model';
 import { Empresa } from 'src/app/models/empresa.model';
+import { AlertService } from 'src/app/parts/alert/alert.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ModalOpen } from 'src/app/utils/modal-open';
+import { Table } from 'src/app/utils/table';
 
 @Component({
     selector: 'app-create',
@@ -32,6 +34,8 @@ export class CreateComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private empresaService: EmpresaService,
+        private alert: AlertService,
+        private table: Table
     ) {
         if ( this.empresaService.objeto.value == undefined)
             this.empresaService.setObject(new Empresa);
@@ -46,6 +50,8 @@ export class CreateComponent implements OnInit {
                 label: 'Dados Cadastrais',
                 routerLink: 'dados-cadastrais',
                 command: (event: any) => {
+                    this.table.selected.next(undefined);
+                    this.table.selectedItems.next([]);
                 }
             },
             { 
@@ -53,13 +59,8 @@ export class CreateComponent implements OnInit {
                 label: 'Usuários',
                 routerLink: 'usuarios',
                 command: (event: any) => {
-                    // if (   !this.objeto.nome.trim()
-                    //     || !this.objeto.email.trim()
-                    //     || !this.objeto.cnpj.toString().trim()
-                    //     ) {
-                    //         this.router.navigate(['..', 'dados-cadastrais'], { relativeTo: this.activatedRoute });
-                    //         this.toastr.info('Preencha os dados cadastrais para prosseguir')
-                    // }
+                    this.table.selected.next(undefined);
+                    this.table.selectedItems.next([]);
                 }
             },
             { 
@@ -67,13 +68,18 @@ export class CreateComponent implements OnInit {
                 label: 'Produtos',
                 routerLink: 'produtos',
                 command: (event: any) => {
+                    this.table.selected.next(undefined);
+                    this.table.selectedItems.next([]);
                 }
+               
             },
             { 
                 id: '4',
                 label: 'Carteira Setup',
                 routerLink: 'setup',
                 command: (event: any) => {
+                    this.table.selected.next(undefined);
+                    this.table.selectedItems.next([]);
                 }
             },
             { 
@@ -81,6 +87,8 @@ export class CreateComponent implements OnInit {
                 label: 'Revisar dados',
                 routerLink: 'finalizar',
                 command: (event: any) => {
+                    this.table.selected.next(undefined);
+                    this.table.selectedItems.next([]);
                 }
             },
         ];

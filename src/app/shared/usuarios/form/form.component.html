@@ -39,6 +39,7 @@
             <label for="perfilAcesso">Perfil: <span class="text-danger">*</span></label>
             <select 
                 class="form-control" 
+                [class.form-control-loading]="loadingPerfil"
                 name="perfilAcesso" 
                 id="perfilAcesso"
                 #perfilAcesso="ngModel"

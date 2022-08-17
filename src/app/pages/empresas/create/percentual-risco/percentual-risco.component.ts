@@ -8,11 +8,11 @@ import { userColumns } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
-    selector: 'app-finalizar',
-    templateUrl: './finalizar.component.html',
-    styleUrls: ['./finalizar.component.css']
+    selector: 'app-percentual-risco',
+    templateUrl: './percentual-risco.component.html',
+    styleUrls: ['./percentual-risco.component.css']
 })
-export class FinalizarComponent implements OnInit {
+export class PercentualRiscoComponent implements OnInit {
 
     faFileCircleCheck = faFileCircleCheck
     objeto: Empresa = new Empresa;
@@ -30,13 +30,4 @@ export class FinalizarComponent implements OnInit {
 
     ngOnInit(): void {
     }
-
-    salvar() {
-        
-    }
-
-    previous() {
-        this.router.navigate(['empresas', 'cadastrar', 'setup'])
-    }
-
 }

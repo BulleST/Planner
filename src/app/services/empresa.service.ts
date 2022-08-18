@@ -9,6 +9,7 @@ import { Usuario } from '../models/usuario.model';
 import { Produto } from '../models/produto.model';
 import { CarteiraSetupRequest } from '../models/carteiraSetup-produto.model';
 import { environment } from 'src/environments/environment';
+import { PercentualRisco } from '../models/percentual-risco.model';
 
 @Injectable({
     providedIn: 'root'
@@ -41,7 +42,7 @@ export class EmpresaService {
     }
 
 
-    addNewUserToEmpresa(user: Usuario) {
+    add_New_User_To_Empresa(user: Usuario) {
         var empresa = this.objeto.value;
         var users = empresa?.usuario ?? [];
         if (empresa ) {
@@ -60,7 +61,7 @@ export class EmpresaService {
             }
         }
     }
-    addNewProdutoToEmpresa(produto: Produto) {
+    add_New_Produto_To_Empresa(produto: Produto) {
         var empresa = this.objeto.value;
         var produtos = empresa?.produto ?? [];
         if (empresa) {
@@ -73,7 +74,7 @@ export class EmpresaService {
             this.toastr.success('Operação concluída');
         }
     }
-    addNewSetupToEmpresa(carteiraSetup: CarteiraSetupRequest) {
+    add_New_Setup_To_Empresa(carteiraSetup: CarteiraSetupRequest) {
         var empresa = this.objeto.value;
         var setups = empresa?.carteiraSetup ?? [];
         if (empresa) {
@@ -84,6 +85,19 @@ export class EmpresaService {
 
             setups.push(carteiraSetup);
             empresa.carteiraSetup = setups;
+            this.objeto.next(empresa);
+            this.toastr.success('Operação concluída');
+        }
+    }
+    add_New_Percentual_Risco_To_Empresa(risco: PercentualRisco) {
+        var empresa = this.objeto.value;
+        var riscos = empresa?.percentualRisco ?? [];
+        if (empresa) {
+            riscos.sort((x, y) => x.id - y.id)
+            var lastId = riscos.length == 0 ? 0 : riscos[riscos.length - 1].id;
+            risco.id = lastId++;
+            riscos.push(risco);
+            empresa.percentualRisco = riscos;
             this.objeto.next(empresa);
             this.toastr.success('Operação concluída');
         }

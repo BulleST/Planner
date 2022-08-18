@@ -1,4 +1,5 @@
 import { CarteiraSetup } from "./carteiraSetup.model";
+import { ProdutoTributacaoRel } from "./produto-tributacao-rel.model";
 import { Produto } from "./produto.model";
 import { Tributacao } from "./tributacao.model";
 
@@ -13,10 +14,8 @@ export class CarteiraSetupRequest {
     id: number = 0;
     carteiraSetup: CarteiraSetup = undefined as unknown as CarteiraSetup;
     carteiraSetupNova?: string = '';
-    produto: Produto = undefined as unknown as Produto;
-    tributacao: Tributacao = undefined as unknown as Tributacao;
     percentual: number = '' as unknown as number;
-    
+    produtoTributacaoRel: ProdutoTributacaoRel[] = [];
 }
 export var setupColumns = [
     { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
 import { Empresa } from 'src/app/models/empresa.model';
@@ -15,6 +15,8 @@ export class SetupComponent implements OnInit {
     faWallet = faWallet;
     objeto: Empresa = new Empresa;
     setupColumns = setupColumns;
+    faArrowLeft = faArrowLeft;
+    faArrowRight = faArrowRight;
     
     constructor(
         private empresaService: EmpresaService,

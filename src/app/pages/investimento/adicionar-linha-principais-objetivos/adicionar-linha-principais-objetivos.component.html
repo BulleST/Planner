@@ -18,7 +18,7 @@
 								#objetivo="ngModel" [(ngModel)]="objeto" required>
 							</textarea>
 							<div *ngIf="objetivo.touched && objetivo.errors">
-								<p *ngIf="objetivo.errors['required']" class="text-danger">Esse campo é obrigatório</p>
+								<p *ngIf="objetivo.errors['required']" class="text-danger">Este campo é obrigatório.</p>
 							</div>
 						</div>
 					</div>
@@ -46,6 +46,6 @@
 
 <ng-template #campoObrigatorio> 
 	<div class="py-3 px-4">
-        Esse campo é obrigatório
+        Este campo é obrigatório
     </div>
 </ng-template>

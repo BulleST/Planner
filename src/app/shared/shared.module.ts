@@ -13,11 +13,14 @@ import { NgbPopoverModule } from "@ng-bootstrap/ng-bootstrap";
 import { DragDropModule as Material_DragDropModule } from '@angular/cdk/drag-drop';
 import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
 import { DropdownModule } from "primeng/dropdown";
+import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
+
 @NgModule({
     declarations: [
         FormUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
+        FormPercentualRiscoComponent,
         ListComponent,
     ],
     imports: [
@@ -36,6 +39,7 @@ import { DropdownModule } from "primeng/dropdown";
         FormUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
+        FormPercentualRiscoComponent,
         ListComponent,
     ],
 })

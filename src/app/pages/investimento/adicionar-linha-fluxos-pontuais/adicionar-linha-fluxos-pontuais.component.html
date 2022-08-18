@@ -23,7 +23,7 @@
 								[ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave" >
 						
                                 <div *ngIf="idade.touched && idade.errors">
-                                    <p *ngIf="idade.errors['required']" class="text-danger">Esse campo é obrigatório</p>
+                                    <p *ngIf="idade.errors['required']" class="text-danger">Este campo é obrigatório.</p>
                                     <p *ngIf="idade.errors['mask']" class="text-danger">Valor inválido</p>
                                 </div>
 						</div>
@@ -37,7 +37,7 @@
 								required popoverClass="popover-danger"
 								[ngbPopover]="campoObrigatorio" triggers="mouseenter:mouseleave" >
                                 <div *ngIf="montante.touched && montante.errors">
-                                    <p *ngIf="montante.errors['required']" class="text-danger">Esse campo é obrigatório</p>
+                                    <p *ngIf="montante.errors['required']" class="text-danger">Este campo é obrigatório.</p>
                                     <p *ngIf="montante.errors['mask']" class="text-danger">Valor inválido</p>
                                 </div>
 						</div>
@@ -66,6 +66,6 @@
 
 <ng-template #campoObrigatorio> 
 	<div class="py-3 px-4">
-        Esse campo é obrigatório
+        Este campo é obrigatório
     </div>
 </ng-template>

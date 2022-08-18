@@ -1,19 +1,15 @@
 <div class="card">
-    <div class="card-header d-flex align-items-center py-2">
-        <span class="title-icon">
-            <!-- <fa-icon [icon]="faWallet"></fa-icon> -->
-            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
-                <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" />
-            </svg> -->
+    <div class="card-header d-flex align-items-center py-2 bg-primary">
+        <span class="title-icon text-white">
             <i class="pi pi-wallet"></i>
         </span>
         <div>
-            <h3 class="card-header-title">Carteira Setup</h3>
-            <p class="card-header-subtitle"><small>Inclua um ou mais setups dessa empresa</small></p>
+            <h3 class="card-header-title text-white">Carteira Setup</h3>
+            <p class="card-header-subtitle text-white"><small>Inclua um ou mais setups dessa empresa</small></p>
         </div>
     </div>
     <div class="card-body">
-        <app-list
+        <app-list-shared
                   [list]="objeto.carteiraSetup"
                   [filterLink]="false"
                   [filterTable]="false"
@@ -21,10 +17,16 @@
                   [sortTable]="false"
                   [menuTable]="false"
                   [canCreate]="true"
-                  [columns]="setupColumns"></app-list>
-        <div class="d-flex justify-content-between px-2 mt-2">
-            <button class="btn btn-grey" (click)="previous()">Anterior</button>
-            <button class="btn btn-primary" (click)="next()">Próximo</button>
+                  [columns]="setupColumns"></app-list-shared>
+        <div class="d-flex justify-content-between px-2 mt-auto">
+            <button class="btn btn-step btn-step-prev mt-2" title="Anteiror" (click)="previous()">
+                <fa-icon [icon]="faArrowLeft"></fa-icon>
+                <span class="btn-step-text">Anterior</span>
+            </button>
+            <button class="btn btn-step btn-step-next mt-2" title="Próximo" (click)="next()">
+                <span class="btn-step-text">Próximo</span>
+                <fa-icon [icon]="faArrowRight"></fa-icon>
+            </button>
         </div>
     </div>
 </div>

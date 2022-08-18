@@ -1,15 +1,15 @@
 <div class="card">
-    <div class="card-header d-flex align-items-center py-2">
-        <span class="title-icon">
+    <div class="card-header d-flex align-items-center py-2 bg-primary">
+        <span class="title-icon text-white">
             <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
         </span>
         <div>
-            <h3 class="card-header-title">Produtos</h3>
-            <p class="card-header-subtitle"><small>Inclua produtos para essa empresa</small></p>
+            <h3 class="card-header-title text-white">Produtos</h3>
+            <p class="card-header-subtitle text-white"><small>Inclua produtos para essa empresa</small></p>
         </div>
     </div>
     <div class="card-body">
-        <app-list
+        <app-list-shared
             [list]="objeto.produto"
             [filterLink]="false"
             [filterTable]="false"
@@ -18,10 +18,16 @@
             [menuTable]="false"
             [canCreate]="true"
             [columns]="produtoColumns"
-        ></app-list>
-        <div class="d-flex justify-content-between px-2 mt-2">
-            <button class="btn btn-grey" (click)="previous()">Anterior</button>
-            <button class="btn btn-primary" (click)="next()">Próximo</button>
+        ></app-list-shared>
+        <div class="d-flex justify-content-between px-2 mt-auto">
+            <button class="btn btn-step btn-step-prev mt-2" title="Anteiror" (click)="previous()">
+                <fa-icon [icon]="faArrowLeft"></fa-icon>
+                <span class="btn-step-text">Anterior</span>
+            </button>
+            <button class="btn btn-step btn-step-next mt-2" title="Próximo" (click)="next()">
+                <span class="btn-step-text">Próximo</span>
+                <fa-icon [icon]="faArrowRight"></fa-icon>
+            </button>
         </div>
     </div>
 </div>

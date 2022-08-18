@@ -8,7 +8,7 @@ import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
 
 @Component({
-    selector: 'app-list',
+    selector: 'app-list-shared',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
@@ -39,7 +39,9 @@ export class ListComponent implements OnInit, OnChanges {
         public crypto: Crypto) {
         this.filters = this.columns.map(x => x.field);
 
-        this.table.loading.subscribe(res => this.loading = res);
+        this.table.loading.subscribe(res => {
+            this.loading = res
+        });
         this.table.selected.subscribe(res => this.selected = res);
         this.table.selectedItems.subscribe(res => this.selectedItems = res);
     }
@@ -48,14 +50,22 @@ export class ListComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.list = changes['list'].currentValue;
-        this.filterLink = changes['filterLink'].currentValue;
-        this.filterTable = changes['filterTable'].currentValue;
-        this.paginator = changes['paginator'].currentValue;
-        this.sortTable = changes['sortTable'].currentValue;
-        this.menuTable = changes['menuTable'].currentValue;
-        this.columns = changes['columns'].currentValue;
-        this.canCreate = changes['canCreate'].currentValue;
+        if (changes['list']) 
+            this.list = changes['list'].currentValue;
+        if (changes['filterLink']) 
+            this.filterLink = changes['filterLink'].currentValue;
+        if (changes['filterTable']) 
+            this.filterTable = changes['filterTable'].currentValue;
+        if (changes['paginator']) 
+            this.paginator = changes['paginator'].currentValue;
+        if (changes['sortTable']) 
+            this.sortTable = changes['sortTable'].currentValue;
+        if (changes['menuTable']) 
+            this.menuTable = changes['menuTable'].currentValue;
+        if (changes['columns']) 
+            this.columns = changes['columns'].currentValue;
+        if (changes['canCreate']) 
+            this.canCreate = changes['canCreate'].currentValue;
     }
 
 

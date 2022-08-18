@@ -1721,7 +1721,7 @@ body {
 }
 
 .bg-primary {
-    background-color: var(--primary-light) !important;
+    background-color: var(--primary) !important;
 }
 
 .form-control.form-control-loading {
@@ -1732,13 +1732,17 @@ body {
 }
 
 .title-icon svg {
-    width: 26px;
-    height: 26px;
-    font-size: 26px;
+    width: 36px;
+    height: 36px;
+    font-size: 36px;
 }
 
 .card-header .title-icon svg {
     width: 26px;
     height: 26px;
     font-size: 26px;
+}
+
+.form-group {
+    flex: 1 0 auto;
 }

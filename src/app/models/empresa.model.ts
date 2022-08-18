@@ -1,5 +1,6 @@
 import { CarteiraSetupRequest } from "./carteiraSetup-produto.model";
 import { Cliente } from "./cliente.model";
+import { PercentualRisco } from "./percentual-risco.model";
 import { Produto } from "./produto.model";
 import { Usuario } from "./usuario.model";
 
@@ -12,7 +13,7 @@ export class Empresa {
     usuario: Usuario[] = [];
     produto: Produto[] = [];
     carteiraSetup: CarteiraSetupRequest[] = [];
-    percentualRisco: any[] = [];
+    percentualRisco: PercentualRisco[] = [];
 }
 
 

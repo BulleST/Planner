@@ -16,7 +16,7 @@ import { ListComponent } from './list/list.component';
 import { DeleteComponent } from './delete/delete.component';
 import { CreateComponent } from './create/create.component';
 import { DadosCadastraisComponent as Create_Empresa_DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
-import { FinalizarComponent as Create_Empresa_FinalizarComponent } from './create/finalizar/finalizar.component';
+import { PercentualRiscoComponent as Create_Empresa_PercentualRiscoComponent } from './create/percentual-risco/percentual-risco.component';
 import { ProdutosComponent as Create_Empresa_ProdutosComponent } from './create/produtos/produtos.component';
 import { SetupComponent as Create_Empresa_SetupComponent } from './create/setup/setup.component';
 import { UsuariosComponent as Create_Empresa_UsuariosComponent } from './create/usuarios/usuarios.component';
@@ -27,6 +27,7 @@ import { ProdutosComponent as Edit_Empresa_ProdutosComponent } from './edit/prod
 import { SetupComponent as Edit_Empresa_SetupComponent } from './edit/setup/setup.component';
 import { UsuariosComponent as Edit_Empresa_UsuariosComponent } from './edit/usuarios/usuarios.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { FinalizarComponent } from './create/finalizar/finalizar.component';
 
 @NgModule({
     declarations: [
@@ -39,13 +40,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
         Create_Empresa_UsuariosComponent,
         Create_Empresa_ProdutosComponent,
         Create_Empresa_SetupComponent,
-        Create_Empresa_FinalizarComponent,
+        Create_Empresa_PercentualRiscoComponent,
         // EDIT COMPONENT STEPS
         EditComponent,
         Edit_Empresa_ClientesComponent,
         Edit_Empresa_ProdutosComponent,
         Edit_Empresa_SetupComponent,
         Edit_Empresa_UsuariosComponent,
+        FinalizarComponent,
 
     ],
     imports: [

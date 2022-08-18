@@ -22,7 +22,7 @@ export class ListComponent implements OnInit {
   list: Empresa[] = [];
   selected?: Empresa;
   selectedItems: Empresa[] = [];
-  loading = false;
+  loading = true;
   columns = empresaColumns;
   filters: string[] = [];
 
@@ -31,7 +31,7 @@ export class ListComponent implements OnInit {
     private table: Table,
     private empresaService: EmpresaService,
     public crypto: Crypto,
-    private mask: MaskApplierService
+    private mask: MaskApplierService,
   ) {
     this.filters = this.columns.map(x => x.field);
     this.table.loading.subscribe(res => this.loading = res);
@@ -43,8 +43,8 @@ export class ListComponent implements OnInit {
         item.cnpj = this.mask.applyMask(item.cnpj.toString().padStart(14, '0'), '00.000.000/0000-00') as unknown as number;
         return item;
       });
+      this.loading = false;
     });
-    // this.empresaService.teste();
   }
 
   ngOnInit(): void {

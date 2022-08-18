@@ -21,15 +21,17 @@ export class CarteiraSetupGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-        var obj = this.empresaService.objeto.value;
-        console.log(obj && obj.produto.length > 0)
-        if (obj && obj.produto.length > 0) {
-            return true;
-        } else {
-            this.toastr.info('Você precisa adicionar produtos a essa empresa antes de cadastrar o carteira setup');
-            this.alert.info('Você precisa adicionar produtos a essa empresa antes de cadastrar o carteira setup', { keepAfterRouteChange: true});
-            return false;
-        }
+        // var obj = this.empresaService.objeto.value;
+        // console.log(obj && obj.produto.length > 0)
+        // if (obj && obj.produto.length > 0) {
+        //     return true;
+        // } else {
+        //     this.toastr.info('Você precisa adicionar produtos a essa empresa antes de cadastrar o carteira setup');
+        //     // this.alert.info('Você precisa adicionar produtos a essa empresa antes de cadastrar o carteira setup', { keepAfterRouteChange: true});
+        //     return false;
+        // }
+
+        return true;
   }
   
 }

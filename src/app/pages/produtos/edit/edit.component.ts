@@ -53,7 +53,7 @@ export class EditComponent implements OnInit {
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar')) {
             // Adicionar a empresaService.objeto
-            this.empresaService.addNewProdutoToEmpresa(this.objeto);
+            this.empresaService.add_New_Produto_To_Empresa(this.objeto);
 
 
         } else if (urlArray.includes('empresas/editar')) {

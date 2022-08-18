@@ -19,20 +19,29 @@ import { CreateComponent as Produto_CreateComponent } from './../produtos/create
 import { EditComponent as Produto_EditComponent } from './../produtos/edit/edit.component';
 import { DeleteComponent as Produto_DeleteComponent } from './../produtos/delete/delete.component';
 
+// CarteiraSetup
+import { SetupComponent } from './create/setup/setup.component';
 import { CreateComponent as CarteiraSetup_CreateComponent } from './../carteira-setup/create/create.component';
 import { EditComponent as CarteiraSetup_EditComponent } from './../carteira-setup/edit/edit.component';
 import { DeleteComponent as CarteiraSetup_DeleteComponent } from './../carteira-setup/delete/delete.component';
+import { CarteiraSetupGuard } from 'src/app/helpers/carteira-setup.guard';
+
+
+// PercentualRisco
+import { PercentualRiscoComponent } from './create/percentual-risco/percentual-risco.component';
+import { CreateComponent as PercentualRisco_CreateComponent } from './../percentual-risco/create/create.component';
+import { EditComponent as PercentualRisco_EditComponent } from './../percentual-risco/edit/edit.component';
+import { DeleteComponent as PercentualRisco_DeleteComponent } from './../percentual-risco/delete/delete.component';
 
 
 import { DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
-import { SetupComponent } from './create/setup/setup.component';
-import { CarteiraSetupGuard } from 'src/app/helpers/carteira-setup.guard';
-import { PercentualRiscoComponent } from './create/percentual-risco/percentual-risco.component';
+import { FinalizarComponent } from './create/finalizar/finalizar.component';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [] },
     { path: 'excluir/:id', component: DeleteComponent },
     { path: 'editar/:id', component: EditComponent },
+    { path: 'cadastrar', redirectTo: 'cadastrar/dados-cadastrais', pathMatch: 'prefix' },
     { path: 'cadastrar', component: CreateComponent, children: [
         { path: 'dados-cadastrais', component: DadosCadastraisComponent },
         { path: 'produtos', component: ProdutosComponent, children: [
@@ -51,7 +60,12 @@ const routes: Routes = [
             { path: 'editar/:id', component: CarteiraSetup_EditComponent  },
             { path: 'excluir/:id', component: CarteiraSetup_DeleteComponent  },
         ] },
-        { path: 'percentual-risco', component: PercentualRiscoComponent },
+        { path: 'percentual-risco', component: PercentualRiscoComponent, children: [
+            { path: 'cadastrar', component: PercentualRisco_CreateComponent },
+            { path: 'editar/:id', component: PercentualRisco_EditComponent  },
+            { path: 'excluir/:id', component: PercentualRisco_DeleteComponent  },
+        ] },
+        { path: 'finalizar', component: FinalizarComponent },
     ] },
 ];
 

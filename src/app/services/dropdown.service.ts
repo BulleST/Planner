@@ -2,6 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
 import { environment } from "src/environments/environment";
+import { CarteiraSetup } from "../models/carteiraSetup.model";
+import { PerfilInvestidor } from "../models/perfilInvestidor.model";
 import { TipoAtivo } from "../models/tipoAtivo.model";
 import { TipoLiquidez } from "../models/tipoLiquidez.model";
 import { TipoRisco } from "../models/tipoRisco.model";
@@ -19,6 +21,8 @@ url = environment.url;
     tipoLiquidez = new BehaviorSubject<TipoLiquidez[]>([]);
     perfilAcesso = new BehaviorSubject<PerfilAcesso[]>([]);
     tributacao = new BehaviorSubject<Tributacao[]>([]);
+    perfilInvestidor = new BehaviorSubject<PerfilInvestidor[]>([]);
+    carteiraSetup = new BehaviorSubject<CarteiraSetup[]>([]);
 
     constructor(
         private http: HttpClient,
@@ -52,6 +56,19 @@ url = environment.url;
     getTributacao() {
         return this.http.get<Tributacao[]>(`${this.url}/Tributacao/getAll`).pipe(map(res => {
             this.tributacao.next(res);
+            return res;
+        }));
+    } 
+    getPerfilInvestidor() {
+        return this.http.get<PerfilInvestidor[]>(`${this.url}/PerfilInvestidor`).pipe(map(res => {
+            this.perfilInvestidor.next(res);
+            return res;
+        }));
+    } 
+    
+    getCarteiraSetup() {
+        return this.http.get<CarteiraSetup[]>(`${this.url}/CarteiraSetup/getAll`).pipe(map(res => {
+            this.carteiraSetup.next(res);
             return res;
         }));
     } 

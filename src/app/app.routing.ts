@@ -12,12 +12,14 @@ const investimento = () => import('./pages/investimento/investimento.module').th
 const usuarios = () => import('./pages/usuarios/usuarios.module').then(res => res.UsuariosModule);
 const produtos = () => import('./pages/produtos/produtos.module').then(res => res.ProdutosModule);
 const setup = () => import('./pages/carteira-setup/carteira-setup.module').then(res => res.CarteiraSetupModule);
+const percentualRisco = () => import('./pages/percentual-risco/percentual-risco.module').then(res => res.PercentualRiscoModule);
 
 const routes: Routes = [
   { path: '', redirectTo: 'investimento', pathMatch: 'full' },
   {
     path: '', component: InitialComponent, /*canActivate: [AuthGuard], */children: [
 
+        { path: 'percentual-risco', loadChildren: percentualRisco },
         { path: 'carteira-setup', loadChildren: setup },
         { path: 'clientes', loadChildren: clientes },
         { path: 'empresas', loadChildren: empresas },

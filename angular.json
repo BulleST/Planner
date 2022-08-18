@@ -53,9 +53,9 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-toastr/toastr.css",
+              "src/styles.css",
               "src/assets/css/table.css",
-              "src/assets/css/steps.css",
-              "src/styles.css"
+              "src/assets/css/steps.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/chart.js",

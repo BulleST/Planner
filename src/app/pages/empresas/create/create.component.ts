@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faArrowRight, faCity, faEllipsisV, faFilter, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCity, faCreditCardAlt, faEllipsisV, faFilter, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
 import { Cliente } from 'src/app/models/cliente.model';
@@ -52,7 +52,8 @@ export class CreateComponent implements OnInit {
                 command: (event: any) => {
                     this.table.selected.next(undefined);
                     this.table.selectedItems.next([]);
-                }
+                },
+                icon: faCreditCardAlt.toString()
             },
             { 
                 id: '2',
@@ -84,8 +85,8 @@ export class CreateComponent implements OnInit {
             },
             { 
                 id: '5',
-                label: 'Revisar dados',
-                routerLink: 'finalizar',
+                label: 'Percentual de Risco',
+                routerLink: 'percentual-risco',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
                     this.table.selectedItems.next([]);

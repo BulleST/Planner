@@ -4,22 +4,25 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ClienteService {
     list = new BehaviorSubject<Cliente[]>([]);
+    url = environment.url;
+    objeto = new BehaviorSubject<Cliente | undefined>(undefined);
 
     constructor(
         private router: Router,
-        private htto: HttpClient,
+        private http: HttpClient,
         private toastr: ToastrService,
     ) { 
     }
 
     getList() {
-        return this.list;
+        return this.http.get<Cliente[]>(`${this.url}/Cliente/1`);
     } 
 
     get(id: number) {

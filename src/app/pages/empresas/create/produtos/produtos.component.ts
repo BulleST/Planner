@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faHandHoldingDollar, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faHandHoldingDollar, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Empresa } from 'src/app/models/empresa.model';
 import { produtoColumns } from 'src/app/models/produto.model';
@@ -15,6 +15,8 @@ export class ProdutosComponent implements OnInit {
     faHandHoldingDollar = faHandHoldingDollar;
     objeto: Empresa = new Empresa;
     produtoColumns = produtoColumns;
+    faArrowLeft = faArrowLeft;
+    faArrowRight = faArrowRight;
     constructor(
         private toastr: ToastrService,
         private empresaService: EmpresaService,

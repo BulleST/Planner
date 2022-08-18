@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faIdCard } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -14,6 +14,8 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 export class DadosCadastraisComponent implements OnInit {
     faIdCard = faIdCard;
     objeto: Empresa = new Empresa;
+    faArrowLeft = faArrowLeft;
+    faArrowRight = faArrowRight;
     
     constructor(
         private toastr: ToastrService,

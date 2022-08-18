@@ -1,8 +1,7 @@
-.p-steps-item:not(.p-steps-item:last-child)::before {
-    content: '/f178';
+/* .p-steps-item:not(.p-steps-item:last-child)::before {
+    content: "\f178";
     position: absolute;
     font-family: 'Font Awesome 5 Free';
-    content: "\f178";
     top: 50%;
     right: 0;
     font-weight: 900;
@@ -14,6 +13,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    content: '';
+    top: 25px;
+    left: 0;
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    background-color: #bbbbbb;
+    z-index: 0;
+}
+
+.p-steps-item:first-child::before {
+    width: 50%;
+    right: 0;
+    left: auto;
+}
+
+.p-steps-item:last-child::before {
+    width: 50%;
+    left: 0;
+    right: auto;
 }
 
 .p-steps-item .p-menuitem-link {
@@ -27,7 +46,7 @@
     background: var(--primary);
     color: #fff;
     margin-bottom: 5px;
-    transition: 0.3s;
+    transition: 0.5s;
 }
 
 .p-steps-title {
@@ -43,16 +62,160 @@
 }
 
 .p-steps-item.p-steps-current .p-menuitem-link .p-steps-number {
-    background: var(--primary-light);
+    background: var(--primary);
     box-shadow: 1px 1px 0px 0px #1b3de547;
 }
 
-.p-steps-item.p-steps-current .p-menuitem-link .p-steps-title, .p-steps-item:hover .p-steps-title {
+.p-steps-item.p-steps-current .p-menuitem-link .p-steps-title,
+.p-steps-item:hover .p-steps-title {
     font-weight: 500;
 }
 
 .p-steps {
-    /* border: 1px #d6d6d6 solid; */
     margin: 16px 0;
-    /* background: whitesmoke; */
+}
+ */
+.btn-step {
+    background-color: var(--primary);
+    color: #fff;
+    border: 2px var(--primary) solid;
+    border-radius: 18px;
+    padding: 8px 12px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-step:hover {
+    padding: 8px 14px 6px;
+    background: var(--primary);
+    color: #fff;
+    position: static;
+    background: #fff;
+    color: var(--primary);
+    /* border-radius: 8px; */
+}
+
+.btn-step fa-icon {
+    /* margin-top: 3px; */
+    line-height: 0;
+}
+
+.btn-step-text {
+    line-height: 0;
+}
+
+.btn-step-prev fa-icon {
+    margin-right: -10px;
+    transform: translateX(-20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s;
+}
+
+.btn-step-prev:hover fa-icon {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    margin-right: 6px;
+}
+
+.btn-step-next fa-icon {
+    margin-left: -10px;
+    transform: translateX(20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s;
+}
+
+.btn-step-next:hover fa-icon {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    margin-left: 6px;
+}
+
+.step-container {}
+
+.step-container p-steps {
+    flex: 1 0 10%;
+}
+
+.p-steps {
+    max-width: calc(40vw);
+    width: 100%;
+    padding-right: 5px;
+}
+
+.p-steps ul {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 5px 0 0;
+}
+
+.p-steps-item {
+    flex-flow: row;
+    width: 100%;
+}
+
+.p-steps-item .p-menuitem-link {
+    flex-flow: revert;
+    width: 100%;
+    display: flex !important;
+    flex-direction: row !important;
+    padding: 5px 5px 5px;
+    background-color: #f5f5f5;
+    color: #282626;
+    border-top: 1px #dfdfdf solid;
+    margin: 0 0 2px;
+    transition: .5s;
+}
+
+.p-steps-item .p-menuitem-link:hover {
+    background-color: #eee9e9;
+}
+
+.p-steps-number {
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--grey-light);
+    color: #fff;
+    background-color: var(--primary);
+    transition: .3s;
+}
+
+.p-steps-item.p-steps-current .p-menuitem-link {
+    background: var(--primary);
+}
+
+.p-steps-item.p-steps-current .p-menuitem-link .p-steps-number {
+    background-color: var(--primary);
+    background-color: #fff;
+    color: var(--primary);
+}
+
+.p-steps-item.p-steps-current .p-menuitem-link .p-steps-title {
+    color: #fff;
+}
+
+.step-container .step-content {
+    flex: 1 0 70%;
+}
+
+.step-container .step-content .card {
+    border-radius: 0;
+}
+
+.step-container .step-content .card-body {
+    display: flex;
+    flex-flow: column;
 }

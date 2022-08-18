@@ -1,26 +1,32 @@
 <div class="card">
-    <div class="card-header d-flex align-items-center py-2">
-        <span class="title-icon">
+    <div class="card-header d-flex align-items-center py-2 bg-primary">
+        <span class="title-icon text-white">
             <fa-icon [icon]="faUser"></fa-icon>
         </span>
         <div>
-            <h3 class="card-header-title">Usuários</h3>
-            <p class="card-header-subtitle"><small>Inclua usuários dessa empresa para acessar o sistema</small></p>
+            <h3 class="card-header-title text-white">Usuários</h3>
+            <p class="card-header-subtitle text-white"><small>Inclua usuários dessa empresa para acessar o sistema</small></p>
         </div>
     </div>
     <div class="card-body">
-        <app-list
-                  [list]="objeto.usuario"
-                  [filterLink]="false"
-                  [filterTable]="false"
-                  [paginator]="false"
-                  [sortTable]="false"
-                  [menuTable]="false"
-                  [canCreate]="true"
-                  [columns]="userColumns"></app-list>
-        <div class="d-flex justify-content-between px-2 mt-2">
-            <button class="btn btn-grey" (click)="previous()">Anterior</button>
-            <button class="btn btn-primary" (click)="next()">Próximo</button>
+        <app-list-shared
+                         [list]="objeto.usuario"
+                         [filterLink]="false"
+                         [filterTable]="false"
+                         [paginator]="false"
+                         [sortTable]="false"
+                         [menuTable]="false"
+                         [canCreate]="true"
+                         [columns]="userColumns"></app-list-shared>
+        <div class="d-flex justify-content-between px-2 mt-auto">
+            <button class="btn btn-step btn-step-prev mt-2" title="Anteiror" (click)="previous()">
+                <fa-icon [icon]="faArrowLeft"></fa-icon>
+                <span class="btn-step-text">Anterior</span>
+            </button>
+            <button class="btn btn-step btn-step-next mt-2" title="Próximo" (click)="next()">
+                <span class="btn-step-text">Próximo</span>
+                <fa-icon [icon]="faArrowRight"></fa-icon>
+            </button>
         </div>
     </div>
 </div>

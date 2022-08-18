@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'https://souhi.azurewebsites.net/'
+  url: 'https://souhi.azurewebsites.net'
 };
 
 /*

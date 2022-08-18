@@ -98,7 +98,6 @@ export class FormProdutoComponent implements OnInit {
         this.sendData.emit(form);
     }
     drop(event: CdkDragDrop<Tributacao[]>) {
-        console.log(event)
         if (event.previousContainer === event.container) {
           moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
@@ -111,6 +110,10 @@ export class FormProdutoComponent implements OnInit {
         }
         this.objeto.tributacao.sort((x,y) => x.id - y.id)
         this._tributacao.sort((x,y) => x.id - y.id)
-      }
+    }
+
+    transferArray() {
+        
+    }
 
 }

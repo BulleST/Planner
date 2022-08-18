@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TableModule } from 'primeng/table';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ChartModule } from 'primeng/chart';
@@ -26,6 +26,7 @@ import { AlertComponent } from './parts/alert/alert.component';
 import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
 import { SharedModule } from './shared/shared.module';
 import { NgbPopoverModule }  from '@ng-bootstrap/ng-bootstrap';
+import { RequestInterceptor } from './helpers/request.interceptor';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -63,6 +64,7 @@ registerLocaleData(localePt);
     providers: [
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
+        { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }
     ],
     bootstrap: [AppComponent]
 })

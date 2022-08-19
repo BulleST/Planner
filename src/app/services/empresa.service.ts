@@ -44,21 +44,6 @@ export class EmpresaService {
     }
 
 
-    add_Percentual(risco: PercentualRisco) {
-        var empresa = this.objeto.value;
-        var riscos = empresa?.percentualRisco ?? [];
-        if (empresa) {
-            riscos.sort((x, y) => x.id - y.id)
-            var lastId = riscos.length == 0 ? 0 : riscos[riscos.length - 1].id;
-            risco.id = ++lastId;
-            riscos.push(risco);
-            empresa.percentualRisco = riscos;
-            this.objeto.next(empresa);
-            this.toastr.success('Operação concluída');
-        }
-    }
-
-
 
     getList() {
         return this.http.get<Empresa[]>(`${this.url}/Empresa/`);

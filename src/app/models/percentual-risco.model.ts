@@ -4,6 +4,7 @@ export class PercentualRisco {
     id: number = 0;
     empresa_Id: number = 0;
     perfilInvestidor: PerfilInvestidor = undefined as unknown as PerfilInvestidor;
+    perfilInvestidor_Id: number = undefined as unknown as number;
     capacidadeRisco_Id: number = undefined as unknown as number;
     baixissimo: number = '' as unknown as number;
     baixo: number = '' as unknown as number;

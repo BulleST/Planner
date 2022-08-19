@@ -88,6 +88,7 @@ export class ProdutoService {
             this.table.resetSelection();
             return true;
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
 
@@ -133,6 +134,7 @@ export class ProdutoService {
                 return false;
             }
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
 
@@ -152,6 +154,7 @@ export class ProdutoService {
                 return false;
             }
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
 

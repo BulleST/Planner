@@ -52,7 +52,9 @@ export class CreateComponent implements OnInit {
 
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
-            this.setupService.add_Setup(this.objeto);
+            var result = this.setupService.add_To_Empresa_List(this.objeto);
+            if (result)
+                this.voltar();
         }
         else {
             // Enviar para a API
@@ -60,6 +62,5 @@ export class CreateComponent implements OnInit {
         }
 
         this.loading = false;
-        this.voltar();
     }
 }

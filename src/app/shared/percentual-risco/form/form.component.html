@@ -1,20 +1,20 @@
 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
     <div class="form-row">
         <div class="form-group col-lg-12 col-md-12 col-sm-12">
-            <label for="perfilInvestidor">Perfil Investidor: <span class="text-danger">*</span></label>
+            <label for="perfilInvestidor_Id">Perfil Investidor: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
-                    id="perfilInvestidor"
-                    name="perfilInvestidor"
+                    id="perfilInvestidor_Id"
+                    name="perfilInvestidor_Id"
                     [class.form-control-loading]="loadingPerfilInvestidor"
-                    #_perfilInvestidor="ngModel"
-                    [(ngModel)]="objeto.perfilInvestidor"
+                    #perfilInvestidor_Id="ngModel"
+                    [(ngModel)]="objeto.perfilInvestidor_Id"
                     required>
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item" *ngFor="let item of perfilInvestidor">{{ item.descricao }}</option>
+                <option [ngValue]="item.id" *ngFor="let item of perfilInvestidor">{{ item.descricao }}</option>
             </select>
-            <div *ngIf="_perfilInvestidor.touched && _perfilInvestidor.errors">
-                <p *ngIf="_perfilInvestidor.errors['required']" class="text-danger">Este campo é obrigatório.</p>
+            <div *ngIf="perfilInvestidor_Id.touched && perfilInvestidor_Id.errors">
+                <p *ngIf="perfilInvestidor_Id.errors['required']" class="text-danger">Este campo é obrigatório.</p>
             </div>
         </div>
     </div>

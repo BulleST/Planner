@@ -71,6 +71,7 @@ export class UsuarioService {
                 return false;
             }
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
     
@@ -101,6 +102,7 @@ export class UsuarioService {
                 return false;
             }
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
     
@@ -120,6 +122,7 @@ export class UsuarioService {
                 return false;
             }
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
 

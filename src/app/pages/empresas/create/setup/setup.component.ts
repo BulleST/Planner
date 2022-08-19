@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faEllipsisV, faFilter, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
 import { Empresa } from 'src/app/models/empresa.model';
@@ -33,9 +34,14 @@ export class SetupComponent implements OnInit {
         private router: Router,
         private table: Table,
         public crypto: Crypto,
+        private mask: MaskApplierService,
     ) {
         this.empresaService.objeto.subscribe(res => {
             this.objeto = res ?? new Empresa;
+            this.objeto.carteiraSetup.map(item => {
+                item.percentual = this.mask.applyMask(item.percentual.toString(), 'separator.2') + '%' as unknown as number;
+                return item;
+            })
         });
         this.filters = this.setupColumns.map(x => x.field);
 
@@ -50,34 +56,12 @@ export class SetupComponent implements OnInit {
     }
 
     next() {
-        this.router.navigate(['empresas', 'cadastrar', 'finalizar'])
+        this.router.navigate(['empresas', 'cadastrar', 'percentual-risco'])
     }
 
     previous() {
         this.router.navigate(['empresas', 'cadastrar', 'produtos'])
     }
 
-    
-    onRowSelect(event: any) {
-        this.table.onRowSelect(event);
-    }
-
-    onRowUnselect(event: any) {
-        this.table.onRowUnselect(event)
-    }
-
-    onAllRowToggle(event: any) {
-        this.table.onAllRowToggle(event);
-    }
-
-    getCellData(row: any, col: any): any {
-        const nestedProperties: string[] = col.field.split('.');
-        let value: any = row;
-        for (const prop of nestedProperties) {
-            value = value[prop];
-        }
-
-        return value;
-    }
 
 }

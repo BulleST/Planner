@@ -5,6 +5,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { PercentualRisco } from 'src/app/models/percentual-risco.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { PercentualRiscoService } from 'src/app/services/percentual-risco.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
@@ -26,6 +27,7 @@ export class CreateComponent implements OnInit {
         private toastr: ToastrService,
         private modal: ModalOpen,
         private empresaService: EmpresaService,
+        private riscoService: PercentualRiscoService,
         private crypto: Crypto
     ) {
         this.modal.getOpen().subscribe(res => {
@@ -50,20 +52,16 @@ export class CreateComponent implements OnInit {
         this.loading = true;
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            // Adicionar a empresaService.objeto
-            this.empresaService.add_Percentual(this.objeto);
-
-
-        } else if (urlArray.includes('empresas/editar')) {
-            // Adicionar a empresaService.objeto
-        }
+        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
+            var result = this.riscoService.add_To_Empresa_List(this.objeto);
+            if (result) 
+                this.voltar();
+        } 
         else {
             // Enviar para a API
             this.toastr.success('Operação concluída');
         }
 
         this.loading = false;
-        this.voltar();
     }
 }

@@ -49,7 +49,11 @@ export class CarteiraSetupService {
         this.objeto.next(value);
     }
 
-    add_Setup(item: CarteiraSetupRequest) {
+    add_To_Empresa_List(item: CarteiraSetupRequest) {
+        if (item.produtoTributacaoRel.length == 0) {
+            this.toastr.error('Insira pelo menos uma combinação de produto e tributação.');
+            return false;
+        }
         if (this.empresa) {
             var setups = this.empresa.carteiraSetup ?? [];
             let carteiraSetup = this.dropdownService.carteiraSetup.value.find(x => x.id == item.carteiraSetup.id);
@@ -70,9 +74,9 @@ export class CarteiraSetupService {
             this.empresaService.objeto.next(this.empresa);
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
-            console.log(this.empresa.carteiraSetup)
             return true;
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
 
@@ -101,6 +105,7 @@ export class CarteiraSetupService {
                 return false;
             }
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
     
@@ -120,6 +125,7 @@ export class CarteiraSetupService {
                 return false;
             }
         }
+        this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
 

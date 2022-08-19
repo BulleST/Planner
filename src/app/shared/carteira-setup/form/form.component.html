@@ -5,31 +5,31 @@
             [class.col-md-6]="!novaCarteiraSetup" 
             [class.col-lg-4]="novaCarteiraSetup" 
             [class.col-md-4]="novaCarteiraSetup">
-            <label for="carteiraSetup">Carteira Setup: <span class="text-danger">*</span></label>
+            <label for="carteiraSetup_Id">Carteira Setup: <span class="text-danger">*</span></label>
             <select 
                     class="form-control"
-                    id="carteiraSetup"
-                    name="carteiraSetup"
-                    #carteiraSetup="ngModel"
-                    [(ngModel)]="objeto.carteiraSetup"
-                    [required]="carteiraSetup.touched == true && !novaCarteiraSetup"
+                    id="carteiraSetup_Id"
+                    name="carteiraSetup_Id"
+                    #carteiraSetup_Id="ngModel"
+                    [(ngModel)]="objeto.carteiraSetup_Id"
+                    [required]="carteiraSetup_Id.touched == true && !novaCarteiraSetup"
                     (change)="novaCarteira()">
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="{id: 1, nome: 'oi'}">oi</option>
+                <option [ngValue]="item.id" *ngFor="let item of empresa.carteiraSetup">{{item.nome}}</option>
             </select>
             <p>Não encontrou a opção desejada? Clique <label for="carteiraSetup" class="link d-inline" (click)="novaCarteira(true)">aqui</label></p>
         </div>
         <div class="form-group col-lg-6 col-md-6 col-sm-12" [class.d-none]="!novaCarteiraSetup"
                 [class.fade-out-left]="!novaCarteiraSetup"  
                 [class.fade-in-right]="novaCarteiraSetup" >
-            <label for="carteiraSetupNova">Adicionar Carteira Setup: <span class="text-danger">*</span></label>
+            <label for="nome">Adicionar Carteira Setup: <span class="text-danger">*</span></label>
             <input type="text" 
                 class="form-control"
-                id="carteiraSetupNova"
-                name="carteiraSetupNova"
-                #carteiraSetupNova="ngModel"
-                [(ngModel)]="objeto.carteiraSetupNova"
-                [required]="carteiraSetupNova.touched == true && !novaCarteiraSetup">
+                id="nome"
+                name="nome"
+                #nome="ngModel"
+                [(ngModel)]="objeto.nome"
+                [required]="nome.touched == true && !novaCarteiraSetup">
         </div>
         <div class="form-group col-sm-12" 
             [class.col-lg-6]="!novaCarteiraSetup" 
@@ -88,7 +88,7 @@
                 decimalMarker=","
                 suffix="%"
                 #aliquota
-                [value]="tributacao != undefined ? tributacao!.aliquota : ''"
+                [value]="tributacao != undefined ? tributacao!.aliquota + ' %': ''"
                 readonly>
         </div>
         <button type="button" class="btn btn-grey d-flex ml-auto align-self-center mt-2" (click)="adicionarProduto()">Adicionar</button>

@@ -10,6 +10,7 @@ import { Produto } from '../models/produto.model';
 import { CarteiraSetupRequest } from '../models/carteiraSetup-produto.model';
 import { environment } from 'src/environments/environment';
 import { PercentualRisco } from '../models/percentual-risco.model';
+import { DropdownService } from './dropdown.service';
 
 @Injectable({
     providedIn: 'root'
@@ -24,12 +25,13 @@ export class EmpresaService {
         private http: HttpClient,
         private toastr: ToastrService,
         private crypto: Crypto,
-    ) { 
+        private dropdownService: DropdownService
+    ) {
     }
 
     getObject() {
         var e = localStorage.getItem('empresa')
-        if(e) {
+        if (e) {
             this.setObject(this.crypto.decrypt(e) ?? new Empresa)
         }
         return this.objeto;
@@ -38,64 +40,17 @@ export class EmpresaService {
     setObject(value: Empresa) {
         localStorage.setItem('empresa', this.crypto.encrypt(value) ?? '')
         this.objeto.next(value);
-     
+
     }
 
 
-    add_New_User_To_Empresa(user: Usuario) {
-        var empresa = this.objeto.value;
-        var users = empresa?.usuario ?? [];
-        if (empresa ) {
-            var emails = users.map(x => x.email).find(x => x.toLowerCase() == user.email.toLowerCase());
-            if (emails) {
-                this.toastr.error('Esse e-mail já está cadastrado para outro usuário!!');
-                return;
-            } else {
-                users.sort((x, y) => x.id - y.id)
-                var lastId = users.length == 0 ? 0 : users[users.length - 1].id;
-                user.id = lastId++;
-                users.push(user);
-                empresa.usuario = users;
-                this.objeto.next(empresa);
-                this.toastr.success('Operação concluída');
-            }
-        }
-    }
-    add_New_Produto_To_Empresa(produto: Produto) {
-        var empresa = this.objeto.value;
-        var produtos = empresa?.produto ?? [];
-        if (empresa) {
-            produtos.sort((x, y) => x.id - y.id)
-            var lastId = produtos.length == 0 ? 0 : produtos[produtos.length - 1].id;
-            produto.id = lastId++;
-            produtos.push(produto);
-            empresa.produto = produtos;
-            this.objeto.next(empresa);
-            this.toastr.success('Operação concluída');
-        }
-    }
-    add_New_Setup_To_Empresa(carteiraSetup: CarteiraSetupRequest) {
-        var empresa = this.objeto.value;
-        var setups = empresa?.carteiraSetup ?? [];
-        if (empresa) {
-
-            setups.sort((x, y) => x.id - y.id)
-            var lastId = setups.length == 0 ? 0 : setups[setups.length - 1].id;
-            carteiraSetup.id = lastId++;
-
-            setups.push(carteiraSetup);
-            empresa.carteiraSetup = setups;
-            this.objeto.next(empresa);
-            this.toastr.success('Operação concluída');
-        }
-    }
-    add_New_Percentual_Risco_To_Empresa(risco: PercentualRisco) {
+    add_Percentual(risco: PercentualRisco) {
         var empresa = this.objeto.value;
         var riscos = empresa?.percentualRisco ?? [];
         if (empresa) {
             riscos.sort((x, y) => x.id - y.id)
             var lastId = riscos.length == 0 ? 0 : riscos[riscos.length - 1].id;
-            risco.id = lastId++;
+            risco.id = ++lastId;
             riscos.push(risco);
             empresa.percentualRisco = riscos;
             this.objeto.next(empresa);
@@ -107,7 +62,7 @@ export class EmpresaService {
 
     getList() {
         return this.http.get<Empresa[]>(`${this.url}/Empresa/`);
-    } 
+    }
 
     get(id: number): BehaviorSubject<undefined | Empresa> {
         if (this.list.value.length == 0) {
@@ -126,7 +81,7 @@ export class EmpresaService {
     create(request: Empresa) {
         var id = 1;
         if (this.list.value.length > 0) {
-            id = this.list.value[this.list.value.length-1].id + 1;
+            id = this.list.value[this.list.value.length - 1].id + 1;
         }
         request.id = id;
         this.list.value.push(request);
@@ -138,7 +93,7 @@ export class EmpresaService {
         var index = this.list.value.findIndex(x => x.id == request.id);
         if (index == -1) {
             return new BehaviorSubject('Não encontrado')
-        }  
+        }
         this.list.value[index] = request;
         this.list.next(this.list.value);
         return new BehaviorSubject(request);

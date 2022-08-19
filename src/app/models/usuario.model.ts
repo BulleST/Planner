@@ -7,7 +7,8 @@ export class Usuario {
     empresa: Empresa = new Empresa;
 
     empresa_Id: number = 0
-    perfilAcesso: PerfilAcesso = undefined as unknown as PerfilAcesso;
+    perfilAcesso: PerfilAcesso = new PerfilAcesso;
+    perfilAcesso_Id: number = undefined as unknown as number;
 
     nome: string = '';
     email: string = '';

@@ -1,3 +1,4 @@
+import { Location } from "@angular/common";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
@@ -7,6 +8,11 @@ import { BehaviorSubject } from "rxjs";
 export class ModalOpen {
     openSubject = new BehaviorSubject<boolean>(false);
 
+    constructor(
+        private location: Location
+    ) {
+
+    }
     getOpen(): BehaviorSubject<boolean> {
         let value = this.openSubject.value ?? localStorage.getItem('modal') === 'true' ? true : false;
         if(this.openSubject.value != undefined) {
@@ -19,5 +25,12 @@ export class ModalOpen {
     setOpen(value: boolean) {
         this.openSubject.next(value);
         localStorage.setItem('modal', value.toString())
+    }
+
+    voltar() {
+        this.setOpen(false);
+        setTimeout(() => {
+            this.location.back();
+        }, 200);
     }
 }

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Produto } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { ProdutoService } from 'src/app/services/produto.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
@@ -21,12 +23,10 @@ export class CreateComponent implements OnInit {
     loading = false;
 
     constructor(
-        private router: Router,
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: ModalOpen,
-        private empresaService: EmpresaService,
-        private crypto: Crypto
+        private produtoService: ProdutoService,
     ) {
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
@@ -40,23 +40,17 @@ export class CreateComponent implements OnInit {
     }
 
     voltar() {
-        this.modal.setOpen(false);
-        setTimeout(() => {
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-        }, 200);
+        this.modal.voltar();
     }
 
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            // Adicionar a empresaService.objeto
-            this.empresaService.add_New_Produto_To_Empresa(this.objeto);
-
-
-        } else if (urlArray.includes('empresas/editar')) {
-            // Adicionar a empresaService.objeto
+        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
+            let result = this.produtoService.add_To_Empresa_List(this.objeto);
+            if (result)
+                this.voltar();
         }
         else {
             // Enviar para a API
@@ -64,6 +58,5 @@ export class CreateComponent implements OnInit {
         }
 
         this.loading = false;
-        this.voltar();
     }
 }

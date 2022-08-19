@@ -36,7 +36,8 @@ export class ListComponent implements OnInit, OnChanges {
 
     constructor(
         private table: Table,
-        public crypto: Crypto) {
+        public crypto: Crypto,
+    ) {
         this.filters = this.columns.map(x => x.field);
 
         this.table.loading.subscribe(res => {

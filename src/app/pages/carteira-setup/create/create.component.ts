@@ -5,6 +5,7 @@ import { faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraSetupRequest } from 'src/app/models/carteiraSetup-produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -25,7 +26,7 @@ export class CreateComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: ModalOpen,
-        private empresaService: EmpresaService,
+        private setupService: CarteiraSetupService,
     ) {
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
@@ -50,13 +51,8 @@ export class CreateComponent implements OnInit {
         this.erro = [];
 
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            // Adicionar a empresaService.objeto
-            this.empresaService.add_New_Setup_To_Empresa(this.objeto);
-
-
-        } else if (urlArray.includes('empresas/editar')) {
-            // Adicionar a empresaService.objeto
+        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
+            this.setupService.add_Setup(this.objeto);
         }
         else {
             // Enviar para a API

@@ -19,63 +19,63 @@
     </div>
     <div class="form-row">
         <div class="form-group col-lg-4 col-md-4 col-sm-12">
-            <label for="tipoAtivo">Tipo Ativo: <span class="text-danger">*</span></label>
+            <label for="tipoAtivo_Id">Tipo Ativo: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
-                    name="tipoAtivo"
-                    id="tipoAtivo"
-                    #tipoAtivo="ngModel"
-                    [(ngModel)]="objeto.tipoAtivo"
+                    name="tipoAtivo_Id"
+                    id="tipoAtivo_Id"
+                    #tipoAtivo_Id="ngModel"
+                    [(ngModel)]="objeto.tipoAtivo_Id"
                     [class.form-control-loading]="loadingAtivo"
                     required
                     popoverClass="popover-danger"
                     [ngbPopover]="campoObrigatorio"
                     triggers="mouseenter:mouseleave">
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item" *ngFor="let item of _tipoAtivo">{{ item.nome }}</option>
+                <option [ngValue]="item.id" *ngFor="let item of _tipoAtivo">{{ item.nome }}</option>
             </select>
-            <div *ngIf="tipoAtivo.touched && tipoAtivo.errors">
-                <p class="text-danger" *ngIf="tipoAtivo.errors['required']">Este campo é obrigatório.</p>
+            <div *ngIf="tipoAtivo_Id.touched && tipoAtivo_Id.errors">
+                <p class="text-danger" *ngIf="tipoAtivo_Id.errors['required']">Este campo é obrigatório.</p>
             </div>
         </div>
         <div class="form-group col-lg-4 col-md-4 col-sm-12">
-            <label for="tipoRisco">Tipo Risco: <span class="text-danger">*</span></label>
+            <label for="tipoRisco_Id">Tipo Risco: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
-                    name="tipoRisco"
-                    id="tipoRisco"
-                    #tipoRisco="ngModel"
-                    [(ngModel)]="objeto.tipoRisco"
+                    name="tipoRisco_Id"
+                    id="tipoRisco_Id"
+                    #tipoRisco_Id="ngModel"
+                    [(ngModel)]="objeto.tipoRisco_Id"
                     [class.form-control-loading]="loadingRisco"
                     required
                     popoverClass="popover-danger"
                     [ngbPopover]="campoObrigatorio"
                     triggers="mouseenter:mouseleave">
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item" *ngFor="let item of _tipoRisco">{{ item.nome }}</option>
+                <option [ngValue]="item.id" *ngFor="let item of _tipoRisco">{{ item.nome }}</option>
             </select>
-            <div *ngIf="tipoRisco.touched && tipoRisco.errors">
-                <p class="text-danger" *ngIf="tipoRisco.errors['required']">Este campo é obrigatório.</p>
+            <div *ngIf="tipoRisco_Id.touched && tipoRisco_Id.errors">
+                <p class="text-danger" *ngIf="tipoRisco_Id.errors['required']">Este campo é obrigatório.</p>
             </div>
         </div>
         <div class="form-group col-lg-4 col-md-4 col-sm-12">
-            <label for="tipoLiquidez">Tipo Liquidez: <span class="text-danger">*</span></label>
+            <label for="tipoLiquidez_Id">Tipo Liquidez: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
-                    name="tipoLiquidez"
-                    id="tipoLiquidez"
-                    #tipoLiquidez="ngModel"
-                    [(ngModel)]="objeto.tipoLiquidez"
+                    name="tipoLiquidez_Id"
+                    id="tipoLiquidez_Id"
+                    #tipoLiquidez_Id="ngModel"
+                    [(ngModel)]="objeto.tipoLiquidez_Id"
                     [class.form-control-loading]="loadingLiquidez"
                     required
                     popoverClass="popover-danger"
                     [ngbPopover]="campoObrigatorio"
                     triggers="mouseenter:mouseleave">
                 <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item" *ngFor="let item of _tipoLiquidez">{{ item.nome }}</option>
+                <option [ngValue]="item.id" *ngFor="let item of _tipoLiquidez">{{ item.nome }}</option>
             </select>
-            <div *ngIf="tipoLiquidez.touched && tipoLiquidez.errors">
-                <p class="text-danger" *ngIf="tipoLiquidez.errors['required']">Este campo é obrigatório.</p>
+            <div *ngIf="tipoLiquidez_Id.touched && tipoLiquidez_Id.errors">
+                <p class="text-danger" *ngIf="tipoLiquidez_Id.errors['required']">Este campo é obrigatório.</p>
             </div>
         </div>
     </div>

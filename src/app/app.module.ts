@@ -25,7 +25,7 @@ import { LoadingComponent } from './parts/loading/loading.component';
 import { AlertComponent } from './parts/alert/alert.component';
 import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
 import { SharedModule } from './shared/shared.module';
-import { NgbPopoverModule }  from '@ng-bootstrap/ng-bootstrap';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RequestInterceptor } from './helpers/request.interceptor';
 registerLocaleData(localePt);
 
@@ -52,14 +52,10 @@ registerLocaleData(localePt);
         FormsModule,
         DropdownModule,
         NgbPopoverModule,
-        ToastrModule.forRoot(
-            {
-                preventDuplicates: true,
-                timeOut: 8000
-            }),
+        ToastrModule.forRoot({ preventDuplicates: true, timeOut: 8000, }),
         TableModule,
         ChartModule,
-        NgxMaskModule.forRoot({ validation: true }),
+        NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
     ],
     providers: [
         { provide: LOCALE_ID, useValue: 'pt-BR' },

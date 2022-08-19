@@ -1656,8 +1656,23 @@ tbody.tbody-border tr {
 
 .popover-danger .popover-arrow::after {
     border-top-color: #fff5f5;
-    top: 1px;
 }
+
+.bs-popover-auto[data-popper-placement^=top]>.popover-arrow::before, .bs-popover-top>.popover-arrow::before {
+    bottom: 0px;
+}
+
+.bs-popover-auto[data-popper-placement^=top]>.popover-arrow::after, .bs-popover-top>.popover-arrow::after {
+    top: -2px;
+}
+
+/* .bs-popover-auto[data-popper-placement^=bottom]>.popover-arrow::before, .bs-popover-bottom>.popover-arrow::before {
+    top: 0px;
+}
+
+.bs-popover-auto[data-popper-placement^=bottom]>.popover-arrow::after, .bs-popover-bottom>.popover-arrow::after {
+    bottom: -2px;
+} */
 
 .popover-info {
     background: #d8e5e9;

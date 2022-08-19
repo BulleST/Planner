@@ -52,7 +52,7 @@ export class CreateComponent implements OnInit {
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar')) {
             // Adicionar a empresaService.objeto
-            this.empresaService.add_New_Percentual_Risco_To_Empresa(this.objeto);
+            this.empresaService.add_Percentual(this.objeto);
 
 
         } else if (urlArray.includes('empresas/editar')) {

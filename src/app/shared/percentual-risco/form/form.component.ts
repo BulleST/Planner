@@ -48,13 +48,6 @@ export class FormPercentualRiscoComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    voltar() {
-        this.modal.setOpen(false);
-        setTimeout(() => {
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-        }, 200);
-    }
-
     send(form: NgForm) {
         if (form.invalid) {
             this.toastr.error('Campos inválidos');

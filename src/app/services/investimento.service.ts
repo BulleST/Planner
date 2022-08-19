@@ -92,7 +92,9 @@ export class InvestimentoService {
         var rel: ProdutoTributacaoRel = {
             id: 1,
             tributacao: request.tributacao,
-            produto: request.produto
+            tributacao_Id: request.tributacao.id,
+            produto: request.produto,
+            produto_Id: request.produto.id,
         };
 
         var planejamentoProduto: PlanejamentoProduto = {

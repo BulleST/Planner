@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { UsuarioService } from 'src/app/services/user.service.ts';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -20,11 +22,10 @@ export class CreateComponent implements OnInit {
 	loading = false;
 
 	constructor(
-		private router: Router,
 		private activatedRoute: ActivatedRoute,
 		private toastr: ToastrService,
 		private modal: ModalOpen,
-		private empresaService: EmpresaService,
+		private userService: UsuarioService,
 	) {
 		this.modal.getOpen().subscribe(res => {
 			this.modalOpen = res;
@@ -38,31 +39,23 @@ export class CreateComponent implements OnInit {
 	}
 
 	voltar() {
-		this.modal.setOpen(false);
-		setTimeout(() => {
-			this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-		}, 200);
+        this.modal.voltar();
 	}
 
 	send(form: NgForm) {
 		this.loading = true;
 		this.erro = [];
-
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
+        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
             // Adicionar a empresaService.objeto
-            this.empresaService.add_New_User_To_Empresa(this.objeto);
-            
-
-        } else if (urlArray.includes('empresas/editar')) {
-            // Adicionar a empresaService.objeto
-        } 
+            let result = this.userService.add_To_Empresa_List(this.objeto); 
+            if (result)
+                this.voltar();
+        }
         else {
             // Enviar para a API
             this.toastr.success('Operação concluída');
         }
-
 		this.loading = false;
-		this.voltar();
 	}
 }

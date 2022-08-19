@@ -7,8 +7,11 @@ export class Produto {
     id: number = undefined as unknown as number;
     empresa_Id: number = undefined as unknown as number;
     tipoAtivo: TipoAtivo = undefined as unknown as TipoAtivo;
+    tipoAtivo_Id: number = undefined as unknown as number;
     tipoRisco: TipoRisco = undefined as unknown as TipoRisco;
+    tipoRisco_Id: number = undefined as unknown as number;
     tipoLiquidez: TipoLiquidez = undefined as unknown as TipoLiquidez;
+    tipoLiquidez_Id: number = undefined as unknown as number;
     tributacao: Tributacao[] = [];
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;

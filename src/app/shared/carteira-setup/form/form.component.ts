@@ -37,26 +37,18 @@ export class FormCarteiraSetupComponent implements OnInit {
     tributacao: Tributacao = undefined as unknown as Tributacao;
 
     constructor(
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private empresaService: EmpresaService,
-        private crypto: Crypto,
-        private modal: ModalOpen,
-        private dropdownService: DropdownService
     ) {
-        this.empresaService.objeto.subscribe(res => this.empresa = res ?? new Empresa);
-
+        this.empresaService.objeto.subscribe(res => {
+            this.empresa = res ?? new Empresa
+            if (this.empresa.carteiraSetup.length == 0) {
+                this.novaCarteiraSetup = true;
+            }
+        });
     }
 
     ngOnInit(): void {
-    }
-
-    voltar() {
-        this.modal.setOpen(false);
-        setTimeout(() => {
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-        }, 200);
     }
 
     send(form: NgForm) {
@@ -77,7 +69,7 @@ export class FormCarteiraSetupComponent implements OnInit {
         }
 
         if (!this.novaCarteiraSetup) {
-            delete this.objeto.carteiraSetupNova;
+            delete this.objeto.nome;
         }
     }
 
@@ -96,8 +88,10 @@ export class FormCarteiraSetupComponent implements OnInit {
                 this.objeto.produtoTributacaoRel.push({
                     id: lastId++,
                     produto: this.produto,
+                    produto_Id: this.produto.id,
                     tributacao: this.tributacao,
-                })
+                    tributacao_Id: this.tributacao.id,
+                });
             }
         }
     }

@@ -5,7 +5,7 @@ import { RouterModule } from "@angular/router";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { TableModule } from "primeng/table";
 import { DragDropModule as Primeng_DragDropModule} from 'primeng/dragdrop';
-import { FormUsuarioComponent } from "./usuarios/form/form.component";
+import { FormCreateUsuarioComponent } from "./usuarios/form-create/form-create.component";
 import { FormProdutoComponent } from './produtos/form/form.component';
 import { NgxMaskModule } from "ngx-mask";
 import { ListComponent } from "./list/list.component";
@@ -14,10 +14,12 @@ import { DragDropModule as Material_DragDropModule } from '@angular/cdk/drag-dro
 import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
 import { DropdownModule } from "primeng/dropdown";
 import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
+import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.component";
 
 @NgModule({
     declarations: [
-        FormUsuarioComponent,
+        FormCreateUsuarioComponent,
+        FormEditUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
         FormPercentualRiscoComponent,
@@ -36,7 +38,8 @@ import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.compo
         DropdownModule,
     ],
     exports: [
-        FormUsuarioComponent,
+        FormCreateUsuarioComponent,
+        FormEditUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
         FormPercentualRiscoComponent,

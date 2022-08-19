@@ -19,16 +19,5 @@
             [canCreate]="true"
             [columns]="percentualRiscoColumns"
         ></app-list-shared>
-        <div class="d-flex justify-content-between px-2 mt-auto">
-            <button class="btn btn-step btn-step-prev mt-2" title="Anteiror" (click)="previous()">
-                <fa-icon [icon]="faArrowLeft"></fa-icon>
-                <span class="btn-step-text">Anterior</span>
-            </button>
-            <button class="btn btn-step btn-step-next mt-2" title="Próximo" (click)="next()">
-                <span class="btn-step-text">Finalizar </span>
-                <fa-icon [icon]="faCheck"></fa-icon>
-            </button>
-        </div>
     </div>
 </div>
-<router-outlet></router-outlet>

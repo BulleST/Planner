@@ -7,7 +7,7 @@ import { produtoColumns } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
-    selector: 'app-produtos',
+    selector: 'app-produtos-create',
     templateUrl: './produtos.component.html',
     styleUrls: ['./produtos.component.css']
   })

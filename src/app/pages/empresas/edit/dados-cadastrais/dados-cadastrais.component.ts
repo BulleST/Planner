@@ -1,23 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faArrowLeft, faArrowRight, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Empresa } from 'src/app/models/empresa.model';
-import { userColumns } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
-    selector: 'app-usuarios-create',
-    templateUrl: './usuarios.component.html',
-    styleUrls: ['./usuarios.component.css']
+    selector: 'app-dados-cadastrais-edit',
+    templateUrl: './dados-cadastrais.component.html',
+    styleUrls: ['./dados-cadastrais.component.css']
 })
-export class UsuariosComponent implements OnInit {
-    faUser = faUsers;
+export class DadosCadastraisComponent implements OnInit {
+    faIdCard = faIdCard;
     objeto: Empresa = new Empresa;
-    userColumns = userColumns;
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
+    erro: any[] = [];
+    loading = false;
+
     constructor(
+        private toastr: ToastrService,
         private empresaService: EmpresaService,
         private router: Router
     ) {
@@ -29,12 +32,12 @@ export class UsuariosComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    next() {
-        this.router.navigate(['empresas', 'cadastrar', 'produtos'])
-    }
-    
-    previous() {
-        this.router.navigate(['empresas', 'cadastrar', 'dados-cadastrais'])
+    next(form: NgForm) {
+        if (form.invalid) {
+            this.toastr.error('Dados inválidos')
+            return;
+        }
+        this.empresaService.setObject(this.objeto);
     }
 
 }

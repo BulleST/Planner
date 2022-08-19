@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faArrowLeft, faArrowRight, faCheck, faFileCircleCheck, faPercent } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faPercent } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
-import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { percentualRiscoColumns } from 'src/app/models/percentual-risco.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
-    selector: 'app-percentual-risco-create',
-    templateUrl: './percentual-risco.component.html',
-    styleUrls: ['./percentual-risco.component.css']
+  selector: 'app-percentual-risco',
+  templateUrl: './percentual-risco.component.html',
+  styleUrls: ['./percentual-risco.component.css']
 })
 export class PercentualRiscoComponent implements OnInit {
     faPercent = faPercent;
@@ -20,9 +19,7 @@ export class PercentualRiscoComponent implements OnInit {
     objeto: Empresa = new Empresa;
     percentualRiscoColumns = percentualRiscoColumns;
     constructor(
-        private toastr: ToastrService,
         private empresaService: EmpresaService,
-        private router: Router,
         private mask: MaskApplierService
     ) {
         this.empresaService.objeto.subscribe(res => {
@@ -42,12 +39,5 @@ export class PercentualRiscoComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    next() {
-        // this.router.navigate(['empresas', 'cadastrar', 'finalizar'])
-    }
-    
-    previous() {
-        this.router.navigate(['empresas', 'cadastrar', 'setup'])
-    }
 
 }

@@ -27,7 +27,8 @@ import { ProdutosComponent as Edit_Empresa_ProdutosComponent } from './edit/prod
 import { SetupComponent as Edit_Empresa_SetupComponent } from './edit/setup/setup.component';
 import { UsuariosComponent as Edit_Empresa_UsuariosComponent } from './edit/usuarios/usuarios.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { FinalizarComponent } from './create/finalizar/finalizar.component';
+import { DadosCadastraisComponent as Edit_Empresa_DadosCadastraisComponent } from './edit/dados-cadastrais/dados-cadastrais.component';
+import { PercentualRiscoComponent as Edit_Empresa_PercentualRiscoComponent } from './edit/percentual-risco/percentual-risco.component';
 
 @NgModule({
     declarations: [
@@ -47,8 +48,8 @@ import { FinalizarComponent } from './create/finalizar/finalizar.component';
         Edit_Empresa_ProdutosComponent,
         Edit_Empresa_SetupComponent,
         Edit_Empresa_UsuariosComponent,
-        FinalizarComponent,
-
+        Edit_Empresa_DadosCadastraisComponent,
+        Edit_Empresa_PercentualRiscoComponent,
     ],
     imports: [
         CommonModule,

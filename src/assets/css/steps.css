@@ -138,8 +138,6 @@
     margin-left: 6px;
 }
 
-.step-container {}
-
 .step-container p-steps {
     flex: 1 0 10%;
 }
@@ -173,7 +171,7 @@
     color: #282626;
     border-top: 1px #dfdfdf solid;
     margin: 0 0 2px;
-    transition: .5s;
+    transition: .5s color 0s;
 }
 
 .p-steps-item .p-menuitem-link:hover {

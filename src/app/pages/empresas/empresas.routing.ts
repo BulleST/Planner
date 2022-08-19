@@ -35,7 +35,6 @@ import { DeleteComponent as PercentualRisco_DeleteComponent } from './../percent
 
 
 import { DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
-import { FinalizarComponent } from './create/finalizar/finalizar.component';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [] },
@@ -65,7 +64,6 @@ const routes: Routes = [
             { path: 'editar/:id', component: PercentualRisco_EditComponent  },
             { path: 'excluir/:id', component: PercentualRisco_DeleteComponent  },
         ] },
-        { path: 'finalizar', component: FinalizarComponent },
     ] },
 ];
 

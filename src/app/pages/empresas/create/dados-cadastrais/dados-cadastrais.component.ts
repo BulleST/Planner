@@ -7,7 +7,7 @@ import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
-    selector: 'app-dados-cadastrais',
+    selector: 'app-dados-cadastrais-create',
     templateUrl: './dados-cadastrais.component.html',
     styleUrls: ['./dados-cadastrais.component.css']
 })

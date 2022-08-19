@@ -5,8 +5,6 @@ import { faArrowRight, faCity, faEllipsisV, faFilter, faTimes, faUsers } from '@
 import { ToastrService } from 'ngx-toastr';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
-import { Crypto } from 'src/app/utils/crypto';
-import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
   selector: 'app-edit',

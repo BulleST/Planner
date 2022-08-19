@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faArrowRight, faCity, faCreditCardAlt, faEllipsisV, faFilter, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCity, faCreditCardAlt, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
-import { Cliente } from 'src/app/models/cliente.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
-import { ModalOpen } from 'src/app/utils/modal-open';
 import { Table } from 'src/app/utils/table';
 
 @Component({

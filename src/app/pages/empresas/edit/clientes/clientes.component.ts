@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faCity, faEllipsisV, faFilter, faPeopleRoof, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { Cliente } from 'src/app/models/cliente.model';
 import { Empresa } from 'src/app/models/empresa.model';
@@ -21,38 +22,27 @@ export class ClientesComponent implements OnInit {
     faTimes = faTimes;
     loading = false;
 
-    clienteSelected?: Cliente;
-    clientesSelected: Cliente[] = [];
     clientesColumn = [
         { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
         { field: 'nome', header: 'Razão Social', filterType: 'text', filterDisplay: 'menu' },
         { field: 'cpf', header: 'CPF', filterType: 'text', filterDisplay: 'menu' },
     ];
-    clientesFilters: string[] = [];
     objeto: Empresa = new Empresa;
 
     constructor(
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
         private empresaService: EmpresaService,
-        private table: Table) { 
-        this.clientesFilters = this.clientesColumn.map(x => x.field);
+        private mask: MaskApplierService
+    ) {
+        this.empresaService.objeto.subscribe(res => {
+            this.objeto = res ?? new Empresa;
+            this.objeto.cliente.map(item => {
+                item.cpf = this.mask.applyMask(item.cpf.toString(), '000.000.000-00') as unknown as number;
+                return item;
+            });
+        });
     }
 
     ngOnInit(): void {
-    }
-
-    onRowSelect(event: any) {
-      this.table.onRowSelect(event);
-    }
-  
-    onRowUnselect(event: any) {
-      this.table.onRowUnselect(event)
-    }
-  
-    onAllRowToggle(event: any) {
-      this.table.onAllRowToggle(event);
     }
 
 }

@@ -10,7 +10,7 @@ import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
 
 @Component({
-    selector: 'app-setup',
+    selector: 'app-setup-create',
     templateUrl: './setup.component.html',
     styleUrls: ['./setup.component.css']
 })

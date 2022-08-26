@@ -27,7 +27,7 @@ export class PercentualRiscoService {
         private dropdownService: DropdownService,
         private empresaService: EmpresaService,
     ) {
-        this.empresaService.getObject().subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.empresa = res;
         });
     }
@@ -59,7 +59,7 @@ export class PercentualRiscoService {
             item.id = ++lastId;
             list.push(item);
             this.empresa.percentualRisco = list;
-            this.empresaService.objeto.next(this.empresa);
+            this.empresaService.setObject(this.empresa);
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -82,7 +82,7 @@ export class PercentualRiscoService {
                 item.perfilInvestidor = perfilInvestidor;
                 list.splice(index, 1, item);
                 this.empresa.percentualRisco = list;
-                this.empresaService.objeto.next(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -101,7 +101,7 @@ export class PercentualRiscoService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.percentualRisco = list;
-                this.empresaService.objeto.next(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;

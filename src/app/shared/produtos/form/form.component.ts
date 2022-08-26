@@ -38,38 +38,37 @@ export class FormProdutoComponent implements OnInit {
 
 
     constructor(
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
-        private empresaService: EmpresaService,
-        private crypto: Crypto,
-        private modal: ModalOpen,
         private dropdownService: DropdownService
     ) {
 
-        this.dropdownService.getTributacao().subscribe(res => {
-            this._tributacao = res.filter(x => !this.objeto.tributacao.map(x => x.id).includes(x.id));
-            this.loadingTributacao = false;
-        });
         this.dropdownService.tributacao.subscribe(res => this._tributacao = res);
-
-        this.dropdownService.getLiquidez().subscribe(res => {
-            this._tipoLiquidez = res;
-            this.loadingLiquidez = false;
+        this.dropdownService.getTributacao().subscribe({
+            next: (res) => this._tributacao.filter(x => !this.objeto.tributacao.map(x => x.id).includes(x.id)),
+            error: (err) => console.error(err),
+            complete: ()  => this.loadingTributacao = false
         });
+
         this.dropdownService.tipoLiquidez.subscribe(res => this._tipoLiquidez = res);
-
-        var a = this.dropdownService.getRisco().subscribe(res => {
-            this._tipoRisco = res;
-            this.loadingRisco = false;
+        this.dropdownService.getLiquidez().subscribe({
+            next: (res) => this._tipoLiquidez = res,
+            error: (err) => console.error(err),
+            complete: ()  => this.loadingLiquidez = false
         });
+
         this.dropdownService.tipoRisco.subscribe(res => this._tipoRisco = res);
-
-        this.dropdownService.getAtivo().subscribe(res => {
-            this._tipoAtivo = res;
-            this.loadingAtivo = false;
+        this.dropdownService.getRisco().subscribe({
+            next: (res) => this._tipoRisco = res,
+            error: (err) => console.error(err),
+            complete: ()  => this.loadingRisco = false
         });
+
         this.dropdownService.tipoAtivo.subscribe(res => this._tipoAtivo = res);
+        this.dropdownService.getAtivo().subscribe({
+            next: (res) => this._tipoAtivo = res,
+            error: (err) => console.error(err),
+            complete: ()  => this.loadingAtivo = false
+        });
         
     }
 

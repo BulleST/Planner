@@ -25,8 +25,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         SharedModule,
         FontAwesomeModule
     ],
+    bootstrap: [ProdutosComponent],
     exports: [
         CreateComponent,
-    ]
+    ],
+    providers: [],
 })
 export class ProdutosModule { }

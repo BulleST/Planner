@@ -19,6 +19,7 @@ export class ListComponent implements OnInit, OnChanges {
     faEllipsisV = faEllipsisV;
     loading = false;
 
+    @Input() createLink: string[] = [];
     @Input() list: any[] = [];
     @Input() filterLink = true;
     @Input() filterTable = true;
@@ -53,6 +54,8 @@ export class ListComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['list']) 
             this.list = changes['list'].currentValue;
+        if (changes['createLink']) 
+            this.createLink = changes['createLink'].currentValue;
         if (changes['filterLink']) 
             this.filterLink = changes['filterLink'].currentValue;
         if (changes['filterTable']) 
@@ -86,9 +89,9 @@ export class ListComponent implements OnInit, OnChanges {
         const nestedProperties: string[] = col.field.split('.');
         let value: any = row;
         for (const prop of nestedProperties) {
-            value = value[prop];
+            value = value[prop] ?? '-';
         }
 
-        return value;
+        return value ?? '-';
     }
 }

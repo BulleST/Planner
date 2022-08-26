@@ -35,10 +35,10 @@ export class CreateComponent implements OnInit {
         private alert: AlertService,
         private table: Table
     ) {
-        if ( this.empresaService.objeto.value == undefined)
+        if ( this.empresaService.objeto == undefined)
             this.empresaService.setObject(new Empresa);
             
-        this.empresaService.objeto.subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.objeto = res ?? new Empresa;
         });
 

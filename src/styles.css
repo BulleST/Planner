@@ -96,11 +96,13 @@ hr {
 }
 
 .page__header {
-    padding: 15px calc(1vw + 30px);
+    padding: 15px calc(1vw + 20px);
     background-color: white;
     box-shadow: 2px 2px 2px #0000001c;
     display: flex;
     align-items: center;
+    margin: 10px auto;
+    width: 98%;
 }
 
 .page__header-title {

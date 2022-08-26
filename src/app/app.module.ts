@@ -11,7 +11,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TableModule } from 'primeng/table';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ChartModule } from 'primeng/chart';
-import { NgxMaskModule } from 'ngx-mask';
+import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { AppRoutingModule } from './app.routing';
@@ -58,6 +58,9 @@ registerLocaleData(localePt);
         NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
     ],
     providers: [
+        CurrencyPipe,
+        MaskPipe,
+        DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }

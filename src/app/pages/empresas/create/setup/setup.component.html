@@ -9,8 +9,8 @@
         </div>
     </div>
     <div class="card-body">
-        <app-list-shared
-                  [list]="objeto.carteiraSetup"
+        <app-list-shared [createLink]="['cadastrar']"
+                  [list]="rels"
                   [filterLink]="false"
                   [filterTable]="false"
                   [paginator]="false"

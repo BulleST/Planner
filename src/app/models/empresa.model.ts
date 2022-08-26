@@ -1,4 +1,5 @@
-import { CarteiraSetupRequest } from "./carteiraSetup-produto.model";
+import { CarteiraProdutoRel } from "./carteiraSetup-produto.model";
+import { CarteiraSetup } from "./carteiraSetup.model";
 import { Cliente } from "./cliente.model";
 import { PercentualRisco } from "./percentual-risco.model";
 import { Produto } from "./produto.model";
@@ -12,7 +13,7 @@ export class Empresa {
     cliente: Cliente[] = [];
     usuario: Usuario[] = [];
     produto: Produto[] = [];
-    carteiraSetup: CarteiraSetupRequest[] = [];
+    carteiraSetup: CarteiraSetup[] = []; // Referente ao REL
     percentualRisco: PercentualRisco[] = [];
 }
 

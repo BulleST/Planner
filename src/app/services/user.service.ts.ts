@@ -28,7 +28,7 @@ export class UsuarioService {
         private dropdownService: DropdownService,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.getObject().subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.empresa = res;
         });
     }
@@ -62,7 +62,7 @@ export class UsuarioService {
                 item.id = ++lastId;
                 list.push(item);
                 this.empresa.usuario = list;
-                this.empresaService.objeto.next(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -90,7 +90,7 @@ export class UsuarioService {
                     item.perfilAcesso = perfil;
                     list.splice(index, 1, item);
                     this.empresa.usuario = list;
-                    this.empresaService.objeto.next(this.empresa);
+                    this.empresaService.setObject(this.empresa);
                     this.toastr.success('Operação concluída');
                     return true;
                 } else {
@@ -113,7 +113,7 @@ export class UsuarioService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.usuario = list;
-                this.empresaService.objeto.next(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;

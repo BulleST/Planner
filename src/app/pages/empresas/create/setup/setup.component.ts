@@ -1,9 +1,11 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faEllipsisV, faFilter, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
-import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraProdutoRel, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -28,20 +30,31 @@ export class SetupComponent implements OnInit {
     selected?: any;
     selectedItems: any[] = [];
     filters: string[] = [];
+    rels: CarteiraProdutoRel[] = [];
+    setup: CarteiraSetup[] = [];
     
     constructor(
         private empresaService: EmpresaService,
         private router: Router,
         private table: Table,
         public crypto: Crypto,
-        private mask: MaskApplierService,
+        private currency: CurrencyPipe,
     ) {
-        this.empresaService.objeto.subscribe(res => {
+       
+        this.empresaService.empresa.subscribe(res => {
             this.objeto = res ?? new Empresa;
             this.objeto.carteiraSetup.map(item => {
-                item.percentual = this.mask.applyMask(item.percentual.toString(), 'separator.2') + '%' as unknown as number;
+                item.carteiraProdutoRel.map(rel => {
+                    // rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
+                    rel.carteiraSetup = item;
+                    return rel
+                })
                 return item;
             })
+            var arrays = this.objeto.carteiraSetup.map(x => x.carteiraProdutoRel)
+            this.rels = [].concat.apply([], arrays as unknown as ConcatArray<never>[]);
+
+            this.setup = this.objeto.carteiraSetup;
         });
         this.filters = this.setupColumns.map(x => x.field);
 

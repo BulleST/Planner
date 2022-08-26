@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraSetupRequest } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -17,7 +17,7 @@ export class CreateComponent implements OnInit {
     faTimes = faTimes;
     faWallet = faWallet;
     modalOpen = false;
-    objeto: CarteiraSetupRequest = new CarteiraSetupRequest;
+    objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
     erro: any[] = [];
     loading = false;
 

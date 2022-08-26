@@ -1,0 +1,24 @@
+<div class="page">
+    <div class="page__header">
+        <span class="title-icon">
+            <i class="pi pi-wallet"></i>
+        </span>
+        <div>
+            <h3 class="page__header-title">Setup</h3>
+            <p class="page__header-subtitle"><small>Setup de produtos cadastrados em <strong>"Empresa X"</strong></small></p>
+        </div>
+    </div>
+    <div class="page__body">
+        <app-list-shared
+                         [createLink]="['cadastrar']"
+                         [list]="list"
+                         [filterLink]="true"
+                         [filterTable]="true"
+                         [paginator]="true"
+                         [sortTable]="true"
+                         [menuTable]="true"
+                         [canCreate]="true"
+                         [columns]="setupColumns"></app-list-shared>
+    </div>
+</div>
+<router-outlet></router-outlet>

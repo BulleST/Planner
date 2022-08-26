@@ -38,7 +38,7 @@ export class FormPercentualRiscoComponent implements OnInit {
         private modal: ModalOpen,
         private dropdownService: DropdownService
     ) {
-        this.empresaService.objeto.subscribe(res => this.empresa = res ?? new Empresa);
+        this.empresaService.empresa.subscribe(res => this.empresa = res ?? new Empresa);
         this.dropdownService.getPerfilInvestidor().subscribe(res => {
             this.loadingPerfilInvestidor = false;
             this.perfilInvestidor = res;

@@ -24,7 +24,7 @@ export class DadosCadastraisComponent implements OnInit {
         private empresaService: EmpresaService,
         private router: Router
     ) {
-        this.empresaService.objeto.subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.objeto = res ?? new Empresa;
         });
     }

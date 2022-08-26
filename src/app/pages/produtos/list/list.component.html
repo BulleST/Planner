@@ -1,23 +1,24 @@
-<div class="card">
-    <div class="card-header d-flex align-items-center py-2">
+<div class="page">
+    <div class="page__header">
         <span class="title-icon">
             <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
         </span>
         <div>
-            <h3 class="card-header-title">Produtos</h3>
-            <p class="card-header-subtitle"><small>Inclua produtos para essa empresa</small></p>
+            <h3 class="page__header-title">Produtos</h3>
+            <p class="page__header-subtitle"><small>Produtos cadastrados em <strong>"Empresa X"</strong></small></p>
         </div>
     </div>
-    <div class="card-body">
+    <div class="page__body">
         <app-list-shared
-                  [list]="objeto.produto"
-                  [filterLink]="true"
-                  [filterTable]="true"
-                  [paginator]="true"
-                  [sortTable]="true"
-                  [menuTable]="true"
-                  [canCreate]="true"
-                  [columns]="produtoColumns"></app-list-shared>
+                         [createLink]="['cadastrar']"
+                         [list]="list"
+                         [filterLink]="true"
+                         [filterTable]="true"
+                         [paginator]="true"
+                         [sortTable]="true"
+                         [menuTable]="true"
+                         [canCreate]="true"
+                         [columns]="produtoColumns"></app-list-shared>
     </div>
 </div>
 <router-outlet></router-outlet>

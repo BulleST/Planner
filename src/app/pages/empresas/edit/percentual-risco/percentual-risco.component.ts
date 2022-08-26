@@ -22,7 +22,7 @@ export class PercentualRiscoComponent implements OnInit {
         private empresaService: EmpresaService,
         private mask: MaskApplierService
     ) {
-        this.empresaService.objeto.subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.objeto = res ?? new Empresa;
             this.objeto.percentualRisco.map(item => {
                 item.baixissimo = this.mask.applyMask(item.baixissimo.toString(), 'separator.2') + '%'  as unknown as number;

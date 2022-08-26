@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Empresa } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
 import { Usuario } from '../models/usuario.model';
 import { Produto } from '../models/produto.model';
-import { CarteiraSetupRequest } from '../models/carteiraSetup-produto.model';
+import { CarteiraSetupRelRequest } from '../models/carteiraSetup-produto.model';
 import { environment } from 'src/environments/environment';
 import { PercentualRisco } from '../models/percentual-risco.model';
 import { DropdownService } from './dropdown.service';
@@ -18,32 +18,30 @@ import { DropdownService } from './dropdown.service';
 export class EmpresaService {
     url = environment.url;
     list = new BehaviorSubject<Empresa[]>([]);
-    objeto = new BehaviorSubject<Empresa | undefined>(undefined);
+    // objeto = new BehaviorSubject<Empresa | undefined>(undefined);
+	private empresaSubject: BehaviorSubject<Empresa | undefined>;
+	public empresa: Observable<Empresa | undefined>;
 
     constructor(
-        private router: Router,
         private http: HttpClient,
-        private toastr: ToastrService,
         private crypto: Crypto,
-        private dropdownService: DropdownService
     ) {
+		this.empresaSubject = new BehaviorSubject<Empresa | undefined>(undefined);
+		this.empresa = this.empresaSubject.asObservable();
     }
 
-    getObject() {
-        var e = localStorage.getItem('empresa')
+    public get objeto(): Empresa | undefined  {
+        var e = localStorage.getItem('empresa')  
         if (e) {
             this.setObject(this.crypto.decrypt(e) ?? new Empresa)
         }
-        return this.objeto;
+        return this.empresaSubject.value;
     }
 
-    setObject(value: Empresa) {
+    setObject(value: Empresa | undefined) {
         localStorage.setItem('empresa', this.crypto.encrypt(value) ?? '')
-        this.objeto.next(value);
-
+        this.empresaSubject.next(value);
     }
-
-
 
     getList() {
         return this.http.get<Empresa[]>(`${this.url}/Empresa/`);

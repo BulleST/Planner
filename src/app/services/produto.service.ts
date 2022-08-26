@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { Crypto } from '../utils/crypto';
 import { environment } from 'src/environments/environment';
 import { DropdownService } from './dropdown.service';
@@ -30,7 +30,7 @@ export class ProdutoService {
         private dropdownService: DropdownService,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.getObject().subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.empresa = res;
         });
 
@@ -83,7 +83,7 @@ export class ProdutoService {
             item.id = ++lastId;
             list.push(item);
             this.empresa.produto = list;
-            this.empresaService.objeto.next(this.empresa);
+            this.empresaService.setObject(this.empresa);
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -126,7 +126,7 @@ export class ProdutoService {
 
                 list.splice(index, 1, item);
                 this.empresa.produto = list;
-                this.empresaService.objeto.next(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -145,7 +145,7 @@ export class ProdutoService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.produto = list;
-                this.empresaService.objeto.next(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -161,7 +161,16 @@ export class ProdutoService {
 
 
     getList() {
-        return this.http.get<Produto[]>(`${this.url}/CarteiraSetupRequest/`);
+        let empresa_Id = this.empresaService.objeto?.id ?? 1;
+        return this.http.get<Produto[]>(`${this.url}/produto/all/${empresa_Id}`).pipe(
+            map(list => {
+                this.list.next(list);
+                var empresa = this.empresaService.objeto;
+                this.empresa!.produto! = list;
+                this.empresaService.setObject(empresa);
+                return list;
+            })
+        );
     }
 
     get(id: number): BehaviorSubject<undefined | Produto> {

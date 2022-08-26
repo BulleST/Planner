@@ -15,6 +15,7 @@ import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component
 import { DropdownModule } from "primeng/dropdown";
 import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
 import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.component";
+import { ToastrModule } from "ngx-toastr";
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.compone
         Material_DragDropModule,
         NgbPopoverModule,
         DropdownModule,
+        ToastrModule
     ],
     exports: [
         FormCreateUsuarioComponent,

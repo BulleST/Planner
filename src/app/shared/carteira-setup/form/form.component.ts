@@ -4,15 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { x } from 'pdfkit';
-import { CarteiraSetupRequest } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { Produto } from 'src/app/models/produto.model';
 import { Tributacao } from 'src/app/models/tributacao.model';
-import { DropdownService } from 'src/app/services/dropdown.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
-import { Crypto } from 'src/app/utils/crypto';
-import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
     selector: 'app-form-carteira-setup',
@@ -20,7 +17,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     styleUrls: ['./form.component.css']
 })
 export class FormCarteiraSetupComponent implements OnInit {
-    @Input() objeto: CarteiraSetupRequest = new CarteiraSetupRequest;
+    @Input() objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
     @Input() loading = false;
     @Input() erro: any[] = [];
 
@@ -40,8 +37,10 @@ export class FormCarteiraSetupComponent implements OnInit {
         private toastr: ToastrService,
         private empresaService: EmpresaService,
     ) {
-        this.empresaService.objeto.subscribe(res => {
+        console.log(this.objeto)
+        this.empresaService.empresa.subscribe(res => {
             this.empresa = res ?? new Empresa
+            this.carteirasSetup = this.empresa.carteiraSetup;
             if (this.empresa.carteiraSetup.length == 0) {
                 this.novaCarteiraSetup = true;
             }
@@ -61,16 +60,20 @@ export class FormCarteiraSetupComponent implements OnInit {
         this.sendData.emit(form);
     }
 
-    novaCarteira(criarNova?: boolean) {
-        if (criarNova != undefined) {
-            this.novaCarteiraSetup = criarNova;
+    carteiraSetupChange() {
+        this.novaCarteiraSetup = this.objeto.carteiraSetup_Id == undefined;
+        if (this.novaCarteiraSetup) {
+            this.novaCarteira();
         } else {
-            this.novaCarteiraSetup = this.objeto.carteiraSetup == undefined;
+            this.objeto.nome = '';
         }
+    }
 
-        if (!this.novaCarteiraSetup) {
-            delete this.objeto.nome;
-        }
+    novaCarteira() {
+        this.novaCarteiraSetup = true;
+        this.objeto.carteiraSetup = new CarteiraSetup;
+        this.objeto.carteiraSetup_Id = undefined as unknown as number;
+        this.objeto.nome = '';
     }
 
     adicionarProduto() {
@@ -81,8 +84,10 @@ export class FormCarteiraSetupComponent implements OnInit {
         } else {
             var jaExiste = this.objeto.produtoTributacaoRel.find(x => x.produto.id == this.produto.id && x.tributacao.id  == this.tributacao.id);
             if (jaExiste) {
+                console.log('if')
                 this.toastr.error('Combinação já cadastrada')
             } else {
+                console.log('else')
                 this.objeto.produtoTributacaoRel.sort((x,y) => x.id - y.id);
                 var lastId = this.objeto.produtoTributacaoRel.length == 0 ? 0 : this.objeto.produtoTributacaoRel[this.objeto.produtoTributacaoRel.length - 1].id;
                 this.objeto.produtoTributacaoRel.push({

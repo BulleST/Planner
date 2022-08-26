@@ -1,7 +1,9 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { faArrowRight, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
-import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraProdutoRel, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
@@ -15,17 +17,33 @@ export class SetupComponent implements OnInit {
 
     setupColumns = setupColumns;
     objeto: Empresa = new Empresa;
+    setup: CarteiraSetup[] = [];
+    rels: CarteiraProdutoRel[][] = [];
 
     constructor(
         private empresaService: EmpresaService,
-        private mask: MaskApplierService
+        private currency: CurrencyPipe,
     ) {
-        this.empresaService.objeto.subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.objeto = res ?? new Empresa;
+            this.rels = this.objeto.carteiraSetup.map(item => {
+                return item.carteiraProdutoRel.map(rel => {
+                    rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
+                    rel.carteiraSetup = item;
+                    return rel
+                })
+                return item.carteiraProdutoRel;
+            })
+            console.log(this.rels);
             this.objeto.carteiraSetup.map(item => {
-                item.percentual = this.mask.applyMask(item.percentual.toString(), 'separator.2') + '%' as unknown as number;
+                item.carteiraProdutoRel.map(rel => {
+                    // rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
+                    return rel;
+                })
                 return item;
             });
+
+            this.setup = this.objeto.carteiraSetup;
         });
     }
 

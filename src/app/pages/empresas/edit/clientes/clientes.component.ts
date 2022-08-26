@@ -33,7 +33,7 @@ export class ClientesComponent implements OnInit {
         private empresaService: EmpresaService,
         private mask: MaskApplierService
     ) {
-        this.empresaService.objeto.subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.objeto = res ?? new Empresa;
             this.objeto.cliente.map(item => {
                 item.cpf = this.mask.applyMask(item.cpf.toString(), '000.000.000-00') as unknown as number;

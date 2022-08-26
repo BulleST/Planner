@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraSetupRequest } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -17,7 +17,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 export class EditComponent implements OnInit {
     faTimes = faTimes;
     modalOpen = false;
-    objeto: CarteiraSetupRequest = new CarteiraSetupRequest;
+    objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
     erro: any[] = [];
     loading = false;
 
@@ -36,9 +36,12 @@ export class EditComponent implements OnInit {
         activatedRoute.paramMap.subscribe(p => {
             if (p.get('id')) {
                 this.objeto.id = this.crypto.decrypt(p.get('id'));
-                let objeto = this.empresaService.objeto.value?.carteiraSetup.find(x => x.id == this.objeto.id);
+                let objeto = this.empresaService.objeto?.carteiraSetup.find(x => x.id == this.objeto.id);
                 if (objeto) {
-                    this.objeto = objeto;
+                    this.objeto.carteiraSetup_Id = objeto.id;
+                    this.objeto.nome = objeto.nome;
+                    this.objeto.percentual = objeto.carteiraProdutoRel.find(x => x.id == this.objeto.id)?.percentual ?? '' as unknown as number;
+                    this.objeto.produtoTributacaoRel = objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel);
                     setTimeout(() => {
                         this.modal.setOpen(true);
                     }, 200);
@@ -59,7 +62,6 @@ export class EditComponent implements OnInit {
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
-
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
             let result = this.setupService.edit_To_Empresa_List(this.objeto);

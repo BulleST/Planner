@@ -197,8 +197,8 @@
 
 .p-steps-item.p-steps-current .p-menuitem-link .p-steps-number {
     background-color: var(--primary);
-    background-color: #fff;
-    color: var(--primary);
+    background-color: #ffffff2b;
+    /* color: var(--primary); */
 }
 
 .p-steps-item.p-steps-current .p-menuitem-link .p-steps-title {

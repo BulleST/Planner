@@ -4,7 +4,7 @@ export class Alert {
     message: string = '';
     autoClose: boolean = false;
     background: boolean = true;
-    keepAfterRouteChange?: boolean = false;
+    keepAfterRouteChange?: boolean = true;
     fade: boolean = false;
 
     constructor(init?:Partial<Alert>) {

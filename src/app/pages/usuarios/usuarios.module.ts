@@ -10,6 +10,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ListComponent } from './list/list.component';
 import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { DeleteComponent } from './delete/delete.component';
     UsuariosRoutingModule,
     FormsModule,
     ToastrModule,
-    SharedModule
+    SharedModule,
+    FontAwesomeModule
   ],
   exports: [
     CreateComponent

@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faCity, faEllipsisV, faFilter, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Empresa } from 'src/app/models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class EditComponent implements OnInit {
     faCity = faCity;
     faUsers = faUsers;
     faFilter = faFilter;
-    objeto: Empresa = new Empresa;
+    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
     erro: any[] = [];
     loading = false;
 

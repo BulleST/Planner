@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "src/environments/environment";
-import { Empresa } from "../models/empresa.model";
+import { Empresa, EmpresaCreateRequest } from "../models/empresa.model";
 import { PercentualRisco } from "../models/percentual-risco.model";
 import { Crypto } from "../utils/crypto";
 import { Table } from "../utils/table";
@@ -17,7 +17,7 @@ export class PercentualRiscoService {
     url = environment.url;
     list = new BehaviorSubject<PercentualRisco[]>([]);
     objeto = new BehaviorSubject<PercentualRisco | undefined>(undefined);
-    empresa?= new Empresa;
+    empresa?= new EmpresaCreateRequest;
 
     constructor(
         private table: Table,
@@ -27,7 +27,7 @@ export class PercentualRiscoService {
         private dropdownService: DropdownService,
         private empresaService: EmpresaService,
     ) {
-        this.empresaService.empresa.subscribe(res => {
+        this.empresaService.createEmpresaObject.subscribe(res => {
             this.empresa = res;
         });
     }
@@ -59,7 +59,7 @@ export class PercentualRiscoService {
             item.id = ++lastId;
             list.push(item);
             this.empresa.percentualRisco = list;
-            this.empresaService.setObject(this.empresa);
+            this.empresaService.setCreateObject(this.empresa);
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -82,7 +82,7 @@ export class PercentualRiscoService {
                 item.perfilInvestidor = perfilInvestidor;
                 list.splice(index, 1, item);
                 this.empresa.percentualRisco = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setCreateObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -101,7 +101,7 @@ export class PercentualRiscoService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.percentualRisco = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setCreateObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;

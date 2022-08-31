@@ -4,6 +4,7 @@ export class PercentualRisco {
     id: number = 0;
     empresa_Id: number = 0;
     perfilInvestidor: PerfilInvestidor = undefined as unknown as PerfilInvestidor;
+    // perfilInvestidor: string = '';
     perfilInvestidor_Id: number = undefined as unknown as number;
     capacidadeRisco_Id: number = undefined as unknown as number;
     baixissimo: number = '' as unknown as number;
@@ -17,6 +18,7 @@ export class PercentualRisco {
 
 export var percentualRiscoColumns = [
     { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
+    // { field: 'perfilInvestidor', header: 'Perfil Investidor', filterType: 'text', filterDisplay: 'menu' },
     { field: 'perfilInvestidor.descricao', header: 'Perfil Investidor', filterType: 'text', filterDisplay: 'menu' },
     { field: 'baixissimo', header: 'Baixissimo', filterType: 'numeric', filterDisplay: 'menu' },
     { field: 'baixo', header: 'Baixo', filterType: 'numeric', filterDisplay: 'menu' },

@@ -1,0 +1,139 @@
+{
+    "nome": "Noemi Cavalcanti Almeida",
+    "cnpj": 55555555555,
+    "email": "noemi@bullest.com.br",
+    "usuario": [
+        {
+            "id": 1,
+            "empresa_Id": 0,
+            "perfilAcesso": {
+                "id": 1,
+                "perfil": "Master",
+                "usuario": []
+            },
+            "perfilAcesso_Id": 1,
+            "nome": "Noemi Cavalcanti Almeida",
+            "email": "noemi@bullest.com.br",
+            "senha": "sdasdas"
+        }
+    ],
+    "produto": [
+        {
+            "id": 1,
+            "tipoAtivo": {
+                "id": 1,
+                "nome": "Renda Fixa",
+                "produto": [],
+                "investimento": []
+            },
+            "tipoAtivo_Id": 1,
+            "tipoRisco": {
+                "id": 4,
+                "nome": "Arrojado",
+                "produto": [],
+                "investimento": []
+            },
+            "tipoRisco_Id": 4,
+            "tipoLiquidez": {
+                "id": 2,
+                "nome": "Baixa (D+60 a 2 anos)",
+                "produto": [],
+                "investimento": []
+            },
+            "tipoLiquidez_Id": 2,
+            "tributacao": [
+                {
+                    "id": 1,
+                    "descricao": "Até 180 dias",
+                    "aliquota": 22.5,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                },
+                {
+                    "id": 2,
+                    "descricao": "De 181 a 360 dias",
+                    "aliquota": 20,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                },
+                {
+                    "id": 3,
+                    "descricao": "De 361 a 720 dias",
+                    "aliquota": 17.5,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                },
+                {
+                    "id": 5,
+                    "descricao": "Day Trade",
+                    "aliquota": 20,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                }
+            ],
+            "taxaAdm": 54,
+            "taxaPfee": 25464654.525,
+            "descricao": "Noemi"
+        },
+        {
+            "id": 2,
+            "tipoAtivo": {
+                "id": 2,
+                "nome": "Renda Variável",
+                "produto": [],
+                "investimento": []
+            },
+            "tipoAtivo_Id": 2,
+            "tipoRisco": {
+                "id": 2,
+                "nome": "Baixo",
+                "produto": [],
+                "investimento": []
+            },
+            "tipoRisco_Id": 2,
+            "tipoLiquidez": {
+                "id": 2,
+                "nome": "Baixa (D+60 a 2 anos)",
+                "produto": [],
+                "investimento": []
+            },
+            "tipoLiquidez_Id": 2,
+            "tributacao": [
+                {
+                    "id": 5,
+                    "descricao": "Day Trade",
+                    "aliquota": 20,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                },
+                {
+                    "id": 6,
+                    "descricao": "Position/Swing Trade",
+                    "aliquota": 15,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                },
+                {
+                    "id": 7,
+                    "descricao": "Venda de Cotas",
+                    "aliquota": 20,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                },
+                {
+                    "id": 8,
+                    "descricao": "Dividendos",
+                    "aliquota": 0,
+                    "investimentoTributacaoRel": [],
+                    "produtoTributacaoRel": []
+                }
+            ],
+            "taxaAdm": 54,
+            "taxaPfee": 654,
+            "descricao": "Fundo Teste"
+        }
+    ],
+    "carteiraSetup": [
+    ],
+    "percentualRisco": []
+}

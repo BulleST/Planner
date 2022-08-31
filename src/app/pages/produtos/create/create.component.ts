@@ -27,7 +27,14 @@ export class CreateComponent implements OnInit {
         private toastr: ToastrService,
         private modal: ModalOpen,
         private produtoService: ProdutoService,
+        private crypto: Crypto
     ) {
+        activatedRoute.paramMap.subscribe(p => {
+            if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
+                this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
+            }
+        })
+        
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
@@ -47,16 +54,18 @@ export class CreateComponent implements OnInit {
         this.loading = true;
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
+        if (urlArray.includes('empresas/cadastrar')) {
             let result = this.produtoService.add_To_Empresa_List(this.objeto);
             if (result)
                 this.voltar();
+        }else if (urlArray.includes('empresas/editar')) {
+            // Enviar para a API também
         }
         else {
             // Enviar para a API
-            this.toastr.success('Operação concluída');
         }
-
+        this.toastr.success('Operação concluída');
+        this.loading = false;
         this.loading = false;
     }
 }

@@ -24,27 +24,27 @@ export class SetupComponent implements OnInit {
         private empresaService: EmpresaService,
         private currency: CurrencyPipe,
     ) {
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res ?? new Empresa;
-            this.rels = this.objeto.carteiraSetup.map(item => {
-                return item.carteiraProdutoRel.map(rel => {
-                    rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
-                    rel.carteiraSetup = item;
-                    return rel
-                })
-                return item.carteiraProdutoRel;
-            })
-            console.log(this.rels);
-            this.objeto.carteiraSetup.map(item => {
-                item.carteiraProdutoRel.map(rel => {
-                    // rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
-                    return rel;
-                })
-                return item;
-            });
+        // this.empresaService.createEmpresaObject.subscribe(res => {
+        //     this.objeto = res ?? new Empresa;
+        //     this.rels = this.objeto.carteiraSetup.map(item => {
+        //         return item.carteiraProdutoRel.map(rel => {
+        //             rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
+        //             rel.carteiraSetup = item;
+        //             return rel
+        //         })
+        //         return item.carteiraProdutoRel;
+        //     })
+        //     console.log(this.rels);
+        //     this.objeto.carteiraSetup.map(item => {
+        //         item.carteiraProdutoRel.map(rel => {
+        //             // rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
+        //             return rel;
+        //         })
+        //         return item;
+        //     });
 
-            this.setup = this.objeto.carteiraSetup;
-        });
+        //     this.setup = this.objeto.carteiraSetup;
+        // });
     }
 
     ngOnInit(): void {

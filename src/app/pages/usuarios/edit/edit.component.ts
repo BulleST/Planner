@@ -34,18 +34,43 @@ export class EditComponent implements OnInit {
 		this.modal.getOpen().subscribe(res => {
 			this.modalOpen = res;
 		});
-
+        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         activatedRoute.paramMap.subscribe(p => {
-            if (p.get('id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('id'));
-                let user = this.empresaService.objeto?.usuario.find(x => x.id == this.objeto.id);
-                if (user) {
-                    this.objeto = user;
-                    setTimeout(() => {
-                        this.modal.setOpen(true);
-                    }, 200);
-                } else {
-                    this.voltar();
+            if (p.get('user_id')) {
+                this.objeto.id = this.crypto.decrypt(p.get('user_id'));
+                if (urlArray.includes('empresas/cadastrar')) { // Se estiver na página de cadastro de uma empresa nova
+                    let user = this.empresaService.createObjeto?.usuario.find(x => x.id == this.objeto.id);
+                    if (user) {
+                        this.objeto = user;
+                        setTimeout(() => {
+                            this.modal.setOpen(true);
+                        }, 200);
+                    }
+                    else {
+                        this.voltar();
+                    }
+                } 
+                else { 
+                    /* Se estiver na página de visão geral de uma empresa já existente ou
+                     Se estiver no módulo de usuários */
+                    if (urlArray.includes('empresas/editar')) {
+                    
+                    }
+                    this.userService.get(this.objeto.id).subscribe({
+                        next: (user) => {
+                            this.objeto = user;
+                            setTimeout(() => {
+                                this.modal.setOpen(true);
+                            }, 200);
+                        }, 
+                        error: (err) => {
+                            this.toastr.error('Não foi possível carregar esse usuário');
+                            this.voltar();
+                        },
+                        complete: () => {
+
+                        }
+                    });
                 }
             }
         })

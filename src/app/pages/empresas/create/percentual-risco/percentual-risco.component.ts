@@ -4,7 +4,7 @@ import { faArrowLeft, faArrowRight, faCheck, faFileCircleCheck, faPercent } from
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
-import { Empresa } from 'src/app/models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
 import { percentualRiscoColumns } from 'src/app/models/percentual-risco.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
@@ -17,7 +17,7 @@ export class PercentualRiscoComponent implements OnInit {
     faPercent = faPercent;
     faArrowLeft = faArrowLeft;
     faCheck = faCheck;
-    objeto: Empresa = new Empresa;
+    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
     percentualRiscoColumns = percentualRiscoColumns;
     constructor(
         private toastr: ToastrService,
@@ -25,8 +25,8 @@ export class PercentualRiscoComponent implements OnInit {
         private router: Router,
         private mask: MaskApplierService
     ) {
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res ?? new Empresa;
+        this.empresaService.createEmpresaObject.subscribe(res => {
+            this.objeto = res ?? new EmpresaCreateRequest;
             this.objeto.percentualRisco.map(item => {
                 item.baixissimo = this.mask.applyMask(item.baixissimo.toString(), 'separator.2') + '%'  as unknown as number;
                 item.baixo = this.mask.applyMask(item.baixo.toString(), 'separator.2') + '%'  as unknown as number;
@@ -35,7 +35,7 @@ export class PercentualRiscoComponent implements OnInit {
                 item.superArrojado = this.mask.applyMask(item.superArrojado.toString(), 'separator.2') + '%'  as unknown as number;
                 item.hedge = this.mask.applyMask(item.hedge.toString(), 'separator.2') + '%'  as unknown as number;
                 return item;
-            })
+            });
         });
     }
 

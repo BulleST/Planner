@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faCity, faCreditCardAlt, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
-import { Empresa } from 'src/app/models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Table } from 'src/app/utils/table';
@@ -20,7 +20,7 @@ export class CreateComponent implements OnInit {
     faEllipsisV = faEllipsisV;
     faTimes = faTimes;
     faCity = faCity;
-    objeto: Empresa = new Empresa;
+    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
     erro: any[] = [];
     loading = false;
 
@@ -35,11 +35,11 @@ export class CreateComponent implements OnInit {
         private alert: AlertService,
         private table: Table
     ) {
-        if ( this.empresaService.objeto == undefined)
-            this.empresaService.setObject(new Empresa);
+        if ( this.empresaService.createObjeto == undefined)
+            this.empresaService.setCreateObject(new EmpresaCreateRequest);
             
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res ?? new Empresa;
+        this.empresaService.createEmpresaObject.subscribe(res => {
+            this.objeto = res ?? new EmpresaCreateRequest;
         });
 
         this.items =  [

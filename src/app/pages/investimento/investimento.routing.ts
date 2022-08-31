@@ -16,13 +16,13 @@ const routes: Routes = [
   {
     path: '', component: InvestimentoComponent, children: [
       { path: 'adicionar-produto', component: AdicionarLinhaProdutoComponent },
-      { path: 'remover-produto/:id', component: DeleteLinhaProdutoComponent },
+      { path: 'remover-produto/:investimento_id', component: DeleteLinhaProdutoComponent },
       { path: 'adicionar-investimento', component: AdicionarLinhaInvestimentoComponent },
-      { path: 'remover-investimento/:id', component: DeleteLinhaInvestimentoComponent },
+      { path: 'remover-investimento/:investimento_id', component: DeleteLinhaInvestimentoComponent },
       { path: 'adicionar-objetivo', component: AdicionarLinhaPrincipaisObjetivosComponent },
-      { path: 'remover-objetivo/:id', component: DeleteLinhaPrincipaisObjetivosComponent },
+      { path: 'remover-objetivo/:investimento_id', component: DeleteLinhaPrincipaisObjetivosComponent },
       { path: 'adicionar-fluxo-pontual', component: AdicionarLinhaFluxosPontuaisComponent },
-      { path: 'remover-fluxo-pontual/:id', component: DeleteLinhaFluxosPontuaisComponent },
+      { path: 'remover-fluxo-pontual/:investimento_id', component: DeleteLinhaFluxosPontuaisComponent },
     ]
   },
   {

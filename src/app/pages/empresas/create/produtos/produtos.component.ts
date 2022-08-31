@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faHandHoldingDollar, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Empresa } from 'src/app/models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
 import { produtoColumns } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
@@ -13,7 +13,7 @@ import { EmpresaService } from 'src/app/services/empresa.service';
   })
 export class ProdutosComponent implements OnInit {
     faHandHoldingDollar = faHandHoldingDollar;
-    objeto: Empresa = new Empresa;
+    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
     produtoColumns = produtoColumns;
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
@@ -22,8 +22,8 @@ export class ProdutosComponent implements OnInit {
         private empresaService: EmpresaService,
         private router: Router
     ) {
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res ?? new Empresa;
+        this.empresaService.createEmpresaObject.subscribe(res => {
+            this.objeto = res ?? new EmpresaCreateRequest;
         });
     }
 

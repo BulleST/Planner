@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { x } from 'pdfkit';
-import { Empresa } from 'src/app/models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
 import { PercentualRisco } from 'src/app/models/percentual-risco.model';
 import { PerfilInvestidor } from 'src/app/models/perfilInvestidor.model';
 import { Produto } from 'src/app/models/produto.model';
@@ -28,17 +28,11 @@ export class FormPercentualRiscoComponent implements OnInit {
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
     perfilInvestidor: PerfilInvestidor[] = [];
     loadingPerfilInvestidor = true;
-    empresa: Empresa = new Empresa;
 
     constructor(
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
-        private empresaService: EmpresaService,
-        private modal: ModalOpen,
         private dropdownService: DropdownService
     ) {
-        this.empresaService.empresa.subscribe(res => this.empresa = res ?? new Empresa);
         this.dropdownService.getPerfilInvestidor().subscribe(res => {
             this.loadingPerfilInvestidor = false;
             this.perfilInvestidor = res;
@@ -57,7 +51,6 @@ export class FormPercentualRiscoComponent implements OnInit {
         this.erro = [];
         this.sendData.emit(form);
     }
-
 }
 
 

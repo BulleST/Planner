@@ -1,7 +1,7 @@
 <div *ngIf="list.length == 0 && !loading" class="p-2">
     <p>Nenhum registro cadastrado. <a *ngIf="canCreate" [routerLink]="createLink">Clique aqui para adicionar</a></p>
 </div>
-<div class="d-flex align-items-center justify-content-center" *ngIf="loading">
+<div class="loading" [class.active]="loading">
     <span class="spinner-border my-3"></span>
 </div>
 <div class="content" *ngIf="list.length > 0">
@@ -64,11 +64,11 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
-            <tr [class.selected]="item == selected" [class.selected-many]="selectedItems.includes(item)">
+            <tr [class.selected]="item == selected" [class.selected-many]="selectedItems.includes(item)" [pSelectableRow]="item" [pSelectableRowIndex]="rowIndex">
                 <td [attr.data-id]="item.id">
                     <p-tableCheckbox [value]="item"></p-tableCheckbox>
                 </td>
-                <td [pSelectableRow]="item" [pSelectableRowIndex]="rowIndex" *ngFor="let col of columns">
+                <td *ngFor="let col of columns">
                     <p>{{getCellData(item, col)}}</p>
                 </td>
                 <td class="td-actions">
@@ -95,9 +95,9 @@
         </ng-template>
     </p-table>
 </div>
-<div class="actions__nav"  *ngIf="list.length > 0">
+<div class="actions__nav">
     <div class="actions__nav-inner" *ngIf="selected">
-        <a class="actions__nav-link" [routerLink]="['editar', crypto.encrypt(selected.id)]">Editar</a>
-        <a class="actions__nav-link" [routerLink]="['excluir', crypto.encrypt(selected.id)]">Excluir</a>
+        <a class="actions__nav-link" [routerLink]="['editar', encryptValue(selected?.id)]">Editar</a>
+        <a class="actions__nav-link" [routerLink]="['excluir', encryptValue(selected?.id)]">Excluir</a>
     </div>
 </div>

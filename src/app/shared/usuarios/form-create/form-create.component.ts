@@ -25,12 +25,6 @@ export class FormCreateUsuarioComponent implements OnInit {
     loadingPerfil = true;
 
     constructor(
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
-        private empresaService: EmpresaService,
-        private crypto: Crypto,
-        private modal: ModalOpen,
         private dropdownService: DropdownService,
     ) {
 

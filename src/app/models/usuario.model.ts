@@ -2,14 +2,11 @@ import { Empresa } from "./empresa.model";
 import { PerfilAcesso } from "./usuario-perfil.model";
 
 export class Usuario {
-
     id: number = 0;
-    empresa: Empresa = new Empresa;
-
     empresa_Id: number = 0
     perfilAcesso: PerfilAcesso = new PerfilAcesso;
     perfilAcesso_Id: number = undefined as unknown as number;
-
+    // perfilAcesso: string = '';
     nome: string = '';
     email: string = '';
     senha: string = '';

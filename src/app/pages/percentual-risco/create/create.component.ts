@@ -30,6 +30,11 @@ export class CreateComponent implements OnInit {
         private riscoService: PercentualRiscoService,
         private crypto: Crypto
     ) {
+        activatedRoute.paramMap.subscribe(p => {
+            if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
+                this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
+            }
+        });
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });

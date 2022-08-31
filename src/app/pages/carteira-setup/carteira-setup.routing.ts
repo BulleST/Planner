@@ -7,9 +7,9 @@ import { ListComponent } from './list/list.component';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [
-        { path: 'cadastrar', component: CreateComponent },
-        { path: 'editar/:id', component: EditComponent },
-        { path: 'excluir/:id', component: DeleteComponent },
+        { path: 'cadastrar/:empresa_id', component: CreateComponent },
+        { path: 'editar/:setup_id', component: EditComponent },
+        { path: 'excluir/:setup_id', component: DeleteComponent },
     ] }
 ];
 

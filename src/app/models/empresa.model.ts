@@ -1,7 +1,8 @@
-import { CarteiraProdutoRel } from "./carteiraSetup-produto.model";
+import { CarteiraProdutoRel, CarteiraProdutoRequest, CarteiraSetupRelRequest } from "./carteiraSetup-produto.model";
 import { CarteiraSetup } from "./carteiraSetup.model";
 import { Cliente } from "./cliente.model";
 import { PercentualRisco } from "./percentual-risco.model";
+import { PerfilInvestidor } from "./perfilInvestidor.model";
 import { Produto } from "./produto.model";
 import { Usuario } from "./usuario.model";
 
@@ -16,6 +17,27 @@ export class Empresa {
     carteiraSetup: CarteiraSetup[] = []; // Referente ao REL
     percentualRisco: PercentualRisco[] = [];
 }
+
+
+export class EmpresaCreateRequest {
+    nome: string = '';
+    cnpj: number = '' as unknown as number;
+    email: string = '';
+    usuario: Usuario[] = [];
+    produto: Produto[] = [];
+    carteiraSetup: CarteiraProdutoRequest[] = [];
+    percentualRisco: PercentualRisco[] = [];
+}
+
+
+export class EmpresaEditRequest {
+    id: number = 0;
+    nome: string = '';
+    cnpj: number = '' as unknown as number;
+    email: string = '';
+}
+
+
 
 
 export var empresaColumns = [

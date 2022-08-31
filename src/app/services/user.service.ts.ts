@@ -7,7 +7,7 @@ import { Crypto } from '../utils/crypto';
 import { Usuario } from '../models/usuario.model';
 import { environment } from 'src/environments/environment';
 import { DropdownService } from './dropdown.service';
-import { Empresa } from '../models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
 
@@ -18,7 +18,7 @@ export class UsuarioService {
     url = environment.url;
     list = new BehaviorSubject<Usuario[]>([]);
     objeto = new BehaviorSubject<Usuario | undefined>(undefined);
-    empresa? = new Empresa;
+    empresa?= new EmpresaCreateRequest;
 
     constructor(
         private table: Table,
@@ -28,7 +28,7 @@ export class UsuarioService {
         private dropdownService: DropdownService,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.empresa.subscribe(res => {
+        this.empresaService.createEmpresaObject.subscribe(res => {
             this.empresa = res;
         });
     }
@@ -46,7 +46,7 @@ export class UsuarioService {
         this.objeto.next(value);
     }
 
-    add_To_Empresa_List(item: Usuario) {
+    add_To_Empresa_Create(item: Usuario) {
         if (this.empresa) {
             var list = this.empresa.usuario ?? [];
             var emails = list.map(x => x.email).find(x => x.toLowerCase() == item.email.toLowerCase());
@@ -62,7 +62,7 @@ export class UsuarioService {
                 item.id = ++lastId;
                 list.push(item);
                 this.empresa.usuario = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setCreateObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -74,7 +74,7 @@ export class UsuarioService {
         this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
-    
+
     edit_To_Empresa_List(item: Usuario) {
         if (this.empresa) {
             var list = this.empresa.usuario ?? [];
@@ -90,7 +90,7 @@ export class UsuarioService {
                     item.perfilAcesso = perfil;
                     list.splice(index, 1, item);
                     this.empresa.usuario = list;
-                    this.empresaService.setObject(this.empresa);
+                    this.empresaService.setCreateObject(this.empresa);
                     this.toastr.success('Operação concluída');
                     return true;
                 } else {
@@ -105,7 +105,7 @@ export class UsuarioService {
         this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
-    
+
     delete_To_Empresa_List(id: number) {
         if (this.empresa) {
             var list = this.empresa.usuario ?? [];
@@ -113,7 +113,7 @@ export class UsuarioService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.usuario = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setCreateObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -127,51 +127,23 @@ export class UsuarioService {
     }
 
     getList() {
-        return this.http.get<Usuario[]>(`${this.url}/Usuario/`);
+        return this.http.get<Usuario[]>(`${this.url}/usuario/`);
     }
 
-    get(id: number): BehaviorSubject<undefined | Usuario> {
-        if (this.list.value.length == 0) {
-            return new BehaviorSubject<undefined | Usuario>(undefined);
-        }
-
-        var index = this.list.value.findIndex(x => x.id == id);
-        if (index == -1) {
-            return new BehaviorSubject<undefined | Usuario>(undefined);
-        }
-
-        var item = this.list.value[index];
-        return new BehaviorSubject<undefined | Usuario>(item);
+    get(id: number) {
+        return this.http.get<Usuario>(`${this.url}/usuario/${id}`);
     }
 
     create(request: Usuario) {
-        var id = 1;
-        if (this.list.value.length > 0) {
-            id = this.list.value[this.list.value.length - 1].id + 1;
-        }
-        request.id = id;
-        this.list.value.push(request);
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+        return this.http.post(`${this.url}/usuario/`, request);
     }
 
     edit(request: Usuario) {
-        var index = this.list.value.findIndex(x => x.id == request.id);
-        if (index == -1) {
-            return new BehaviorSubject('Não encontrado')
-        }
-        this.list.value[index] = request;
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+        return this.http.put(`${this.url}/usuario/${request.id}`, request);
     }
 
-    delete(model: Usuario) {
-        var index = this.list.value.findIndex(x => x.id == model.id);
-        if (index != -1) {
-            this.list.value.splice(index, 1);
-            this.list.next(this.list.value);
-        }
-        return this.list;
+    delete(id: number) {
+        return this.http.delete(`${this.url}/usuario/${id}`);
     }
 
 }

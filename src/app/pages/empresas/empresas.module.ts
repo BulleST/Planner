@@ -15,6 +15,7 @@ import { EmpresasComponent } from './empresas.component';
 import { ListComponent } from './list/list.component';
 import { DeleteComponent } from './delete/delete.component';
 import { CreateComponent } from './create/create.component';
+
 import { DadosCadastraisComponent as Create_Empresa_DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
 import { PercentualRiscoComponent as Create_Empresa_PercentualRiscoComponent } from './create/percentual-risco/percentual-risco.component';
 import { ProdutosComponent as Create_Empresa_ProdutosComponent } from './create/produtos/produtos.component';
@@ -30,11 +31,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DadosCadastraisComponent as Edit_Empresa_DadosCadastraisComponent } from './edit/dados-cadastrais/dados-cadastrais.component';
 import { PercentualRiscoComponent as Edit_Empresa_PercentualRiscoComponent } from './edit/percentual-risco/percentual-risco.component';
 
+
 @NgModule({
     declarations: [
         EmpresasComponent,
         ListComponent,
         DeleteComponent,
+        
         // CREATE COMPONENT STEPS
         CreateComponent,
         Create_Empresa_DadosCadastraisComponent,
@@ -42,6 +45,7 @@ import { PercentualRiscoComponent as Edit_Empresa_PercentualRiscoComponent } fro
         Create_Empresa_ProdutosComponent,
         Create_Empresa_SetupComponent,
         Create_Empresa_PercentualRiscoComponent,
+
         // EDIT COMPONENT STEPS
         EditComponent,
         Edit_Empresa_ClientesComponent,

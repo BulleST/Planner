@@ -3,10 +3,9 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { x } from 'pdfkit';
 import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { Empresa } from 'src/app/models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
 import { Produto } from 'src/app/models/produto.model';
 import { Tributacao } from 'src/app/models/tributacao.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -20,31 +19,23 @@ export class FormCarteiraSetupComponent implements OnInit {
     @Input() objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
     @Input() loading = false;
     @Input() erro: any[] = [];
-
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
+    @Input() produtos: Produto[] = [];
+
+    faTrashAlt = faTrashAlt;
     tributacoes: Tributacao[] = [];
     carteirasSetup: CarteiraSetup[] = [];
-    novaCarteiraSetup = false;
+    novaCarteiraSetup = true;
     loadingCarteiras = true;
     loadingTributacao = false;
-
-    empresa: Empresa = new Empresa;
-    faTrashAlt = faTrashAlt;
     produto: Produto = undefined as unknown as Produto;
     tributacao: Tributacao = undefined as unknown as Tributacao;
+    carteiraSetupObjeto?: CarteiraSetup;
 
     constructor(
         private toastr: ToastrService,
-        private empresaService: EmpresaService,
     ) {
-        console.log(this.objeto)
-        this.empresaService.empresa.subscribe(res => {
-            this.empresa = res ?? new Empresa
-            this.carteirasSetup = this.empresa.carteiraSetup;
-            if (this.empresa.carteiraSetup.length == 0) {
-                this.novaCarteiraSetup = true;
-            }
-        });
+
     }
 
     ngOnInit(): void {
@@ -65,15 +56,14 @@ export class FormCarteiraSetupComponent implements OnInit {
         if (this.novaCarteiraSetup) {
             this.novaCarteira();
         } else {
-            this.objeto.nome = '';
+            this.objeto.carteiraSetup = '';
         }
     }
 
     novaCarteira() {
         this.novaCarteiraSetup = true;
-        this.objeto.carteiraSetup = new CarteiraSetup;
         this.objeto.carteiraSetup_Id = undefined as unknown as number;
-        this.objeto.nome = '';
+        this.objeto.carteiraSetup = '';
     }
 
     adicionarProduto() {
@@ -82,27 +72,26 @@ export class FormCarteiraSetupComponent implements OnInit {
         } else if (this.tributacao == undefined) {
             this.toastr.error('Selecione uma tributação para adicionar');
         } else {
-            var jaExiste = this.objeto.produtoTributacaoRel.find(x => x.produto.id == this.produto.id && x.tributacao.id  == this.tributacao.id);
+            var jaExiste = this.objeto.produtoTributacaoRel.find(x => x.produto_Id == this.produto.id && x.tributacao_Id == this.tributacao.id);
             if (jaExiste) {
-                console.log('if')
                 this.toastr.error('Combinação já cadastrada')
             } else {
-                console.log('else')
-                this.objeto.produtoTributacaoRel.sort((x,y) => x.id - y.id);
+                this.objeto.produtoTributacaoRel.sort((x, y) => x.id - y.id);
                 var lastId = this.objeto.produtoTributacaoRel.length == 0 ? 0 : this.objeto.produtoTributacaoRel[this.objeto.produtoTributacaoRel.length - 1].id;
                 this.objeto.produtoTributacaoRel.push({
-                    id: lastId++,
-                    produto: this.produto,
+                    id: ++lastId,
+                    produto: this.produto.descricao,
                     produto_Id: this.produto.id,
-                    tributacao: this.tributacao,
+                    tributacao: this.tributacao.descricao,
                     tributacao_Id: this.tributacao.id,
+                    aliquota: this.tributacao.aliquota
                 });
             }
         }
     }
 
     removeItem(id: number) {
-        if (this.objeto.produtoTributacaoRel.length == 0) 
+        if (this.objeto.produtoTributacaoRel.length == 0)
             return;
         var index = this.objeto.produtoTributacaoRel.findIndex(x => x.id == id);
         if (index != -1) {

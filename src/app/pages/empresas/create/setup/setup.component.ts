@@ -6,7 +6,7 @@ import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraProdutoRel, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { Empresa } from 'src/app/models/empresa.model';
+import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
@@ -24,14 +24,13 @@ export class SetupComponent implements OnInit {
     faTimes = faTimes;
     faEllipsisV = faEllipsisV;
 
-    objeto: Empresa = new Empresa;
+    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
     setupColumns = setupColumns;
     loading = false;
     selected?: any;
     selectedItems: any[] = [];
     filters: string[] = [];
-    rels: CarteiraProdutoRel[] = [];
-    setup: CarteiraSetup[] = [];
+    list: any[] = [];
     
     constructor(
         private empresaService: EmpresaService,
@@ -41,20 +40,10 @@ export class SetupComponent implements OnInit {
         private currency: CurrencyPipe,
     ) {
        
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res ?? new Empresa;
-            this.objeto.carteiraSetup.map(item => {
-                item.carteiraProdutoRel.map(rel => {
-                    // rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;
-                    rel.carteiraSetup = item;
-                    return rel
-                })
-                return item;
-            })
-            var arrays = this.objeto.carteiraSetup.map(x => x.carteiraProdutoRel)
-            this.rels = [].concat.apply([], arrays as unknown as ConcatArray<never>[]);
-
-            this.setup = this.objeto.carteiraSetup;
+        this.empresaService.createEmpresaObject.subscribe(res => {
+            this.objeto = res ?? new EmpresaCreateRequest;
+           console.log(res)
+           
         });
         this.filters = this.setupColumns.map(x => x.field);
 

@@ -60,7 +60,7 @@ export class DeleteComponent implements OnInit {
     send() {
         this.loading = true;
         this.erro = [];
-        this.empresaService.delete(this.objeto);
+        this.empresaService.delete(this.objeto.id);
         this.voltar();
         this.toastr.success('Operação concluída');
         this.loading = false;

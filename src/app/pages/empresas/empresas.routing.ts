@@ -38,53 +38,53 @@ import { DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadast
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [] },
-    { path: 'excluir/:id', component: DeleteComponent },
-    { path: 'editar/:id', component: EditComponent, children: [
-        { path: 'produtos', component: ProdutosComponent, children: [
-            { path: 'cadastrar', component: Produto_CreateComponent  },
-            { path: 'editar/:id', component: Produto_EditComponent  },
-            { path: 'excluir/:id', component: Produto_DeleteComponent  },
-        ] },
+    { path: 'excluir/:empresa_id', component: DeleteComponent },
+    { path: 'editar/:empresa_id', component: EditComponent, children: [
         { path: 'clientes', component: ClientesComponent },
+        { path: 'produtos', component: ProdutosComponent, children: [
+            { path: 'cadastrar', component: Produto_CreateComponent, data: { page: 'cadastrar-produto-nova-empresa' }  },
+            { path: 'editar/:produto_id', component: Produto_EditComponent  },
+            { path: 'excluir/:produto_id', component: Produto_DeleteComponent  },
+        ] },
         { path: 'usuarios', component: UsuariosComponent, children: [
             { path: 'cadastrar', component: Usuario_CreateComponent },
-            { path: 'editar/:id', component: Usuario_EditComponent  },
-            { path: 'excluir/:id', component: Usuario_DeleteComponent  },
+            { path: 'editar/:user_id', component: Usuario_EditComponent  },
+            { path: 'excluir/:user_id', component: Usuario_DeleteComponent  },
         ] },
         { path: 'setup', component: SetupComponent, children: [
             { path: 'cadastrar', component: CarteiraSetup_CreateComponent, canActivate: [CarteiraSetupGuard] },
-            { path: 'editar/:id', component: CarteiraSetup_EditComponent  },
-            { path: 'excluir/:id', component: CarteiraSetup_DeleteComponent  },
+            { path: 'editar/:setup_id', component: CarteiraSetup_EditComponent  },
+            { path: 'excluir/:setup_id', component: CarteiraSetup_DeleteComponent  },
         ] },
         { path: 'percentual-risco', component: PercentualRiscoComponent, children: [
             { path: 'cadastrar', component: PercentualRisco_CreateComponent },
-            { path: 'editar/:id', component: PercentualRisco_EditComponent  },
-            { path: 'excluir/:id', component: PercentualRisco_DeleteComponent  },
+            { path: 'editar/:percentual_id', component: PercentualRisco_EditComponent  },
+            { path: 'excluir/:percentual_id', component: PercentualRisco_DeleteComponent  },
         ] },
     ]  },
     { path: 'cadastrar', redirectTo: 'cadastrar/dados-cadastrais', pathMatch: 'prefix' },
     { path: 'cadastrar', component: CreateComponent, children: [
+        { path: 'clientes', component: ClientesComponent },
         { path: 'dados-cadastrais', component: DadosCadastraisComponent },
         { path: 'produtos', component: ProdutosComponent, children: [
             { path: 'cadastrar', component: Produto_CreateComponent  },
-            { path: 'editar/:id', component: Produto_EditComponent  },
-            { path: 'excluir/:id', component: Produto_DeleteComponent  },
+            { path: 'editar/:produto_id', component: Produto_EditComponent  },
+            { path: 'excluir/:produto_id', component: Produto_DeleteComponent  },
         ] },
-        { path: 'clientes', component: ClientesComponent },
         { path: 'usuarios', component: UsuariosComponent, children: [
             { path: 'cadastrar', component: Usuario_CreateComponent },
-            { path: 'editar/:id', component: Usuario_EditComponent  },
-            { path: 'excluir/:id', component: Usuario_DeleteComponent  },
+            { path: 'editar/:user_id', component: Usuario_EditComponent  },
+            { path: 'excluir/:user_id', component: Usuario_DeleteComponent  },
         ] },
         { path: 'setup', component: SetupComponent, children: [
             { path: 'cadastrar', component: CarteiraSetup_CreateComponent, canActivate: [CarteiraSetupGuard] },
-            { path: 'editar/:id', component: CarteiraSetup_EditComponent  },
-            { path: 'excluir/:id', component: CarteiraSetup_DeleteComponent  },
+            { path: 'editar/:setup_id', component: CarteiraSetup_EditComponent  },
+            { path: 'excluir/:setup_id', component: CarteiraSetup_DeleteComponent  },
         ] },
         { path: 'percentual-risco', component: PercentualRiscoComponent, children: [
             { path: 'cadastrar', component: PercentualRisco_CreateComponent },
-            { path: 'editar/:id', component: PercentualRisco_EditComponent  },
-            { path: 'excluir/:id', component: PercentualRisco_DeleteComponent  },
+            { path: 'editar/:percentual_id', component: PercentualRisco_EditComponent  },
+            { path: 'excluir/:percentual_id', component: PercentualRisco_DeleteComponent  },
         ] },
     ] },
 ];

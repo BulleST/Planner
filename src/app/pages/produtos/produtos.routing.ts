@@ -8,8 +8,8 @@ import { ListComponent } from './list/list.component';
 const routes: Routes = [
     { path: '', component: ListComponent, children: [
         { path: 'cadastrar', component: CreateComponent },
-        { path: 'editar/:id', component: EditComponent },
-        { path: 'excluir/:id', component: DeleteComponent },
+        { path: 'editar/:produto_id', component: EditComponent },
+        { path: 'excluir/:produto_id', component: DeleteComponent },
     ] }
 ];
 

@@ -33,23 +33,23 @@ export class EditComponent implements OnInit {
             this.modalOpen = res;
         });
 
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('id'));
-                let objeto = this.empresaService.objeto?.carteiraSetup.find(x => x.id == this.objeto.id);
-                if (objeto) {
-                    this.objeto.carteiraSetup_Id = objeto.id;
-                    this.objeto.nome = objeto.nome;
-                    this.objeto.percentual = objeto.carteiraProdutoRel.find(x => x.id == this.objeto.id)?.percentual ?? '' as unknown as number;
-                    this.objeto.produtoTributacaoRel = objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel);
-                    setTimeout(() => {
-                        this.modal.setOpen(true);
-                    }, 200);
-                } else {
-                    this.voltar();
-                }
-            }
-        })
+        // activatedRoute.paramMap.subscribe(p => {
+        //     if (p.get('id')) {
+        //         this.objeto.id = this.crypto.decrypt(p.get('id'));
+        //         let objeto = this.empresaService.createObjeto?.carteiraSetup.find(x => x.id == this.objeto.id);
+        //         if (objeto) {
+        //             this.objeto.carteiraSetup_Id = objeto.id;
+        //             this.objeto.nome = objeto.nome;
+        //             this.objeto.percentual = objeto.carteiraProdutoRel.find(x => x.id == this.objeto.id)?.percentual ?? '' as unknown as number;
+        //             this.objeto.produtoTributacaoRel = objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel);
+        //             setTimeout(() => {
+        //                 this.modal.setOpen(true);
+        //             }, 200);
+        //         } else {
+        //             this.voltar();
+        //         }
+        //     }
+        // })
     }
 
     ngOnInit(): void {

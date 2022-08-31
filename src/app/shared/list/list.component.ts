@@ -1,7 +1,10 @@
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
+import { MaskType } from 'src/app/helpers/column.interface';
 import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -37,7 +40,10 @@ export class ListComponent implements OnInit, OnChanges {
 
     constructor(
         private table: Table,
-        public crypto: Crypto,
+        private crypto: Crypto,
+        private currency: CurrencyPipe,
+        private mask: MaskApplierService,
+        private datePipe: DatePipe,
     ) {
         this.filters = this.columns.map(x => x.field);
 
@@ -89,9 +95,36 @@ export class ListComponent implements OnInit, OnChanges {
         const nestedProperties: string[] = col.field.split('.');
         let value: any = row;
         for (const prop of nestedProperties) {
-            value = value[prop] ?? '-';
+            value = value[prop];
         }
-
+        if (col.mask && value) {
+            if (col.mask == MaskType.percentage) {
+                try {
+                    console.log()
+                    value = this.currency.transform(value.toString(), 'BRL', '', col.decimal) + '%';
+                } catch (e) {
+                    console.log(e)
+                }
+            } else if (col.mask == MaskType.money) {
+                value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
+            } else if (col.mask == MaskType.date) {
+                console.log('date')
+                
+            } else if (col.mask == MaskType.dateTime) {
+                console.log('datetime')
+                
+            } else {
+                return value ?? '-';
+            }
+        }
         return value ?? '-';
+    }
+
+    encryptValue(value: any) {
+        if (value) {
+            return this.crypto.encrypt(value.toString());
+        } else {
+            return ''
+        }
     }
 }

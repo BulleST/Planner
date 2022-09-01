@@ -12,6 +12,7 @@
             <div class="modal__body mt-0">
                 <app-form-carteira-setup
                     [objeto]="objeto" 
+                    [carteirasSetup]="carteirasSetup" 
                     [loading]="loading"
                     [erro]="erro"
                     (sendData)="send($event)"

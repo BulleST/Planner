@@ -21,10 +21,10 @@ export class FormCarteiraSetupComponent implements OnInit {
     @Input() erro: any[] = [];
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
     @Input() produtos: Produto[] = [];
+    @Input() carteirasSetup: CarteiraSetup[] = [];
 
     faTrashAlt = faTrashAlt;
     tributacoes: Tributacao[] = [];
-    carteirasSetup: CarteiraSetup[] = [];
     novaCarteiraSetup = true;
     loadingCarteiras = true;
     loadingTributacao = false;

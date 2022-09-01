@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Produto } from 'src/app/models/produto.model';
+import { DropdownService } from 'src/app/services/dropdown.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
@@ -23,18 +25,20 @@ export class CreateComponent implements OnInit {
     objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
     erro: any[] = [];
     loading = false;
-    produtos: Produto[] = [];
     loadingProduto = false;
+    produtos: Produto[] = [];
+    carteirasSetup: CarteiraSetup[] = [];
 
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: ModalOpen,
-        private setupService: CarteiraSetupService,
         private crypto: Crypto,
+        private setupService: CarteiraSetupService,
         private produtoService: ProdutoService,
         private empresaService: EmpresaService,
+        private dropdownService: DropdownService,
     ) {
 
         activatedRoute.paramMap.subscribe(p => {
@@ -51,6 +55,8 @@ export class CreateComponent implements OnInit {
                     this.empresaService.createEmpresaObject.subscribe(res => {
                         this.produtos = res?.produto ?? [];
                     });
+                    this.dropdownService.getCarteiraSetup_In_Empresa_Creation()
+                                            .subscribe(res => this.carteirasSetup = res);
                 }
             }
 
@@ -85,10 +91,10 @@ export class CreateComponent implements OnInit {
         if (urlArray.includes('empresas/cadastrar')) {
             var result = this.setupService.add_To_Empresa_List(this.objeto);
             if (result){
-                // this.voltar();
+                this.voltar();
             }
         } else if (urlArray.includes('empresas/editar')) {
-            
+            // Enviar para a API
         }
         else {
             // Enviar para a API

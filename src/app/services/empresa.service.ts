@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Empresa, EmpresaCreateRequest, EmpresaEditRequest } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
-import { Usuario } from '../models/usuario.model';
-import { Produto } from '../models/produto.model';
-import { CarteiraSetupRelRequest } from '../models/carteiraSetup-produto.model';
 import { environment } from 'src/environments/environment';
-import { PercentualRisco } from '../models/percentual-risco.model';
-import { DropdownService } from './dropdown.service';
 
 @Injectable({
     providedIn: 'root'

@@ -3,18 +3,20 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
 import { environment } from "src/environments/environment";
 import { CarteiraSetup } from "../models/carteiraSetup.model";
+import { EmpresaCreateRequest } from "../models/empresa.model";
 import { PerfilInvestidor } from "../models/perfilInvestidor.model";
 import { TipoAtivo } from "../models/tipoAtivo.model";
 import { TipoLiquidez } from "../models/tipoLiquidez.model";
 import { TipoRisco } from "../models/tipoRisco.model";
 import { Tributacao } from "../models/tributacao.model";
 import { PerfilAcesso } from "../models/usuario-perfil.model";
+import { EmpresaService } from "./empresa.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class DropdownService {
-url = environment.url;
+    url = environment.url;
 
     tipoAtivo = new BehaviorSubject<TipoAtivo[]>([]);
     tipoRisco = new BehaviorSubject<TipoRisco[]>([]);
@@ -23,10 +25,17 @@ url = environment.url;
     tributacao = new BehaviorSubject<Tributacao[]>([]);
     perfilInvestidor = new BehaviorSubject<PerfilInvestidor[]>([]);
     carteiraSetup = new BehaviorSubject<CarteiraSetup[]>([]);
+    carteiraSetupEmpresaCreation = new BehaviorSubject<CarteiraSetup[]>([]);
 
+    empresaCreation?: EmpresaCreateRequest;
+    
     constructor(
         private http: HttpClient,
-    ) { 
+        private empresaService: EmpresaService
+    ) {
+        this.empresaService.createEmpresaObject.subscribe(res => {
+            this.empresaCreation = res;
+        })
     }
 
     getAtivo() {
@@ -34,44 +43,46 @@ url = environment.url;
             this.tipoAtivo.next(res);
             return res;
         }));
-    } 
+    }
     getRisco() {
         return this.http.get<TipoRisco[]>(`${this.url}/TipoRisco/getAll`).pipe(map(res => {
             this.tipoRisco.next(res);
             return res;
         }));
-    } 
+    }
     getLiquidez() {
         return this.http.get<TipoLiquidez[]>(`${this.url}/TipoLiquidez/getAll`).pipe(map(res => {
             this.tipoLiquidez.next(res);
             return res;
         }));
-    } 
+    }
     getPerfilAcesso() {
         return this.http.get<PerfilAcesso[]>(`${this.url}/PerfilAcesso/getPerfilList`).pipe(map(res => {
             this.perfilAcesso.next(res);
             return res;
         }));
-    } 
+    }
     getTributacao() {
         return this.http.get<Tributacao[]>(`${this.url}/Tributacao/getAll`).pipe(map(res => {
             this.tributacao.next(res);
             return res;
         }));
-    } 
+    }
     getPerfilInvestidor() {
         return this.http.get<PerfilInvestidor[]>(`${this.url}/PerfilInvestidor`).pipe(map(res => {
             this.perfilInvestidor.next(res);
             return res;
         }));
-    } 
-    
+    }
+
     getCarteiraSetup() {
         return this.http.get<CarteiraSetup[]>(`${this.url}/CarteiraSetup/getAll`).pipe(map(res => {
             this.carteiraSetup.next(res);
             return res;
         }));
-    } 
+    }
 
-
+    getCarteiraSetup_In_Empresa_Creation() {
+        return this.carteiraSetupEmpresaCreation;
+    }
 }

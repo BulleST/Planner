@@ -5,5 +5,5 @@ export class CarteiraSetup {
     id: number = 0;
     empresa_Id: number = undefined as unknown as number;
     nome: string = '';
-    // carteiraProdutoRel: CarteiraProdutoRel[] = [];
+    carteiraProdutoRel: CarteiraProdutoRel[] = [];
 }

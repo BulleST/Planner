@@ -50,7 +50,7 @@ export class CarteiraSetupService {
         this.setObject(value);
     }
 
-    add_To_Empresa_List(item: CarteiraSetupRelRequest) {
+    /*add_To_Empresa_List(item: CarteiraSetupRelRequest) {
         if (item.produtoTributacaoRel.length == 0) {
             this.toastr.error('Insira pelo menos uma combinação entre produto e tributação.');
             return false;
@@ -67,11 +67,12 @@ export class CarteiraSetupService {
                 carteira_Setup = {
                     id: ++lastId,
                     nome: item.carteiraSetup ?? '',
-                    empresa_Id: item.empresa_Id
+                    empresa_Id: item.empresa_Id,
+                    carteiraProdutoRel: []
                 };
-                var list = this.dropdownService.carteiraSetup.value;
+                var list = this.dropdownService.carteiraSetupEmpresaCreation.value;
                 list.push(carteira_Setup);
-                this.dropdownService.carteiraSetup.next(list);
+                this.dropdownService.carteiraSetupEmpresaCreation.next(list);
             }
             let mensagemErro = ``;
 
@@ -127,7 +128,85 @@ export class CarteiraSetupService {
         this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
+    */
+    add_To_Empresa_List(item: CarteiraSetupRelRequest) {
+        if (item.produtoTributacaoRel.length == 0) {
+            this.toastr.error('Insira pelo menos uma combinação entre produto e tributação.');
+            return false;
+        }
+        if (this.empresaCreateRequest) {
+            let carteiras_Setup = this.empresaService.createObjeto?.carteiraSetup ?? [];
+            carteiras_Setup.sort((x, y) => x.id - y.id);
+            let lastId = 0;
+            
+            // Setando CarteiraSetup
+            let carteira_Setup = this.dropdownService.carteiraSetup.value.find(x => x.id == item.carteiraSetup_Id);
+            if (!carteira_Setup) {
+                lastId = carteiras_Setup.length == 0 ? 0 : carteiras_Setup[carteiras_Setup.length - 1].id;
+                carteira_Setup = {
+                    id: ++lastId,
+                    nome: item.carteiraSetup ?? '',
+                    empresa_Id: item.empresa_Id,
+                    carteiraProdutoRel: []
+                };
+                var list = this.dropdownService.carteiraSetupEmpresaCreation.value;
+                list.push(carteira_Setup);
+                this.dropdownService.carteiraSetupEmpresaCreation.next(list);
+            }
+            let mensagemErro = ``;
 
+            
+            for (let produtoTributacaoRel of item.produtoTributacaoRel) {
+                let validacao = this.empresaCreateRequest.carteiraSetup.find(x => {
+                    var mesmaCarteira = x.carteiraSetup.toLowerCase() == item.carteiraSetup.toLowerCase() 
+                                                && x.carteiraSetup_Id == item.carteiraSetup_Id;
+                    var mesmoProdutoTributacaoRel = item.produtoTributacaoRel.filter(y => y.produto_Id == x.produto_Id 
+                                                                                        && y.tributacao_Id== x.tributacao_Id)
+                    return mesmaCarteira && mesmoProdutoTributacaoRel;
+                });
+                if (validacao) {
+                    mensagemErro = `<div class="mt-2">
+                        <p><strong>Carteira: </strong> ${carteira_Setup.nome}</p>
+                        <p><strong>Produto: </strong> ${produtoTributacaoRel.produto}</p>
+                        <p><strong>Tributação: </strong>${produtoTributacaoRel.tributacao}</p>
+                        <p><strong>Alíquota: </strong>${produtoTributacaoRel.aliquota}%</p>
+                        <hr>
+                    </div>`;
+                } else {
+                    let carteiraProdutoRel: CarteiraProdutoRequest = {
+                        id: ++lastId,
+                        empresa_Id: carteira_Setup.empresa_Id,
+                        carteiraSetup: carteira_Setup.nome,
+                        carteiraSetup_Id: carteira_Setup.id,
+                        percentual: item.percentual,
+                        produto: produtoTributacaoRel.produto,
+                        produto_Id: produtoTributacaoRel.produto_Id,
+                        tributacao: produtoTributacaoRel.tributacao,
+                        tributacao_Id: produtoTributacaoRel.tributacao_Id,
+                        aliquota: produtoTributacaoRel.aliquota,
+                    }
+                    this.empresaCreateRequest.carteiraSetup.push(carteiraProdutoRel);
+                }
+            }
+
+            this.empresaService.setCreateObject(this.empresaCreateRequest);
+            if (mensagemErro.trim() != '') {
+                this.alert.warn(`  
+                    <p><strong>Atenção</strong></p>
+                    <p>Os seguintes itens não foram adicionados como um setup pois já estão cadastrados.</p>
+                    <p>Obs.: os outros registros não citados foram salvos!</p>
+                    ${mensagemErro}
+                `);
+            } else {
+                this.toastr.success('Operação concluída');
+            }
+
+            this.table.resetSelection();
+            return true;
+        }
+        this.toastr.error('Nenhuma empresa selecionada.');
+        return false;
+    }
     edit_To_Empresa_List(item: CarteiraSetupRelRequest) {
         if (item.produtoTributacaoRel.length == 0) {
             this.toastr.error('Insira pelo menos uma combinação de produto e tributação.');
@@ -241,6 +320,7 @@ export class CarteiraSetupService {
 
 
     get(id: number){
+        return this.http.get<CarteiraSetup>(`${this.url}/carteiraSetup/${id}`);
     }
 
     create(request: CarteiraSetupRelRequest) {

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { faCity, faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { Empresa, empresaColumns } from 'src/app/models/empresa.model';
-import { ClienteService } from 'src/app/services/cliente.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
 import * as $ from 'jquery';
+import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 
 @Component({
   selector: 'app-list',
@@ -25,7 +25,7 @@ export class ListComponent implements OnInit {
   loading = true;
   columns = empresaColumns;
   filters: string[] = [];
-
+  tableLinks: MenuTableLink[] = []
   
   constructor(
     private table: Table,
@@ -45,6 +45,11 @@ export class ListComponent implements OnInit {
       });
       this.loading = false;
     });
+
+    this.tableLinks = [
+        { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+        { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
+    ]
   }
 
   ngOnInit(): void {

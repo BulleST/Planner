@@ -6,7 +6,7 @@ import { BehaviorSubject, map } from 'rxjs';
 import { Crypto } from '../utils/crypto';
 import { environment } from 'src/environments/environment';
 import { DropdownService } from './dropdown.service';
-import { Empresa, EmpresaCreateRequest } from '../models/empresa.model';
+import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
 import { Produto } from '../models/produto.model';
@@ -19,7 +19,7 @@ export class ProdutoService {
     list = new BehaviorSubject<Produto[]>([]);
     objeto = new BehaviorSubject<Produto | undefined>(undefined);
     carteiraSetup = new BehaviorSubject<Produto[]>([]);
-    empresaCreateRequest?= new EmpresaCreateRequest;
+    Empresa?= new Empresa;
 
     constructor(
         private router: Router,
@@ -30,8 +30,8 @@ export class ProdutoService {
         private dropdownService: DropdownService,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.createEmpresaObject.subscribe(res => {
-            this.empresaCreateRequest = res;
+        this.empresaService.empresaObject.subscribe(res => {
+            this.Empresa = res;
         });
 
     }
@@ -50,8 +50,8 @@ export class ProdutoService {
     }
 
     add_To_Empresa_List(item: Produto) {
-        if (this.empresaCreateRequest) {
-            var list = this.empresaCreateRequest.produto ?? [];
+        if (this.Empresa) {
+            var list = this.Empresa.produto ?? [];
 
             let tipoAtivo = this.dropdownService.tipoAtivo.value.find(x => x.id == item.tipoAtivo_Id);
             if (!tipoAtivo) {
@@ -82,8 +82,8 @@ export class ProdutoService {
             var lastId = list.length == 0 ? 0 : list[list.length - 1].id;
             item.id = ++lastId;
             list.push(item);
-            this.empresaCreateRequest.produto = list;
-            this.empresaService.setCreateObject(this.empresaCreateRequest);
+            this.Empresa.produto = list;
+            this.empresaService.setObject(this.Empresa);
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -93,8 +93,8 @@ export class ProdutoService {
     }
 
     edit_To_Empresa_Create(item: Produto) {
-        if (this.empresaCreateRequest) {
-            var list = this.empresaCreateRequest.produto ?? [];
+        if (this.Empresa) {
+            var list = this.Empresa.produto ?? [];
             let index = list.findIndex(x => x.id == item.id);
             if (index != -1) {
              
@@ -125,8 +125,8 @@ export class ProdutoService {
                 }
 
                 list.splice(index, 1, item);
-                this.empresaCreateRequest.produto = list;
-                this.empresaService.setCreateObject(this.empresaCreateRequest);
+                this.Empresa.produto = list;
+                this.empresaService.setObject(this.Empresa);
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -139,13 +139,13 @@ export class ProdutoService {
     }
 
     delete_To_Empresa_List(id: number) {
-        if (this.empresaCreateRequest) {
-            var list = this.empresaCreateRequest.produto ?? [];
+        if (this.Empresa) {
+            var list = this.Empresa.produto ?? [];
             let index = list.findIndex(x => x.id == id);
             if (index != -1) {
                 list.splice(index, 1);
-                this.empresaCreateRequest.produto = list;
-                this.empresaService.setCreateObject(this.empresaCreateRequest);
+                this.Empresa.produto = list;
+                this.empresaService.setObject(this.Empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -164,9 +164,9 @@ export class ProdutoService {
         return this.http.get<Produto[]>(`${this.url}/produto/all/${empresa_Id}`).pipe(
             map(list => {
                 this.list.next(list);
-                var empresa = this.empresaService.createObjeto;
-                this.empresaCreateRequest!.produto! = list;
-                this.empresaService.setCreateObject(empresa);
+                var empresa = this.empresaService.object;
+                this.Empresa!.produto! = list;
+                this.empresaService.setObject(empresa);
                 return list;
             })
         );

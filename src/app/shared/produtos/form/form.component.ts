@@ -23,9 +23,8 @@ export class FormProdutoComponent implements OnInit {
     @Input() objeto: Produto = new Produto;
     @Input() loading = false;
     @Input() erro: any[] = [];
-
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
-    
+
     _tributacao: Tributacao[] = [];
     _tipoAtivo: TipoAtivo[] = [];
     _tipoRisco: TipoRisco[] = [];
@@ -42,34 +41,38 @@ export class FormProdutoComponent implements OnInit {
         private dropdownService: DropdownService
     ) {
 
-        this.dropdownService.tributacao.subscribe(res => this._tributacao = res);
+        this.dropdownService.tributacao.subscribe(res => {
+            this._tributacao = res.filter(x => !this.objeto.tributacao.map(y => y.id).includes(x.id))
+        });
         this.dropdownService.getTributacao().subscribe({
-            next: (res) => this._tributacao.filter(x => !this.objeto.tributacao.map(x => x.id).includes(x.id)),
+            next: (res) => {
+                this._tributacao = res.filter(x => !this.objeto.tributacao.map(y => y.id).includes(x.id))
+            },
             error: (err) => console.error(err),
-            complete: ()  => this.loadingTributacao = false
+            complete: () => this.loadingTributacao = false
         });
 
         this.dropdownService.tipoLiquidez.subscribe(res => this._tipoLiquidez = res);
         this.dropdownService.getLiquidez().subscribe({
             next: (res) => this._tipoLiquidez = res,
             error: (err) => console.error(err),
-            complete: ()  => this.loadingLiquidez = false
+            complete: () => this.loadingLiquidez = false
         });
 
         this.dropdownService.tipoRisco.subscribe(res => this._tipoRisco = res);
         this.dropdownService.getRisco().subscribe({
             next: (res) => this._tipoRisco = res,
             error: (err) => console.error(err),
-            complete: ()  => this.loadingRisco = false
+            complete: () => this.loadingRisco = false
         });
 
         this.dropdownService.tipoAtivo.subscribe(res => this._tipoAtivo = res);
         this.dropdownService.getAtivo().subscribe({
             next: (res) => this._tipoAtivo = res,
             error: (err) => console.error(err),
-            complete: ()  => this.loadingAtivo = false
+            complete: () => this.loadingAtivo = false
         });
-        
+
     }
 
     ngOnInit(): void {
@@ -91,21 +94,16 @@ export class FormProdutoComponent implements OnInit {
     }
     drop(event: CdkDragDrop<Tributacao[]>) {
         if (event.previousContainer === event.container) {
-          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
-          transferArrayItem(
-            event.previousContainer.data,
-            event.container.data,
-            event.previousIndex,
-            event.currentIndex,
-          );
+            transferArrayItem(
+                event.previousContainer.data,
+                event.container.data,
+                event.previousIndex,
+                event.currentIndex,
+            );
         }
-        this.objeto.tributacao.sort((x,y) => x.id - y.id)
-        this._tributacao.sort((x,y) => x.id - y.id)
+        this.objeto.tributacao.sort((x, y) => x.id - y.id)
+        this._tributacao.sort((x, y) => x.id - y.id)
     }
-
-    transferArray() {
-        
-    }
-
 }

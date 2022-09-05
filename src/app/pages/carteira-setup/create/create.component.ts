@@ -30,7 +30,6 @@ export class CreateComponent implements OnInit {
     carteirasSetup: CarteiraSetup[] = [];
 
     constructor(
-        private router: Router,
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: ModalOpen,
@@ -38,25 +37,22 @@ export class CreateComponent implements OnInit {
         private setupService: CarteiraSetupService,
         private produtoService: ProdutoService,
         private empresaService: EmpresaService,
-        private dropdownService: DropdownService,
     ) {
 
         activatedRoute.paramMap.subscribe(p => {
             if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
                 this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
                 this.loadingProduto = true;
-                this.produtoService.getList(this.objeto.empresa_Id).subscribe(res => {
+                this.produtoService.getList(this.objeto.empresa_Id!).subscribe(res => {
                     this.loadingProduto = false;
                     this.produtos = res;
                 });
             } else {
                 var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
                 if (urlArray.includes('empresas/cadastrar/')) {
-                    this.empresaService.createEmpresaObject.subscribe(res => {
-                        this.produtos = res?.produto ?? [];
-                    });
-                    this.dropdownService.getCarteiraSetup_In_Empresa_Creation()
-                                            .subscribe(res => this.carteirasSetup = res);
+                    
+                    this.produtos = this.empresaService.object.produto;
+                    this.carteirasSetup = this.empresaService.object.carteiraSetup;
                 }
             }
 
@@ -70,17 +66,10 @@ export class CreateComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void {
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
-    }
+    ngOnInit(): void {}
 
     voltar() {
-        this.modal.setOpen(false);
-        setTimeout(() => {
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-        }, 200);
+        this.modal.voltar();
     }
 
     send(form: NgForm) {

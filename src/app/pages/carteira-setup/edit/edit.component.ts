@@ -5,6 +5,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
+import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
 import { Produto } from 'src/app/models/produto.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -23,8 +24,9 @@ export class EditComponent implements OnInit {
     objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
     erro: any[] = [];
     loading = false;
-    carteirasSetup: CarteiraSetup[] = []
-    produtos: Produto[] = []
+    loadingProduto = false;
+    produtos: Produto[] = [];
+    carteirasSetup: CarteiraSetup[] = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -33,30 +35,55 @@ export class EditComponent implements OnInit {
         private crypto: Crypto,
         private setupService: CarteiraSetupService,
         private empresaService: EmpresaService,
-        private dropdownService: DropdownService,
     ) {
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
+
+        this.empresaService.empresaObject.subscribe(res => {
+            this.carteirasSetup = res.carteiraSetup;
+            this.produtos = res.produto
+        });
+
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         activatedRoute.paramMap.subscribe(p => {
-            if (p.get('setup_id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('setup_id'));
+            if (p.get('setup_id') && p.get('rel_id')) {
+                this.objeto.carteiraSetup_Id = this.crypto.decrypt(p.get('setup_id'));
+                this.objeto.id = this.crypto.decrypt(p.get('rel_id'));
+
                 if (urlArray.includes('empresas/cadastrar')) {
-                    let objeto = this.empresaService.createObjeto?.carteiraSetup.find(x => x.id == this.objeto.id);
-                    console.log(objeto)
+
+                    let objeto = this.empresaService.object?.carteiraSetup
+                        .find(x => x.id == this.objeto.carteiraSetup_Id);
+                    let rel = objeto?.carteiraProdutoRel
+                            .find(x => x.id == this.objeto.id);
+                    
+                    if (objeto && rel) {
+                        this.objeto = {
+                            id: rel.id, 
+                            empresa_Id: 0, 
+                            carteiraSetup: objeto.nome, 
+                            carteiraSetup_Id: objeto.id,
+                            percentual: rel.percentual, 
+                            produtoTributacaoRel: objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel)
+                        };
+                    }
+                 
+
                     if (objeto) {
-                        this.dropdownService.carteiraSetupEmpresaCreation.subscribe(res => this.carteirasSetup = res);
+                        if (this.objeto.id) {
+                            // console.log(objeto.carteiraProdutoRel.find(x => x.id == this.objeto.id))
+                        }
                         setTimeout(() => {
                             this.modal.setOpen(true);
                         }, 200);
-                       
+
                     } else {
                         this.voltar();
                     }
                 } else {
                     if (urlArray.includes('empresas/editar')) {
-        
+
                     }
                     this.setupService.get(this.objeto.id).subscribe({
                         next: (res) => {
@@ -79,7 +106,7 @@ export class EditComponent implements OnInit {
                         error: (err) => {
                             this.voltar()
                         },
-                        complete: () => {},
+                        complete: () => { },
                     })
                 }
             }
@@ -98,7 +125,7 @@ export class EditComponent implements OnInit {
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar')) {
-            let result = this.setupService.edit_To_Empresa_List(this.objeto);
+            let result = this.setupService.add_To_Empresa_List(this.objeto);
             if (result)
                 this.voltar();
         }

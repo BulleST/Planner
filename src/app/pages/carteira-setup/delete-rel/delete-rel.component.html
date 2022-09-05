@@ -11,7 +11,10 @@
             </div>
             <div class="modal__body mt-0">
                 <p>Tem certeza que deseja excluir esse setup? Essa operação não poderá ser desfeita!!</p>
-                <p><small>Obs.: Os produtos e tributações associados a este setup serão excluidos também.</small></p>
+                <p><small>Obs.: Essa operação irá excluir apenas o setup com esse produto e tributação, mantendo os outros registros.</small></p>
+                <p><strong>Produto:</strong> {{objeto.produtoTributacaoRel.produto.descricao}}</p>
+                <p><strong>Tributação:</strong> {{objeto.produtoTributacaoRel.tributacao.descricao}}</p>
+                <p><strong>Aliquota:</strong> {{objeto.produtoTributacaoRel.tributacao.aliquota }}</p>
                 <button class="btn btn-grey ml-auto d-flex mt-2" (click)="send()">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" ></span> Excluir
                 </button>

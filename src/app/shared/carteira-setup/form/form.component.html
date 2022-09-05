@@ -5,16 +5,16 @@
             [class.col-md-6]="!novaCarteiraSetup" 
             [class.col-lg-4]="novaCarteiraSetup" 
             [class.col-md-4]="novaCarteiraSetup">
-            <label for="carteiraSetupObjeto">Carteira Setup: <span class="text-danger">*</span></label>
+            <label for="carteiraSetup">Carteira Setup: <span class="text-danger">*</span></label>
             <select 
                     class="form-control"
-                    id="carteiraSetupObjeto"
-                    name="carteiraSetupObjeto"
-                    #_carteiraSetupObjeto="ngModel"
-                    [(ngModel)]="carteiraSetupObjeto"
-                    [required]="_carteiraSetupObjeto.touched == true && !novaCarteiraSetup"
+                    id="carteiraSetup"
+                    name="carteiraSetup"
+                    #carteiraSetup="ngModel"
+                    [(ngModel)]="_carteiraSetup"
+                    [required]="carteiraSetup.touched == true && !novaCarteiraSetup"
                     (change)="carteiraSetupChange()">
-                <option [ngValue]="undefined">Selecione</option>
+                <option [ngValue]="undefined">Cadastrar nova carteira</option>
                 <option [ngValue]="item" *ngFor="let item of carteirasSetup">{{item.nome}}</option>
             </select>
             <p>Não encontrou a opção desejada? Clique <label for="carteiraSetup" class="link d-inline" (click)="novaCarteira()">aqui</label></p>
@@ -58,7 +58,8 @@
                     id="produto"
                     name="produto"
                     #_produto="ngModel"
-                    [(ngModel)]="produto">
+                    [(ngModel)]="produto"
+                    (change)="tributacao = undefined">
                 <option [ngValue]="undefined">Selecione</option>
                 <option [ngValue]="item" *ngFor="let item of produtos">{{ item.descricao }}</option>
             </select>
@@ -71,7 +72,7 @@
                     name="tributacao"
                     #_tributacao="ngModel"
                     [(ngModel)]="tributacao">
-                <option [ngValue]="undefined">Selecione</option>
+                <option [ngValue]="undefined">Selecione o produto</option>
                 <option [ngValue]="item" *ngFor="let item of (produto != undefined ? produto.tributacao : [])">{{ item.descricao }}</option>
             </select>
         </div>
@@ -112,11 +113,11 @@
                 <tr *ngFor="let item of objeto.produtoTributacaoRel">
                     <td></td>
                     <td>{{item.id}}</td>
-                    <td>{{item.produto}}</td>
-                    <td>{{item.tributacao}}</td>
-                    <td>{{item.aliquota}}</td>
+                    <td>{{item.produto.descricao}}</td>
+                    <td>{{item.tributacao.descricao}}</td>
+                    <td>{{item.tributacao.aliquota}}</td>
                     <td>
-                        <button class="btn btn-small btn-trash ml-auto d-block px-0 text-dark" (click)="removeItem(item.id)">
+                        <button type="button" class="btn btn-small btn-trash ml-auto d-block px-0 text-dark" (click)="removeItem(item.id)">
                             <fa-icon [icon]="faTrashAlt"></fa-icon>
                         </button>
                     </td>

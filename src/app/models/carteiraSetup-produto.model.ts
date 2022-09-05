@@ -5,9 +5,9 @@ import { Column, FilterDisplay, FilterType, MaskType } from './../helpers/column
 export class CarteiraProdutoRel {
     id: number = 0;
     carteiraSetup_Id: number = 0;
-    carteiraSetup?: CarteiraSetup;
-    produtoTributacao_Id: number = 0;
+    // carteiraSetup?: CarteiraSetup;
     percentual: number = 0;
+    produtoTributacao_Id: number = 0;
     produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
 }
 
@@ -20,9 +20,8 @@ export class CarteiraSetupRelRequest {
     produtoTributacaoRel: ProdutoTributacaoRel[] = [];
 }
 
-export class CarteiraProdutoRequest {
-    id: number = 0;
-    empresa_Id: number = 0;
+export class CarteiraProdutoList {
+    id: number = 0; // CateiraProduto_Id
     carteiraSetup: string = '';
     carteiraSetup_Id: number = undefined as unknown as number;
     percentual: number = '' as unknown as number;

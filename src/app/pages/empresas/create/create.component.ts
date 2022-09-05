@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faCity, faCreditCardAlt, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
-import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Table } from 'src/app/utils/table';
@@ -14,13 +14,13 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.css']
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, OnDestroy {
 
     faArrowRight = faArrowRight;
     faEllipsisV = faEllipsisV;
     faTimes = faTimes;
     faCity = faCity;
-    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
+    objeto: Empresa = new Empresa;
     erro: any[] = [];
     loading = false;
 
@@ -35,11 +35,11 @@ export class CreateComponent implements OnInit {
         private alert: AlertService,
         private table: Table
     ) {
-        if ( this.empresaService.createObjeto == undefined)
-            this.empresaService.setCreateObject(new EmpresaCreateRequest);
+        if ( this.empresaService.object == undefined)
+            this.empresaService.setObject(new Empresa);
             
-        this.empresaService.createEmpresaObject.subscribe(res => {
-            this.objeto = res ?? new EmpresaCreateRequest;
+        this.empresaService.empresaObject.subscribe(res => {
+            this.objeto = res;
         });
 
         this.items =  [
@@ -94,6 +94,10 @@ export class CreateComponent implements OnInit {
     }
 
     ngOnInit(): void {
+    }
+            
+    ngOnDestroy(): void {
+        this.empresaService.setObject(new Empresa)
     }
 
     voltar() {

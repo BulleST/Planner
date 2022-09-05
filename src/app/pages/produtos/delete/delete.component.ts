@@ -36,7 +36,7 @@ export class DeleteComponent implements OnInit {
         activatedRoute.paramMap.subscribe(p => {
             if (p.get('produto_id')) {
                 this.objeto.id = this.crypto.decrypt(p.get('produto_id'));
-                let objeto = this.empresaService.createObjeto?.produto.find(x => x.id == this.objeto.id);
+                let objeto = this.empresaService.object?.produto.find(x => x.id == this.objeto.id);
                 if (objeto) {
                     this.objeto = objeto;
                     setTimeout(() => {

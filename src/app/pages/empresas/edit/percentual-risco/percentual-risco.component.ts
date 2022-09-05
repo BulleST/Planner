@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { faArrowLeft, faCheck, faPercent } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
-import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { percentualRiscoColumns } from 'src/app/models/percentual-risco.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
@@ -16,14 +16,14 @@ export class PercentualRiscoComponent implements OnInit {
     faPercent = faPercent;
     faArrowLeft = faArrowLeft;
     faCheck = faCheck;
-    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
+    objeto: Empresa = new Empresa;
     percentualRiscoColumns = percentualRiscoColumns;
     constructor(
         private empresaService: EmpresaService,
         private mask: MaskApplierService
     ) {
-        this.empresaService.createEmpresaObject.subscribe(res => {
-            this.objeto = res ?? new EmpresaCreateRequest;
+        this.empresaService.empresaObject.subscribe(res => {
+            this.objeto = res;
             this.objeto.percentualRisco.map(item => {
                 item.baixissimo = this.mask.applyMask(item.baixissimo.toString(), 'separator.2') + '%'  as unknown as number;
                 item.baixo = this.mask.applyMask(item.baixo.toString(), 'separator.2') + '%'  as unknown as number;

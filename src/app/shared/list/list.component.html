@@ -95,9 +95,12 @@
         </ng-template>
     </p-table>
 </div>
-<div class="actions__nav">
+<div class="actions__nav" *ngIf="tableLinks.length > 0">
     <div class="actions__nav-inner" *ngIf="selected">
-        <a class="actions__nav-link" [routerLink]="['editar', encryptValue(selected?.id)]">Editar</a>
-        <a class="actions__nav-link" [routerLink]="['excluir', encryptValue(selected?.id)]">Excluir</a>
+        <a class="actions__nav-link" 
+            *ngFor="let item of tableLinks" 
+            [routerLink]="item.fullRoute">{{item.label}}</a>
+        <!-- <a class="actions__nav-link" [routerLink]="['editar', encryptValue(selected?.id)]">Editar</a>
+        <a class="actions__nav-link" [routerLink]="['excluir', encryptValue(selected?.id)]">Excluir</a> -->
     </div>
 </div>

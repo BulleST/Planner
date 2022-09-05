@@ -7,7 +7,7 @@ import { Crypto } from '../utils/crypto';
 import { Usuario } from '../models/usuario.model';
 import { environment } from 'src/environments/environment';
 import { DropdownService } from './dropdown.service';
-import { Empresa, EmpresaCreateRequest } from '../models/empresa.model';
+import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
 
@@ -18,7 +18,7 @@ export class UsuarioService {
     url = environment.url;
     list = new BehaviorSubject<Usuario[]>([]);
     objeto = new BehaviorSubject<Usuario | undefined>(undefined);
-    empresa?= new EmpresaCreateRequest;
+    empresa = new Empresa;
 
     constructor(
         private table: Table,
@@ -28,7 +28,7 @@ export class UsuarioService {
         private dropdownService: DropdownService,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.createEmpresaObject.subscribe(res => {
+        this.empresaService.empresaObject.subscribe(res => {
             this.empresa = res;
         });
     }
@@ -62,7 +62,7 @@ export class UsuarioService {
                 item.id = ++lastId;
                 list.push(item);
                 this.empresa.usuario = list;
-                this.empresaService.setCreateObject(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -90,7 +90,7 @@ export class UsuarioService {
                     item.perfilAcesso = perfil;
                     list.splice(index, 1, item);
                     this.empresa.usuario = list;
-                    this.empresaService.setCreateObject(this.empresa);
+                    this.empresaService.setObject(this.empresa);
                     this.toastr.success('Operação concluída');
                     return true;
                 } else {
@@ -108,12 +108,12 @@ export class UsuarioService {
 
     delete_To_Empresa_List(id: number) {
         if (this.empresa) {
-            var list = this.empresa.usuario ?? [];
+            var list = this.empresa.usuario;
             let index = list.findIndex(x => x.id == id);
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.usuario = list;
-                this.empresaService.setCreateObject(this.empresa);
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;

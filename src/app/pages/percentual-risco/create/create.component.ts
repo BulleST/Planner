@@ -47,26 +47,25 @@ export class CreateComponent implements OnInit {
     }
 
     voltar() {
-        this.modal.setOpen(false);
-        setTimeout(() => {
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-        }, 200);
+        this.modal.voltar();
     }
 
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
-            var result = this.riscoService.add_To_Empresa_List(this.objeto);
+        if (urlArray.includes('empresas/cadastrar')) {
+            var result = this.riscoService.add_To_Empresa_Create(this.objeto);
             if (result) 
                 this.voltar();
         } 
         else {
-            // Enviar para a API
-            this.toastr.success('Operação concluída');
-        }
+            if ( urlArray.includes('empresas/editar')) {
 
+            }
+            // Enviar para a API
+        }
+        this.toastr.success('Operação concluída');
         this.loading = false;
     }
 }

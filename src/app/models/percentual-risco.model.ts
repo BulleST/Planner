@@ -1,3 +1,4 @@
+import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { PerfilInvestidor } from "./perfilInvestidor.model";
 
 export class PercentualRisco {
@@ -16,14 +17,67 @@ export class PercentualRisco {
 }
 
 
-export var percentualRiscoColumns = [
-    { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
-    // { field: 'perfilInvestidor', header: 'Perfil Investidor', filterType: 'text', filterDisplay: 'menu' },
-    { field: 'perfilInvestidor.descricao', header: 'Perfil Investidor', filterType: 'text', filterDisplay: 'menu' },
-    { field: 'baixissimo', header: 'Baixissimo', filterType: 'numeric', filterDisplay: 'menu' },
-    { field: 'baixo', header: 'Baixo', filterType: 'numeric', filterDisplay: 'menu' },
-    { field: 'moderado', header: 'Moderado', filterType: 'numeric', filterDisplay: 'menu' },
-    { field: 'arrojado', header: 'Arrojado', filterType: 'numeric', filterDisplay: 'menu' },
-    { field: 'superArrojado', header: 'Super Arrojado', filterType: 'numeric', filterDisplay: 'menu' },
-    { field: 'hedge', header: 'Hedge', filterType: 'numeric', filterDisplay: 'menu' },
+export var percentualRiscoColumns: Column[] = [
+    { 
+        field: 'id', 
+        header: 'Id', 
+        filterType: FilterType.text, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.undefined, 
+    },
+    { 
+        field: 'perfilInvestidor.descricao', 
+        header: 'Perfil Investidor', 
+        filterType: FilterType.text, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.undefined, 
+    },
+    { 
+        field: 'baixissimo', 
+        header: 'Baixissimo', 
+        filterType: FilterType.numeric, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.percentage, 
+        decimal: '1.0-2'
+    },
+    { 
+        field: 'baixo', 
+        header: 'Baixo', 
+        filterType: FilterType.numeric, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.percentage, 
+        decimal: '1.0-2'
+    },
+    { 
+        field: 'moderado', 
+        header: 'Moderado', 
+        filterType: FilterType.numeric, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.percentage, 
+        decimal: '1.0-2'
+    },
+    { 
+        field: 'arrojado', 
+        header: 'Arrojado', 
+        filterType: FilterType.numeric, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.percentage, 
+        decimal: '1.0-2'
+    },
+    { 
+        field: 'superArrojado', 
+        header: 'Super Arrojado', 
+        filterType: FilterType.numeric, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.percentage, 
+        decimal: '1.0-2'
+    },
+    { 
+        field: 'hedge', 
+        header: 'Hedge', 
+        filterType: FilterType.numeric, 
+        filterDisplay: FilterDisplay.menu,
+        mask: MaskType.percentage, 
+        decimal: '1.0-2'
+    },
 ]

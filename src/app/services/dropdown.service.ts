@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
 import { environment } from "src/environments/environment";
 import { CarteiraSetup } from "../models/carteiraSetup.model";
-import { EmpresaCreateRequest } from "../models/empresa.model";
+import { Empresa } from "../models/empresa.model";
 import { PerfilInvestidor } from "../models/perfilInvestidor.model";
 import { TipoAtivo } from "../models/tipoAtivo.model";
 import { TipoLiquidez } from "../models/tipoLiquidez.model";
@@ -25,16 +25,15 @@ export class DropdownService {
     tributacao = new BehaviorSubject<Tributacao[]>([]);
     perfilInvestidor = new BehaviorSubject<PerfilInvestidor[]>([]);
     carteiraSetup = new BehaviorSubject<CarteiraSetup[]>([]);
-    carteiraSetupEmpresaCreation = new BehaviorSubject<CarteiraSetup[]>([]);
 
-    empresaCreation?: EmpresaCreateRequest;
+    empresa: Empresa = new Empresa;
     
     constructor(
         private http: HttpClient,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.createEmpresaObject.subscribe(res => {
-            this.empresaCreation = res;
+        this.empresaService.empresaObject.subscribe(res => {
+            this.empresa = res;
         })
     }
 
@@ -80,9 +79,5 @@ export class DropdownService {
             this.carteiraSetup.next(res);
             return res;
         }));
-    }
-
-    getCarteiraSetup_In_Empresa_Creation() {
-        return this.carteiraSetupEmpresaCreation;
     }
 }

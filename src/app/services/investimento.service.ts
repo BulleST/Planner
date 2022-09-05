@@ -91,11 +91,10 @@ export class InvestimentoService {
     createProduto(request: PlanejamentoProdutoRequest) {
         var rel: ProdutoTributacaoRel = {
             id: 1,
-            produto: request.produto.descricao,
+            produto: request.produto,
             produto_Id: request.produto.id,
-            tributacao: request.tributacao.descricao,
+            tributacao: request.tributacao,
             tributacao_Id: request.tributacao.id,
-            aliquota: request.tributacao.aliquota,
         };
 
         var planejamentoProduto: PlanejamentoProduto = {

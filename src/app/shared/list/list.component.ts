@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
-import { MaskType } from 'src/app/helpers/column.interface';
+import { Column, MaskType } from 'src/app/helpers/column.interface';
+import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -30,13 +31,13 @@ export class ListComponent implements OnInit, OnChanges {
     @Input() sortTable = true;
     @Input() menuTable = true;
     @Input() canCreate = true;
-    @Input() columns = [
-        { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
-    ];
+    @Input() columns = [{ field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },];
+    @Input() tableLinks: MenuTableLink[] = [];
 
     selected?: any;
     selectedItems: any[] = [];
     filters: string[] = [];
+    routeRow: string[] = [];
 
     constructor(
         private table: Table,
@@ -50,31 +51,47 @@ export class ListComponent implements OnInit, OnChanges {
         this.table.loading.subscribe(res => {
             this.loading = res
         });
-        this.table.selected.subscribe(res => this.selected = res);
+        this.table.selected.subscribe(res => {
+            this.selected = res;
+            if (this.selected) {
+                this.tableLinks.map(link => {
+                    if (link.paramsFieldName != undefined && link.paramsFieldName.length) {
+                        var paramnsMap = link.paramsFieldName.map(p => {
+                            return this.crypto.encrypt(this.selected[p]) ?? '';
+                        })
+                        link.fullRoute = [].concat(link.routePath as never[], paramnsMap as never[])
+                    } else {
+                        link.fullRoute = link.routePath;
+                    }
+                    return link
+                });
+            }
+        });
         this.table.selectedItems.subscribe(res => this.selectedItems = res);
+
     }
 
     ngOnInit(): void {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['list']) 
+        if (changes['list'])
             this.list = changes['list'].currentValue;
-        if (changes['createLink']) 
+        if (changes['createLink'])
             this.createLink = changes['createLink'].currentValue;
-        if (changes['filterLink']) 
+        if (changes['filterLink'])
             this.filterLink = changes['filterLink'].currentValue;
-        if (changes['filterTable']) 
+        if (changes['filterTable'])
             this.filterTable = changes['filterTable'].currentValue;
-        if (changes['paginator']) 
+        if (changes['paginator'])
             this.paginator = changes['paginator'].currentValue;
-        if (changes['sortTable']) 
+        if (changes['sortTable'])
             this.sortTable = changes['sortTable'].currentValue;
-        if (changes['menuTable']) 
+        if (changes['menuTable'])
             this.menuTable = changes['menuTable'].currentValue;
-        if (changes['columns']) 
+        if (changes['columns'])
             this.columns = changes['columns'].currentValue;
-        if (changes['canCreate']) 
+        if (changes['canCreate'])
             this.canCreate = changes['canCreate'].currentValue;
     }
 
@@ -100,31 +117,20 @@ export class ListComponent implements OnInit, OnChanges {
         if (col.mask && value) {
             if (col.mask == MaskType.percentage) {
                 try {
-                    console.log()
                     value = this.currency.transform(value.toString(), 'BRL', '', col.decimal) + '%';
                 } catch (e) {
-                    console.log(e)
                 }
             } else if (col.mask == MaskType.money) {
                 value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
             } else if (col.mask == MaskType.date) {
-                console.log('date')
-                
+
             } else if (col.mask == MaskType.dateTime) {
-                console.log('datetime')
-                
+
             } else {
                 return value ?? '-';
             }
         }
         return value ?? '-';
     }
-
-    encryptValue(value: any) {
-        if (value) {
-            return this.crypto.encrypt(value.toString());
-        } else {
-            return ''
-        }
-    }
 }
+

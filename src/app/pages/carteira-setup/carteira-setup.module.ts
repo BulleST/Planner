@@ -10,6 +10,8 @@ import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DeleteRelComponent } from './delete-rel/delete-rel.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
     declarations: [
@@ -17,7 +19,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
         ListComponent,
         CreateComponent,
         EditComponent,
-        DeleteComponent
+        DeleteComponent,
+        DeleteRelComponent
     ],
     imports: [
         CommonModule,
@@ -25,6 +28,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
         SharedModule,
         ToastrModule,
         FormsModule,
+        NgxMaskModule.forChild()
     ],
     exports: [
         CreateComponent

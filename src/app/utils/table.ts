@@ -51,7 +51,6 @@ export class Table {
                 this.selectedItems.next(selectedItems);
             }
         }
-        console.log(selectedItems.length)
         if (selectedItems.length > 0) {
             this.selected.next(selectedItems[selectedItems.length - 1]);
             this.exibirMenuTable($(`td[data-id=${this.selected.value.id}]`))

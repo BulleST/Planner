@@ -38,7 +38,7 @@ export class EditComponent implements OnInit {
             if (p.get('produto_id')) {
                 this.objeto.id = this.crypto.decrypt(p.get('produto_id'));
                 if (urlArray.includes('empresas/cadastrar')) { // Se estiver na página de cadastro de uma empresa nova
-                    let user = this.empresaService.createObjeto?.produto.find(x => x.id == this.objeto.id);
+                    let user = this.empresaService.object?.produto.find(x => x.id == this.objeto.id);
                     if (user) {
                         this.objeto = user;
                         setTimeout(() => {

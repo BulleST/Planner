@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 })
 export class DadosCadastraisComponent implements OnInit {
     faIdCard = faIdCard;
-    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
+    objeto: Empresa = new Empresa;
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
     erro: any[] = [];
@@ -24,8 +24,8 @@ export class DadosCadastraisComponent implements OnInit {
         private empresaService: EmpresaService,
         private router: Router
     ) {
-        this.empresaService.createEmpresaObject.subscribe(res => {
-            this.objeto = res ?? new EmpresaCreateRequest;
+        this.empresaService.empresaObject.subscribe(res => {
+            this.objeto = res;
         });
     }
 
@@ -37,7 +37,7 @@ export class DadosCadastraisComponent implements OnInit {
             this.toastr.error('Dados inválidos')
             return;
         }
-        this.empresaService.setCreateObject(this.objeto);
+        this.empresaService.setObject(this.objeto);
     }
 
 }

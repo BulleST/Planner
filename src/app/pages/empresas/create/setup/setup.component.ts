@@ -2,11 +2,10 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faEllipsisV, faFilter, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
-import { MaskApplierService } from 'ngx-mask';
-import { ToastrService } from 'ngx-toastr';
-import { CarteiraProdutoRel, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
-import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
+import { Column} from 'src/app/helpers/column.interface';
+import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
+import { CarteiraProdutoList as CarteiraProdutoRelList, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
@@ -24,13 +23,16 @@ export class SetupComponent implements OnInit {
     faTimes = faTimes;
     faEllipsisV = faEllipsisV;
 
-    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
-    setupColumns = setupColumns;
+    objeto: Empresa = new Empresa;
+    setupColumns: Column[] = setupColumns;
+    tableLinks: MenuTableLink[] = [];
     loading = false;
     selected?: any;
     selectedItems: any[] = [];
     filters: string[] = [];
     list: any[] = [];
+
+    rels: CarteiraProdutoRelList[] = []
     
     constructor(
         private empresaService: EmpresaService,
@@ -40,10 +42,28 @@ export class SetupComponent implements OnInit {
         private currency: CurrencyPipe,
     ) {
        
-        this.empresaService.createEmpresaObject.subscribe(res => {
-            this.objeto = res ?? new EmpresaCreateRequest;
-           console.log(res)
-           
+        this.empresaService.empresaObject.subscribe(res => {
+            this.objeto = res;
+            this.rels = []
+            this.objeto.carteiraSetup.map(carteiraSetup => {
+                carteiraSetup.carteiraProdutoRel.map(rel => {
+                        var obj: CarteiraProdutoRelList = {
+                            id: rel.id,
+                            carteiraSetup_Id: carteiraSetup.id,
+                            carteiraSetup: carteiraSetup.nome,
+                            percentual: rel.percentual,
+                            produto: rel.produtoTributacaoRel.produto.descricao,
+                            produto_Id: rel.produtoTributacaoRel.produto_Id,
+                            tributacao: rel.produtoTributacaoRel.tributacao.descricao,
+                            tributacao_Id: rel.produtoTributacaoRel.tributacao_Id,
+                            aliquota: rel.produtoTributacaoRel.tributacao.aliquota,
+                        };
+                        this.rels.push(obj)
+                    return rel;
+                });
+                this.rels.sort((x, y) => x.carteiraSetup_Id - y.carteiraSetup_Id)
+                return carteiraSetup;
+            })
         });
         this.filters = this.setupColumns.map(x => x.field);
 
@@ -52,6 +72,11 @@ export class SetupComponent implements OnInit {
         });
         this.table.selected.subscribe(res => this.selected = res);
         this.table.selectedItems.subscribe(res => this.selectedItems = res);
+        
+        this.tableLinks = [
+            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['carteiraSetup_Id', 'id'] },
+            { label: 'Excluir', routePath: [ 'excluir-rel'], paramsFieldName: ['carteiraSetup_Id', 'id'] },
+        ];
     }
 
     ngOnInit(): void {

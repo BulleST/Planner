@@ -34,16 +34,21 @@ export class DeleteComponent implements OnInit {
         });
 
         activatedRoute.paramMap.subscribe(p => {
-            if (p.get('id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('id'));
-                let objeto = this.empresaService.createObjeto?.percentualRisco.find(x => x.id == this.objeto.id);
-                if (objeto) {
-                    this.objeto = objeto;
-                    setTimeout(() => {
-                        this.modal.setOpen(true);
-                    }, 200);
+            if (p.get('percentual_id')) {
+                this.objeto.id = this.crypto.decrypt(p.get('percentual_id'));
+                var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+                if (urlArray.includes('empresas/cadastrar')) {
+                    let objeto = this.empresaService.object?.percentualRisco.find(x => x.id == this.objeto.id);
+                    if (objeto) {
+                        this.objeto = objeto;
+                        setTimeout(() => {
+                            this.modal.setOpen(true);
+                        }, 200);
+                    } else {
+                        this.voltar();
+                    }
                 } else {
-                    this.voltar();
+
                 }
             }
         })
@@ -61,15 +66,18 @@ export class DeleteComponent implements OnInit {
         this.erro = [];
 
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
-            let result = this.riscoService.delete_To_Empresa_List(this.objeto.id); 
+        if (urlArray.includes('empresas/cadastrar')) {
+            let result = this.riscoService.delete_To_Empresa_Create(this.objeto.id); 
             if (result)
                 this.voltar();
         }
         else {
             // Enviar para a API
-            this.toastr.success('Operação concluída');
+            if (urlArray.includes('empresas/editar')) {
+
+            }
         }
+        this.toastr.success('Operação concluída');
         this.loading = false;
     }
 

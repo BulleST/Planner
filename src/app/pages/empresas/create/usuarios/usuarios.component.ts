@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Empresa, EmpresaCreateRequest } from 'src/app/models/empresa.model';
+import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
+import { Empresa } from 'src/app/models/empresa.model';
 import { userColumns } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
@@ -13,17 +14,22 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 })
 export class UsuariosComponent implements OnInit {
     faUser = faUsers;
-    objeto: EmpresaCreateRequest = new EmpresaCreateRequest;
+    objeto: Empresa = new Empresa;
     userColumns = userColumns;
+    tableLinks: MenuTableLink[] = [];
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
     constructor(
         private empresaService: EmpresaService,
         private router: Router
     ) {
-        this.empresaService.createEmpresaObject.subscribe(res => {
-            this.objeto = res ?? new EmpresaCreateRequest;
+        this.empresaService.empresaObject.subscribe(res => {
+            this.objeto = res;
         });
+        this.tableLinks = [
+            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+            { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
+        ]
     }
 
     ngOnInit(): void {

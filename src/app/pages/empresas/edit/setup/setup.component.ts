@@ -25,7 +25,7 @@ export class SetupComponent implements OnInit {
         private currency: CurrencyPipe,
     ) {
         // this.empresaService.createEmpresaObject.subscribe(res => {
-        //     this.objeto = res ?? new Empresa;
+        //     this.objeto = res;
         //     this.rels = this.objeto.carteiraSetup.map(item => {
         //         return item.carteiraProdutoRel.map(rel => {
         //             rel.percentual = this.currency.transform(rel.percentual, 'BRL', '', '1.2') + '%' as unknown as number;

@@ -141,7 +141,7 @@ td.td-actions {
     top: 0;
     right: 0;
     left: 0;
-    transform: translate(-100%, 0%);
+    transform: translate(-100%, -10px);
     z-index: 5;
     opacity: 0;
     visibility: hidden;

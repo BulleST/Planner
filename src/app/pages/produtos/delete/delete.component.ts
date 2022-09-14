@@ -33,22 +33,49 @@ export class DeleteComponent implements OnInit {
             this.modalOpen = res;
         });
 
+        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         activatedRoute.paramMap.subscribe(p => {
             if (p.get('produto_id')) {
                 this.objeto.id = this.crypto.decrypt(p.get('produto_id'));
-                let objeto = this.empresaService.object?.produto.find(x => x.id == this.objeto.id);
-                if (objeto) {
-                    this.objeto = objeto;
-                    setTimeout(() => {
-                        this.modal.setOpen(true);
-                    }, 200);
+                if (urlArray.includes('empresas/cadastrar')) { // Se estiver na página de cadastro de uma empresa nova
+                    let obj = this.empresaService.object?.produto.find(x => x.id == this.objeto.id);
+                    if (obj) {
+                        this.objeto = obj;
+                        setTimeout(() => {
+                            this.modal.setOpen(true);
+                        }, 200);
+                    }
+                    else {
+                        this.voltar();
+                    }
                 } else {
-                    this.voltar();
+                    // Se estiver no módulo de usuários
+                    if (urlArray.includes('empresas/editar')) {
+                        // Se estiver na página de visão geral de uma empresa já existente ou 
+                    }
+                    this.produtoService.get(this.objeto.id).subscribe({
+                        next: (produto) => {
+                            this.objeto = produto;
+                            this.objeto.tributacao = produto.produtoTributacaoRel.map(x => x.tributacao)
+                            console.log(produto)
+                            setTimeout(() => {
+                                this.modal.setOpen(true);
+                            }, 200);
+                        }, 
+                        error: (err) => {
+                            this.toastr.error('Não foi possível carregar esse registro');
+                            this.voltar();
+                        },
+                        complete: () => {
+
+                        }
+                    });
                 }
             } else {
+                console.log('else1');
                 this.voltar();
             }
-        })
+        });
     }
 
     ngOnInit(): void {
@@ -58,21 +85,33 @@ export class DeleteComponent implements OnInit {
         this.modal.voltar();
     }
 
-    send() {
-        this.loading = true;
-        this.erro = [];
+	send() {
+		this.loading = true;
+		this.erro = [];
 
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
-            let result = this.produtoService.delete_To_Empresa_List(this.objeto.id);
-            if (result)
+        if (urlArray.includes('empresas/cadastrar')) {
+            let result = this.produtoService.delete_To_Empresa_List(this.objeto.id); 
+            if (result) {
                 this.voltar();
+                this.toastr.success('Operação concluída');
+            }
         }
         else {
             // Enviar para a API
-            this.toastr.success('Operação concluída');
-        }
-        this.loading = false;
-    }
+            if (urlArray.includes('empresas/editar')) {
 
+            }
+            this.produtoService.delete(this.objeto.id).subscribe({
+                next: (res) => {
+                    this.modal.voltar();
+                    this.produtoService.getList().subscribe();
+                },
+                error: (res) => {},
+                complete: () => {},
+            })
+        }
+        
+		this.loading = false;
+	}
 }

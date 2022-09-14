@@ -206,7 +206,8 @@
 }
 
 .step-container .step-content {
-    flex: 1 0 70%;
+    flex: 1 0 80%;
+    width: 80%;
 }
 
 .step-container .step-content .card {

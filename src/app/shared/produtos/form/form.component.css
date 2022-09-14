@@ -1,6 +1,7 @@
 .cdk-drop-list {
     position: relative;
     min-height: 300px;
+    height: 100%;
 }
 
 .cdk-drop-list.cdkDrag::after {
@@ -18,18 +19,35 @@
     justify-content: center;
     z-index: 0;
 }
+
 .cdk-drop-list.cdkDrag.empty::after {
     content: 'Solte aqui para selecionar';
     border: 1px #0000007a dashed;
 }
+
 .cdk-drop-list.cdkDrag.empty:hover::after {
     border: 1px #00000096 dashed;
     color: #00000096;
-
 }
 
 .cdk-drag {
     position: relative;
     z-index: 1;
     margin: 0;
+}
+
+.cdk-drop-list.empty::after {
+    content: 'Nenhum item para selecionar';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    transform: translate(-50%, -50%);
+    color: #00000073;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
 }

@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Produto } from 'src/app/models/produto.model';
+import { Produto, ProdutoRequest } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -29,12 +29,14 @@ export class CreateComponent implements OnInit {
         private produtoService: ProdutoService,
         private crypto: Crypto
     ) {
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
-                this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
-            }
-        })
-        
+        // activatedRoute.paramMap.subscribe(p => {
+        //     if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
+        //         this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
+        //     }
+        // });
+
+        this.objeto.empresa_Id = 1;
+
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
@@ -50,22 +52,32 @@ export class CreateComponent implements OnInit {
         this.modal.voltar();
     }
 
-    send(form: NgForm) {
+    send(model: ProdutoRequest) {
         this.loading = true;
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar')) {
             let result = this.produtoService.add_To_Empresa_List(this.objeto);
-            if (result)
+            if (result) {
+                this.toastr.success('Operação concluída');
                 this.voltar();
-        }else if (urlArray.includes('empresas/editar')) {
-            // Enviar para a API também
+            }
         }
         else {
             // Enviar para a API
+            if (urlArray.includes('empresas/editar')) {
+            }
+            this.produtoService.create(model).subscribe({
+                next: (res) => {
+                    this.modal.voltar();
+                    this.produtoService.getList().subscribe();
+                },
+                error: (error) => {
+
+                },
+                complete: () => { }
+            });
         }
-        this.toastr.success('Operação concluída');
-        this.loading = false;
         this.loading = false;
     }
 }

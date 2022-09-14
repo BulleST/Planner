@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import * as $ from 'jquery';
+import { Crypto } from "./crypto";
+import { Table } from "./table";
 
 @Injectable({
     providedIn: 'root'
@@ -9,18 +11,34 @@ export class Header {
     open = new BehaviorSubject<boolean>(false);
     menuHeaderOpen = new BehaviorSubject<boolean>(false);
 
-    constructor() { }
+    constructor(
+        private crypto: Crypto, 
+        private table: Table,
+    ) {
+
+    }
+
+    public get aside(): boolean {
+        var a = localStorage.getItem('navigation') ? this.crypto.decrypt(localStorage.getItem('navigation')) as boolean : false;
+        this.setMenuAside(a);
+        return this.open.value;
+    }
 
     toggleMenuAside(): void {
-        this.open.next(!this.open.value);
+        this.setMenuAside(!this.open.value);
+        // console.log(this.table.selected)
+        // setTimeout(() => {
+        //     if (this.table.selected.value != undefined)
+        //         this.table.exibirMenuTable(); 
+        // }, 40);
     }
-    openMenuAside() {
-        this.open.next(true);
 
+    setMenuAside(value: boolean) {
+        var encryted = this.crypto.encrypt(value) ?? '';
+        localStorage.setItem('navigation', encryted);
+        this.open.next(value);
     }
-    closeMenuAside() {
-        this.open.next(false);
-    }
+
 
     toggleMenuHeader(): void {
         this.menuHeaderOpen.next(!this.menuHeaderOpen.value);
@@ -37,7 +55,7 @@ export class Header {
     clickOut() {
         var classe = this;
         $('body').on('click', function (e) {
-            classe.closeMenuAside();
+            classe.setMenuAside(false);
             classe.closeMenuHeader();
         });
 
@@ -45,7 +63,7 @@ export class Header {
             e.stopPropagation();
         });
 
-        $('.header__aside-toggle').on('click', function (e) {
+        $('.navigation__toggle').on('click', function (e) {
             e.stopPropagation();
         });
 

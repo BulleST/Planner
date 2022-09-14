@@ -1,7 +1,14 @@
-<app-header [ngStyle]="{'z-index': modalOpen ? '-1' : '1', 'position': 'relative'}"></app-header>
-<app-actions [ngStyle]="{'z-index': modalOpen ? '1' : '2', 'position': 'relative'}"></app-actions>
-<div class="main" [class.dark]="modoEscuroAtivado" [ngStyle]="{'z-index': loading ? '2' : '0', 'position': 'relative'}">
-  <router-outlet></router-outlet>
+<app-header [ngStyle]="{
+        'z-index': modalOpen ? '0' : '1', 
+        'position': 'relative'}"></app-header>
+<div class="main" >
+    <app-navigation [ngStyle]="{
+        'z-index': modalOpen ? '1' : '2', 
+        'position': 'relative'}"></app-navigation>
+        <div class="main-content" [class.navigation-open]="navigationOpen">
+            <router-outlet></router-outlet>
+        </div>
 </div>
-<app-footer [ngStyle]="{'z-index': modalOpen ? '-1' : '2', 'position': 'relative'}"></app-footer>
-
+<app-footer [ngStyle]="{
+    'z-index': modalOpen ? '0' : '1', 
+    'position': 'relative'}"></app-footer>

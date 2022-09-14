@@ -9,7 +9,7 @@ import { DropdownService } from './dropdown.service';
 import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
-import { Produto } from '../models/produto.model';
+import { Produto, ProdutoRequest } from '../models/produto.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +19,7 @@ export class ProdutoService {
     list = new BehaviorSubject<Produto[]>([]);
     objeto = new BehaviorSubject<Produto | undefined>(undefined);
     carteiraSetup = new BehaviorSubject<Produto[]>([]);
-    Empresa?= new Empresa;
+    empresa? = new Empresa;
 
     constructor(
         private router: Router,
@@ -31,7 +31,7 @@ export class ProdutoService {
         private empresaService: EmpresaService
     ) {
         this.empresaService.empresaObject.subscribe(res => {
-            this.Empresa = res;
+            this.empresa = res;
         });
 
     }
@@ -50,8 +50,8 @@ export class ProdutoService {
     }
 
     add_To_Empresa_List(item: Produto) {
-        if (this.Empresa) {
-            var list = this.Empresa.produto ?? [];
+        if (this.empresa) {
+            var list = this.empresa.produto ?? [];
 
             let tipoAtivo = this.dropdownService.tipoAtivo.value.find(x => x.id == item.tipoAtivo_Id);
             if (!tipoAtivo) {
@@ -82,8 +82,8 @@ export class ProdutoService {
             var lastId = list.length == 0 ? 0 : list[list.length - 1].id;
             item.id = ++lastId;
             list.push(item);
-            this.Empresa.produto = list;
-            this.empresaService.setObject(this.Empresa);
+            this.empresa.produto = list;
+            this.empresaService.setObject(this.empresa);
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -93,8 +93,8 @@ export class ProdutoService {
     }
 
     edit_To_Empresa_Create(item: Produto) {
-        if (this.Empresa) {
-            var list = this.Empresa.produto ?? [];
+        if (this.empresa) {
+            var list = this.empresa.produto ?? [];
             let index = list.findIndex(x => x.id == item.id);
             if (index != -1) {
              
@@ -125,8 +125,8 @@ export class ProdutoService {
                 }
 
                 list.splice(index, 1, item);
-                this.Empresa.produto = list;
-                this.empresaService.setObject(this.Empresa);
+                this.empresa.produto = list;
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -139,13 +139,13 @@ export class ProdutoService {
     }
 
     delete_To_Empresa_List(id: number) {
-        if (this.Empresa) {
-            var list = this.Empresa.produto ?? [];
+        if (this.empresa) {
+            var list = this.empresa.produto ?? [];
             let index = list.findIndex(x => x.id == id);
             if (index != -1) {
                 list.splice(index, 1);
-                this.Empresa.produto = list;
-                this.empresaService.setObject(this.Empresa);
+                this.empresa.produto = list;
+                this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -160,13 +160,10 @@ export class ProdutoService {
 
 
 
-    getList(empresa_Id: number) {
+    getList(empresa_Id: number = 1) {
         return this.http.get<Produto[]>(`${this.url}/produto/all/${empresa_Id}`).pipe(
             map(list => {
                 this.list.next(list);
-                var empresa = this.empresaService.object;
-                this.Empresa!.produto! = list;
-                this.empresaService.setObject(empresa);
                 return list;
             })
         );
@@ -176,34 +173,16 @@ export class ProdutoService {
         return this.http.get<Produto>(`${this.url}/produto/${id}`);
     }
 
-    create(request: Produto) {
-        var id = 1;
-        if (this.list.value.length > 0) {
-            id = this.list.value[this.list.value.length - 1].id + 1;
-        }
-        request.id = id;
-        this.list.value.push(request);
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+    create(request: ProdutoRequest) {
+        return this.http.post<Produto>(`${this.url}/produto/`, request);
     }
 
-    edit(request: Produto) {
-        var index = this.list.value.findIndex(x => x.id == request.id);
-        if (index == -1) {
-            return new BehaviorSubject('Não encontrado')
-        }
-        this.list.value[index] = request;
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+    edit(request: ProdutoRequest) {
+        return this.http.put<Produto>(`${this.url}/produto/`, request);
     }
 
-    delete(model: Produto) {
-        var index = this.list.value.findIndex(x => x.id == model.id);
-        if (index != -1) {
-            this.list.value.splice(index, 1);
-            this.list.next(this.list.value);
-        }
-        return this.list;
+    delete(id: number) {
+        return this.http.delete<Produto>(`${this.url}/produto/${id}`);
     }
 
 }

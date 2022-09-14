@@ -27,6 +27,7 @@ import { ResetPasswordComponent } from './parts/reset-password/reset-password.co
 import { SharedModule } from './shared/shared.module';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RequestInterceptor } from './helpers/request.interceptor';
+import { NavigationComponent } from './parts/navigation/navigation.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -40,6 +41,7 @@ registerLocaleData(localePt);
         ResetPasswordComponent,
         LoadingComponent,
         AlertComponent,
+        NavigationComponent,
     ],
     imports: [
         BrowserModule,

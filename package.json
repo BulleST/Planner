@@ -34,6 +34,7 @@
     "jquery": "^3.6.0",
     "jspdf": "^2.5.1",
     "ngx-mask": "^14.0.3",
+    "ngx-sortablejs-angular14": "^14.0.1",
     "ngx-toastr": "^14.3.0",
     "pdfkit": "^0.13.0",
     "primeicons": "^5.0.0",

@@ -45,9 +45,10 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes['produtos'])
         if (changes['objeto']){
             this.objeto = changes['objeto'].currentValue;
-            if (this.objeto.carteiraSetup_Id != 0) {
+            if (this.objeto.carteiraSetup_Id) {
                 this.novaCarteiraSetup = false
                 this._carteiraSetup = this.empresaService.object.carteiraSetup.find(x => x.id == this.objeto.carteiraSetup_Id) as unknown as CarteiraSetup;
                 this.objeto.produtoTributacaoRel = this._carteiraSetup.carteiraProdutoRel.map(x => x.produtoTributacaoRel);

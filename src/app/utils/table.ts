@@ -37,8 +37,8 @@ export class Table {
                 selectedItems.push(row);
                 this.selectedItems.next(selectedItems);
             }
+            this.exibirMenuTable();
         }
-        this.exibirMenuTable(event);
     }
 
     onRowUnselect(event: any) {
@@ -53,7 +53,7 @@ export class Table {
         }
         if (selectedItems.length > 0) {
             this.selected.next(selectedItems[selectedItems.length - 1]);
-            this.exibirMenuTable($(`td[data-id=${this.selected.value.id}]`))
+            this.exibirMenuTable();
         }
         else {
             this.selected.next(undefined)
@@ -77,25 +77,25 @@ export class Table {
         });
     }
 
-    exibirMenuTable(event: any) {
-        let tr;
-        if (event.originalEvent) {
-            tr = $(event.originalEvent.target).parents('tr');
-        } else {
-            tr = $(event).parents('tr');
-        }
-        let td = $(tr).find('.td-actions');
 
-        let top = ($(td).offset()?.top ?? 0) - ($(td).height() ?? 0);
-        // let left = ($(td).offset()?.left ?? 0);
-        let left = ($(tr).parents('.content').width() ?? 0) + ($(tr).parents('.content').offset()?.left ?? 0);
-        $('.actions__nav').css({
-            'display': 'flex',
-            'top': top + 'px',
-            'left': left + 'px',
-            'opacity': 1,
-            'visibility': 'visible',
-        })
+    exibirMenuTable() {
+      setTimeout(() => {
+        let tr = $('tr.selected'); 
+        if (tr) {
+            let td = $(tr).find('.td-actions');
+            if (td) {
+                let top = ($(td).offset()?.top ?? 0);
+                let left = ($(td).offset()?.left ?? 0);
+                $('.actions__nav').css({
+                    'display': 'flex',
+                    'top': top + 'px',
+                    'left': left + 'px',
+                    'opacity': 1,
+                    'visibility': 'visible',
+                });
+            }
+        }
+      }, 10);
     }
 
 }

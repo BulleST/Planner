@@ -1,4 +1,6 @@
 import { Column, FilterType, MaskType } from "../helpers/column.interface";
+import { Empresa } from "./empresa.model";
+import { ProdutoTributacaoRel, ProdutoTributacaoRelRequest } from "./produto-tributacao-rel.model";
 import { TipoAtivo } from "./tipoAtivo.model";
 import { TipoLiquidez } from "./tipoLiquidez.model";
 import { TipoRisco } from "./tipoRisco.model";
@@ -7,13 +9,28 @@ import { Tributacao } from "./tributacao.model";
 export class Produto {
     id: number = undefined as unknown as number;
     empresa_Id: number = undefined as unknown as number;
-    tipoAtivo: TipoAtivo = undefined as unknown as TipoAtivo;
+    empresa?: Empresa;
     tipoAtivo_Id: number = undefined as unknown as number;
-    tipoRisco: TipoRisco = undefined as unknown as TipoRisco;
+    tipoAtivo?: TipoAtivo;
     tipoRisco_Id: number = undefined as unknown as number;
-    tipoLiquidez: TipoLiquidez = undefined as unknown as TipoLiquidez;
+    tipoRisco?: TipoRisco;
     tipoLiquidez_Id: number = undefined as unknown as number;
+    tipoLiquidez?: TipoLiquidez;
     tributacao: Tributacao[] = [];
+    produtoTributacaoRel: ProdutoTributacaoRel[] = [];
+    taxaAdm: number =  '' as unknown as number;
+    taxaPfee: number = '' as unknown as number;
+    cm?: boolean;
+    descricao: string = '';
+}
+
+export class ProdutoRequest {
+    id: number = 0;
+    empresa_Id: number = 0;
+    tipoAtivo_Id: number = undefined as unknown as number;
+    tipoRisco_Id: number = undefined as unknown as number;
+    tipoLiquidez_Id: number = undefined as unknown as number;
+    produtoTributacaoRel: ProdutoTributacaoRelRequest[] = [];
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;
     cm?: boolean;
@@ -63,7 +80,7 @@ export var produtoColumns: Column[] = [
         filterType: FilterType.numeric, 
         filterDisplay: 'menu',
         mask: MaskType.percentage,
-        decimal: '1.2'
+        decimal: '1.0-2'
      },
     { 
         field: 'taxaPfee', 
@@ -71,6 +88,6 @@ export var produtoColumns: Column[] = [
         filterType: FilterType.numeric, 
         filterDisplay: 'menu',
         mask: MaskType.percentage,
-        decimal: '1.2'
+        decimal: '1.0-2'
      },
 ];

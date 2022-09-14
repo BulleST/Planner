@@ -25,7 +25,7 @@ export class ListComponent implements OnInit {
   loading = true;
   columns = empresaColumns;
   filters: string[] = [];
-  tableLinks: MenuTableLink[] = []
+  tableLinks: MenuTableLink[] = [];
   
   constructor(
     private table: Table,
@@ -49,7 +49,7 @@ export class ListComponent implements OnInit {
     this.tableLinks = [
         { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
         { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
-    ]
+    ];
   }
 
   ngOnInit(): void {

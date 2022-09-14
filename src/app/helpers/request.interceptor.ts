@@ -18,9 +18,21 @@ export class RequestInterceptor implements HttpInterceptor {
         private table: Table
     ) { }
 
-    excludeUrls = []
+    excludeUrls = [
+        'tributacao/getAll',
+        'tipoLiquidez/getAll',
+        'tipoRisco/getAll',
+        'tipoAtivo/getAll',
+        'perfilAcesso/getPerfilList',
+        'perfilInvestidor',
+    ]
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.table.loading.next(true);
+        var a = this.excludeUrls.filter(x => request.url.includes(x));
+        console.log(a)
+        console.log(request.url)
+        if (a.length == 0) {
+          this.table.loading.next(true);
+        }
         this.table.resetSelection();
         return next.handle(request).pipe(
             tap((data: any) => {

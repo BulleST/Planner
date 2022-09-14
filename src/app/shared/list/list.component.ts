@@ -114,7 +114,7 @@ export class ListComponent implements OnInit, OnChanges {
         for (const prop of nestedProperties) {
             value = value[prop];
         }
-        if (col.mask && value) {
+        if (col.mask && value != undefined && value.toString().trim() != '') {
             if (col.mask == MaskType.percentage) {
                 try {
                     value = this.currency.transform(value.toString(), 'BRL', '', col.decimal) + '%';

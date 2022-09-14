@@ -132,7 +132,8 @@
                  #listOne="cdkDropList"
                  [cdkDropListData]="_tributacao"
                  [cdkDropListConnectedTo]="[listTwo]"
-                 (cdkDropListDropped)="drop($event)">
+                 (cdkDropListDropped)="drop($event)"
+                 [class.empty]="objeto.tributacao.length == 0 && !loading">
                 <div *ngIf="_tributacao.length == 0 && loadingTributacao" class="bg-light d-flex align-items-center justify-content-center flex-column" style="height: 300px;">
                     <span class="spinner-border spinner-border-sm"></span>
                     <p class="mt-1">Carregando...</p>

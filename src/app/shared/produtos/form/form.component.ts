@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Produto } from 'src/app/models/produto.model';
+import { Produto, ProdutoRequest } from 'src/app/models/produto.model';
 import { TipoAtivo } from 'src/app/models/tipoAtivo.model';
 import { TipoLiquidez } from 'src/app/models/tipoLiquidez.model';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
@@ -23,7 +23,7 @@ export class FormProdutoComponent implements OnInit {
     @Input() objeto: Produto = new Produto;
     @Input() loading = false;
     @Input() erro: any[] = [];
-    @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
+    @Output() sendData: EventEmitter<ProdutoRequest> = new EventEmitter<ProdutoRequest>();
 
     _tributacao: Tributacao[] = [];
     _tipoAtivo: TipoAtivo[] = [];
@@ -47,29 +47,51 @@ export class FormProdutoComponent implements OnInit {
         this.dropdownService.getTributacao().subscribe({
             next: (res) => {
                 this._tributacao = res.filter(x => !this.objeto.tributacao.map(y => y.id).includes(x.id))
+                this.loadingTributacao = false;
             },
-            error: (err) => console.error(err),
+            error: (err) => {
+                console.error(err)
+                this.loadingTributacao = false;
+            },
             complete: () => this.loadingTributacao = false
         });
 
         this.dropdownService.tipoLiquidez.subscribe(res => this._tipoLiquidez = res);
         this.dropdownService.getLiquidez().subscribe({
-            next: (res) => this._tipoLiquidez = res,
-            error: (err) => console.error(err),
+            next: (res) => {
+                this._tipoLiquidez = res
+                this.loadingLiquidez = false;
+            },
+            error: (err) => {
+                console.error(err)
+                this.loadingLiquidez = false;
+            },
             complete: () => this.loadingLiquidez = false
         });
 
         this.dropdownService.tipoRisco.subscribe(res => this._tipoRisco = res);
         this.dropdownService.getRisco().subscribe({
-            next: (res) => this._tipoRisco = res,
-            error: (err) => console.error(err),
+            next: (res) => {
+                this._tipoRisco = res
+                this.loadingRisco = false
+            },
+            error: (err) => {
+                console.error(err)
+                this.loadingRisco = false;
+            },
             complete: () => this.loadingRisco = false
         });
 
         this.dropdownService.tipoAtivo.subscribe(res => this._tipoAtivo = res);
         this.dropdownService.getAtivo().subscribe({
-            next: (res) => this._tipoAtivo = res,
-            error: (err) => console.error(err),
+            next: (res) => {
+                this._tipoAtivo = res
+                this.loadingAtivo = false
+            },
+            error: (err) => {
+                console.error(err)
+                this.loadingAtivo = false;
+            },
             complete: () => this.loadingAtivo = false
         });
 
@@ -90,7 +112,20 @@ export class FormProdutoComponent implements OnInit {
             return;
         }
         this.erro = [];
-        this.sendData.emit(form);
+
+        let model: ProdutoRequest = {
+            id: this.objeto.id,
+            empresa_Id: this.objeto.empresa_Id,
+            tipoAtivo_Id: this.objeto.tipoAtivo_Id, 
+            tipoRisco_Id: this.objeto.tipoRisco_Id, 
+            tipoLiquidez_Id: this.objeto.tipoLiquidez_Id, 
+            produtoTributacaoRel: this.objeto.tributacao.map(x => ({ tributacao_Id: x.id})),
+            taxaAdm: this.objeto.taxaAdm, 
+            taxaPfee: this.objeto.taxaPfee, 
+            descricao: this.objeto.descricao.trim(),
+        }
+
+        this.sendData.emit(model);
     }
     drop(event: CdkDragDrop<Tributacao[]>) {
         if (event.previousContainer === event.container) {

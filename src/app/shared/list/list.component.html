@@ -1,8 +1,5 @@
 <div *ngIf="list.length == 0 && !loading" class="p-2">
-    <p>Nenhum registro cadastrado. <a *ngIf="canCreate" [routerLink]="createLink">Clique aqui para adicionar</a></p>
-</div>
-<div class="loading" [class.active]="loading">
-    <span class="spinner-border my-3"></span>
+    <p>Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink">Clique aqui para adicionar</a></p>
 </div>
 <div class="content" *ngIf="list.length > 0">
     <p-table
@@ -94,7 +91,6 @@
             </tr>
         </ng-template>
     </p-table>
-</div>
 <div class="actions__nav" *ngIf="tableLinks.length > 0">
     <div class="actions__nav-inner" *ngIf="selected">
         <a class="actions__nav-link" 
@@ -103,4 +99,5 @@
         <!-- <a class="actions__nav-link" [routerLink]="['editar', encryptValue(selected?.id)]">Editar</a>
         <a class="actions__nav-link" [routerLink]="['excluir', encryptValue(selected?.id)]">Excluir</a> -->
     </div>
+</div>
 </div>

@@ -38,37 +38,42 @@ export class DropdownService {
     }
 
     getAtivo() {
-        return this.http.get<TipoAtivo[]>(`${this.url}/TipoAtivo/getAll`).pipe(map(res => {
+        return this.http.get<TipoAtivo[]>(`${this.url}/tipoAtivo/getAll`).pipe(map(res => {
             this.tipoAtivo.next(res);
             return res;
         }));
     }
+
     getRisco() {
-        return this.http.get<TipoRisco[]>(`${this.url}/TipoRisco/getAll`).pipe(map(res => {
+        return this.http.get<TipoRisco[]>(`${this.url}/tipoRisco/getAll`).pipe(map(res => {
             this.tipoRisco.next(res);
             return res;
         }));
     }
+
     getLiquidez() {
-        return this.http.get<TipoLiquidez[]>(`${this.url}/TipoLiquidez/getAll`).pipe(map(res => {
+        return this.http.get<TipoLiquidez[]>(`${this.url}/tipoLiquidez/getAll`).pipe(map(res => {
             this.tipoLiquidez.next(res);
             return res;
         }));
     }
+
     getPerfilAcesso() {
-        return this.http.get<PerfilAcesso[]>(`${this.url}/PerfilAcesso/getPerfilList`).pipe(map(res => {
+        return this.http.get<PerfilAcesso[]>(`${this.url}/perfilAcesso/getPerfilList`).pipe(map(res => {
             this.perfilAcesso.next(res);
             return res;
         }));
     }
+
     getTributacao() {
-        return this.http.get<Tributacao[]>(`${this.url}/Tributacao/getAll`).pipe(map(res => {
+        return this.http.get<Tributacao[]>(`${this.url}/tributacao/getAll`).pipe(map(res => {
             this.tributacao.next(res);
             return res;
         }));
     }
+
     getPerfilInvestidor() {
-        return this.http.get<PerfilInvestidor[]>(`${this.url}/PerfilInvestidor`).pipe(map(res => {
+        return this.http.get<PerfilInvestidor[]>(`${this.url}/perfilInvestidor`).pipe(map(res => {
             this.perfilInvestidor.next(res);
             return res;
         }));

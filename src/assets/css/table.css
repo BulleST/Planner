@@ -141,7 +141,7 @@ td.td-actions {
     top: 0;
     right: 0;
     left: 0;
-    transform: translate(-100%, -10px);
+    transform: translate(-60%, 40%);
     z-index: 5;
     opacity: 0;
     visibility: hidden;
@@ -303,7 +303,7 @@ tbody tr .btn {
 }
 
 .p-column-filter-overlay-menu .p-column-filter-operator {
-    padding: 0.75rem 1.25rem;
+    padding: 10px;
     border-bottom: 1px solid #dee2e6;
     color: #343a40;
     background: #f8f9fa;
@@ -435,7 +435,7 @@ tbody tr .btn {
 }
 
 .p-column-filter-overlay-menu .p-column-filter-constraint {
-    padding: 13px 20px;
+    padding: 10px;
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -448,7 +448,7 @@ tbody tr .btn {
 }
 
 .p-column-filter-overlay-menu .p-column-filter-add-rule {
-    padding: 0 20px;
+    padding: 0 10px;
 }
 
 /* .p-button.p-button-sm {
@@ -495,7 +495,7 @@ tbody tr .btn {
 }
 
 .p-column-filter-overlay-menu .p-column-filter-buttonbar {
-    padding: 12px 20px;
+    padding: 5px 0px;
 }
 
 .p-button.p-button-outlined {
@@ -530,12 +530,10 @@ tbody tr .btn {
 .p-button.p-button-text.p-column-filter-add-button,
 .p-button,
 .p-button.p-button-outlined {
-    background-color: var(--pink);
-    border: 1px var(--pink) solid;
     background-color: var(--grey);
     border: 1px var(--grey) solid;
     color: #fff;
-    padding: 5px 25px;
+    padding: 5px 15px;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -554,6 +552,11 @@ tbody tr .btn {
 .p-column-filter-menu-button-open {
     background: #f9f9f92b;
     /* color: #000000; */
+}
+
+.p-button.p-button-text.p-column-filter-add-button .p-button-icon {
+    font-size: 9px;
+    margin: 0 5px -3px;
 }
 
 .p-column-filter-menu-button,

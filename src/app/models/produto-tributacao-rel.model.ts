@@ -3,8 +3,13 @@ import { Tributacao } from "./tributacao.model";
 
 export class ProdutoTributacaoRel {
     id: number = 0;
+    produto_Id: number = 0;
+    tributacao_Id: number = 0;
+    
     produto: Produto = new Produto;
-    produto_Id: number = undefined as unknown as number;
     tributacao: Tributacao = new Tributacao;
-    tributacao_Id: number = undefined as unknown as number;
+}
+
+export class ProdutoTributacaoRelRequest {
+    tributacao_Id: number = 0;
 }

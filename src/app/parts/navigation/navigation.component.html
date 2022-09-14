@@ -1,0 +1,55 @@
+<aside class="navigation" [class.open]="menuOpen">
+    <button class="navigation__toggle" (click)="toggleAside()">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="navigation__content">
+        <div class="navigation__logo">
+            <h3>Logo</h3>
+            <hr>
+        </div>
+        <div class="navigation__links">
+            <a class="navigation__links-item" [routerLink]="['minha-empresa']">
+                <span class="navigation__item-icon">
+                    <i class="pi pi-wallet"></i>
+                </span>
+               Minha empresa
+            </a>
+            <a class="navigation__links-item" [routerLink]="['empresas']">
+                <span class="navigation__item-icon">
+                    <fa-icon [icon]="faCity"></fa-icon>
+                </span>
+               Empresas
+            </a>
+            <a class="navigation__links-item" [routerLink]="['clientes']">
+                <span class="navigation__item-icon">
+                    <i class="pi pi-wallet"></i>
+                </span>
+               Clientes
+            </a>
+            <a class="navigation__links-item" [routerLink]="['produtos']">
+                <span class="navigation__item-icon">
+                    <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
+                </span>
+                Produtos
+            </a>
+            <a class="navigation__links-item" [routerLink]="['setup']">
+                <span class="navigation__item-icon">
+                    <i class="pi pi-wallet"></i>
+                </span>
+                Setup
+            </a>
+            <a class="navigation__links-item" [routerLink]="['usuarios']">
+                <span class="navigation__item-icon">
+                    <fa-icon [icon]="faUsers"></fa-icon>
+                </span>
+                Usuários
+            </a>
+            <a class="navigation__links-item" [routerLink]="['percentual-risco']">
+                <span class="navigation__item-icon">
+                    <fa-icon [icon]="faPercent"></fa-icon>
+                </span>
+               Percentual de Risco
+            </a>
+        </div>
+    </div>
+</aside>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Loading } from 'src/app/utils/loading';
+import { Table } from 'src/app/utils/table';
 
 @Component({
   selector: 'app-loading',
@@ -9,9 +10,9 @@ import { Loading } from 'src/app/utils/loading';
 export class LoadingComponent implements OnInit {
   loading = false;
   constructor(
-    private _loading: Loading
+    private table: Table
   ) { 
-    this._loading.loading.subscribe(res => this.loading = res);
+    this.table.loading.subscribe(res => this.loading = res);
   }
 
   ngOnInit(): void {

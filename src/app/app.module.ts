@@ -74,6 +74,7 @@ export class AppModule {
         private config: PrimeNGConfig
 
     ) {
+
         this.config.setTranslation({
             startsWith: 'Começa com',
             contains: 'Contem',

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faEllipsisV, faFilter, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { Column} from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
-import { CarteiraProdutoList as CarteiraProdutoRelList, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraProdutoRel, setupRelColumns } from 'src/app/models/carteira-produto-rel';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -24,7 +24,7 @@ export class SetupComponent implements OnInit {
     faEllipsisV = faEllipsisV;
 
     objeto: Empresa = new Empresa;
-    setupColumns: Column[] = setupColumns;
+    setupColumns: Column[] = setupRelColumns;
     tableLinks: MenuTableLink[] = [];
     loading = false;
     selected?: any;
@@ -32,7 +32,7 @@ export class SetupComponent implements OnInit {
     filters: string[] = [];
     list: any[] = [];
 
-    rels: CarteiraProdutoRelList[] = []
+    rels: CarteiraProdutoRel[] = []
     
     constructor(
         private empresaService: EmpresaService,
@@ -47,16 +47,18 @@ export class SetupComponent implements OnInit {
             this.rels = []
             this.objeto.carteiraSetup.map(carteiraSetup => {
                 carteiraSetup.carteiraProdutoRel.map(rel => {
-                        var obj: CarteiraProdutoRelList = {
+                        var obj: CarteiraProdutoRel = {
                             id: rel.id,
                             carteiraSetup_Id: carteiraSetup.id,
-                            carteiraSetup: carteiraSetup.nome,
+                            carteiraSetup: carteiraSetup,
                             percentual: rel.percentual,
-                            produto: rel.produtoTributacaoRel.produto.descricao,
-                            produto_Id: rel.produtoTributacaoRel.produto_Id,
-                            tributacao: rel.produtoTributacaoRel.tributacao.descricao,
-                            tributacao_Id: rel.produtoTributacaoRel.tributacao_Id,
-                            aliquota: rel.produtoTributacaoRel.tributacao.aliquota,
+                            produtoTributacao_Id: rel.produtoTributacaoRel.id,
+                            produtoTributacaoRel: rel.produtoTributacaoRel,
+                            // produto: rel.produtoTributacaoRel.produto,
+                            // produto_Id: rel.produtoTributacaoRel.produto_Id,
+                            // tributacao: rel.produtoTributacaoRel.tributacao,
+                            // tributacao_Id: rel.produtoTributacaoRel.tributacao_Id,
+                            // aliquota: rel.produtoTributacaoRel.tributacao.aliquota,
                         };
                         this.rels.push(obj)
                     return rel;

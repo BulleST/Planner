@@ -37,13 +37,16 @@ export class ListComponent implements OnInit {
     this.table.loading.subscribe(res => this.loading = res);
     this.table.selected.subscribe(res => this.selected = res);
     this.table.selectedItems.subscribe(res => this.selectedItems = res);
-    this.empresaService.getList().subscribe(res => {
-      this.list = res;
-      this.list.map(item => {
-        item.cnpj = this.mask.applyMask(item.cnpj.toString().padStart(14, '0'), '00.000.000/0000-00') as unknown as number;
-        return item;
-      });
-      this.loading = false;
+    this.empresaService.getList().subscribe({
+        next: (res) => {
+            this.list = res;
+            this.loading = false;
+
+            //   this.list.map(item => {
+            //     item.cnpj = this.mask.applyMask(item.cnpj.toString().padStart(14, '0'), '00.000.000/0000-00') as unknown as number;
+            //     return item;
+            //   });
+        }
     });
 
     this.tableLinks = [

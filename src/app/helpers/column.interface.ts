@@ -1,11 +1,17 @@
+import { FilterMatchMode } from "primeng/api";
+
 export interface Column {
     field: string; 
     header: string, 
-    filterType: FilterType, 
-    filterDisplay: 'menu',
-    mask: MaskType,
+    maskType: MaskType,
+    mask?: string;
     decimal?: string,
     moeda?: string
+    filterType: FilterType, 
+    filterDisplay: FilterDisplay,
+    filterShowMatchMode?: boolean;
+    filterShowAddButton?: boolean;
+    filterMatchMode?: FilterMatchMode;
 }
 
 export enum FilterType {
@@ -19,10 +25,16 @@ export enum FilterDisplay {
     menu = 'menu'
 }
 
+
+
 export enum MaskType {
     undefined,
     money = 'money',
     percentage = 'percentage',
     date = 'date',
     dateTime = 'dateTime',
+    cnpj = 'cnpj',
+    cpf = 'cpf',
+    rg = 'rg',
+    any = 'any',
 }

@@ -12,7 +12,13 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DeleteRelComponent } from './delete-rel/delete-rel.component';
 import { NgxMaskModule } from 'ngx-mask';
-
+import { ChartModule } from 'primeng/chart';
+import { RiscoComponent } from './risco/risco.component';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TableModule } from 'primeng/table';
+import { SliderModule } from 'primeng/slider';
+import { ProgressBarModule } from 'primeng/progressbar';
 @NgModule({
     declarations: [
         CarteiraSetupComponent,
@@ -20,7 +26,8 @@ import { NgxMaskModule } from 'ngx-mask';
         CreateComponent,
         EditComponent,
         DeleteComponent,
-        DeleteRelComponent
+        DeleteRelComponent,
+        RiscoComponent
     ],
     imports: [
         CommonModule,
@@ -28,7 +35,13 @@ import { NgxMaskModule } from 'ngx-mask';
         SharedModule,
         ToastrModule,
         FormsModule,
-        NgxMaskModule.forChild()
+        NgxMaskModule.forChild(),
+        ChartModule,
+        NgbPopoverModule,
+        FontAwesomeModule,
+        TableModule,
+        SliderModule,
+        ProgressBarModule
     ],
     exports: [
         CreateComponent

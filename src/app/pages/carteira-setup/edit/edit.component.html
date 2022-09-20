@@ -1,24 +1,19 @@
-<div class="modal" [class.active]="modalOpen">
-    <div class="modal__bg" (click)="voltar()"></div>
-    <div class="modal__inner" style="max-width: 1000px;">
-        <div class="modal__content">
-            <div class="modal__header pb-2">
-                <h3 class="text-orange">Editar carteira setup</h3>
-                <a (click)="voltar()" class="modal__header-close btn-close">
-                    <span></span>
-                    <span></span>
-                </a>
-            </div>
-            <div class="modal__body mt-0">
-                <app-form-carteira-setup
-                    [objeto]="objeto" 
-                    [produtos]="produtos"
-                    [carteirasSetup]="carteirasSetup" 
-                    [loading]="loading"
-                    [erro]="erro"
-                    (sendData)="send($event)"
-                ></app-form-carteira-setup>
-            </div>
+<div class="modal__content">
+    <div class="modal__header pt-1 pb-2">
+        <div>
+            <a class="link text-dark" href="" (click)="voltar()">
+                <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
+            </a>
+            <h3 class="text-orange">Editar carteira setup</h3>
         </div>
+    </div>
+    <div class="modal__body mt-0">
+        <app-form-carteira-setup
+                                 [objeto]="objeto"
+                                 [produtos]="produtos"
+                                 [carteirasSetup]="carteirasSetup"
+                                 [loading]="loading"
+                                 [erro]="erro"
+                                 (sendData)="send($event)"></app-form-carteira-setup>
     </div>
 </div>

@@ -4,7 +4,7 @@ import { faArrowLeft, faArrowRight, faCheck, faFileCircleCheck, faPercent } from
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
-import { setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { setupRelColumns } from 'src/app/models/carteira-produto-rel';
 import { Empresa } from 'src/app/models/empresa.model';
 import { percentualRiscoColumns } from 'src/app/models/percentual-risco.model';
 import { EmpresaService } from 'src/app/services/empresa.service';

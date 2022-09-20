@@ -1,8 +1,7 @@
-import { CarteiraProdutoRel, /* CarteiraProdutoRequest, CarteiraSetupRelRequest*/ } from "./carteiraSetup-produto.model";
+import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { CarteiraSetup } from "./carteiraSetup.model";
 import { Cliente } from "./cliente.model";
 import { PercentualRisco } from "./percentual-risco.model";
-import { PerfilInvestidor } from "./perfilInvestidor.model";
 import { Produto } from "./produto.model";
 import { Usuario } from "./usuario.model";
 
@@ -19,16 +18,6 @@ export class Empresa {
 }
 
 
-// export class Empresa {
-//     nome: string = '';
-//     cnpj: number = '' as unknown as number;
-//     email: string = '';
-//     usuario: Usuario[] = [];
-//     produto: Produto[] = [];
-//     carteiraSetup: CarteiraProdutoRequest[] = [];
-//     percentualRisco: PercentualRisco[] = [];
-// }
-
 
 export class EmpresaEditRequest {
     id: number = 0;
@@ -40,9 +29,33 @@ export class EmpresaEditRequest {
 
 
 
-export var empresaColumns = [
-    { field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },
-    { field: 'nome', header: 'Razão Social', filterType: 'text', filterDisplay: 'menu' },
-    { field: 'cnpj', header: 'CNPJ', filterType: 'text', filterDisplay: 'menu' },
-    { field: 'email', header: 'E-mail', filterType: 'text', filterDisplay: 'menu' },
+export var empresaColumns: Column[] = [
+    { 
+        field: 'id', 
+        header: 'Id', 
+        filterType: FilterType.text, 
+        filterDisplay: FilterDisplay.menu,
+        maskType: MaskType.undefined
+    },
+    { 
+        field: 'nome', 
+        header: 'Razão Social', 
+        filterType: FilterType.text, 
+        filterDisplay: FilterDisplay.menu,
+        maskType: MaskType.undefined
+    },
+    { 
+        field: 'cnpj', 
+        header: 'CNPJ', 
+        filterType: FilterType.text, 
+        filterDisplay: FilterDisplay.menu,
+        maskType: MaskType.cnpj
+    },
+    { 
+        field: 'email', 
+        header: 'E-mail', 
+        filterType: FilterType.text, 
+        filterDisplay: FilterDisplay.menu,
+        maskType: MaskType.undefined
+    },
   ]

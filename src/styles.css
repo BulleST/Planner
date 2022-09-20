@@ -21,6 +21,7 @@
     --grey: #181818;
     --grey-light: #242424;
     --red: #e81717;
+    --yellow: #f9a814;
 }
 
 * {
@@ -592,11 +593,16 @@ a.btn-pink.disabled:not([href]) {
 .link {
     color: var(--primary);
     font-weight: 600;
-    text-decoration: underline;
+    text-decoration: none;
 }
-
+.text-dark {
+    color: #343a40 !important;
+}
 .link:hover {
     color: var(--primary-dark);
+}
+.link svg {
+    font-size: 12px;
 }
 
 .form-control,
@@ -1726,3 +1732,49 @@ body {
     flex: 1 0 auto;
     margin-bottom: 5px;
 }
+
+.p-progressbar {
+    height: 15px;
+    background-color: #d8dadc;
+    border-radius: 6px;
+}
+
+.p-progressbar .p-progressbar-value {
+    border: 0 none;
+    margin: 0;
+    background: var(--primary-light);
+}
+
+.p-progressbar .p-progressbar-label {
+    line-height: 1;
+    display: inline-flex!important;
+    font-size: 11px;
+    color: #fff;
+}
+
+.p-slider-horizontal {
+    width: 14rem;
+}
+
+.p-slider.p-slider-horizontal {
+    height: 0.286rem;
+}
+
+.p-slider .p-slider-range {
+    background: var(--primary);
+}
+
+.p-slider .p-slider-handle {
+    height: 1.143rem;
+    width: 1.143rem;
+    background: #ffffff;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.p-slider.p-slider-horizontal .p-slider-handle {
+    margin-top: -0.5715rem;
+    margin-left: -0.5715rem;
+}
+

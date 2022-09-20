@@ -23,61 +23,61 @@ export var percentualRiscoColumns: Column[] = [
         header: 'Id', 
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.undefined, 
+        maskType: MaskType.undefined, 
     },
     { 
         field: 'perfilInvestidor.descricao', 
         header: 'Perfil Investidor', 
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.undefined, 
+        maskType: MaskType.undefined, 
     },
     { 
         field: 'baixissimo', 
         header: 'Baixissimo', 
         filterType: FilterType.numeric, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.percentage, 
-        decimal: '1.0-2'
+        maskType: MaskType.percentage, 
+        decimal: '1.0-2',
     },
     { 
         field: 'baixo', 
         header: 'Baixo', 
         filterType: FilterType.numeric, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.percentage, 
-        decimal: '1.0-2'
+        maskType: MaskType.percentage, 
+        decimal: '1.0-2',
     },
     { 
         field: 'moderado', 
         header: 'Moderado', 
         filterType: FilterType.numeric, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.percentage, 
-        decimal: '1.0-2'
+        maskType: MaskType.percentage, 
+        decimal: '1.0-2',
     },
     { 
         field: 'arrojado', 
         header: 'Arrojado', 
         filterType: FilterType.numeric, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.percentage, 
-        decimal: '1.0-2'
+        maskType: MaskType.percentage, 
+        decimal: '1.0-2',
     },
     { 
         field: 'superArrojado', 
         header: 'Super Arrojado', 
         filterType: FilterType.numeric, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.percentage, 
-        decimal: '1.0-2'
+        maskType: MaskType.percentage, 
+        decimal: '1.0-2',
     },
     { 
         field: 'hedge', 
         header: 'Hedge', 
         filterType: FilterType.numeric, 
         filterDisplay: FilterDisplay.menu,
-        mask: MaskType.percentage, 
-        decimal: '1.0-2'
+        maskType: MaskType.percentage, 
+        decimal: '1.0-2',
     },
 ]

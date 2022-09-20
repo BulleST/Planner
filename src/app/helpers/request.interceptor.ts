@@ -28,8 +28,6 @@ export class RequestInterceptor implements HttpInterceptor {
     ]
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var a = this.excludeUrls.filter(x => request.url.includes(x));
-        console.log(a)
-        console.log(request.url)
         if (a.length == 0) {
           this.table.loading.next(true);
         }

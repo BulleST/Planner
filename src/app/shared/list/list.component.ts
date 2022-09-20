@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -31,6 +31,7 @@ export class ListComponent implements OnInit, OnChanges {
     @Input() sortTable = true;
     @Input() menuTable = true;
     @Input() canCreate = true;
+    @Input() selectable = true;
     @Input() columns = [{ field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },];
     @Input() tableLinks: MenuTableLink[] = [];
 
@@ -51,23 +52,16 @@ export class ListComponent implements OnInit, OnChanges {
         this.table.loading.subscribe(res => {
             this.loading = res
         });
-        this.table.selected.subscribe(res => {
-            this.selected = res;
-            if (this.selected) {
-                this.tableLinks.map(link => {
-                    if (link.paramsFieldName != undefined && link.paramsFieldName.length) {
-                        var paramnsMap = link.paramsFieldName.map(p => {
-                            return this.crypto.encrypt(this.selected[p]) ?? '';
-                        })
-                        link.fullRoute = [].concat(link.routePath as never[], paramnsMap as never[])
-                    } else {
-                        link.fullRoute = link.routePath;
-                    }
-                    return link
-                });
-            }
-        });
-        this.table.selectedItems.subscribe(res => this.selectedItems = res);
+
+        if (this.selectable) {
+            this.table.selected.subscribe(res => {
+                this.selected = res;
+                if (this.selected) {
+                   this.tableLinks = this.table.encryptParams(this.tableLinks);
+                }
+            });
+            this.table.selectedItems.subscribe(res => this.selectedItems = res);
+        }
 
     }
 
@@ -77,6 +71,8 @@ export class ListComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['list'])
             this.list = changes['list'].currentValue;
+        if (changes['selectable'])
+            this.selectable = changes['selectable'].currentValue;
         if (changes['createLink'])
             this.createLink = changes['createLink'].currentValue;
         if (changes['filterLink'])
@@ -108,29 +104,8 @@ export class ListComponent implements OnInit, OnChanges {
         this.table.onAllRowToggle(event);
     }
 
-    getCellData(row: any, col: any): any {
-        const nestedProperties: string[] = col.field.split('.');
-        let value: any = row;
-        for (const prop of nestedProperties) {
-            value = value[prop];
-        }
-        if (col.mask && value != undefined && value.toString().trim() != '') {
-            if (col.mask == MaskType.percentage) {
-                try {
-                    value = this.currency.transform(value.toString(), 'BRL', '', col.decimal) + '%';
-                } catch (e) {
-                }
-            } else if (col.mask == MaskType.money) {
-                value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
-            } else if (col.mask == MaskType.date) {
-
-            } else if (col.mask == MaskType.dateTime) {
-
-            } else {
-                return value ?? '-';
-            }
-        }
-        return value ?? '-';
+    getCellData(row: any, col: Column): any {
+        return this.table.getCellData(row, col);
     }
 }
 

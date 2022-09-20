@@ -2,6 +2,11 @@ import { HostListener, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as $ from 'jquery';
 import { ToastrService } from 'ngx-toastr';
+import { Crypto } from './crypto';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { MaskApplierService } from 'ngx-mask';
+import { Column, MaskType } from '../helpers/column.interface';
+import { MenuTableLink } from '../helpers/menu-links.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +19,10 @@ export class Table {
 
     constructor(
         private toastr: ToastrService,
+        private crypto: Crypto,
+        private currency: CurrencyPipe,
+        private mask: MaskApplierService,
+        private datePipe: DatePipe,
     ) {
     }
 
@@ -97,5 +106,49 @@ export class Table {
         }
       }, 10);
     }
+
+    
+    getCellData(row: any, col: Column): any {
+        const nestedProperties: string[] = col.field.split('.');
+        let value: any = row;
+        for (const prop of nestedProperties) {
+            value = value[prop];
+        }
+        if (col.maskType && value != undefined && value.toString().trim() != '') {
+            if (col.maskType == MaskType.percentage) {
+                value = this.currency.transform(value.toString(), 'BRL', '', col.decimal) + '%';
+            } else if (col.maskType == MaskType.money) {
+                value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
+            } else if (col.maskType == MaskType.cnpj) {
+                value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');
+            } else if (col.maskType == MaskType.cpf) {
+                value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
+            }else if (col.maskType == MaskType.any && col.mask) {
+                value = this.mask.applyMask(value, col.mask);
+            } else if (col.maskType == MaskType.date) {
+
+            } else if (col.maskType == MaskType.dateTime) {
+
+            } else {
+                return value ?? '-';
+            }
+        }
+        return value ?? '-';
+    }
+
+    encryptParams(tableLinks: MenuTableLink[]) {
+        return tableLinks.map(link => {
+            if (link.paramsFieldName != undefined && link.paramsFieldName.length) {
+                var paramnsMap = link.paramsFieldName.map(p => {
+                    return this.crypto.encrypt(this.selected.value[p]) ?? '';
+                })
+                link.fullRoute = [].concat(link.routePath as never[], paramnsMap as never[])
+            } else {
+                link.fullRoute = link.routePath;
+            }
+            return link;
+        });
+    }
+
 
 }

@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraProdutoRel } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraProdutoRel } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -29,6 +30,7 @@ export class DeleteRelComponent implements OnInit {
         private modal: ModalOpen,
         private empresaService: EmpresaService,
         private setupService: CarteiraSetupService,
+        private setupRelService: CarteiraProdutoRelService,
         private crypto: Crypto,
         private mask: MaskApplierService
     ) {
@@ -71,7 +73,7 @@ export class DeleteRelComponent implements OnInit {
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar')) {
-            let result = this.setupService.delete_Rel_To_Empresa_List(this.objeto.carteiraSetup_Id, this.objeto.id);
+            let result = this.setupRelService.delete_Rel_To_Empresa_List(this.objeto.carteiraSetup_Id, this.objeto.id);
             if (result)
                 this.voltar();
         }

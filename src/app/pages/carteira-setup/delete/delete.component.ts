@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -17,7 +18,7 @@ export class DeleteComponent implements OnInit {
 
     faTimes = faTimes;
     modalOpen = false;
-    objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
+    objeto: CarteiraRequest = new CarteiraRequest;
     erro: any[] = [];
     loading = false;
 
@@ -27,6 +28,7 @@ export class DeleteComponent implements OnInit {
         private modal: ModalOpen,
         private empresaService: EmpresaService,
         private setupService: CarteiraSetupService,
+        private setupRelService: CarteiraProdutoRelService,
         private crypto: Crypto,
     ) {
         this.modal.getOpen().subscribe(res => {
@@ -38,7 +40,7 @@ export class DeleteComponent implements OnInit {
                 this.objeto.id = this.crypto.decrypt(p.get('setup_id'));
                 let objeto = this.empresaService.object?.carteiraSetup.find(x => x.id == this.objeto.id);
                 if (objeto) {
-                    this.objeto = objeto as unknown as CarteiraSetupRelRequest;
+                    this.objeto = objeto as unknown as CarteiraRequest;
                     setTimeout(() => {
                         this.modal.setOpen(true);
                     }, 200);
@@ -61,7 +63,7 @@ export class DeleteComponent implements OnInit {
         this.erro = [];
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
-            let result = this.setupService.delete_To_Empresa_List(this.objeto.id);
+            let result = this.setupRelService.delete_To_Empresa_List(this.objeto.id);
             if (result)
                 this.voltar();
         }

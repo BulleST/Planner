@@ -1,4 +1,5 @@
-import { Column, FilterType, MaskType } from "../helpers/column.interface";
+import { FilterMatchMode } from "primeng/api";
+import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { Empresa } from "./empresa.model";
 import { ProdutoTributacaoRel, ProdutoTributacaoRelRequest } from "./produto-tributacao-rel.model";
 import { TipoAtivo } from "./tipoAtivo.model";
@@ -42,52 +43,73 @@ export var produtoColumns: Column[] = [
     { 
         field: 'id', 
         header: 'Id', 
+        maskType: MaskType.undefined,
         filterType: FilterType.text, 
-        filterDisplay: 'menu',
-        mask: MaskType.undefined
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
      },
     { 
         field: 'descricao', 
         header: 'Nome', 
+        maskType: MaskType.undefined,
         filterType: FilterType.text, 
-        filterDisplay: 'menu',
-        mask: MaskType.undefined
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
      },
     { 
         field: 'tipoAtivo.nome', 
         header: 'Ativo', 
+        maskType: MaskType.undefined,
         filterType: FilterType.text, 
-        filterDisplay: 'menu',
-        mask: MaskType.undefined
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        filterMatchMode: FilterMatchMode.CONTAINS,
      },
     { 
         field: 'tipoRisco.nome', 
         header: 'Risco', 
+        maskType: MaskType.undefined,
         filterType: FilterType.text, 
-        filterDisplay: 'menu',
-        mask: MaskType.undefined
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        filterMatchMode: FilterMatchMode.CONTAINS,
      },
     { 
         field: 'tipoLiquidez.nome', 
         header: 'Liquidez', 
+        maskType: MaskType.undefined,
         filterType: FilterType.text, 
-        filterDisplay: 'menu',
-        mask: MaskType.undefined
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        filterMatchMode: FilterMatchMode.CONTAINS,
      },
     { 
         field: 'taxaAdm', 
         header: 'Taxa ADM', 
+        maskType: MaskType.percentage,
+        decimal: '1.0-2',
         filterType: FilterType.numeric, 
-        filterDisplay: 'menu',
-        mask: MaskType.percentage,
-        decimal: '1.0-2'
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        filterMatchMode: FilterMatchMode.CONTAINS,
      },
     { 
         field: 'taxaPfee', 
         header: 'Taxa PFEE', 
+        maskType: MaskType.percentage,
+        decimal: '1.0-2',
         filterType: FilterType.numeric, 
-        filterDisplay: 'menu',
-        mask: MaskType.percentage,
-        decimal: '1.0-2'
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        filterMatchMode: FilterMatchMode.CONTAINS,
      },
 ];

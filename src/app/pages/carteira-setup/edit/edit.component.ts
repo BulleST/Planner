@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraSetupRelRequest } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
 import { Produto } from 'src/app/models/produto.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { ProdutoService } from 'src/app/services/produto.service';
+import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -20,88 +22,67 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 })
 export class EditComponent implements OnInit {
     faTimes = faTimes;
-    modalOpen = false;
-    objeto: CarteiraSetupRelRequest = new CarteiraSetupRelRequest;
+    faChevronLeft = faChevronLeft;
+    // modalOpen = false;
+    objeto: CarteiraRequest = new CarteiraRequest;
     erro: any[] = [];
     loading = false;
     loadingProduto = false;
     produtos: Produto[] = [];
     carteirasSetup: CarteiraSetup[] = [];
-
+    urlArray = '';
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: ModalOpen,
         private crypto: Crypto,
         private setupService: CarteiraSetupService,
+        private setupRelService: CarteiraProdutoRelService,
         private empresaService: EmpresaService,
+        private produtoService: ProdutoService,
     ) {
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+        // this.modal.getOpen().subscribe(res => {
+        //     this.modalOpen = res;
+        // });
 
-        this.empresaService.empresaObject.subscribe(res => {
-            this.carteirasSetup = res.carteiraSetup;
-            this.produtos = res.produto
-        });
+        this.urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+        if (this.urlArray.includes('empresas/cadastrar')) {
+            this.empresaService.empresaObject.subscribe(res => {
+                this.carteirasSetup = res.carteiraSetup;
+                this.produtos = res.produto;
+            });
+        } else {
+            this.setupService.getList().subscribe({
+                next: (res) => {
+                    this.carteirasSetup = res;
+                }
+            });
+            this.produtoService.getList().subscribe({
+                next: (res) => {
+                    this.produtos = res;
+                    this.produtos.map(p => {
+                        p.tributacao = p.produtoTributacaoRel.map(x => x.tributacao)
+                        return p;
+                    });
+                }
+            });
+        }
 
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         activatedRoute.paramMap.subscribe(p => {
-            if (p.get('setup_id') && p.get('rel_id')) {
-                this.objeto.carteiraSetup_Id = this.crypto.decrypt(p.get('setup_id'));
-                this.objeto.id = this.crypto.decrypt(p.get('rel_id'));
-
-                if (urlArray.includes('empresas/cadastrar')) {
-
-                    let objeto = this.empresaService.object?.carteiraSetup
-                        .find(x => x.id == this.objeto.carteiraSetup_Id);
-                    let rel = objeto?.carteiraProdutoRel
-                            .find(x => x.id == this.objeto.id);
-                    
-                    if (objeto && rel) {
-                        this.objeto = {
-                            id: rel.id, 
-                            empresa_Id: 0, 
-                            carteiraSetup: objeto.nome, 
-                            carteiraSetup_Id: objeto.id,
-                            percentual: rel.percentual, 
-                            produtoTributacaoRel: objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel)
-                        };
-                    }
-                 
-
-                    if (objeto) {
-                        if (this.objeto.id) {
-                            // console.log(objeto.carteiraProdutoRel.find(x => x.id == this.objeto.id))
-                        }
-                        setTimeout(() => {
-                            this.modal.setOpen(true);
-                        }, 200);
-
-                    } else {
+            if (p.get('setup_id')) {
+                this.objeto.id = this.crypto.decrypt(p.get('setup_id'));
+                if (this.urlArray.includes('empresas/cadastrar')) {
+                    let objeto = this.empresaService.object?.carteiraSetup.find(x => x.id == this.objeto.id);
+                    if (!objeto) {
                         this.voltar();
                     }
                 } else {
-                    if (urlArray.includes('empresas/editar')) {
-
-                    }
                     this.setupService.get(this.objeto.id).subscribe({
                         next: (res) => {
-
-                            // this.objeto = res.carteiraProdutoRel.map(x => {
-                            //     return {
-                            //         id: x.id,
-                            //         empresa_Id: res.empresa_Id,
-                            //         carteiraSetup_Id: res.id, // Id da carteiraSetup
-                            //         carteiraSetup: res.nome, // Nome da CarteiraSetup
-                            //         percentual: x.percentual,
-                            //         produto: x.produtoTributacaoRel.produto,
-                            //         produto_Id: x.produtoTributacaoRel.produto_Id,
-                            //         tributacao: x.produtoTributacaoRel.tributacao,
-                            //         tributacao_Id: x.produtoTributacaoRel.tributacao_Id,
-                            //         aliqupta: x.produtoTributacaoRel.aliquota,
-                            //     } as CarteiraSetupRelRequest;
-                            // });
+                            this.objeto.carteiraRiscoRel = res.carteiraRiscoRel;
+                            this.objeto.carteiraProdutoRel = res.carteiraProdutoRel;
+                            this.objeto.empresa_Id = res.empresa_Id;
+                            this.objeto.nome = res.nome;
                         },
                         error: (err) => {
                             this.voltar()
@@ -123,14 +104,13 @@ export class EditComponent implements OnInit {
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            let result = this.setupService.add_To_Empresa_List(this.objeto);
+        if (this.urlArray.includes('empresas/cadastrar')) {
+            let result = this.setupRelService.add_To_Empresa_List(this.objeto);
             if (result)
                 this.voltar();
         }
         else {
-            if (urlArray.includes('empresas/editar')) {
+            if (this.urlArray.includes('empresas/editar')) {
 
             }
             // Enviar para a API

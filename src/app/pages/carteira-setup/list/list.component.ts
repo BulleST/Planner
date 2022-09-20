@@ -1,10 +1,15 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { CarteiraProdutoRel, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
-import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
+import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Column } from 'src/app/helpers/column.interface';
+import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
+import { CarteiraProdutoRel, setupRelColumns } from 'src/app/models/carteira-produto-rel';
+import { CarteiraSetup, setupColumns } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
+import { Table } from 'src/app/utils/table';
 
 @Component({
     selector: 'app-list',
@@ -12,31 +17,71 @@ import { CarteiraSetupService } from 'src/app/services/setup.service';
     styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
+
+    faFilter = faFilter;
+    faEllipsisV = faEllipsisV;
+    faTimes = faTimes;
     objeto: Empresa = new Empresa;
     setupColumns = setupColumns;
     list: CarteiraSetup[] = [];
-
+    tableLinks: MenuTableLink[] = [];
+    loading = false;
+    selected?: any;
+    selectedItems: any[] = [];
+    filters: string[] = [];
+    activityValues: number[] = [0, 100];
 
     constructor(
-        private empresaService: EmpresaService,
+        private setupRelService: CarteiraProdutoRelService,
         private setupService: CarteiraSetupService,
-        private currency: CurrencyPipe,
+        private table: Table,
     ) {
-        // this.empresaService.createEmpresaObject.subscribe(res => {
-        //     this.objeto = res ?? new Empresa;
-        //     this.objeto.produto.map(item => {
-        //         item.taxaAdm = this.currency.transform(item.taxaAdm, 'BRL', '', '1.2') + '%' as unknown as number;
-        //         item.taxaPfee = this.currency.transform(item.taxaPfee, 'BRL', '', '1.2') + '%' as unknown as number;
-        //         return item;
-        //     })
-        // });
 
-        this.setupService.getList(1).subscribe(res => {
+        this.setupService.getList().subscribe(res => {
             this.list = res;
+            this.list.map(x => {
+                x.carteiraRiscoRel = x.carteiraRiscoRel ?? [];
+                let list = x.carteiraRiscoRel.map(y => y.percentual);
+                x.percentualTotal = list.length > 0 ? list.reduce((x,y) => x+y) : 0;
+                x.percentualTotal = 20
+                return x;
+            })
         });
+
+        this.tableLinks = [
+            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+            { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
+        ]
+
+        this.table.loading.subscribe(res => this.loading = res);
+        this.table.selected.subscribe(res => {
+            this.selected = res;
+            if (res) {
+                this.tableLinks = this.table.encryptParams(this.tableLinks);
+            }
+        });
+        this.table.selectedItems.subscribe(res => this.selectedItems = res);
+        this.filters = this.setupColumns.map(x => x.field);
     }
 
     ngOnInit(): void {
     }
+
+    onRowSelect(event: any) {
+        this.table.onRowSelect(event);
+    }
+
+    onRowUnselect(event: any) {
+        this.table.onRowUnselect(event)
+    }
+
+    onAllRowToggle(event: any) {
+        this.table.onAllRowToggle(event);
+    }
+
+    getCellData(row: any, col: Column): any {
+        return this.table.getCellData(row, col);
+    }
+
 
 }

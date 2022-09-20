@@ -2,7 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { faArrowRight, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
-import { CarteiraProdutoRel, setupColumns } from 'src/app/models/carteiraSetup-produto.model';
+import { CarteiraProdutoRel, setupRelColumns } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -15,7 +15,7 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 export class SetupComponent implements OnInit {
     loading = false;
 
-    setupColumns = setupColumns;
+    setupColumns = setupRelColumns;
     objeto: Empresa = new Empresa;
     setup: CarteiraSetup[] = [];
     rels: CarteiraProdutoRel[][] = [];

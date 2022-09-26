@@ -63,7 +63,6 @@
 
 tr {
     position: relative;
-    cursor: pointer;
 }
 
 td,
@@ -176,9 +175,7 @@ a.actions__nav-link:last-child:not([href]) {
     visibility: visible;
 }
 
-tr:hover,
-tr.selected,
-.selected tr {
+tr.selectable {
     cursor: pointer;
 }
 
@@ -201,9 +198,6 @@ tr.selected-many:nth-child(odd) td.td-actions {
     border-bottom: none;
 }
 
-td {
-    cursor: pointer;
-}
 
 .p-checkbox-box.p-highlight {
     background: var(--primary-light);

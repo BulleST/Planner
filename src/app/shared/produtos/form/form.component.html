@@ -123,7 +123,7 @@
             </div>
         </div>
     </div>
-    <div class="form-row d-flex w-100 flex-wrap align-items-stretch">
+    <!-- <div class="form-row d-flex w-100 flex-wrap align-items-stretch">
         <p class="col-12 mb-1">Tributação: <span class="text-danger">*</span></p>
         <p class="col-12 mb-1"><small>Clique e arraste para selecionar as tributações aplicadas a esse produto</small></p>
         <div class="col-lg-6 col-md-6 col-sm-12">
@@ -168,7 +168,39 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
+
+    <p-pickList 
+    [source]="_produtoTributacaoRel" 
+    sourceHeader="Selecione ou arraste para o lado"
+    sourceFilterPlaceholder="Pesquisar"
+    [target]="objeto.produtoTributacaoRel" 
+    targetHeader="Solte aqui para selecionar"
+    targetFilterPlaceholder="Pesquisar"
+    [metaKeySelection]="true"
+    [filterBy]="'tributacao.descricao, tributaca.aliquota'"
+    [dragdrop]="true">
+    <ng-template pTemplate="sourceFilter" let-options="options">
+        <div class="p-picklist-filter">
+            <input ngModel #sourceFilter="ngModel" type="text" (keyup)="options.filter(sourceFilter.value)" role="textbox" class="form-control h-auto" placeholder="Filtrar por nome">
+            <span *ngIf="!sourceFilter.value" class="p-picklist-filter-icon pi pi-search"></span>
+            <span *ngIf="sourceFilter.value" class="p-picklist-filter-icon pi pi-times" (click)="options.reset(); sourceFilter.reset();"></span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="targetFilter" let-options="options">
+        <div class="p-picklist-filter">
+            <input ngModel #targetFilter="ngModel" type="text" (keyup)="options.filter(targetFilter.value)" role="textbox" class="form-control h-auto" placeholder="Filtrar por nome">
+            <span *ngIf="!targetFilter.value" class="p-picklist-filter-icon pi pi-search"></span>
+            <span *ngIf="targetFilter.value" class="p-picklist-filter-icon pi pi-times" (click)="options.reset(); targetFilter.reset()"></span>
+        </div>
+    </ng-template>
+        <ng-template let-item pTemplate="item">
+            <div>
+                {{item.tributacao.descricao}} <br>
+                <strong>Alíquota: </strong> {{ item.tributacao.aliquota | currency : 'BRL' : '' : '1.2-2' }}%
+            </div>
+        </ng-template>
+    </p-pickList>
     <div class="d-flex p-0 mt-1">
         <div *ngIf="erro || form.invalid" class="m-0">
             <p class="text-red" *ngFor="let err of erro">{{err}}</p>

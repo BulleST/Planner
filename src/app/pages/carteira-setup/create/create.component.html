@@ -2,18 +2,18 @@
     <div class="modal__bg" (click)="voltar()"></div>
     <div class="modal__inner" style="max-width: 1500px;"> -->
         <div class="modal__content">
-            <div class="modal__header pb-2">
-                <h3 class="text-orange">Adicionar carteira setup</h3>
-                <!-- <a (click)="voltar()" class="modal__header-close btn-close">
-                    <span></span>
-                    <span></span>
-                </a> -->
+            <div class="modal__header pb-2" style="padding: 0 25px;" >
+                <div>
+                    <a class="link text-dark" href="" (click)="voltar()">
+                        <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
+                    </a>
+                    <h3 class="text-orange">Adicionar carteira setup</h3>
+                </div>
+                <button class="btn btn-yellow" (click)="resetForm()">Limpar campos</button>
             </div>
             <div class="modal__body mt-0">
                 <app-form-carteira-setup
                     [objeto]="objeto"
-                    [produtos]="produtos"
-                    [carteirasSetup]="carteirasSetup"
                     [loading]="loading"
                     [erro]="erro"
                     (sendData)="send($event)"

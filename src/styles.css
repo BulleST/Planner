@@ -595,12 +595,15 @@ a.btn-pink.disabled:not([href]) {
     font-weight: 600;
     text-decoration: none;
 }
+
 .text-dark {
     color: #343a40 !important;
 }
+
 .link:hover {
     color: var(--primary-dark);
 }
+
 .link svg {
     font-size: 12px;
 }
@@ -1203,13 +1206,8 @@ tbody tr.alert-dark:nth-of-type(even) td {
     background-color: var(--primary);
 }
 
-.form-control:disabled,
-.form-control:disabled::placeholder,
-.form-control:disabled::-webkit-datetime-edit-fields-wrapper {
-    color: #5a5a5a;
-    text-decoration: line-through;
-}
-
+/* .form-control:disabled, .form-control:disabled::placeholder, .form-control:disabled::-webkit-datetime-edit-fields-wrapper {
+} */
 .dragDrop-container {
     background: #efefef;
     padding: 10px 10px 10px 10px;
@@ -1747,7 +1745,7 @@ body {
 
 .p-progressbar .p-progressbar-label {
     line-height: 1;
-    display: inline-flex!important;
+    display: inline-flex !important;
     font-size: 11px;
     color: #fff;
 }
@@ -1778,3 +1776,96 @@ body {
     margin-left: -0.5715rem;
 }
 
+.mat-option-text {
+    font-size: 14px !important;
+}
+
+.btn-yellow {
+    background-color: var(--yellow);
+    color: #fff;
+}
+
+.btn-yellow:active,
+.btn-yellow:focus {
+    background-color: #e59606;
+    box-shadow: 0px 0px 0px 2px #f9a81466;
+}
+
+.btn-yellow:hover {
+    background-color: #e59606;
+    color: #fff;
+}
+
+.form-control:disabled {
+    cursor: not-allowed;
+}
+
+.p-picklist-buttons {
+    position: sticky;
+    top: 50%;
+    bottom: 50%;
+}
+
+.p-picklist {
+    align-items: start;
+}
+
+.p-picklist-buttons .p-button {
+    margin: 2px 0px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.p-picklist-list-wrapper {
+    padding: 0px 5px;
+}
+
+.p-picklist-item {
+    opacity: 1;
+    padding: 2px 10px;
+    margin: 0;
+}
+
+.p-picklist-item:hover,
+.p-picklist-item.p-highlight {
+    background-color: #d9d8dd59;
+}
+
+.p-picklist-filter-icon {
+    right: 10px;
+    opacity: 0.7;
+}
+
+.p-picklist-filter-input {
+    border-color: #cbb7b7;
+}
+
+.p-picklist {
+    margin-top: 25px;
+}
+
+.p-picklist-list-wrapper {
+    border: 1px #cbb7b7 solid;
+    margin: 0 15px;
+    padding: 0;
+}
+
+.p-picklist-list {
+    margin-top: 15px;
+}
+
+.p-picklist-filter-container {
+    padding: 10px;
+    border-bottom: 1px #cbb7b7 solid;
+}
+
+.p-picklist-header {
+    padding: 10px;
+    border-bottom: 1px #cbb7b7 solid;
+    background-color: #f1eaea;
+    font-weight: 600;
+}

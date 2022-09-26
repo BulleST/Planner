@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Produto, ProdutoRequest } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -17,6 +17,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 })
 export class CreateComponent implements OnInit {
     faTimes = faTimes;
+    faChevronLeft = faChevronLeft;
     modalOpen = false;
     objeto: Produto = new Produto;
     erro: any[] = [];
@@ -46,6 +47,10 @@ export class CreateComponent implements OnInit {
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
+    }
+
+    resetForm() {
+        this.objeto = new Produto;
     }
 
     voltar() {

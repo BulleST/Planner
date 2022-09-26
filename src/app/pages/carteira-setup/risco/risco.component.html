@@ -1,9 +1,12 @@
 <div class="modal" [class.active]="modalOpen">
     <div class="modal__bg" (click)="voltar()"></div>
-    <div class="modal__inner" style="max-width: 1000px;">
+    <div class="modal__inner" style="max-width: 700px;">
         <div class="modal__content">
-            <div class="modal__header pb-2">
-                <h3 class="text-orange">Adicionar risco</h3>
+            <div class="modal__header pb-2 pl-4">
+                <h3 class="text-orange">
+                    <span *ngIf="isEdit">Editar</span>
+                    <span *ngIf="!isEdit">Adicionar</span> Risco
+                </h3>
                 <a (click)="voltar()" class="modal__header-close btn-close">
                     <span></span>
                     <span></span>
@@ -25,41 +28,45 @@
                                     (change)="objeto.tipoRisco_Id = tipoRisco_Id.value.id"
                                     popoverClass="popover-danger"
                                     [ngbPopover]="campoObrigatorio"
+                                    [disabled]="isEdit"
                                     triggers="mouseenter:mouseleave">
                                 <option [ngValue]="undefined">Selecione</option>
-                                <option [ngValue]="item" *ngFor="let item of _tipoRisco">{{ item.nome }}</option>
+                                <option [ngValue]="item" *ngFor="let item of _tiposRisco">{{ item.nome }}</option>
                             </select>
                             <div *ngIf="tipoRisco_Id.touched && tipoRisco_Id.errors">
                                 <p class="text-danger" *ngIf="tipoRisco_Id.errors['required']">Este campo é obrigatório.</p>
                             </div>
                         </div>
-                        <div class="form-group col-lg-6 col-md-6 col-sm-12" >
+                        <div class="form-group col-lg-6 col-md-6 col-sm-12">
                             <label for="percentual">Percentual: <span class="text-danger">*</span></label>
-                            <input 
-                                class="form-control"
-                                id="percentual"
-                                name="percentual"
-                                mask="separator"
-                                thousandSeparator="."
-                                decimalMarker=","
-                                suffix="%"
-                                #percentual="ngModel"
-                                [(ngModel)]="objeto.percentual"
-                                [max]="maxPercentual"
-                                required>
-                                <div *ngIf="percentual.touched && percentual.errors">
-                                    <p class="text-danger" *ngIf="percentual.errors['required']">Este campo é obrigatório.</p>
-                                    <p class="text-danger" *ngIf="percentual.errors['max']">O percentual máximo agora é {{maxPercentual}}.</p>
-                                </div>
-                                <p class="text-danger" *ngIf="objeto.percentual > maxPercentual">O percentual máximo agora é {{maxPercentual}}%.</p>
+                            <input
+                                   class="form-control"
+                                   id="percentual"
+                                   name="percentual"
+                                   mask="separator"
+                                   thousandSeparator="."
+                                   decimalMarker=","
+                                   suffix="%"
+                                   #percentual="ngModel"
+                                   [(ngModel)]="objeto.percentual"
+                                   [max]="percentualDisponivel"
+                                   placeholder="Máximo de {{percentualDisponivel}}%"
+                                   required>
+                            <div *ngIf="percentual.touched && percentual.errors">
+                                <p class="text-danger" *ngIf="percentual.errors['required']">Este campo é obrigatório.</p>
+                                <p class="text-danger" *ngIf="percentual.errors['max']">O percentual máximo agora é {{percentualDisponivel}}.</p>
+                            </div>
+                            <p class="text-danger" *ngIf="objeto.percentual > percentualDisponivel">O percentual máximo agora é {{percentualDisponivel}}%.</p>
                         </div>
                     </div>
-                    <div class="d-flex p-0 mt-1">
+                    <div class="d-flex py-0 px-1 mt-1">
                         <div *ngIf="erro || form.invalid" class="m-0">
                             <p class="text-red" *ngFor="let err of erro">{{err}}</p>
                             <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
                         </div>
-                        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                        <button class="btn btn-grey" *ngIf="isEdit" [ngClass]="erro.length > 0 || form.invalid ? 'ml-auto mr-1' : 'ml-0'" [disabled]="loading" (click)="excluirRisco()">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Excluir </button>
+                        <button class="btn btn-primary" [ngClass]="(erro.length == 0 && form.valid) || !isEdit ? 'ml-auto' : 'ml-0'" [disabled]="form.invalid || loading">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
                     </div>
                 </form>

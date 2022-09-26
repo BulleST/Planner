@@ -61,7 +61,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
-            <tr [class.selected]="item == selected" [class.selected-many]="selectedItems.includes(item)" [pSelectableRow]="selectable == true ? item : null" [pSelectableRowIndex]="selectable ? rowIndex : null">
+            <tr [class.selected]="item == selected" [class.selectable]="selectable" [class.selected-many]="selectedItems.includes(item)" [pSelectableRow]="selectable == true ? item : null" [pSelectableRowIndex]="selectable ? rowIndex : null">
                 <td [attr.data-id]="item.id">
                     <p-tableCheckbox [value]="item" *ngIf="selectable"></p-tableCheckbox>
                 </td>

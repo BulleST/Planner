@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
 import { Produto, ProdutoRequest } from 'src/app/models/produto.model';
 import { TipoAtivo } from 'src/app/models/tipoAtivo.model';
 import { TipoLiquidez } from 'src/app/models/tipoLiquidez.model';
@@ -26,10 +27,10 @@ export class FormProdutoComponent implements OnInit {
     @Output() sendData: EventEmitter<ProdutoRequest> = new EventEmitter<ProdutoRequest>();
 
     _tributacao: Tributacao[] = [];
+    _produtoTributacaoRel: ProdutoTributacaoRel[] = [];
     _tipoAtivo: TipoAtivo[] = [];
     _tipoRisco: TipoRisco[] = [];
     _tipoLiquidez: TipoLiquidez[] = [];
-    tributacaoSelected?: Tributacao;
     loadingTributacao = true;
     loadingAtivo = true;
     loadingRisco = true;
@@ -47,6 +48,16 @@ export class FormProdutoComponent implements OnInit {
         this.dropdownService.getTributacao().subscribe({
             next: (res) => {
                 this._tributacao = res.filter(x => !this.objeto.tributacao.map(y => y.id).includes(x.id))
+
+                this._produtoTributacaoRel = this._tributacao.map(x => {
+                                                    return {
+                                                        id: 0,
+                                                        produto: this.objeto,
+                                                        produto_Id: this.objeto.id,
+                                                        tributacao_Id: x.id,
+                                                        tributacao: x
+                                                    }
+                                                })
                 this.loadingTributacao = false;
             },
             error: (err) => {

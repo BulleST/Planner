@@ -137,3 +137,13 @@
     color: #212529;
     transition: .3s color;
 }
+
+.mat-option {
+    height: auto !important;
+    padding: 9px 11px !important;
+    line-height: 1 !important;
+}
+
+.mat-option-text {
+    font-size: 14px !important;
+}

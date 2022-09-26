@@ -17,6 +17,8 @@ import { ListComponent } from "./list/list.component";
 import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
 import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
 import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.component";
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {PickListModule} from 'primeng/picklist';
 
 @NgModule({
     declarations: [
@@ -39,7 +41,9 @@ import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.compone
         NgbPopoverModule,
         DropdownModule,
         ToastrModule,
-        ChartModule
+        ChartModule,
+        MatAutocompleteModule,
+        PickListModule,
     ],
     exports: [
         FormCreateUsuarioComponent,

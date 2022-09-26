@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject } from 'rxjs';
 import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Produto } from 'src/app/models/produto.model';
@@ -21,62 +22,34 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 export class CreateComponent implements OnInit {
     faTimes = faTimes;
     faWallet = faWallet;
+    faChevronLeft = faChevronLeft;
     modalOpen = false;
     objeto: CarteiraRequest = new CarteiraRequest;
     erro: any[] = [];
     loading = false;
     loadingProduto = false;
-    produtos: Produto[] = [];
-    carteirasSetup: CarteiraSetup[] = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
         private modal: ModalOpen,
-        private crypto: Crypto,
         private setupService: CarteiraSetupService,
-        private setupRelService: CarteiraProdutoRelService,
-        private produtoService: ProdutoService,
-        private empresaService: EmpresaService,
     ) {
-        
-
+        // this.setupService.setObject(new CarteiraSetup);
         this.setupService.getObject().subscribe(res => {
             this.objeto = res as CarteiraRequest;
-            console.log(res)
         });
-       
-        activatedRoute.paramMap.subscribe(p => {
-            var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-            if (urlArray.includes('empresas/cadastrar/')) {
-                this.produtos = this.empresaService.object.produto;
-                this.carteirasSetup = this.empresaService.object.carteiraSetup;
-            } 
-            else {
-
-                this.setupService.getList().subscribe({
-                    next: (res) => {
-                        this.carteirasSetup = res;
-                    }
-                });
-
-                this.produtoService.getList().subscribe({
-                    next: (res) => {
-                        this.produtos = res;
-                        this.produtos.map(p => {
-                            p.tributacao = p.produtoTributacaoRel.map(x => x.tributacao)
-                            return p;
-                        });
-                    }
-                });
-            }
-        })
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+    }
     
     voltar() {
         this.modal.voltar();
+    }
+
+    resetForm() {
+        this.objeto = new CarteiraSetup
+        this.setupService.setObject(new CarteiraSetup);
     }
 
     send(form: NgForm) {

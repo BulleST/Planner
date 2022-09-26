@@ -14,21 +14,14 @@ export class MaxPercentualRiscoGuard implements CanActivate {
     ) {
         this.setupService.getObject().subscribe(res => {
             this.carteiraSetup = res;
-            this.carteiraSetup.carteiraRiscoRel = this.carteiraSetup.carteiraRiscoRel ? this.carteiraSetup.carteiraRiscoRel : []; 
         })
 
     }
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        let maxPercentual = 100;
-        let percentuais = this.carteiraSetup.carteiraRiscoRel.map(x => x.percentual)
-        if (percentuais) {
-            maxPercentual = 100 - this.carteiraSetup.carteiraRiscoRel.map(x => x.percentual).reduce((x,y) => x+y);
-        }
-
-
-        return maxPercentual > 0;
+   
+        return this.setupService.percentualDisponivelRisco.value > 0;
     }
 
 }

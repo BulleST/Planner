@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { faChevronLeft, faChevronRight, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
-import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
-import { Produto } from 'src/app/models/produto.model';
-import { DropdownService } from 'src/app/services/dropdown.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
@@ -23,13 +19,10 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 export class EditComponent implements OnInit {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
-    // modalOpen = false;
     objeto: CarteiraRequest = new CarteiraRequest;
     erro: any[] = [];
     loading = false;
     loadingProduto = false;
-    produtos: Produto[] = [];
-    carteirasSetup: CarteiraSetup[] = [];
     urlArray = '';
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -41,33 +34,8 @@ export class EditComponent implements OnInit {
         private empresaService: EmpresaService,
         private produtoService: ProdutoService,
     ) {
-        // this.modal.getOpen().subscribe(res => {
-        //     this.modalOpen = res;
-        // });
 
         this.urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (this.urlArray.includes('empresas/cadastrar')) {
-            this.empresaService.empresaObject.subscribe(res => {
-                this.carteirasSetup = res.carteiraSetup;
-                this.produtos = res.produto;
-            });
-        } else {
-            this.setupService.getList().subscribe({
-                next: (res) => {
-                    this.carteirasSetup = res;
-                }
-            });
-            this.produtoService.getList().subscribe({
-                next: (res) => {
-                    this.produtos = res;
-                    this.produtos.map(p => {
-                        p.tributacao = p.produtoTributacaoRel.map(x => x.tributacao)
-                        return p;
-                    });
-                }
-            });
-        }
-
         activatedRoute.paramMap.subscribe(p => {
             if (p.get('setup_id')) {
                 this.objeto.id = this.crypto.decrypt(p.get('setup_id'));

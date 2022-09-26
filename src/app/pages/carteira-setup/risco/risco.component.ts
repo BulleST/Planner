@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
 import { CarteiraRiscoRel } from 'src/app/models/carteira-risco-rel.model';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { Produto } from 'src/app/models/produto.model';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { DropdownService } from 'src/app/services/dropdown.service';
-import { EmpresaService } from 'src/app/services/empresa.service';
-import { ProdutoService } from 'src/app/services/produto.service';
-import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -27,12 +22,13 @@ export class RiscoComponent implements OnInit {
     faWallet = faWallet;
     modalOpen = false;
     objeto: CarteiraRiscoRel = new CarteiraRiscoRel;
-    erro: any[] = [];
+    erro: string[] = [] as string[];
     loading = false;
-    _tipoRisco: TipoRisco[] = [];
+    _tiposRisco: TipoRisco[] = [];
     loadingRisco = true;
     carteiraSetup: CarteiraSetup = new CarteiraSetup;
-    maxPercentual = 100;
+    percentualDisponivel = 100;
+    isEdit = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -43,14 +39,29 @@ export class RiscoComponent implements OnInit {
         private alertService: AlertService,
         private crypto: Crypto
     ) {
+        this.activatedRoute.params.subscribe(res => {
+            if (res['object']) {
+                this.isEdit = true;
+                this.objeto = this.crypto.decrypt(res['object']) as CarteiraRiscoRel;
+                this.objeto.tipoRisco = this._tiposRisco.find(x => x.id == this.objeto.tipoRisco_Id) ?? undefined as unknown as TipoRisco;
+            } else {
+                this.isEdit = false;
+            }
+        })
+        
         this.dropdownService.tipoRisco.subscribe(res => {
-            let carteiraSetup = this.setupService.getObject().value as CarteiraRequest;
-            let riscosCadastrados = carteiraSetup.carteiraRiscoRel.map(x => x.tipoRisco_Id);
-            this._tipoRisco = res.filter(x => !riscosCadastrados.includes(x.id))
+            if (this.activatedRoute.snapshot.params['object']) {
+                this._tiposRisco = res;
+                this.objeto.tipoRisco = this._tiposRisco.find(x => x.id == this.objeto.tipoRisco_Id) ?? undefined as unknown as TipoRisco;
+            } else {
+                let carteiraSetup = this.setupService.getObject().value as CarteiraRequest;
+                let riscosCadastrados = carteiraSetup.carteiraRiscoRel.map(x => x.tipoRisco_Id);
+                this._tiposRisco = res.filter(x => !riscosCadastrados.includes(x.id));
+            }
         });
         this.dropdownService.getRisco().subscribe({
             next: (res) => {
-                this.loadingRisco = false
+                this.loadingRisco = false;
             },
             error: (err) => {
                 console.error(err)
@@ -59,16 +70,9 @@ export class RiscoComponent implements OnInit {
             complete: () => this.loadingRisco = false
         });
 
-        this.setupService.getObject().subscribe(res => {
-            this.carteiraSetup = res;
-            this.maxPercentual = 100 - res.carteiraRiscoRel.map(res => res.percentual).reduce((x,y) => x + y);
-        })
-        this.activatedRoute.params.subscribe(res => {
-            if (res['object']) {
-                this.objeto = this.crypto.decrypt(res['object']) as CarteiraRiscoRel;
-            }
-            console.log('params: ', res)
-        })
+        this.setupService.percentualDisponivelRisco.subscribe(res => this.percentualDisponivel = res);
+        this.setupService.getObject().subscribe(res => this.carteiraSetup = res);
+     
 
         setTimeout(() => {
             this.modal.setOpen(true);
@@ -88,24 +92,51 @@ export class RiscoComponent implements OnInit {
     send() {
         this.loading = true;
         this.erro = [];
+        if (this.isEdit) {
+            this.edit();
+        } else {
+            this.create();
+        }
+        this.toastr.success('OK');
+        this.voltar();
+        this.loading = false;
+    }
 
-        let carteiraSetup = this.setupService.getObject().value as CarteiraRequest;
-        let riscosExistentes = carteiraSetup.carteiraRiscoRel.map(x => x.tipoRisco_Id);
-        let a = riscosExistentes.includes(this.objeto.tipoRisco_Id)
-        if (a) {
+    create() {
+        console.log('create')
+        let carteiraSetup = this.setupService.getObject().value;
+        let existe = carteiraSetup.carteiraRiscoRel.find(x => x.tipoRisco_Id == this.objeto.tipoRisco_Id);
+        if (existe) {
             this.toastr.error('Esse risco já foi adicionado');
         } else {
             carteiraSetup.carteiraRiscoRel.push(this.objeto);
             this.setupService.setObject(carteiraSetup);
-            this.voltar();
-
-            if (this.maxPercentual == 0) {
-                this.alertService.info('Percentual máximo atingido, continue preenchendo os campos')
-            } else {
-                this.toastr.success('OK')
-            }
         }
+        if (this.percentualDisponivel == 0) {
+            this.alertService.info('Percentual máximo atingido, continue preenchendo os campos')
+        }
+    }
 
-        this.loading = false;
+    edit() {
+        console.log('edit')
+        console.log(this.objeto)
+        let carteiraSetup = this.setupService.getObject().value;
+        let index = carteiraSetup.carteiraRiscoRel.findIndex(x => x.tipoRisco_Id == this.objeto.tipoRisco_Id);
+        console.log(index)
+        if (index != -1) {
+            console.log(carteiraSetup.carteiraRiscoRel)
+            carteiraSetup.carteiraRiscoRel.splice(index, 1, this.objeto);
+            this.setupService.setObject(carteiraSetup)
+        }
+    }
+
+    excluirRisco() {
+        this.loading = true;
+        this.erro = [];
+        if (this.isEdit) {
+            this.setupService.excluirRisco(this.objeto);
+        }
+        this.toastr.success('OK');
+        this.voltar();
     }
 }

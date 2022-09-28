@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
 import { CarteiraRiscoRel } from 'src/app/models/carteira-risco-rel.model';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
@@ -54,7 +53,7 @@ export class RiscoComponent implements OnInit {
                 this._tiposRisco = res;
                 this.objeto.tipoRisco = this._tiposRisco.find(x => x.id == this.objeto.tipoRisco_Id) ?? undefined as unknown as TipoRisco;
             } else {
-                let carteiraSetup = this.setupService.getObject().value as CarteiraRequest;
+                let carteiraSetup = this.setupService.getObject().value as CarteiraSetup;
                 let riscosCadastrados = carteiraSetup.carteiraRiscoRel.map(x => x.tipoRisco_Id);
                 this._tiposRisco = res.filter(x => !riscosCadastrados.includes(x.id));
             }
@@ -70,7 +69,6 @@ export class RiscoComponent implements OnInit {
             complete: () => this.loadingRisco = false
         });
 
-        this.setupService.percentualDisponivelRisco.subscribe(res => this.percentualDisponivel = res);
         this.setupService.getObject().subscribe(res => this.carteiraSetup = res);
      
 

@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
-import { CarteiraProdutoRel, CarteiraRequest } from '../models/carteira-produto-rel';
+import { CarteiraProdutoRel } from '../models/carteira-produto-rel';
 import { CarteiraSetup } from '../models/carteiraSetup.model';
 
 @Injectable({
@@ -46,7 +46,7 @@ export class CarteiraProdutoRelService {
     }
 
     
-    add_To_Empresa_List(item: CarteiraRequest) {
+    add_To_Empresa_List(item: CarteiraSetup) {
         if (item.carteiraProdutoRel.length == 0) {
             this.toastr.error('Insira pelo menos uma combinação entre produto e tributação.');
             return false;
@@ -68,7 +68,7 @@ export class CarteiraProdutoRelService {
                     nome: item.nome ?? '',
                     empresa_Id: item.empresa_Id,
                     carteiraRiscoRel: [],
-                    carteiraProdutoRel: []
+                    carteiraProdutoRel: [],
                 };
             } else {
                 carteira_Setup = this.empresa.carteiraSetup[carteira_Setup_Index];
@@ -181,14 +181,14 @@ export class CarteiraProdutoRelService {
         return this.http.get<CarteiraSetup>(`${this.url}/carteiraSetup/${id}`);
     }
 
-    create(request: CarteiraRequest) {
+    create(request: CarteiraSetup) {
         return this.http.post<CarteiraSetup>(`${this.url}/carteiraSetup/`, request);
     }
 
-    edit(request: CarteiraRequest) {
+    edit(request: CarteiraSetup) {
     }
 
-    delete(model: CarteiraRequest) {
+    delete(model: CarteiraSetup) {
     }
 
 }

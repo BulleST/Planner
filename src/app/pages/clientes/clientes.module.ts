@@ -13,6 +13,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { ToastrModule } from 'ngx-toastr';
 import { TableModule } from 'primeng/table';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
     NgxMaskModule,
     ToastrModule,
     TableModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    SharedModule
   ],
   bootstrap: [ClientesComponent]
 })

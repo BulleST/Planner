@@ -3,15 +3,8 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faChevronLeft, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject } from 'rxjs';
-import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { Produto } from 'src/app/models/produto.model';
-import { EmpresaService } from 'src/app/services/empresa.service';
-import { ProdutoService } from 'src/app/services/produto.service';
-import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
-import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -24,7 +17,7 @@ export class CreateComponent implements OnInit {
     faWallet = faWallet;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
-    objeto: CarteiraRequest = new CarteiraRequest;
+    objeto: CarteiraSetup = new CarteiraSetup;
     erro: any[] = [];
     loading = false;
     loadingProduto = false;
@@ -33,10 +26,11 @@ export class CreateComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private modal: ModalOpen,
         private setupService: CarteiraSetupService,
+        private toastr: ToastrService,
     ) {
         // this.setupService.setObject(new CarteiraSetup);
         this.setupService.getObject().subscribe(res => {
-            this.objeto = res as CarteiraRequest;
+            this.objeto = res as CarteiraSetup;
         });
     }
 
@@ -58,25 +52,25 @@ export class CreateComponent implements OnInit {
 
         var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (urlArray.includes('empresas/cadastrar')) {
-            // var result = this.setupRelService.add_To_Empresa_List(this.objeto);
-            // if (result){
-            //     this.toastr.success('Operação concluída');
-            //     this.voltar();
-            // }
+            var result = this.setupService.add_To_Empresa_List(this.objeto);
+            if (result){
+                this.toastr.success('Operação concluída');
+                this.voltar();
+            }
         } 
         else {
+            // Enviar para a API
             if (urlArray.includes('empresas/editar')) {
             }
             console.log(this.objeto)
-            // this.setupService.create(this.objeto).subscribe({
-            //     next: (res) => {
+            this.setupService.create(this.objeto).subscribe({
+                next: (res) => {
 
-            //     },
-            //     error: (err) => {
+                },
+                error: (err) => {
 
-            //     },
-            // })
-            // Enviar para a API
+                },
+            })
         }
 
         this.loading = false;

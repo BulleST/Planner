@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
 import { environment } from 'src/environments/environment';
 
@@ -21,22 +21,16 @@ export class ClienteService {
     ) { 
     }
 
-    getList() {
-        return this.http.get<Cliente[]>(`${this.url}/Cliente/1`);
+    getList(empresa_id: number = 1) {
+        return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresa_id}`)
+        .pipe(map(list => {
+            this.list.next(list);
+            return list;
+        }));
     } 
-
+    
     get(id: number) {
-        if (this.list.value.length == 0) {
-            return new BehaviorSubject('Não encontrado');
-        }
-
-        var index = this.list.value.findIndex(x => x.id == id);
-        if (index == -1) {
-            return new BehaviorSubject('Não encontrado');
-        }
-
-        var item = this.list.value[index];
-        return new BehaviorSubject(item);
+        return this.http.get<Cliente[]>(`${this.url}/cliente/${id}`);
     }
 
     create(request: Cliente) {

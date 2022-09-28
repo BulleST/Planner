@@ -13,14 +13,6 @@ export class CarteiraProdutoRel {
     produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
 }
 
-export class CarteiraRequest {
-    id: number = 0;
-    empresa_Id: number = 0;
-    nome: string = '';
-    // produtoTributacaoRel: ProdutoTributacaoRel[] = [];
-    carteiraProdutoRel: CarteiraProdutoRel[] = [];
-    carteiraRiscoRel: CarteiraRiscoRel[] = [];
-}
 
 export var setupRelColumns: Column[] = [
     { 

@@ -73,7 +73,7 @@ export class ProdutoService {
                 return false;
             }
             item.tipoLiquidez = tipoLiquidez;
-            if (item.tributacao.length == 0) {
+            if (item.produtoTributacaoRel.length == 0) {
                 this.toastr.error('Selecione pelo menos uma tributação');
                 return false;
             }
@@ -119,7 +119,7 @@ export class ProdutoService {
                 }
                 item.tipoLiquidez = tipoLiquidez;
 
-                if (item.tributacao.length == 0) {
+                if (item.produtoTributacaoRel.length == 0) {
                     this.toastr.error('Selecione pelo menos uma tributação');
                     return false;
                 }

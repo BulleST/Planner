@@ -94,8 +94,8 @@ const routes: Routes = [
             },
             {
                 path: 'setup', component: SetupComponent, children: [
-                    { path: 'cadastrar', component: CarteiraSetup_CreateComponent, canActivate: [CarteiraSetupGuard] },
-                    { path: 'editar/:setup_id/:rel_id', component: CarteiraSetup_EditComponent },
+                    { path: 'setup/cadastrar', component: CarteiraSetup_CreateComponent, canActivate: [CarteiraSetupGuard] },
+                    { path: 'setup/editar/:setup_id/:rel_id', component: CarteiraSetup_EditComponent },
                     { path: 'excluir/:setup_id', component: CarteiraSetup_DeleteComponent },
                     { path: 'excluir-rel/:setup_id/:rel_id', component: CarteiraSetup_DeleteRelComponent },
                 ]

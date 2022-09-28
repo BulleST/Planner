@@ -1869,3 +1869,17 @@ body {
     background-color: #f1eaea;
     font-weight: 600;
 }
+
+.p-dropdown-items .p-element:hover {
+    background: #d2d9d3;
+}
+
+.p-dropdown-empty-message {
+    padding: 5px 10px 10px;
+}
+
+.p-disabled *,
+.p-disabled {
+    cursor: not-allowed!important;
+    pointer-events: all;
+}

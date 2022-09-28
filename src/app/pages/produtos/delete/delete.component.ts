@@ -56,8 +56,6 @@ export class DeleteComponent implements OnInit {
                     this.produtoService.get(this.objeto.id).subscribe({
                         next: (produto) => {
                             this.objeto = produto;
-                            this.objeto.tributacao = produto.produtoTributacaoRel.map(x => x.tributacao)
-                            console.log(produto)
                             setTimeout(() => {
                                 this.modal.setOpen(true);
                             }, 200);

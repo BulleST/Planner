@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
+import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
@@ -19,7 +19,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 export class EditComponent implements OnInit {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
-    objeto: CarteiraRequest = new CarteiraRequest;
+    objeto: CarteiraSetup = new CarteiraSetup;
     erro: any[] = [];
     loading = false;
     loadingProduto = false;

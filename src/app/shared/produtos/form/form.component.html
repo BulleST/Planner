@@ -179,6 +179,8 @@
     targetFilterPlaceholder="Pesquisar"
     [metaKeySelection]="true"
     [filterBy]="'tributacao.descricao, tributaca.aliquota'"
+    (onMoveToTarget)="move($event)"
+    (onMoveToSource)="move($event)"
     [dragdrop]="true">
     <ng-template pTemplate="sourceFilter" let-options="options">
         <div class="p-picklist-filter">

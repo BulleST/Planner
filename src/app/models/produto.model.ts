@@ -17,7 +17,6 @@ export class Produto {
     tipoRisco?: TipoRisco;
     tipoLiquidez_Id: number = undefined as unknown as number;
     tipoLiquidez?: TipoLiquidez;
-    tributacao: Tributacao[] = [];
     produtoTributacaoRel: ProdutoTributacaoRel[] = [];
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;

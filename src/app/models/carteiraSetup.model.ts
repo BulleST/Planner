@@ -1,3 +1,4 @@
+import { jsonIgnore } from "json-ignore";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { CarteiraProdutoRel } from "./carteira-produto-rel";
 import { CarteiraRiscoRel } from "./carteira-risco-rel.model";
@@ -6,7 +7,6 @@ export class CarteiraSetup {
     id: number = 0;
     nome: string = '';
     empresa_Id: number = 0;
-    percentualTotal?: number;
     carteiraProdutoRel: CarteiraProdutoRel[] = [];
     carteiraRiscoRel: CarteiraRiscoRel[] = [];
 }

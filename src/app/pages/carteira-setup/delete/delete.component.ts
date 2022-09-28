@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { CarteiraRequest } from 'src/app/models/carteira-produto-rel';
+import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
@@ -18,7 +18,7 @@ export class DeleteComponent implements OnInit {
 
     faTimes = faTimes;
     modalOpen = false;
-    objeto: CarteiraRequest = new CarteiraRequest;
+    objeto: CarteiraSetup = new CarteiraSetup;
     erro: any[] = [];
     loading = false;
 
@@ -40,7 +40,7 @@ export class DeleteComponent implements OnInit {
                 this.objeto.id = this.crypto.decrypt(p.get('setup_id'));
                 let objeto = this.empresaService.object?.carteiraSetup.find(x => x.id == this.objeto.id);
                 if (objeto) {
-                    this.objeto = objeto as unknown as CarteiraRequest;
+                    this.objeto = objeto as unknown as CarteiraSetup;
                     setTimeout(() => {
                         this.modal.setOpen(true);
                     }, 200);

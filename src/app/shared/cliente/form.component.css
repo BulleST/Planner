@@ -1,0 +1,149 @@
+.cdk-drop-list {
+    position: relative;
+    min-height: 300px;
+}
+
+.cdk-drop-list.cdkDrag::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    transform: translate(-50%, -50%);
+    color: #00000073;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
+}
+
+.cdk-drop-list.cdkDrag.empty::after {
+    content: 'Solte aqui para selecionar';
+    border: 1px #0000007a dashed;
+}
+
+.cdk-drop-list.cdkDrag.empty:hover::after {
+    border: 1px #00000096 dashed;
+    color: #00000096;
+}
+
+.cdk-drag {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+}
+
+.fade-in-right {
+    animation: fade-in-right .5s forwards;
+}
+
+.fade-out-left {
+    animation: fade-out-left .5s forwards;
+}
+
+.form-group {
+    transition: .5s;
+}
+
+@keyframes fade-in-right {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+        display: none;
+        transform: translateX(-100%);
+    }
+
+    20% {
+        display: block;
+    }
+
+    100% {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0%);
+    }
+}
+
+@keyframes fade-out-left {
+    0% {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0%);
+        display: block;
+    }
+
+    20% {
+        display: none;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-100%);
+    }
+}
+
+.data-view {
+    background: linear-gradient(90deg, var(--grey-light) 50%, #ffffff 50%);
+    border-radius: 3px;
+    background-size: 200%;
+    background-position: 250%;
+    display: flex;
+    align-self: flex-start;
+    position: relative;
+    transition: .3s;
+}
+
+.data-view .btn {
+    margin: 0 0;
+    padding: 5px 10px;
+    background-color: transparent;
+    border-radius: 3px;
+    /* border-color: var(--yellow); */
+}
+
+.data-view .btn.active {
+    color: white;
+}
+
+.data-view .btn:first-child {
+    color: #fff;
+}
+
+.data-view .btn:last-child {
+    border-radius: 0px 3px 3px 0px;
+    border-color: #595c5f;
+    border-left: none;
+}
+
+.data-view.right .btn:last-child {
+    color: #fff;
+}
+
+.data-view.right {
+    transition: .3s;
+    background-position: 153%;
+}
+
+.data-view.right .btn:first-child {
+    border: 1px #8f8f8f solid;
+    border-right: none;
+    border-radius: 3px 0px 0px 3px;
+}
+
+.data-view.right .btn:first-child {
+    color: #212529;
+    transition: .3s color;
+}
+
+.mat-option {
+    height: auto !important;
+    padding: 9px 11px !important;
+    line-height: 1 !important;
+}
+
+.mat-option-text {
+    font-size: 14px !important;
+}

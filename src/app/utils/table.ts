@@ -123,10 +123,13 @@ export class Table {
                 value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');
             } else if (col.maskType == MaskType.cpf) {
                 value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
-            }else if (col.maskType == MaskType.any && col.mask) {
+            } else if (col.maskType == MaskType.rg) {
+                value = this.mask.applyMask(value.toString().padStart(9, '0'), '00.000.000-0');
+            } else if (col.maskType == MaskType.any && col.mask) {
                 value = this.mask.applyMask(value, col.mask);
             } else if (col.maskType == MaskType.date) {
-
+                value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC');
+                
             } else if (col.maskType == MaskType.dateTime) {
 
             } else {

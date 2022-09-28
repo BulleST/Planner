@@ -41,9 +41,6 @@ export class ListComponent implements OnInit {
             this.list = res;
             this.list.map(x => {
                 x.carteiraRiscoRel = x.carteiraRiscoRel ?? [];
-                let list = x.carteiraRiscoRel.map(y => y.percentual);
-                x.percentualTotal = list.length > 0 ? list.reduce((x,y) => x+y) : 0;
-                x.percentualTotal = 20
                 return x;
             })
         });

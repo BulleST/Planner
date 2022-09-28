@@ -43,11 +43,11 @@ export class FormProdutoComponent implements OnInit {
     ) {
 
         this.dropdownService.tributacao.subscribe(res => {
-            this._tributacao = res.filter(x => !this.objeto.tributacao.map(y => y.id).includes(x.id))
+            this._tributacao = res.filter(x => !this.objeto.produtoTributacaoRel.map(y => y.id).includes(x.id))
         });
         this.dropdownService.getTributacao().subscribe({
             next: (res) => {
-                this._tributacao = res.filter(x => !this.objeto.tributacao.map(y => y.id).includes(x.id))
+                this._tributacao = res.filter(x => !this.objeto.produtoTributacaoRel.map(y => y.tributacao_Id).includes(x.id))
 
                 this._produtoTributacaoRel = this._tributacao.map(x => {
                                                     return {
@@ -110,14 +110,16 @@ export class FormProdutoComponent implements OnInit {
 
     ngOnInit(): void {
     }
-
+    move(e: any) {
+        console.log(e)
+    }
     send(form: NgForm) {
         if (form.invalid) {
             this.toastr.error('Campos inválidos');
             this.erro = ['Campos inválidos'];
             return;
         }
-        if (this.objeto.tributacao.length == 0) {
+        if (this.objeto.produtoTributacaoRel.length == 0) {
             this.toastr.error('Selecione pelo menos uma tributação para continuar');
             this.erro = ['Selecione pelo menos uma tributação para continuar'];
             return;
@@ -130,7 +132,7 @@ export class FormProdutoComponent implements OnInit {
             tipoAtivo_Id: this.objeto.tipoAtivo_Id, 
             tipoRisco_Id: this.objeto.tipoRisco_Id, 
             tipoLiquidez_Id: this.objeto.tipoLiquidez_Id, 
-            produtoTributacaoRel: this.objeto.tributacao.map(x => ({ tributacao_Id: x.id})),
+            produtoTributacaoRel: this.objeto.produtoTributacaoRel.map(x => ({ tributacao_Id: x.id})),
             taxaAdm: this.objeto.taxaAdm, 
             taxaPfee: this.objeto.taxaPfee, 
             descricao: this.objeto.descricao.trim(),
@@ -138,7 +140,7 @@ export class FormProdutoComponent implements OnInit {
 
         this.sendData.emit(model);
     }
-    drop(event: CdkDragDrop<Tributacao[]>) {
+    drop(event: CdkDragDrop<ProdutoTributacaoRel[]>) {
         if (event.previousContainer === event.container) {
             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
@@ -149,7 +151,7 @@ export class FormProdutoComponent implements OnInit {
                 event.currentIndex,
             );
         }
-        this.objeto.tributacao.sort((x, y) => x.id - y.id)
+        this.objeto.produtoTributacaoRel.sort((x, y) => x.id - y.id)
         this._tributacao.sort((x, y) => x.id - y.id)
     }
 }

@@ -5,6 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
 import { environment } from 'src/environments/environment';
+import { Crypto } from '../utils/crypto';
+import { Empresa } from '../models/empresa.model';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,13 +15,34 @@ import { environment } from 'src/environments/environment';
 export class ClienteService {
     list = new BehaviorSubject<Cliente[]>([]);
     url = environment.url;
-    objeto = new BehaviorSubject<Cliente | undefined>(undefined);
+    objeto = new BehaviorSubject<Cliente>(new Cliente);
+    empresa = new Empresa;
 
     constructor(
-        private router: Router,
         private http: HttpClient,
-        private toastr: ToastrService,
+        private crypto: Crypto,
+        private empresaService: EmpresaService
     ) { 
+        this.empresaService.empresaObject.subscribe(res => {
+            this.empresa = res;
+        });
+    }
+
+    getObject(): BehaviorSubject<Cliente> {
+        let e = localStorage.getItem('cliente');
+        if (!e) {
+            this.setObject(new Cliente)
+        } else {
+            let obj = this.crypto.decrypt(e);
+            this.objeto.next(obj);
+        }
+
+        return this.objeto;
+    }
+
+    setObject(value: Cliente) {
+        localStorage.setItem('cliente', this.crypto.encrypt(value) ?? '');
+        this.objeto.next(value);
     }
 
     getList(empresa_id: number = 1) {
@@ -34,33 +58,15 @@ export class ClienteService {
     }
 
     create(request: Cliente) {
-        var id = 1;
-        if (this.list.value.length > 0) {
-            id = this.list.value[this.list.value.length-1].id + 1;
-        }
-        request.id = id;
-        this.list.value.push(request);
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+        return this.http.post<Cliente>(`${this.url}/cliente/`, request);
     }
-
+    
     edit(request: Cliente) {
-        var index = this.list.value.findIndex(x => x.id == request.id);
-        if (index == -1) {
-            return new BehaviorSubject('Não encontrado')
-        }  
-        this.list.value[index] = request;
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+        return this.http.put<Cliente>(`${this.url}/cliente/${request.id}`, request);
     }
-
-    delete(model: Cliente) {
-        var index = this.list.value.findIndex(x => x.id == model.id);
-        if (index != -1) {
-            this.list.value.splice(index, 1);
-            this.list.next(this.list.value);
-        }
-        return this.list;
+    
+    delete(id: number) {
+        return this.http.delete<Cliente>(`${this.url}/cliente/${id}`);
     }
 
 }

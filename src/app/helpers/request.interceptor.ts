@@ -24,7 +24,8 @@ export class RequestInterceptor implements HttpInterceptor {
         'tipoRisco/getAll',
         'tipoAtivo/getAll',
         'perfilAcesso/getPerfilList',
-        'perfilInvestidor',
+        'perfilInvestidor/getAll',
+        'estadoCivil/getAll',
     ]
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var a = this.excludeUrls.filter(x => request.url.includes(x));

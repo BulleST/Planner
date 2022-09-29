@@ -6,11 +6,11 @@ import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 
 const routes: Routes = [
-  { path: '', component: ListComponent, children: [
+    { path: '', component: ListComponent, children: [
+        { path: 'excluir/:cliente_id', component: DeleteComponent },
+    ]},
     { path: 'cadastrar', component: CreateComponent },
-    { path: 'excluir/:cliente_id', component: DeleteComponent },
     { path: 'editar/:cliente_id', component: EditComponent },
-  ]}
 ];
 
 @NgModule({

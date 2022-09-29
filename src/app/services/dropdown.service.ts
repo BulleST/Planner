@@ -4,6 +4,7 @@ import { BehaviorSubject, map } from "rxjs";
 import { environment } from "src/environments/environment";
 import { CarteiraSetup } from "../models/carteiraSetup.model";
 import { Empresa } from "../models/empresa.model";
+import { EstadoCivil } from "../models/estadoCivil.model";
 import { PerfilInvestidor } from "../models/perfilInvestidor.model";
 import { TipoAtivo } from "../models/tipoAtivo.model";
 import { TipoLiquidez } from "../models/tipoLiquidez.model";
@@ -25,6 +26,7 @@ export class DropdownService {
     tributacao = new BehaviorSubject<Tributacao[]>([]);
     perfilInvestidor = new BehaviorSubject<PerfilInvestidor[]>([]);
     carteiraSetup = new BehaviorSubject<CarteiraSetup[]>([]);
+    estadoCivil = new BehaviorSubject<EstadoCivil[]>([]);
 
     empresa: Empresa = new Empresa;
     
@@ -73,7 +75,7 @@ export class DropdownService {
     }
 
     getPerfilInvestidor() {
-        return this.http.get<PerfilInvestidor[]>(`${this.url}/perfilInvestidor`).pipe(map(res => {
+        return this.http.get<PerfilInvestidor[]>(`${this.url}/perfilInvestidor/getAll`).pipe(map(res => {
             this.perfilInvestidor.next(res);
             return res;
         }));
@@ -82,6 +84,12 @@ export class DropdownService {
     getCarteiraSetup() {
         return this.http.get<CarteiraSetup[]>(`${this.url}/CarteiraSetup/getAll`).pipe(map(res => {
             this.carteiraSetup.next(res);
+            return res;
+        }));
+    }
+    getEstadoCivil() {
+        return this.http.get<EstadoCivil[]>(`${this.url}/estadoCivil/getAll`).pipe(map(res => {
+            this.estadoCivil.next(res);
             return res;
         }));
     }

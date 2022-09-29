@@ -1,1 +1,20 @@
-<p>create works!</p>
+        <div class="modal__content">
+            <div class="modal__header pb-2" style="padding: 0 25px;" >
+                <div>
+                    <a class="link text-dark" href="" (click)="voltar()">
+                        <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
+                    </a>
+                    <h3 class="text-orange">Planner</h3>
+                </div>
+                <button class="btn btn-yellow" (click)="resetForm()">Limpar campos</button>
+            </div>
+            <div class="modal__body mt-0">
+                <app-form-cliente
+                    [cliente]="cliente"
+                    [loading]="loading"
+                    [erro]="erro"
+                    (sendData)="send($event)"
+                ></app-form-cliente>
+            </div>
+        </div>
+        <router-outlet></router-outlet>

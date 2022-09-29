@@ -8,19 +8,19 @@ export class Cliente {
     id: number = 0;
     empresa: Empresa = new Empresa;
     empresa_Id: number = undefined as unknown as number;
-    perfilInvestidor: PerfilInvestidor = new PerfilInvestidor;
+    perfilInvestidor: PerfilInvestidor = undefined as unknown as PerfilInvestidor;
     perfilInvestidor_Id: number = undefined as unknown as number;
     nome: string = '';
     idade: number = '' as unknown as number;
     altura: number = '' as unknown as number;
     peso: number = '' as unknown as number;
-    estadoCivil: EstadoCivil = new EstadoCivil;
+    imc: number = '' as unknown as number;
+    estadoCivil: EstadoCivil = undefined as unknown as EstadoCivil;
     estadoCivil_Id: number = undefined as unknown as number;
-    dataNascimento: Date = new Date;
+    dataNascimento: Date = '' as unknown as Date;
     cpf: number = '' as unknown as number;
     rg: number = '' as unknown as number;
     email: string = '';
-    imc: number = '' as unknown as number;
     receita: number = '' as unknown as number;
     despesa: number = '' as unknown as number;
     

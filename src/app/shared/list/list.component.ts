@@ -16,7 +16,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit, OnChanges {
+export class ListSharedComponent implements OnInit, OnChanges {
 
     faFilter = faFilter;
     faTimes = faTimes;

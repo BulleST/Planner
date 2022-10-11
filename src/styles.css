@@ -34,6 +34,7 @@
 
     *::-webkit-scrollbar {
         width: 10px;
+        height: 7px;
     }
 
     *::-webkit-scrollbar-thumb {
@@ -148,7 +149,7 @@
 
     .page__body .content {
         width: 100%;
-        overflow-x: auto;
+        /* overflow-x: auto; */
     }
 
     .btn {
@@ -1323,10 +1324,12 @@
     }
 
     /* testeee*/
-    [novalidate] .form-control {
-        border: 1px solid #ced4da !important;
+    [novalidate] .form-control,
+    [novalidate] .form-control.ng-valid,
+    [novalidate] .form-control.ng-invalid {
+        border: 1px solid #ced4da;
         opacity: 1;
-        background-color: #fff !important;
+        background-color: #fff;
         cursor: default;
     }
 
@@ -1435,15 +1438,16 @@
     }
 
     .table-editable td .form-control:focus {
-        box-shadow: 0px 36px 1px 1px rgb(202, 233, 244) inset;
+        box-shadow: 0px 10000px 1px 1px rgb(202, 233, 244) inset;
     }
 
     .table-editable th {
         padding: 7px 9px;
         border: none !important;
-        background-color: var(--primary);
-        color: #fff;
+        /* background-color: var(--primary); */
+        /* color: #fff; */
         text-shadow: 1px 2px 4px #0000004e;
+        font-weight: 100;
     }
 
     .table-editable .subheader,
@@ -1453,16 +1457,9 @@
 
     .btn-table-header {
         color: #fff;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         padding: 3px 15px;
-        font-weight: bold;
-        background-color: #ffffff17;
-        display: inline;
+        font-size: 13px;
     }
-
     .overflow-x-auto::-webkit-scrollbar-thumb,
     .table::-webkit-scrollbar-thumb {
         background-color: #595858;
@@ -1518,6 +1515,17 @@
         padding: 8px;
         background-color: #fff;
         border: 1px solid #dee2e6;
+        width: 100%;
+    }
+    .home__container-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 9px;
+        background-color: #f5f5f5;
+    }
+    .home__container-header h6 {
+        font-size: 15px;
     }
 
     .dark .home__container {
@@ -1569,7 +1577,7 @@
     }
 
     .dark .table-editable td .form-control:focus {
-        box-shadow: 0px 36px 1px 1px rgb(113 117 119) inset;
+        box-shadow: 0px 10000px 1px 1px rgb(113 117 119) inset;
     }
 
     .dark .table-editable td {
@@ -1891,4 +1899,46 @@
 
     .table-editable>*:not(caption)>*>* {
         border: none;
+    }
+    [novalidate] .table-editable .form-control, 
+    [novalidate] .table-editable .form-control.ng-valid, 
+    [novalidate] .table-editable .form-control.ng-invalid,
+    .table-editable .form-control {
+        border: none;
+        cursor: pointer;
+        /* box-shadow: none!important; */
+    }
+    
+    [novalidate] .table-editable .form-control:hover, 
+    [novalidate] .table-editable .form-control.ng-valid:hover, 
+    [novalidate] .table-editable .form-control.ng-invalid:hover,
+    .table-editable .form-control:hover {
+        box-shadow: none;
+    }
+    
+    [novalidate] .table-editable .form-control:hover:focus, 
+    [novalidate] .table-editable .form-control.ng-valid:hover:focus, 
+    [novalidate] .table-editable .form-control.ng-invalid:hover:focus,
+    .table-editable .form-control:hover:focus {
+        box-shadow: 0px 10000px 1px 1px rgb(202 233 244) inset;
+    }
+
+
+    .p-datatable table
+
+    
+   .p-datatable table::-webkit-scrollbar {
+        height: 7px;
+    }
+
+   .p-datatable table::-webkit-scrollbar-thumb {
+        background-color: var(--grey);
+        transition: .5s;
+    }
+
+   .p-datatable table::-webkit-scrollbar-track {
+        background-color: rgba(173, 170, 170, 0.9);
+    }
+    .chart-container {
+        height: 60vh;
     }

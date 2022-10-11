@@ -9,6 +9,7 @@ import { Tributacao } from "./tributacao.model";
 
 export class Produto {
     id: number = undefined as unknown as number;
+    descricao: string = '';
     empresa_Id: number = undefined as unknown as number;
     empresa?: Empresa;
     tipoAtivo_Id: number = undefined as unknown as number;
@@ -21,7 +22,6 @@ export class Produto {
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;
     cm?: boolean;
-    descricao: string = '';
 }
 
 export class ProdutoRequest {

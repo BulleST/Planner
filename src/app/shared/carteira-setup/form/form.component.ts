@@ -18,6 +18,7 @@ import { ProdutoService } from 'src/app/services/produto.service';
 import { flashOnEnterAnimation } from 'angular-animations';
 import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
 import { lastValueFrom } from 'rxjs';
+import { colors } from 'src/app/utils/colors.enum';
 
 @Component({
     selector: 'app-form-carteira-setup',
@@ -61,33 +62,6 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         return ((a > b) as unknown as number) - ((a < b) as unknown as number)
     };
     chartWidth: string = '0';
-    chartPalete = [
-        // '#2a718b', // --primary-light
-        // // '#f9a814', // --yellow
-        // '#242424', // --grey-light
-        // '#104456', // --primary
-        // '#181818', // --grey
-        // '#092a36', // --primary-dark
-        
-        '#FF6F91',
-        '#FF9671',
-        '#C34A36',
-        '#008F7A',
-        '#F9F871',
-        '#845EC2',
-        '#2C73D2',
-        '#B0A8B9',
-        '#D65DB1',
-        '#008E9B',
-        '#4B4453',
-        '#0089BA',
-        '#FFC75F',
-        '#845EC2',
-        '#FF8066',
-        '#0081CF',
-        
-        
-    ];
     selectedRisco?: TipoRisco;
     urlArray = '';
 
@@ -299,11 +273,10 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
        
         this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produtoTributacaoRel.produto.tipoRisco_Id, y.produtoTributacaoRel.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
         let a = this.objeto.carteiraProdutoRel.map(x => {
-            console.log(x)
             return {
                 type: 'bar',
                 label: `${x.produtoTributacaoRel.produto.descricao} <br> ${x.produtoTributacaoRel.tributacao.descricao}`,
-                backgroundColor: this.chartPalete[index++],
+                backgroundColor: colors[index++],
                 data: [ x ]
             }
         })

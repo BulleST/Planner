@@ -6,24 +6,21 @@ import { MyAccountComponent } from './parts/my-account/my-account.component';
 import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
 
 const account = () => import('./pages/account/account.module').then(res => res.AccountModule);
-const clientes = () => import('./pages/clientes/clientes.module').then(res => res.ClientesModule);
+const planner = () => import('./pages/planner/planner.module').then(res => res.PlannerModule);
 const empresas = () => import('./pages/empresas/empresas.module').then(res => res.EmpresasModule);
-const investimento = () => import('./pages/investimento/investimento.module').then(res => res.InvestimentoModule);
 const usuarios = () => import('./pages/usuarios/usuarios.module').then(res => res.UsuariosModule);
 const produtos = () => import('./pages/produtos/produtos.module').then(res => res.ProdutosModule);
 const setup = () => import('./pages/carteira-setup/carteira-setup.module').then(res => res.CarteiraSetupModule);
 const percentualRisco = () => import('./pages/percentual-risco/percentual-risco.module').then(res => res.PercentualRiscoModule);
 
 const routes: Routes = [
-  { path: '', redirectTo: 'investimento', pathMatch: 'full' },
   {
     path: '', component: InitialComponent, /*canActivate: [AuthGuard], */children: [
 
         { path: 'percentual-risco', loadChildren: percentualRisco },
         { path: 'carteira-setup', loadChildren: setup },
-        { path: 'clientes', loadChildren: clientes },
+        { path: 'clientes', loadChildren: planner },
         { path: 'empresas', loadChildren: empresas },
-        { path: 'investimento', loadChildren: investimento },
         { path: 'produtos', loadChildren: produtos },
         { path: 'usuarios', loadChildren: usuarios },
 

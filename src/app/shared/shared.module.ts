@@ -13,13 +13,13 @@ import { NgxMaskModule } from "ngx-mask";
 import { ToastrModule } from "ngx-toastr";
 import { FormCreateUsuarioComponent } from "./usuarios/form-create/form-create.component";
 import { FormProdutoComponent } from './produtos/form/form.component';
-import { ListComponent } from "./list/list.component";
+import { ListSharedComponent } from "./list/list.component";
 import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
 import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
 import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.component";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PickListModule } from 'primeng/picklist';
-import { FormClienteComponent } from "./cliente/form.component";
+import { FormPlannerComponent } from "./planner/form.component";
 import {StepsModule} from 'primeng/steps';
 
 @NgModule({
@@ -28,9 +28,9 @@ import {StepsModule} from 'primeng/steps';
         FormEditUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
-        FormClienteComponent,
+        FormPlannerComponent,
         FormPercentualRiscoComponent,
-        ListComponent,
+        ListSharedComponent,
     ],
     imports: [
         CommonModule,
@@ -55,8 +55,8 @@ import {StepsModule} from 'primeng/steps';
         FormProdutoComponent,
         FormCarteiraSetupComponent,
         FormPercentualRiscoComponent,
-        FormClienteComponent,
-        ListComponent,
+        FormPlannerComponent,
+        ListSharedComponent,
     ],
 })
 export class SharedModule {

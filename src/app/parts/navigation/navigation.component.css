@@ -80,11 +80,16 @@
 
 
 .navigation__logo {
-    height: 50px;
+    /* height: 50px; */
     padding: 13px 15px 0;
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+}
+
+.navigation__logo img {
+    height: auto;
+    width: 90%;
 }
 
 .navigation__logo h3 {
@@ -107,11 +112,11 @@
     flex-flow: column;
     margin-top: 2vh;
     position: relative;
-    margin: calc(0.5vh + 5px) 10px 0;
+    margin: calc(0.5vh + 10px) 10px 0;
 }
 
 .navigation__links::before {
-    content: '';
+    /* content: ''; */
     position: absolute;
     left: 0;
     top: 19px;
@@ -122,7 +127,8 @@
 }
 
 .navigation__links-item {
-    padding: 6px 15px;
+    /* padding: 6px 15px; */
+    padding: 6px 10px;
     text-decoration: none;
     color: #ffffffc7;
     font-weight: 100;
@@ -136,7 +142,7 @@
 }
 
 .navigation__links-item::before {
-    content: '';
+    /* content: ''; */
     position: absolute;
     top: 50%;
     left: 0;

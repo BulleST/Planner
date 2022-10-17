@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { ToastrService } from 'ngx-toastr';
 import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
@@ -13,7 +11,6 @@ import { AlertService } from 'src/app/parts/alert/alert.service';
 import { PlannerService } from 'src/app/services/planner.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
-import { Crypto } from 'src/app/utils/crypto';
 import { arrowDown, arrowUp } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
@@ -22,7 +19,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './produto-form.component.html',
     styleUrls: ['./produto-form.component.css']
 })
-export class ProdutoFormComponent implements OnInit {
+export class ProdutoFormComponent implements OnInit, AfterViewInit {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -45,34 +42,23 @@ export class ProdutoFormComponent implements OnInit {
         private plannerService: PlannerService,
         private alertService: AlertService,
         private produtoService: ProdutoService,
+        private setup: CarteiraSetupService,
     ) {
 
         this.plannerService.getObject().subscribe(async planner => {
             this.planner = planner;
-            
-            if (!planner.carteiraSetup_Id) {
-                this.voltar();
-                this.alertService.warn('Selecione um setup para cadastrar um produto')
-            } else {
-                let produtosId = planner.carteiraSetup.carteiraProdutoRel.map(x => x.produtoTributacaoRel.produto_Id);
-                // this.produtos = (await lastValueFrom(this.produtoService.getList())).filter(x => produtosId.includes(x.id))
-                this.produtoService.getList().subscribe({
-                    next: res => {
-                        this.produtos = res.filter(x => produtosId.includes(x.id)).map(p => {
-                            p.produtoTributacaoRel = planner.carteiraSetup.carteiraProdutoRel.map(x => x.produtoTributacaoRel)
-                                .filter(x => x.produto_Id == p.id)
-                                return p;
-                            });
-
-                        this.produtos.sort((x,y) => x.id - y.id);
-                        this.loadingProdutos = false;
-                    },
-                    error: err => {
-                        this.loadingProdutos = false;
-                    }
-                })
+        });
+        this.setup.list.subscribe(res => this.carteirasSetup = res);
+        this.setup.getList().subscribe({
+            next: res => {
+                this.carteirasSetup = res
+                this.loadingCarteiraSetup = false;
+            },
+            error: err => {
+                this.loadingCarteiraSetup = false;
             }
-        })
+        });
+
 
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
@@ -85,14 +71,72 @@ export class ProdutoFormComponent implements OnInit {
         }, 200);
     }
 
+    ngAfterViewInit(): void {
+        if (this.planner.carteiraSetup) {
+            this.setProdutos();
+        }
+    }
+
     voltar() {
         this.modal.voltar();
+    }
+
+    async setProdutos() {
+        this.loadingProdutos = true;
+        let produtosId: number[] = [];
+        if (this.planner.carteiraSetup) {
+            this.planner.carteiraSetup_Id = this.planner.carteiraSetup.id;
+            produtosId = this.planner.carteiraSetup.carteiraProdutoRel.map(x => x.produtoTributacaoRel.produto_Id);
+            let produtosResponse = await lastValueFrom(this.produtoService.getList());
+            
+            this.produtos = produtosResponse.filter(x => produtosId.includes(x.id)).map(p => {
+                p.produtoTributacaoRel = this.planner.carteiraSetup.carteiraProdutoRel.map(x => x.produtoTributacaoRel)
+                .filter(x => x.produto_Id == p.id)
+                return p;
+            });
+            this.produtos.sort((x,y) => x.id - y.id);
+
+        } else {
+            this.produtos = [];
+        } 
+        this.loadingProdutos = false;
+    }
+
+    async carteiraSetupChange(carteiraSetup: any) {
+        console.log(this.planner.carteiraSetup)
+        if (carteiraSetup.value) {
+            this.planner.carteiraSetup_Id = carteiraSetup.value.id;
+        } else {
+            this.planner.carteiraSetup_Id = 0;
+        } 
+        this.plannerService.setObject(this.planner);
+
+        this.setProdutos();
+
     }
 
     tributacaoChange(produtoTributacaoRel: ProdutoTributacaoRel) {
         this.objeto.produtoTributacaoRel_Id = produtoTributacaoRel?.id ?? 0;
         this.aliquota = this.objeto.produtoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
     }
+
+  
+    slickInit(e) {
+        console.log('slick initialized');
+      }
+      
+      breakpoint(e) {
+        console.log('breakpoint');
+      }
+      
+      afterChange(e) {
+        console.log('afterChange');
+      }
+      
+      beforeChange(e) {
+        console.log('beforeChange');
+      }
+
     arrowUp(value: number) {
         return arrowUp(value)
     }

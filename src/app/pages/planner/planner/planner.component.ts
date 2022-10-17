@@ -34,7 +34,6 @@ export class PlannerComponent implements OnInit {
     ) {
         this.plannerService.getObject().subscribe(res => {
             this.planner = res;
-            console.log(this.planner);
         });
     }
 

@@ -17,7 +17,7 @@ import { ProdutoFormComponent } from './planner/produto-form/produto-form.compon
 import { RemoverProdutoComponent } from './planner/produto-remover/remover-produto.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { PlannerRoutingModule } from './planner.routing';
-
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 @NgModule({
   declarations: [
@@ -40,6 +40,7 @@ import { PlannerRoutingModule } from './planner.routing';
     NgbPopoverModule,
     SharedModule,
     DropdownModule,
+    SlickCarouselModule
   ],
   bootstrap: [ListComponent]
 })

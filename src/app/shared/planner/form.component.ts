@@ -21,6 +21,7 @@ import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Planejamento } from 'src/app/models/planejamento.model';
 import { PlannerService } from 'src/app/services/planner.service';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
+import { Crypto } from 'src/app/utils/crypto';
 
 @Component({
     selector: 'app-form-planner',
@@ -77,6 +78,7 @@ export class FormPlannerComponent implements OnInit, OnChanges, AfterViewInit {
     chartCapitalSeguradoOptions: any;
     @ViewChild('chartCapitalSegurado') private chartCapitalSegurado;
     mobile: ScreenWidth = ScreenWidth.lg;
+
     constructor(
         private toastr: ToastrService,
         private activatedRoute: ActivatedRoute,
@@ -84,9 +86,22 @@ export class FormPlannerComponent implements OnInit, OnChanges, AfterViewInit {
         private setup: CarteiraSetupService,
         private plannerService: PlannerService,
         private isMobile: IsMobile,
+        private crypto: Crypto,
     ) {
         this.activatedRoute.params.subscribe(item => {
-            this.isEditPage = !!item['cliente_id'];
+            this.isEditPage = !!item['planner_id'];
+
+            if(this.isEditPage) {
+                this.planner.id = this.crypto.decrypt(item['planner_id'])
+                this.plannerService.get(this.planner.id).subscribe({
+                    next: res => {
+                        res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
+                        res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
+                        this.planner = res;
+                        console.log(this.planner)
+                    }
+                })
+            }
         });
 
         this.isMobile.get().subscribe(res => this.mobile = res);
@@ -153,9 +168,13 @@ export class FormPlannerComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     carteiraSetupChange(carteiraSetup: any) {
-        this.planner.carteiraSetup_Id = carteiraSetup.value.id;
-        console.log(this.carteirasSetup);
+        if (carteiraSetup.value) {
+            this.planner.carteiraSetup_Id = carteiraSetup.value.id;
+        } else {
+            this.planner.carteiraSetup_Id = 0;
+        } 
         this.plannerService.setObject(this.planner);
+
     }
 
     calculaIdade() {
@@ -169,22 +188,25 @@ export class FormPlannerComponent implements OnInit, OnChanges, AfterViewInit {
     }
     setChartPatrimonioIdade() {
         this.setChartWidth('chart-patrimonio-idade');
-
+        this.planner.planejamentoGrafico.sort((x, y) => x.idade - y.idade)
         this.chartPatrimonioIdadeData = {
-            labels: Array.from({length: 21}, (_, i) => i * 5),
+            labels: this.planner.planejamentoGrafico.map(x => x.idade),
+            // labels: Array.from({length: 21}, (_, i) => i * 5),
             datasets: [
                 {
                     type: 'line',
-                    label: 'Realidade Atual',
-                    data: Array.from({length: 21}, (_, i) => parseInt((Math.random() * (100 - 0) + 0).toString())),
-                    backgroundColor: colors
+                    label: 'Planejado',
+                    // data: Array.from({length: 21}, (_, i) => parseInt((Math.random() * (100 - 0) + 0).toString())),
+                    data: this.planner.planejamentoGrafico.map(x => x.valorPlanejado),
+                    backgroundColor: '#242424',
                 },
                 {
                     type: 'bar',
-                    label: 'Planejado',
-                    data: Array.from({length: 21}, (_, i) => parseInt((Math.random() * (100 - 0) + 0).toString())),
-                    backgroundColor: colors
-                }
+                    label: 'Realidade Atual',
+                    // data: Array.from({length: 21}, (_, i) => parseInt((Math.random() * (100 - 0) + 0).toString())),
+                    data: this.planner.planejamentoGrafico.map(x => x.valorAtual),
+                    backgroundColor: '#2d7a95',
+                },
             ]
         }
 
@@ -215,6 +237,15 @@ export class FormPlannerComponent implements OnInit, OnChanges, AfterViewInit {
                     min: 0,
                     max: 100,
                     suggestedMax: 100,
+                }
+            },
+            animations: {
+                tension: {
+                  duration: 1000,
+                      easing: 'linear',
+                    //   from: 1,
+                    //   to: 0,
+                    //   loop: true
                 }
             }
         };
@@ -293,6 +324,21 @@ export class FormPlannerComponent implements OnInit, OnChanges, AfterViewInit {
         let index = this.principaisObjetivos.findIndex(x => x == item);
         if (index != -1) {
             this.principaisObjetivos.splice(index, 1);
+        }
+    }
+
+    removerInvestimento(item: PlanejamentoInvestimento) {
+        let index = this.planner.planejamentoInvestimento.findIndex(x => x == item);
+        if(index != -1) {
+            this.planner.planejamentoInvestimento.splice(index, 1);
+            this.plannerService.setObject(this.planner);
+        }
+    }
+    removerProduto(item: PlanejamentoProduto) {
+        let index = this.planner.planejamentoProduto.findIndex(x => x == item);
+        if(index != -1) {
+            this.planner.planejamentoProduto.splice(index, 1);
+            this.plannerService.setObject(this.planner);
         }
     }
 

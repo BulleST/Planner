@@ -1,0 +1,21 @@
+/* .slider {
+    position: relative;
+    height: 1px;
+    overflow: hidden;
+    min-height: 15vh;
+    margin-top: 0px;
+}
+
+.slider-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    transform: translateX(100%);
+    transition: .5s;
+}
+
+.slider-item.active {
+    transform: translateX(0);
+} */

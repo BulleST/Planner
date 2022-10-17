@@ -88,7 +88,7 @@ export class InvestimentoFormComponent implements OnInit {
     }
     
     tributacaoChange(investimentoTributacaoRel: InvestimentoTributacaoRel) {
-        this.objeto.investimentoTributacao_Id = investimentoTributacaoRel?.id ?? 0;
+        this.objeto.investimentoTributacaoRel_Id = investimentoTributacaoRel?.id ?? 0;
         this.aliquota = this.objeto.investimentoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
     }
 

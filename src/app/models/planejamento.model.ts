@@ -3,6 +3,7 @@ import { Cliente } from "./cliente.model";
 import { FluxosPontuais } from "./fluxosPontuais.model";
 import { PlanejamentoInvestimento } from "./planejamento-investimento.model";
 import { PlanejamentoProduto } from "./planejamento-produto.model";
+import { PlanejamentoGrafico } from "./planejamentoGrafico.model";
 
 export class Planejamento {
     id: number = 0;
@@ -17,8 +18,8 @@ export class Planejamento {
     taxaIPCA: number = '' as unknown as number;
     cm: boolean = false;
     
-    re_Sugerido: number = '' as unknown as number; // re = Reserva de Emergência
-    re_Planejado: number = '' as unknown as number; // re = Reserva de Emergência
+    rE_Sugerido: number = '' as unknown as number; // re = Reserva de Emergência
+    rE_Planejado: number = '' as unknown as number; // re = Reserva de Emergência
 
     riscoAssumido: number = '' as unknown as number;
     riscoTolerado: number = '' as unknown as number;
@@ -46,6 +47,8 @@ export class Planejamento {
     planoAcao_Total: number = 0;
     planoAcao_RentabilidadeMedia: number = 0;
     planoAcao_RentabilidadeReal: number = 0;
+
+    planejamentoGrafico: PlanejamentoGrafico[] = [];
 
     planejamentoInvestimento: PlanejamentoInvestimento[] = [];
     planejamentoProduto: PlanejamentoProduto[] = [];

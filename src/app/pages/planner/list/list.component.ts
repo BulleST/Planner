@@ -49,7 +49,7 @@ export class ListComponent implements OnInit {
       });
   
       this.tableLinks = [
-          { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+          { label: 'Editar', routePath: [ 'planner'], paramsFieldName: ['id'] },
           { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
       ];
     }

@@ -23,7 +23,7 @@ export class RequestInterceptor implements HttpInterceptor {
         'tipoLiquidez/getAll',
         'tipoRisco/getAll',
         'tipoAtivo/getAll',
-        'perfilAcesso/getPerfilList',
+        'perfilAcesso/getAll',
         'perfilInvestidor/getAll',
         'estadoCivil/getAll',
     ]

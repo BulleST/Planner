@@ -19,7 +19,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CreateComponent,
     ListComponent,
     EditComponent,
-    DeleteComponent
+    DeleteComponent,
   ],
   imports: [
     CommonModule,
@@ -27,7 +27,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     FormsModule,
     ToastrModule,
     SharedModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   exports: [
     CreateComponent

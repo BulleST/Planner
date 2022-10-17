@@ -61,7 +61,7 @@ export class DropdownService {
     }
 
     getPerfilAcesso() {
-        return this.http.get<PerfilAcesso[]>(`${this.url}/perfilAcesso/getPerfilList`).pipe(map(res => {
+        return this.http.get<PerfilAcesso[]>(`${this.url}/perfilAcesso/getAll`).pipe(map(res => {
             this.perfilAcesso.next(res);
             return res;
         }));

@@ -54,7 +54,7 @@ export class PlannerService {
     } 
     
     get(id: number) {
-        return this.http.get<Planejamento[]>(`${this.url}/planejamento/${id}`);
+        return this.http.get<Planejamento>(`${this.url}/planejamento/${id}`);
     }
 
     create(request: Planejamento) {

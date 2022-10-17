@@ -5,7 +5,7 @@ import { Tributacao } from "./tributacao.model";
 export class PlanejamentoInvestimento {
     id: number = 0;
     planejamento_Id: number = 0;
-    investimentoTributacao_Id: number = undefined as unknown as number;
+    investimentoTributacaoRel_Id: number = undefined as unknown as number;
     investimentoTributacaoRel: InvestimentoTributacaoRel = undefined as unknown as InvestimentoTributacaoRel;
     rentabilidade?: number;
     rentabilidadeLiquida?: number;

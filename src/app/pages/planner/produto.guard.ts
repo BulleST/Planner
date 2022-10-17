@@ -8,7 +8,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 @Injectable({
   providedIn: 'root'
 })
-export class InvestimentoGuard implements CanActivate {
+export class ProdutoGuard implements CanActivate {
   constructor(
     private modal: ModalOpen,
     private alert: AlertService,
@@ -20,10 +20,12 @@ export class InvestimentoGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-
         let planner = this.plannerService.getObject().value;
-        if (planner.planejamentoProduto.length == 0) {
+        if (!planner.carteiraSetup) {
+            this.modal.voltar();
+            this.alert.warn('Escolha um setup para adicionar um produto!');
+            return false;
+        } else if (planner.planejamentoInvestimento.length == 0) {
             this.modal.voltar();
             this.alert.warn('Insira um produto para cadastrar um investimento!');
             return false;

@@ -1,6 +1,7 @@
 import { CarteiraSetup } from "./carteiraSetup.model";
 import { Cliente } from "./cliente.model";
 import { FluxosPontuais } from "./fluxosPontuais.model";
+import { PrincipaisObjetivos } from "./objetivos.model";
 import { PlanejamentoInvestimento } from "./planejamento-investimento.model";
 import { PlanejamentoProduto } from "./planejamento-produto.model";
 import { PlanejamentoGrafico } from "./planejamentoGrafico.model";
@@ -52,5 +53,6 @@ export class Planejamento {
 
     planejamentoInvestimento: PlanejamentoInvestimento[] = [];
     planejamentoProduto: PlanejamentoProduto[] = [];
-    planejamentoFluxosPontuais: FluxosPontuais[] = [];
+    planejamentoFluxosPontuais: FluxosPontuais[] = []; 
+    principaisObjetivos: PrincipaisObjetivos[] = [];
 }

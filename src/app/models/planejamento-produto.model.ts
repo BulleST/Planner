@@ -6,7 +6,7 @@ export class PlanejamentoProduto {
     id: number = 0;
     planejamento_Id: number = 0;
     produtoTributacaoRel_Id: number = undefined as unknown as number ;
-    produtoTributacaoRel?: ProdutoTributacaoRel;
+    produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
     rentabilidade: number = '' as unknown as number;
     rentabilidadeLiquida: number = '' as unknown as number;
     montanteAtual: number = '' as unknown as number;

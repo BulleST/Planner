@@ -9,7 +9,7 @@ export class CarteiraProdutoRel {
     carteiraSetup_Id: number = 0;
     carteiraSetup?: CarteiraSetup;
     percentual: number = 0;
-    produtoTributacao_Id: number = 0;
+    produtoTributacaoRel_Id: number = 0;
     produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
 }
 

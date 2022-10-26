@@ -1,26 +1,26 @@
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { NgModule } from "@angular/core";
 import { DragDropModule as Material_DragDropModule } from '@angular/cdk/drag-drop';
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { TableModule } from "primeng/table";
-import { ChartModule } from 'primeng/chart';
 import { DragDropModule as Primeng_DragDropModule } from 'primeng/dragdrop';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { NgbPopoverModule } from "@ng-bootstrap/ng-bootstrap";
 import { DropdownModule } from "primeng/dropdown";
-import { NgxMaskModule } from "ngx-mask";
+import { PickListModule } from 'primeng/picklist';
+import { TableModule } from "primeng/table";
+import { ChartModule } from 'primeng/chart';
+import { StepsModule } from 'primeng/steps';
 import { ToastrModule } from "ngx-toastr";
+import { NgxMaskModule } from "ngx-mask";
+
 import { FormCreateUsuarioComponent } from "./usuarios/form-create/form-create.component";
-import { FormProdutoComponent } from './produtos/form/form.component';
-import { ListSharedComponent } from "./list/list.component";
-import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
 import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
 import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.component";
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { PickListModule } from 'primeng/picklist';
-import { FormPlannerComponent } from "./planner/form.component";
-import {StepsModule} from 'primeng/steps';
+import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
+import { FormProdutoComponent } from './produtos/form/form.component';
+import { ListSharedComponent } from "./list/list.component";
 
 @NgModule({
     declarations: [
@@ -28,7 +28,6 @@ import {StepsModule} from 'primeng/steps';
         FormEditUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
-        FormPlannerComponent,
         FormPercentualRiscoComponent,
         ListSharedComponent,
     ],
@@ -55,7 +54,6 @@ import {StepsModule} from 'primeng/steps';
         FormProdutoComponent,
         FormCarteiraSetupComponent,
         FormPercentualRiscoComponent,
-        FormPlannerComponent,
         ListSharedComponent,
     ],
 })

@@ -132,7 +132,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     }
 
     ngAfterViewInit(): void {
-        this.setChartProduto('ngAfterViewInit');
+        // this.setChartProduto('ngAfterViewInit');
         var windowWidth = window.innerWidth;
         var container = $('.chart-container').width() ?? 0;
         var viewport = 100 / windowWidth;
@@ -179,27 +179,30 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         if (this.selectedRisco) {
             this.produtos = produtos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id);
         }
-        this.calcularPercentualProduto();
+
+        this.calcularPercentualProduto(this.selectedRisco);
 
     }
 
-    calcularPercentualProduto() {
+    calcularPercentualProduto(tipoRisco?: TipoRisco) {
         let percentuais = this.objeto.carteiraProdutoRel
-            .filter(x => x.produtoTributacaoRel.produto.tipoRisco_Id == this.selectedRisco?.id)
+            .filter(x => x.produtoTributacaoRel.produto.tipoRisco_Id == tipoRisco?.id)
             .map(x => x.percentual);
-        if (this.selectedRisco && percentuais.length > 0) {
+            console.log(percentuais)
+            
+            if (tipoRisco && percentuais.length > 0) {
+                console.log(percentuais.reduce((x, y) => x + y))
             this.percentualMaxProduto = 100 - percentuais.reduce((x, y) => x + y);
         } else {
             this.percentualMaxProduto = 100;
         }
+        console.log(this.percentualMaxProduto)
+        return this.percentualMaxProduto;
     }
 
     setChartProduto(str: string) {
-        console.log(str)
         let index = 0;
-        let tipoRiscos = this.objeto.carteiraProdutoRel
-            .map(x => x.produtoTributacaoRel.produto.tipoRisco);
-            
+        let tipoRiscos = this.objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel.produto.tipoRisco);
         tipoRiscos = tipoRiscos.filter((value: any, index: any, self: any) => {
             return index === self.findIndex((x: any) => (x.id === value.id))
         });
@@ -256,13 +259,13 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
                         }
                     }
                 },
-                yAxes: [{
-                    scaleLabel: { display: false },
+                yAxes: {
+                    scaleLabel: { display: true },
                     stacked: true,
                     drawOnChartArea: tipoRiscos.length > 0,
                     drawBorder: tipoRiscos.length > 0,
                     display: tipoRiscos.length > 0,
-                }]
+                }
             },
             parsing: {
                 yAxisKey: 'produtoTributacaoRel.produto.tipoRisco.nome',
@@ -354,29 +357,37 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     // }
 
     adicionarProduto() {
+        console.log('adicionarProduto')
         if (this.produto == undefined) {
             this.toastr.error('Selecione um produto para adicionar');
         } else if (this.produtoTributacaoRel == undefined) {
             this.toastr.error('Selecione uma tributação para adicionar');
         } else {
-            var jaExiste = this.objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel).find(x => x.produto_Id == this.produto?.id && x.tributacao_Id == this.produtoTributacaoRel?.id);
-            if (jaExiste) {
-                this.toastr.error('Combinação já cadastrada')
-                return;
-            }
             
             let p: Produto = Object.assign({}, this.produto)
             p.produtoTributacaoRel = [];
             this.produtoTributacaoRel.produto = p;
-            this.objeto.carteiraProdutoRel.push({
+            
+
+            let carteiraProdutoRel = {
                 id: 0,
                 percentual: this.percentual,
                 carteiraSetup_Id: this.objeto.id,
-                produtoTributacao_Id: this.produtoTributacaoRel.id,
+                produtoTributacaoRel_Id: this.produtoTributacaoRel.id,
                 produtoTributacaoRel: this.produtoTributacaoRel
-            });
+            }
+
+            var index = this.objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel).findIndex(x => x.produto_Id == this.produto?.id && x.tributacao_Id == this.produtoTributacaoRel?.id);
+            var jaExiste = this.objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel).find(x => x.produto_Id == this.produto?.id && x.tributacao_Id == this.produtoTributacaoRel?.id);
+            if (jaExiste && index != -1) {
+                carteiraProdutoRel.id = jaExiste.id;
+                this.objeto.carteiraProdutoRel.splice(index, 1, carteiraProdutoRel);
+            } else {
+                this.objeto.carteiraProdutoRel.push(carteiraProdutoRel);
+            }
+            
             this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produtoTributacaoRel.produto.tipoRisco_Id, y.produtoTributacaoRel.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
-            this.calcularPercentualProduto();
+            this.calcularPercentualProduto(this.selectedRisco);
             this.setChartProduto('adicionarProduto');
             this.setupService.setObject(this.objeto);
             
@@ -393,7 +404,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         if (index != -1) {
             this.objeto.carteiraProdutoRel.splice(index, 1);
             this.setChartProduto('removeProduto');
-            this.calcularPercentualProduto();
+            this.calcularPercentualProduto(this.selectedRisco);
             
             this.setupService.setObject(this.objeto);
         }

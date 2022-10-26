@@ -96,7 +96,7 @@ export class CarteiraProdutoRelService {
                         id: ++last_Id_Rel,
                         carteiraSetup_Id: carteira_Setup.id,
                         percentual: 0,
-                        produtoTributacao_Id: 0,
+                        produtoTributacaoRel_Id: 0,
                         produtoTributacaoRel: carteiraProdutoRel.produtoTributacaoRel,
                     }
                     carteira_Setup.carteiraProdutoRel.push(c);

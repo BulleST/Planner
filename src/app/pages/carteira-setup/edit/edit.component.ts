@@ -47,10 +47,7 @@ export class EditComponent implements OnInit {
                 } else {
                     this.setupService.get(this.objeto.id).subscribe({
                         next: (res) => {
-                            this.objeto.carteiraRiscoRel = res.carteiraRiscoRel;
-                            this.objeto.carteiraProdutoRel = res.carteiraProdutoRel;
-                            this.objeto.empresa_Id = res.empresa_Id;
-                            this.objeto.nome = res.nome;
+                            this.objeto = res;
                         },
                         error: (err) => {
                             this.voltar()

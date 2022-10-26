@@ -52,7 +52,7 @@ export class SetupComponent implements OnInit {
                             carteiraSetup_Id: carteiraSetup.id,
                             carteiraSetup: carteiraSetup,
                             percentual: rel.percentual,
-                            produtoTributacao_Id: rel.produtoTributacaoRel.id,
+                            produtoTributacaoRel_Id: rel.produtoTributacaoRel.id,
                             produtoTributacaoRel: rel.produtoTributacaoRel,
                             // produto: rel.produtoTributacaoRel.produto,
                             // produto_Id: rel.produtoTributacaoRel.produto_Id,

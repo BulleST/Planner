@@ -1929,8 +1929,6 @@
     }
 
 
-    .p-datatable table
-
     
    .p-datatable table::-webkit-scrollbar {
         height: 7px;
@@ -1946,4 +1944,13 @@
     }
     .chart-container {
         height: 60vh;
+    }
+
+    .form-footer-submit-fixed {
+        display: flex;
+        position: sticky;
+        bottom: 10px;
+        background: #fff;
+        padding: 10px 10px;
+        box-shadow: 0px -1px 6px #00000061;
     }

@@ -103,13 +103,18 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['planner_id'];
 
+            console.log(item)
+            console.log(this.planner)
             if (this.isEditPage) {
                 this.planner.id = this.crypto.decrypt(item['planner_id'])
+                console.log('oi')
                 this.plannerService.get(this.planner.id).subscribe({
                     next: res => {
+                        console.log('oi')
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
+                        console.log(res)
                         this.planner = res;
                         this.setChartPatrimonioIdade();
                     }
@@ -175,6 +180,14 @@ export class PlannerComponent implements OnInit, AfterViewInit {
 
     resetForm() {
         this.plannerService.setObject(new Planejamento);
+    }
+
+    calcularICM() {
+        if (!this.planner.cliente.altura || !this.planner.cliente.peso) {
+            this.planner.cliente.imc = '' as unknown as number;
+        } else {
+            this.planner.cliente.imc = this.planner.cliente.peso / (Math.pow(this.planner.cliente.altura, 2))
+        }
     }
 
     carteiraSetupChange(carteiraSetup: any) {
@@ -377,27 +390,27 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             return;
         }
         this.erro = [];
-
+        console.log(this.planner)
         if (this.isEditPage) {
-            this.plannerService.edit(this.planner).subscribe({
-                next: res => {
-                    this.loading = false;
-                    this.voltar();
-                },
-                error: err => {
-                    this.loading = false;
-                }
-            });
+            // this.plannerService.edit(this.planner).subscribe({
+            //     next: res => {
+            //         this.loading = false;
+            //         this.voltar();
+            //     },
+            //     error: err => {
+            //         this.loading = false;
+            //     }
+            // });
         } else {
-            this.plannerService.create(this.planner).subscribe({
-                next: res => {
-                    this.loading = false;
-                    this.voltar();
-                },
-                error: err => {
-                    this.loading = false;
-                }
-            });
+            // this.plannerService.create(this.planner).subscribe({
+            //     next: res => {
+            //         this.loading = false;
+            //         this.voltar();
+            //     },
+            //     error: err => {
+            //         this.loading = false;
+            //     }
+            // });
         }
     }
 }

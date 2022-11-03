@@ -54,7 +54,7 @@
                                id="tipoRisco-{{item.nome}}"
                                #tipoRisco="ngModel"
                                [(ngModel)]="selectedRisco"
-                               (ngModelChange)="tipoRiscoChange(); calcularPercentualProduto(selectedRisco)"
+                               (ngModelChange)="tipoRiscoChange()"
                                [value]="item"
                                [checked]="item.id == selectedRisco?.id">
                         <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
@@ -139,8 +139,8 @@
                                    decimalMarker=","
                                    suffix="%"
                                    #_percentual="ngModel"
-                                   [max]="calcularPercentualProduto(selectedRisco)"
-                                   [placeholder]="calcularPercentualProduto(selectedRisco) + '%' + ' disponível'"
+                                   [max]="percentualMaxProduto"
+                                   [placeholder]="percentualMaxProduto + '%' + ' disponível'"
                                    [disabled]="produto == undefined"
                                    [(ngModel)]="percentual">
                         </div>
@@ -150,13 +150,13 @@
                                 [disabled]="produto == undefined 
                                 || produtoTributacaoRel == undefined 
                                 || percentual.toString() == ''
-                                || percentual > calcularPercentualProduto(selectedRisco)"> 
+                                || percentual > percentualMaxProduto"> 
                             Adicionar 
                         </button>
                     </div>
                     <div class="mt-1 px-1">
                         <p class="text-danger" *ngIf="_percentual.touched && _percentual.value ==''">Informe o percentual</p>
-                        <p class="text-danger" *ngIf="percentual > calcularPercentualProduto(selectedRisco)">Valor máximo disponível é {{calcularPercentualProduto(selectedRisco)}}%</p>
+                        <p class="text-danger" *ngIf="percentual > percentualMaxProduto">Valor máximo disponível é {{percentualMaxProduto}}%</p>
                     </div>
                 </div>
             </div>
@@ -214,12 +214,12 @@
             </div>
         </div>
     </div>
-    <div class="d-flex p-0 mt-3">
+    <div class="d-flex align-items-start p-0 mt-3">
         <div *ngIf="erro || form.invalid" class="m-0">
             <p class="text-red" *ngFor="let err of erro">{{err}}</p>
             <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
         </div>
-        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading || validatePercentualRisco()">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
     </div>
 </form>

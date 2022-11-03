@@ -54,7 +54,11 @@ export class PlannerService {
     } 
     
     get(id: number) {
-        return this.http.get<Planejamento>(`${this.url}/planejamento/${id}`);
+        return this.http.get<Planejamento>(`${this.url}/planejamento/${id}`).pipe(map(item => {
+            item.principaisObjetivos = item.principaisObjetivos ? item.principaisObjetivos : [];
+            this.setObject(item);
+            return item;
+        }));
     }
 
     create(request: Planejamento) {

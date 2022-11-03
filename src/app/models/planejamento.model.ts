@@ -15,8 +15,10 @@ export class Planejamento {
     carteiraSetup: CarteiraSetup = undefined as unknown as CarteiraSetup;
     data: Date  = '' as unknown as Date;
     descricao: string = '';
+    
     taxaSelic: number = '' as unknown as number;
-    taxaIPCA: number = '' as unknown as number;
+    taxaIpca: number = '' as unknown as number;
+
     cm: boolean = false;
     
     rE_Sugerido: number = '' as unknown as number; // re = Reserva de Emergência

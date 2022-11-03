@@ -117,6 +117,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
             this.setChartProduto('ngOnChanges');
+            this.validatePercentualRisco();
         }
 
         if (changes['loading'])
@@ -157,18 +158,6 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         this.sendData.emit(form);
     }
 
-    // selectData(event: any) {
-    //     let object = event.element.element.$context.raw as CarteiraRiscoRel;
-    //     if (this.selectedRisco == object) {
-    //         delete this.selectedRisco;
-    //         delete this.selectedRiscoIndex;
-    //     } else {
-    //         this.selectedRisco = object;
-    //         this.selectedRiscoIndex = event.element.datasetIndex;
-    //         this.tipoRiscoChange();
-    //     }
-    // }
-
     async tipoRiscoChange() {
         let produtos: Produto[] = [];
         if (this.urlArray.includes('empresas/cadastrar')) {
@@ -180,26 +169,22 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
             this.produtos = produtos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id);
         }
 
-        this.calcularPercentualProduto(this.selectedRisco);
+        this.percentualMaxProduto = this.calcularPercentualProduto(this.selectedRisco);
 
     }
 
     calcularPercentualProduto(tipoRisco?: TipoRisco) {
+        let percentualMaxProduto = 100;
         let percentuais = this.objeto.carteiraProdutoRel
             .filter(x => x.produtoTributacaoRel.produto.tipoRisco_Id == tipoRisco?.id)
             .map(x => x.percentual);
-            console.log(percentuais)
             
-            if (tipoRisco && percentuais.length > 0) {
-                console.log(percentuais.reduce((x, y) => x + y))
-            this.percentualMaxProduto = 100 - percentuais.reduce((x, y) => x + y);
-        } else {
-            this.percentualMaxProduto = 100;
-        }
-        console.log(this.percentualMaxProduto)
-        return this.percentualMaxProduto;
+        if (tipoRisco && percentuais.length > 0) {
+            percentualMaxProduto = 100 - percentuais.reduce((x, y) => x + y);
+        } 
+        return percentualMaxProduto;
     }
-
+    
     setChartProduto(str: string) {
         let index = 0;
         let tipoRiscos = this.objeto.carteiraProdutoRel.map(x => x.produtoTributacaoRel.produto.tipoRisco);
@@ -292,70 +277,6 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
 
     }
 
-    // setChartRisco() {
-    //     this.optionsRisco = {
-    //         onClick: (e: any) => {
-    //             let index = 0;
-    //             for (let dataset of e.chart.data.datasets) {
-    //                 dataset.backgroundColor = this.chartPalete[index++];
-    //             }
-    //             if (this.selectedRiscoIndex != undefined) {
-    //                 e.chart.data.datasets[this.selectedRiscoIndex].backgroundColor = '#f9a814'
-    //             }
-    //             e.chart.update();
-    //         },
-    //         indexAxis: 'y',
-    //         tooltips: {
-    //             mode: 'index',
-    //             intersect: false,
-    //             enabled: true,
-    //         },
-    //         scales: {
-    //             xAxes: {
-    //                 stacked: true,
-    //                 min: 0,
-    //                 max: 100,
-    //                 grid: {
-    //                     borderWidth: 0,
-    //                     drawBorder: false,
-    //                     tickLength: 2,
-    //                     // offset: false    
-    //                 }
-    //             },
-    //             yAxes: {
-    //                 stacked: true,
-    //                 display: false,
-    //             }
-    //         }
-    //     };
-
-    //     let index = 0;
-    //     let datasetRisco = this.objeto.carteiraRiscoRel.map(x => {
-    //         let color: string;
-    //         if (this.selectedRisco
-    //             && this.selectedRisco.id == x.id
-    //             && this.selectedRisco.tipoRisco_Id == x.tipoRisco_Id
-    //             && this.selectedRisco.carteiraSetup_Id == x.carteiraSetup_Id
-    //             && this.selectedRisco.percentual == x.percentual
-    //         ) {
-    //             color = '#f9a814'
-    //         } else {
-    //             color = this.chartPalete[index++];
-    //         }
-    //         return {
-    //             type: 'bar',
-    //             label: x.tipoRisco.nome,
-    //             backgroundColor: color,
-    //             showLine: false,
-    //             data: [x],
-    //         }
-    //     })
-    //     this.dataRisco = {
-    //         labels: [''],
-    //         datasets: datasetRisco
-    //     };
-    // }
-
     adicionarProduto() {
         console.log('adicionarProduto')
         if (this.produto == undefined) {
@@ -408,6 +329,37 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
             
             this.setupService.setObject(this.objeto);
         }
+    }
+
+
+    validatePercentualRisco() {
+        let invalid = false;
+        let riscos: CarteiraRiscoRel[] = [];
+        for(let rel of this.objeto.carteiraProdutoRel) {
+            let index = riscos.findIndex(x => x.tipoRisco_Id == rel.produtoTributacaoRel.produto.tipoRisco_Id);
+            if (index != -1) {
+                riscos[index].percentual += rel.percentual;
+            } else {
+                riscos.push({
+                    tipoRisco: rel.produtoTributacaoRel.produto.tipoRisco as TipoRisco,
+                    tipoRisco_Id: rel.produtoTributacaoRel.produto.tipoRisco_Id,
+                    percentual: rel.percentual,
+                    id: 0,
+                    carteiraSetup_Id: 0,
+                })
+            }
+        }
+
+        this.erro = riscos.filter(x => x.percentual != 100).map(x => {
+            return `A soma do percentual dos produtos para cada tipo de risco ${x.tipoRisco.nome} deve ser 100%.`
+        });
+
+        if(this.erro.length > 0) {
+            invalid = true;
+        }
+        invalid
+
+        return invalid;
     }
 }
 

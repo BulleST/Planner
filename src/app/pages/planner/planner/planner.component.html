@@ -137,10 +137,10 @@
                                            popoverClass="popover-danger"
                                            [disablePopover]="idade.errors == null"
                                            triggers="mouseenter:mouseleave"
-                                           mask="0*"
-                                           suffix=" anos"
                                            (keyup.arrowup)="planner.cliente.idade = arrowUp(idade.value)"
-                                           (keyup.arrowdown)="planner.cliente.idade = arrowDown(idade.value, true)">
+                                           (keyup.arrowdown)="planner.cliente.idade = arrowDown(idade.value, true)"
+                                           mask="0*"
+                                           suffix=" anos">
                                 </div>
                             </div>
                             <div class="form-row">
@@ -181,8 +181,9 @@
                                            thousandSeparator="."
                                            decimalMarker=","
                                            suffix="kg"
-                                           (keyup.arrowup)="planner.cliente.peso = arrowUp(peso.value)"
-                                           (keyup.arrowdown)="planner.cliente.peso = arrowDown(peso.value, true)">
+                                           (ngModelChange)="calcularICM()"
+                                           (keyup.arrowup)="planner.cliente.peso = arrowUp(peso.value); calcularICM();"
+                                           (keyup.arrowdown)="planner.cliente.peso = arrowDown(peso.value, true); calcularICM();">
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6">
                                     <label for="altura">Altura:
@@ -202,8 +203,9 @@
                                            thousandSeparator="."
                                            decimalMarker=","
                                            suffix="cm"
-                                           (keyup.arrowup)="planner.cliente.altura = arrowUp(altura.value)"
-                                           (keyup.arrowdown)="planner.cliente.altura = arrowDown(altura.value, true)">
+                                           (ngModelChange)="calcularICM()"
+                                           (keyup.arrowup)="planner.cliente.altura = arrowUp(altura.value); calcularICM();"
+                                           (keyup.arrowdown)="planner.cliente.altura = arrowDown(altura.value, true); calcularICM();">
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6">
                                     <label for="imc">IMC:
@@ -225,6 +227,102 @@
                                            suffix="%"
                                            (keyup.arrowup)="planner.cliente.imc = arrowUp(imc.value)"
                                            (keyup.arrowdown)="planner.cliente.imc = arrowDown(imc.value, true)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Valores -->
+                    <div class="form-row mb-1">
+                        <div class="home__container">
+                            <div class="home__container-header mb-2">
+                                <h6>Valores</h6>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
+                                    <label for="receita">Receita:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="receita"
+                                           name="receita"
+                                           #receita="ngModel"
+                                           [(ngModel)]="planner.cliente.receita"
+                                           mask="separator"
+                                           thousandSeparator="."
+                                           decimalMarker=","
+                                           prefix="R$ "
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="receita.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           (keyup.arrowup)="planner.cliente.receita = arrowUp(receita.value)"
+                                           (keyup.arrowdown)="planner.cliente.receita = arrowDown(receita.value, true)">
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                    <label for="despesa">Despesas:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="despesa"
+                                           name="despesa"
+                                           #despesa="ngModel"
+                                           [(ngModel)]="planner.cliente.despesa"
+                                           mask="separator"
+                                           thousandSeparator="."
+                                           decimalMarker=","
+                                           prefix="R$ "
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="despesa.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           (keyup.arrowup)="planner.cliente.despesa = arrowUp(despesa.value)"
+                                           (keyup.arrowdown)="planner.cliente.despesa = arrowDown(despesa.value, true)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Taxas -->
+                    <div class="form-row mb-1">
+                        <div class="home__container">
+                            <div class="home__container-header mb-2">
+                                <h6>Taxas</h6>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
+                                    <label for="taxaSelic">Taxa Selic:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="taxaSelic"
+                                           name="taxaSelic"
+                                           #taxaSelic="ngModel"
+                                           [(ngModel)]="planner.taxaSelic"
+                                           mask="separator"
+                                           thousandSeparator="."
+                                           decimalMarker=","
+                                           suffix="%"
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="taxaSelic.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           (keyup.arrowup)="planner.taxaSelic = arrowUp(taxaSelic.value)"
+                                           (keyup.arrowdown)="planner.taxaSelic = arrowDown(taxaSelic.value, true)">
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                    <label for="taxaIpca">Taxa IPCA:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="taxaIpca"
+                                           name="taxaIpca"
+                                           #taxaIpca="ngModel"
+                                           [(ngModel)]="planner.taxaIpca"
+                                           mask="separator"
+                                           thousandSeparator="."
+                                           decimalMarker=","
+                                           suffix="%"
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="taxaIpca.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           (keyup.arrowup)="planner.taxaIpca = arrowUp(taxaIpca.value)"
+                                           (keyup.arrowdown)="planner.taxaIpca = arrowDown(taxaIpca.value, true)">
                                 </div>
                             </div>
                         </div>
@@ -452,6 +550,8 @@
                             </div>
                             <div class="form-row">
                                 <p-table [value]="planner.planejamentoInvestimento"
+                                        [responsive]="true"
+                                        responsiveLayout="scroll"
                                          class="table table-editable"
                                          emptyMessage="Nenhum registro">
                                     <ng-template pTemplate="header">
@@ -571,7 +671,8 @@
                                          [value]="planner.planejamentoProduto"
                                          [responsive]="true"
                                          responsiveLayout="scroll"
-                                         class="table table-editable">
+                                         class="table table-editable"
+                                         emptyMessage="Nenhum registro">
                                     <ng-template pTemplate="header" let-columns>
                                         <tr class="primary">
                                             <th class="text-right"></th>

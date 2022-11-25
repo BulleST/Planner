@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faChevronLeft, faPlus, faTimes, faTrash, faTrashAlt, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Cliente } from 'src/app/models/cliente.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { EstadoCivil } from 'src/app/models/estadoCivil.model';
 import { FluxosPontuais } from 'src/app/models/fluxosPontuais.model';
 import { PrincipaisObjetivos } from 'src/app/models/objetivos.model';
@@ -85,6 +86,13 @@ export class PlannerComponent implements OnInit, AfterViewInit {
 
     produtoHover?: Produto;
 
+    // Primeiro inserir produto de uma carteira
+    // pelo dropdown.
+    // Depois pode adicionar produto aleatório a uma carteira
+    enviadoPrimeiraVez: boolean = false;
+
+    percentualTotalProduto = 0;
+
     constructor(
         private modal: ModalOpen,
         private plannerService: PlannerService,
@@ -95,35 +103,33 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         private setup: CarteiraSetupService,
         private produtoService: ProdutoService,
         private crypto: Crypto,
+        private router: Router,
     ) {
         this.plannerService.getObject().subscribe(res => {
             this.planner = res;
+            this.enviadoPrimeiraVez = this.planner.id != 0;
+            this.calculaPercentualProduto();
+            console.log(this.planner.planejamentoInvestimento)
         });
-
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['planner_id'];
-
-            console.log(item)
-            console.log(this.planner)
+            if (this.planner.id != 0 && !item['planner_id']) {
+                this.router.navigate(['clientes', 'planner', this.crypto.encrypt(this.planner.id)], { skipLocationChange: false })
+            }
             if (this.isEditPage) {
                 this.planner.id = this.crypto.decrypt(item['planner_id'])
-                console.log('oi')
                 this.plannerService.get(this.planner.id).subscribe({
                     next: res => {
-                        console.log('oi')
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
-                        console.log(res)
                         this.planner = res;
                         this.setChartPatrimonioIdade();
                     }
                 });
             }
         });
-
         this.isMobile.get().subscribe(res => this.mobile = res);
-
         this.setup.list.subscribe(res => this.carteirasSetup = res);
         this.setup.getList().subscribe({
             next: res => {
@@ -134,7 +140,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                 this.loadingCarteiraSetup = false;
             }
         });
-
+        this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
         this.dropdown.getEstadoCivil().subscribe({
             next: res => {
                 this.estadoCivil = res;
@@ -144,8 +150,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                 this.loadingEstadoCivil = false;
             }
         });
-        this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
-
+        this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
         this.dropdown.getPerfilInvestidor().subscribe({
             next: res => {
                 this.perfilInvestidor = res;
@@ -155,8 +160,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                 this.loadingPerfilInvestidor = false;
             }
         });
-
-        this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
         this.setChartPatrimonioIdade();
         this.setChartCapitalSegurado();
     }
@@ -190,14 +193,18 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         }
     }
 
-    carteiraSetupChange(carteiraSetup: any) {
-        if (carteiraSetup.value) {
-            this.planner.carteiraSetup_Id = carteiraSetup.value.id;
+    calculaPercentualProduto() {
+        if (this.planner.planejamentoProduto.length > 0) {
+            let percentuais = this.planner.planejamentoProduto.map(x => x.percentual).filter(x => x.toString().trim() != '' && x != 0)
+            if(percentuais.length > 0) {
+                this.percentualTotalProduto = percentuais.reduce((x, y) => x + y)
+            } else {
+                this.percentualTotalProduto = 0;
+            }
         } else {
-            this.planner.carteiraSetup_Id = 0;
+            this.percentualTotalProduto = 0;
         }
-        this.plannerService.setObject(this.planner);
-
+        return this.percentualTotalProduto;
     }
 
     calculaIdade() {
@@ -208,6 +215,22 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         } else {
             this.planner.cliente.idade = '' as unknown as number;
         }
+    }
+
+    carteiraSetupChange(carteiraSetup: any) {
+        if (carteiraSetup.value) {
+            this.planner.carteiraSetup_Id = carteiraSetup.value.id;
+        } else {
+            this.planner.carteiraSetup_Id = 0;
+        }
+        this.saveData();
+
+    }
+
+    perfilInvestidorChange() {
+        this.planner.cliente.perfilInvestidor = this.perfilInvestidor
+            .find(x => x.id == this.planner.cliente.perfilInvestidor_Id) as PerfilInvestidor;
+        this.saveData();
     }
 
     setChartPatrimonioIdade() {
@@ -321,41 +344,73 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.chartSize[containerId]['height'] = (viewportHeight * containerHeight).toString() + 'vh';
     }
 
-    async adicionarProduto() {
-        if (this.planner.carteiraSetup) {
-            this.planner.planejamentoProduto = this.planner.carteiraSetup.carteiraProdutoRel.map(x => {
-                let planP: PlanejamentoProduto = new PlanejamentoProduto;
-                planP.planejamento_Id = this.planner.id;
-                planP.produtoTributacaoRel = x.produtoTributacaoRel;
-                planP.produtoTributacaoRel_Id = x.produtoTributacaoRel_Id;
-                return planP;
-            });
-            this.planner.planejamentoProduto.sort((x, y) => x.produtoTributacaoRel?.produto_Id - y.produtoTributacaoRel?.produto_Id);
-        } else {
-            this.planner.planejamentoProduto = [];
+    async adicionarProdutoCarteira(form: NgForm) {
+        // if (this.planner.carteiraSetup) {
+        //     this.planner.planejamentoProduto = this.planner.carteiraSetup.carteiraProdutoRel.map(x => {
+        //         let planP: PlanejamentoProduto = new PlanejamentoProduto;
+        //         planP.planejamento_Id = this.planner.id;
+        //         planP.produtoTributacaoRel = x.produtoTributacaoRel;
+        //         planP.produtoTributacaoRel_Id = x.produtoTributacaoRel_Id;
+        //         return planP;
+        //     });
+        //     this.planner.planejamentoProduto.sort((x, y) => x.produtoTributacaoRel?.produto_Id - y.produtoTributacaoRel?.produto_Id);
+        // } else {
+        //     this.planner.planejamentoProduto = [];
+        // } 
+
+        this.planner.planejamentoProduto = [];
+        this.planner.usuario_Id = 1;
+        this.planner.cliente.empresa_Id = 1;
+        if (!this.planner.cliente.empresa) {
+            this.planner.cliente.empresa = new Empresa;
+        }
+        this.planner.cliente.empresa.id = 1;
+
+        this.saveData();
+        this.erro = [];
+        console.log(form.errors);
+        if (form.invalid) {
+            this.erro.push('Campos inválidos!');
+            this.toastr.error('Campos inválidos!');
+            this.loading = false;
+            return;
         } 
-        this.plannerService.setObject(this.planner);
+        this.plannerService.create(this.planner).subscribe({
+            next: res => {
+                this.loading = false;
+                this.plannerService.setObject(res);
+                this.enviadoPrimeiraVez = true;
+                console.log(res);
+            },
+            error: err => {
+                this.loading = false;
+            }
+        });
     }
 
     adicionarFLuxoPontual() {
         this.planner.planejamentoFluxosPontuais.push(new FluxosPontuais)
+        this.saveData();
     }
 
     removerFluxoPontual(item: FluxosPontuais) {
         let index = this.planner.planejamentoFluxosPontuais.findIndex(x => x == item);
         if (index != -1) {
             this.planner.planejamentoFluxosPontuais.splice(index, 1);
+            this.saveData();
         }
     }
 
     adicionarObjetivo() {
         this.planner.principaisObjetivos.push(new PrincipaisObjetivos)
+        this.saveData();
     }
 
     removerObjetivo(item: PrincipaisObjetivos) {
         let index = this.planner.principaisObjetivos.findIndex(x => x == item);
         if (index != -1) {
             this.planner.principaisObjetivos.splice(index, 1);
+            this.saveData();
         }
     }
 
@@ -363,7 +418,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         let index = this.planner.planejamentoInvestimento.findIndex(x => x == item);
         if (index != -1) {
             this.planner.planejamentoInvestimento.splice(index, 1);
-            this.plannerService.setObject(this.planner);
+            this.saveData();
         }
     }
 
@@ -371,7 +426,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         let index = this.planner.planejamentoProduto.findIndex(x => x == item);
         if (index != -1) {
             this.planner.planejamentoProduto.splice(index, 1);
-            this.plannerService.setObject(this.planner);
+            this.saveData();
         }
     }
 
@@ -383,34 +438,65 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         return arrowDown(value, allowNegative)
     }
 
-    send(form: NgForm) {
+    saveData(){
+        this.plannerService.setObject(this.planner);
+    }
+
+    validaForm(form: NgForm) {
+        this.erro = [];
         if (form.invalid) {
-            this.toastr.error('Campos inválidos');
-            this.erro = ['Campos inválidos'];
+            this.erro.push('Campos inválidos!');
+            this.toastr.error('Campos inválidos!');
+            
+            return false;
+        } 
+        if (this.loading == true) {
+            return false;
+        }
+        
+        if (this.planner.planejamentoInvestimento.length == 0) {
+            this.erro.push('Insira um ou mais investimentos no planner.');
+            this.toastr.error('Insira um ou mais investimentos no planner.');
+            return false;
+        }
+        if (this.planner.planejamentoProduto.length == 0) {
+            this.erro.push('Insira um ou mais produtos no planner.');
+            this.toastr.error('Insira um ou mais produtos no planner.');
+        } else {
+            let soma = this.planner.planejamentoProduto.map(x => x.percentual).reduce((x, y) => x + y);
+            if (soma > 100 || soma.toString() == '') {
+                this.erro.push('A soma do percentual dos produtos deve chegar a 100% no máximo.');
+                this.toastr.error('A soma do percentual dos produtos deve chegar a 100% no máximo.');
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
+        return true;
+    }
+
+    send(form: NgForm) {
+        this.planner.usuario_Id = 1;
+        this.planner.cliente.empresa_Id = 1;
+        if (!this.planner.cliente.empresa) {
+            this.planner.cliente.empresa = new Empresa;
+        }
+        this.planner.cliente.empresa.id = 1;
+        this.saveData();
+        let valid = this.validaForm(form);
+        if (!valid) {
             return;
         }
-        this.erro = [];
-        console.log(this.planner)
-        if (this.isEditPage) {
-            // this.plannerService.edit(this.planner).subscribe({
-            //     next: res => {
-            //         this.loading = false;
-            //         this.voltar();
-            //     },
-            //     error: err => {
-            //         this.loading = false;
-            //     }
-            // });
-        } else {
-            // this.plannerService.create(this.planner).subscribe({
-            //     next: res => {
-            //         this.loading = false;
-            //         this.voltar();
-            //     },
-            //     error: err => {
-            //         this.loading = false;
-            //     }
-            // });
-        }
+        this.plannerService.edit(this.planner).subscribe({
+            next: res => {
+                this.loading = false;
+                console.log(res);
+                this.plannerService.setObject(res);
+            },
+            error: err => {
+                this.loading = false;
+            }
+        });
     }
 }

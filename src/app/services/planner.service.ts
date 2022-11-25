@@ -61,12 +61,19 @@ export class PlannerService {
         }));
     }
 
+
+    
+    send(request: Planejamento) {
+        return this.http.post<Planejamento>(`${this.url}/planejamento/`, request);
+    }
+    
+
     create(request: Planejamento) {
         return this.http.post<Planejamento>(`${this.url}/planejamento/`, request);
     }
     
     edit(request: Planejamento) {
-        return this.http.put<Planejamento>(`${this.url}/planejamento/${request.id}`, request);
+        return this.http.put<Planejamento>(`${this.url}/planejamento/`, request);
     }
     
     delete(id: number) {

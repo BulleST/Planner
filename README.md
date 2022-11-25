@@ -1,6 +1,6 @@
 # Para a publicação
 
-### ng build --base-href "https://noemi1.github.io/Planner/"
+### ng build --base-href "https://bullest.github.io/Planner/"
 ### npx angular-cli-ghpages --dir=dist/planner
 
 

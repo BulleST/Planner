@@ -11,20 +11,58 @@
             </div>
             <div class="modal__body mt-0">
                 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
+                    
+                            <div class="mt-2 mb-2 px-2">
+                                <p class="h6">Selecione o Risco</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="mx-2">
+                                        <input type="radio"
+                                            class="mr-1 mt-1"
+                                            name="tipoRisco"
+                                            id="tipoRisco-0"
+                                            #tipoRisco="ngModel"
+                                            [(ngModel)]="selectedRisco"
+                                            (ngModelChange)="setProdutos()"
+                                            [value]="undefined"
+                                            [checked]="!selectedRisco">
+                                        <label for="tipoRisco-0">Todos</label>
+                                    </div>
+                                    <div *ngFor="let item of tipoRiscos" class="mx-2">
+                                        <input type="radio"
+                                            class="mr-1 mt-1"
+                                            name="tipoRisco"
+                                            id="tipoRisco-{{item.nome}}"
+                                            #tipoRisco="ngModel"
+                                            [(ngModel)]="selectedRisco"
+                                            (ngModelChange)="setProdutos()"
+                                            [value]="item"
+                                            [checked]="item.id == selectedRisco?.id">
+                                        <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12 col-md-4 col-sm-12">
                                     <label for="produto">Produto: <span class="text-danger">*</span></label>
                                     <select
-                                            class="form-control"
-                                            id="produto"
-                                            name="produto"
-                                            #_produto="ngModel"
-                                            [(ngModel)]="produto"
-                                            required>
-                                        <!-- (ngModelChange)="produtoChange(_produto.value)" -->
-                                        <option [ngValue]="undefined">Selecione</option>
-                                        <option [ngValue]="item" *ngFor="let item of produtos">{{item.descricao}}</option>
-                                    </select>
+                                    class="form-control"
+                                    id="produto"
+                                    name="produto"
+                                    #_produto="ngModel"
+                                    [(ngModel)]="produto"
+                                    required
+                                    (ngModelChange)="produtoChange()">
+                                    <option [ngValue]="undefined">
+                                        <span *ngIf="produtos.length > 0">Selecione</span>
+                                        <span *ngIf="produtos.length == 0">Nenhum produto</span>
+                                    </option>
+                                    <option [ngValue]="item" *ngFor="let item of produtos">{{item.descricao}}</option>
+                                </select>
+                                <div *ngIf="_produto.touched && _produto.errors">
+                                    <p class="text-danger " *ngIf="_produto.errors['required']"><small>Esse campo é obrigatório
+                                    </small></p>
+                                </div>
+                                <!-- <p class="text-warning"><small>Obs.: Filtrando por produtos ainda não adicionados</small></p> -->
                                 </div>
                             </div>
                             <div class="form-row">
@@ -36,12 +74,12 @@
                                             name="produtoTributacaoRel"
                                             #produtoTributacaoRel="ngModel"
                                             [(ngModel)]="objeto.produtoTributacaoRel"
-                                            (ngModelChange)="tributacaoChange(produtoTributacaoRel.value)"
+                                            (ngModelChange)="tributacaoChange(objeto.produtoTributacaoRel)"
                                             [disabled]="!produto"
                                             required>
                                         <option [ngValue]="undefined" *ngIf="produto">Selecione</option>
                                         <option [ngValue]="undefined" *ngIf="!produto">Selecione um produto</option>
-                                        <option [ngValue]="item" *ngFor="let item of produto ? produto.produtoTributacaoRel : []">{{item.tributacao.descricao}}</option>
+                                        <option [ngValue]="item" *ngFor="let item of (produto ? produto.produtoTributacaoRel : [])">{{item.tributacao.descricao}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6">
@@ -60,7 +98,30 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12">
+                                    <label for="percentual">Percentual: <span class="text-danger">*</span></label>
+                                    <input type="text"
+                                            class="form-control"
+                                            id="percentual"
+                                            name="percentual"
+                                            #percentual="ngModel"
+                                            [(ngModel)]="objeto.percentual"
+                                            mask="separator.5"
+                                            thousandSeparator="."
+                                            decimalMarker=","
+                                            suffix="%"
+                                            [ngbPopover]="campoObrigatorio"
+                                            popoverClass="popover-danger"
+                                            [disablePopover]="percentual.errors == null"
+                                            triggers="mouseenter:mouseleave"
+                                            (keyup.arrowup)="objeto.percentual = arrowUp(percentual.value)"
+                                            (keyup.arrowdown)="objeto.percentual = arrowDown(percentual.value)"
+                                            required>
+                                    <div *ngIf="percentual.errors && percentual.touched">
+                                        <p class="text-danger" *ngIf="percentual.errors['required']">Esse campo é obrigatório</p>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                     <label for="rentabilidade">Rentabilidade: <span class="text-danger">*</span></label>
                                     <input type="text"
                                             class="form-control"
@@ -83,7 +144,7 @@
                                         <p class="text-danger" *ngIf="rentabilidade.errors['required']">Esse campo é obrigatório</p>
                                     </div>
                                 </div>
-                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                     <label for="montanteAtual">Montante Atual: <span class="text-danger">*</span></label>
                                     <input type="text"
                                             class="form-control"

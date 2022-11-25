@@ -12,7 +12,7 @@ export class PlanejamentoProduto {
     montanteAtual: number = '' as unknown as number;
     sugerido: number = '' as unknown as number;
     planoAcao: number = '' as unknown as number;
-
+    percentual: number = '' as unknown as number;
     // produto: Produto = new Produto;
     // tributacao: Tributacao = new Tributacao;
 }

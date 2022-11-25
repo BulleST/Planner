@@ -44,6 +44,7 @@ export class InvestimentoFormComponent implements OnInit {
         private plannerService: PlannerService,
         private setupService: CarteiraSetupService,
         private investimentoService: InvestimentoService,
+        private toastr: ToastrService,
         ) {
         this.plannerService.getObject().subscribe(planner => {
             this.planner = planner;
@@ -79,27 +80,36 @@ export class InvestimentoFormComponent implements OnInit {
     }
 
     arrowUp(value: number) {
-        console.log('value: ', value)
         return arrowUp(value)
     }
     arrowDown(value: number, allowNegative: boolean = false) {
-        console.log('value: ', value)
         return arrowDown(value, allowNegative)
     }
     
     tributacaoChange(investimentoTributacaoRel: InvestimentoTributacaoRel) {
         this.objeto.investimentoTributacaoRel_Id = investimentoTributacaoRel?.id ?? 0;
+        let investimento: Investimento = Object.assign({}, this.investimento)
+        investimento.investimentoTributacaoRel = [];
+        this.objeto.investimentoTributacaoRel.investimento = investimento;
         this.aliquota = this.objeto.investimentoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
     }
 
     send(model: NgForm) {
         this.loading = true;
         this.erro = [];
-
-        this.planner.planejamentoInvestimento.push(this.objeto);
-        this.plannerService.setObject(this.planner);
-        this.voltar();
-
+        console.log(this.objeto)
+        
+        let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimentoTributacaoRel_Id == this.objeto.investimentoTributacaoRel_Id)
+        console.log(jaExiste)
+        if(jaExiste) {
+            this.erro.push('Esse investimento já está inserido.')
+            this.toastr.error('Esse investimento já está inserido.')
+        } else {
+            this.erro = [];
+            this.planner.planejamentoInvestimento.push(this.objeto);
+            this.plannerService.setObject(this.planner);
+            this.voltar();
+        }
         this.loading = false;
     }
 

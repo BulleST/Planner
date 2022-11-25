@@ -56,7 +56,7 @@
                                [(ngModel)]="selectedRisco"
                                (ngModelChange)="tipoRiscoChange()"
                                [value]="item"
-                               [checked]="item.id == selectedRisco?.id">
+                               [checked]="item.id == selectedRisco.id">
                         <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
                     </div>
                 </div>
@@ -139,8 +139,8 @@
                                    decimalMarker=","
                                    suffix="%"
                                    #_percentual="ngModel"
-                                   [max]="percentualMaxProduto"
-                                   [placeholder]="percentualMaxProduto + '%' + ' disponível'"
+                                   [max]="selectedRisco.percentualDisponivel"
+                                   [placeholder]="selectedRisco.percentualDisponivel + '%' + ' disponível'"
                                    [disabled]="produto == undefined"
                                    [(ngModel)]="percentual">
                         </div>
@@ -150,13 +150,13 @@
                                 [disabled]="produto == undefined 
                                 || produtoTributacaoRel == undefined 
                                 || percentual.toString() == ''
-                                || percentual > percentualMaxProduto"> 
+                                || percentual > selectedRisco.percentualDisponivel"> 
                             Adicionar 
                         </button>
                     </div>
                     <div class="mt-1 px-1">
                         <p class="text-danger" *ngIf="_percentual.touched && _percentual.value ==''">Informe o percentual</p>
-                        <p class="text-danger" *ngIf="percentual > percentualMaxProduto">Valor máximo disponível é {{percentualMaxProduto}}%</p>
+                        <p class="text-danger" *ngIf="percentual > selectedRisco.percentualDisponivel">Valor máximo disponível é {{selectedRisco.percentualDisponivel}}%</p>
                     </div>
                 </div>
             </div>
@@ -177,7 +177,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of objeto.carteiraProdutoRel" [class.selected]="item.produtoTributacaoRel.produto.tipoRisco_Id == selectedRisco?.id">
+                            <tr *ngFor="let item of objeto.carteiraProdutoRel;"
+                            [class.selected]="item.produtoTributacaoRel.produto.tipoRisco_Id == selectedRisco.id">
                                 <td></td>
                                 <td>{{item.id }}</td>
                                 <td>{{item.produtoTributacaoRel.produto.tipoRisco?.nome}}</td>
@@ -194,10 +195,10 @@
                                            decimalMarker=","
                                            suffix="%"
                                            #_percentual="ngModel"
-                                           [max]="percentualMaxProduto"
-                                           [placeholder]="calcularPercentualProduto(item.produtoTributacaoRel.produto.tipoRisco) + '%' + ' disponível'"
+                                           [max]="getRisco(item.produtoTributacaoRel.produto.tipoRisco_Id)?.percentualDisponivel"
+                                           [placeholder]="getRisco(item.produtoTributacaoRel.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
                                            [(ngModel)]="item.percentual"
-                                           (change)="calcularPercentualProduto(item.produtoTributacaoRel.produto.tipoRisco); setChartProduto('')">
+                                           (change)="calcularPercentuais(); setChartProduto('')">
 
                                     <!-- {{item.percentual | mask : 'separator' : '.' }}% -->
                                 </td>

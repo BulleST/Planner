@@ -14,12 +14,12 @@ const routes: Routes = [
     { path: 'planner', component: PlannerComponent, children: [
         { path: 'investimento', component: InvestimentoFormComponent },
         // { path: 'produto/:produto_id', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
-        // { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
+        { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
     ] },
     { path: 'planner/:planner_id', component: PlannerComponent, children: [
         { path: 'investimento', component: InvestimentoFormComponent },
         // { path: 'produto/:produto_id', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
-        // { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
+        { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
     ] },
 ];
 

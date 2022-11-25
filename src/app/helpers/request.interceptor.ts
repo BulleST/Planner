@@ -36,6 +36,7 @@ export class RequestInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(
             tap((data: any) => {
                 if (data.type == 0) {
+                    
                 } else {
                     this.table.loading.next(false);
                     if ([200, 204, 201].includes(data.status) && (request.method == 'POST' || request.method == 'DELETE' || request.method == 'PUT')) {

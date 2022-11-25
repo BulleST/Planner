@@ -7,7 +7,9 @@ import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
 import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
 import { Produto } from 'src/app/models/produto.model';
+import { TipoRisco } from 'src/app/models/tipoRisco.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
+import { DropdownService } from 'src/app/services/dropdown.service';
 import { PlannerService } from 'src/app/services/planner.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
@@ -19,7 +21,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './produto-form.component.html',
     styleUrls: ['./produto-form.component.css']
 })
-export class ProdutoFormComponent implements OnInit, AfterViewInit {
+export class ProdutoFormComponent implements OnInit {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -28,13 +30,16 @@ export class ProdutoFormComponent implements OnInit, AfterViewInit {
     loading = false;
 
     carteirasSetup: CarteiraSetup[] = [];
+    loadingCarteiraSetup = true;
     produtos: Produto[] = [];
     loadingProdutos = true;
+    tipoRiscos: TipoRisco[] = [];
+    loadingRiscos = true;
+
     produto?: Produto;
-    tributacaoRel?: Produto;
-    produtoTributacaoRel: ProdutoTributacaoRel[] = [];
-    loadingCarteiraSetup = true;
+    selectedRisco?: TipoRisco;
     planner: Planejamento = new Planejamento;
+    
     aliquota = '';
 
     constructor(
@@ -43,6 +48,7 @@ export class ProdutoFormComponent implements OnInit, AfterViewInit {
         private alertService: AlertService,
         private produtoService: ProdutoService,
         private setup: CarteiraSetupService,
+        private dropdown: DropdownService,
     ) {
 
         this.plannerService.getObject().subscribe(async planner => {
@@ -59,10 +65,32 @@ export class ProdutoFormComponent implements OnInit, AfterViewInit {
             }
         });
 
-
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
+
+        this.dropdown.getRisco().subscribe({
+            next: (res) => {
+                this.tipoRiscos = res;
+                this.loadingRiscos = false;
+            }, 
+            error: (err ) => {
+                this.loadingRiscos = false;
+            }
+        })
+
+        this.produtoService.list.subscribe(res => {
+            this.setProdutos();
+        })
+        this.produtoService.getList().subscribe({
+            next: (res) => {
+                this.setProdutos();
+                this.loadingProdutos = false
+            },
+            error: (erro) => {
+                this.loadingProdutos = false
+            }
+        })
     }
 
     ngOnInit(): void {
@@ -71,71 +99,52 @@ export class ProdutoFormComponent implements OnInit, AfterViewInit {
         }, 200);
     }
 
-    ngAfterViewInit(): void {
-        if (this.planner.carteiraSetup) {
-            this.setProdutos();
-        }
-    }
-
     voltar() {
         this.modal.voltar();
     }
 
-    async setProdutos() {
+    setProdutos() {
         this.loadingProdutos = true;
-        let produtosId: number[] = [];
-        if (this.planner.carteiraSetup) {
-            this.planner.carteiraSetup_Id = this.planner.carteiraSetup.id;
-            produtosId = this.planner.carteiraSetup.carteiraProdutoRel.map(x => x.produtoTributacaoRel.produto_Id);
-            let produtosResponse = await lastValueFrom(this.produtoService.getList());
-            
-            this.produtos = produtosResponse.filter(x => produtosId.includes(x.id)).map(p => {
-                p.produtoTributacaoRel = this.planner.carteiraSetup.carteiraProdutoRel.map(x => x.produtoTributacaoRel)
-                .filter(x => x.produto_Id == p.id)
-                return p;
-            });
-            this.produtos.sort((x,y) => x.id - y.id);
-
-        } else {
-            this.produtos = [];
+        this.produtos = this.produtoService.list.value;
+        if(this.selectedRisco) {
+            this.produtos = this.produtoService.list.value
+            .filter(x => x.tipoRisco_Id == this.selectedRisco?.id)
         } 
+        this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
+        this.objeto.produtoTributacaoRel_Id = 0;
+        this.produto = undefined;
+        this.aliquota = '';
         this.loadingProdutos = false;
     }
 
-    async carteiraSetupChange(carteiraSetup: any) {
-        console.log(this.planner.carteiraSetup)
-        if (carteiraSetup.value) {
-            this.planner.carteiraSetup_Id = carteiraSetup.value.id;
-        } else {
-            this.planner.carteiraSetup_Id = 0;
-        } 
-        this.plannerService.setObject(this.planner);
-
-        this.setProdutos();
-
+    produtoChange() {
+        this.objeto.produtoTributacaoRel_Id = 0;
+        this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
+        this.aliquota = '';
     }
+
 
     tributacaoChange(produtoTributacaoRel: ProdutoTributacaoRel) {
-        this.objeto.produtoTributacaoRel_Id = produtoTributacaoRel?.id ?? 0;
-        this.aliquota = this.objeto.produtoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
+        let rels = this.planner.planejamentoProduto.map(x => x.produtoTributacaoRel)
+        .find(x => x.produto_Id == produtoTributacaoRel.produto_Id && x.tributacao_Id == produtoTributacaoRel.tributacao_Id)
+
+        if (rels) {
+            this.objeto.produtoTributacaoRel_Id = 0;
+            this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
+            this.aliquota = '';
+            this.produto = undefined;
+            this.alertService.error('Você não pode inserir essa tributação e produto, pois já estão cadastrados.', { keepAfterRouteChange: false, })
+        } else {
+            this.objeto.produtoTributacaoRel_Id = produtoTributacaoRel?.id ?? 0;
+            let produto: Produto = Object.assign({}, this.produto)
+            produto.produtoTributacaoRel = [];
+            this.objeto.produtoTributacaoRel.produto = produto;
+            this.aliquota = this.objeto.produtoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
+        }
+
+
     }
 
-  
-    slickInit(e) {
-        console.log('slick initialized');
-      }
-      
-      breakpoint(e) {
-        console.log('breakpoint');
-      }
-      
-      afterChange(e) {
-        console.log('afterChange');
-      }
-      
-      beforeChange(e) {
-        console.log('beforeChange');
-      }
 
     arrowUp(value: number) {
         return arrowUp(value)

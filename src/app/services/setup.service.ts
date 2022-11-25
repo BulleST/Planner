@@ -147,7 +147,7 @@ export class CarteiraSetupService {
     }
     
     edit(request: CarteiraSetup) {
-        return this.http.put<CarteiraSetup>(`${this.url}/carteiraSetup/${request.id}`, request);
+        return this.http.put<CarteiraSetup>(`${this.url}/carteiraSetup/`, request);
     }
     
     delete(id: number) {

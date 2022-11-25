@@ -27,7 +27,7 @@ export class ProdutoGuard implements CanActivate {
             return false;
         } else if (planner.planejamentoInvestimento.length == 0) {
             this.modal.voltar();
-            this.alert.warn('Insira um produto para cadastrar um investimento!');
+            this.alert.warn('Insira um investimento para cadastrar um produto!');
             return false;
         }
         return true;

@@ -247,9 +247,8 @@ a.btn-primary:not([href]):focus {
     background-color: var(--primary);
     border-color: var(--primary);
     opacity: 0.8;
-    cursor: default!important;
+    cursor: default !important;
 }
-
 
 .btn-orange {
     background-color: var(--primary);
@@ -594,11 +593,9 @@ a.btn-pink.disabled:not([href]) {
     border-color: var(--primary);
 }
 
-
-
 .link,
 .btn-link {
-    color: var(--primary)!important;
+    color: var(--primary) !important;
     text-decoration: underline !important;
     text-underline-position: under;
     cursor: pointer;
@@ -1963,5 +1960,10 @@ body {
 }
 
 .text-info {
-    color: var(--primary-light)!important;
+    color: var(--primary-light) !important;
+}
+
+p-dropdown.form-control.ng-touched.ng-invalid:not(.novalidate .form-control.ng-touched.ng-invalid) {
+    background-position: 96% center;
+    padding: 12px 30px 12px 6px;
 }

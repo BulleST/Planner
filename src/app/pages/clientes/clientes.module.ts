@@ -7,7 +7,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { TableModule } from 'primeng/table';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ListComponent } from './list/list.component';
 import { PlannerComponent } from './planner/planner.component';
 import { DeleteComponent } from './delete/delete.component';
@@ -16,9 +15,11 @@ import { RemoverInvestimentoComponent } from './planner/investimento-remover/rem
 import { ProdutoFormComponent } from './planner/produto-form/produto-form.component';
 import { RemoverProdutoComponent } from './planner/produto-remover/remover-produto.component';
 import { DropdownModule } from 'primeng/dropdown';
-import { PlannerRoutingModule } from './planner.routing';
+import { ClientesRoutingModule } from './clientes.routing';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { ChartModule } from 'primeng/chart';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.component';
 
 @NgModule({
   declarations: [
@@ -29,21 +30,22 @@ import { ChartModule } from 'primeng/chart';
     RemoverInvestimentoComponent,
     ProdutoFormComponent,
     RemoverProdutoComponent,
+    DeletePlannerComponent,
   ],
   imports: [
     CommonModule,
-    PlannerRoutingModule,
+    ClientesRoutingModule,
     FormsModule,
     FontAwesomeModule,
     NgxMaskModule,
     ToastrModule,
     TableModule,
     NgbPopoverModule,
-    SharedModule,
     DropdownModule,
     SlickCarouselModule,
     ChartModule,
+    SharedModule
   ],
   bootstrap: [ListComponent]
 })
-export class PlannerModule { }
+export class ClientesModule { }

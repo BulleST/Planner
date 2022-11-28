@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Table } from '../utils/table';
+import { AlertService } from '../parts/alert/alert.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,8 @@ export class RequestInterceptor implements HttpInterceptor {
         private accountService: AccountService,
         private router: Router,
         private toastr: ToastrService,
-        private table: Table
+        private table: Table,
+        private alert: AlertService
     ) { }
 
     excludeUrls = [
@@ -59,7 +61,8 @@ export class RequestInterceptor implements HttpInterceptor {
             catchError(err => {
                 console.error(err);
                 this.table.loading.next(false);
-                this.toastr.error('Ocorreu um erro no processamento da requisição')
+                this.toastr.error('Ocorreu um erro no processamento da requisição');
+                this.alert.error(err.error.message);
                 return throwError(err);
             }),
         );

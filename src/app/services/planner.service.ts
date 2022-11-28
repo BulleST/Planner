@@ -42,6 +42,7 @@ export class PlannerService {
 
     setObject(value: Planejamento) {
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
+        console.log(value)
         this.objeto.next(value);
     }
 
@@ -51,7 +52,7 @@ export class PlannerService {
             this.list.next(list);
             return list;
         }));
-    } 
+    }
     
     get(id: number) {
         return this.http.get<Planejamento>(`${this.url}/planejamento/${id}`).pipe(map(item => {
@@ -60,13 +61,10 @@ export class PlannerService {
             return item;
         }));
     }
-
-
     
     send(request: Planejamento) {
         return this.http.post<Planejamento>(`${this.url}/planejamento/`, request);
     }
-    
 
     create(request: Planejamento) {
         return this.http.post<Planejamento>(`${this.url}/planejamento/`, request);
@@ -77,7 +75,7 @@ export class PlannerService {
     }
     
     delete(id: number) {
-        return this.http.delete<Planejamento>(`${this.url}/planejamento/${id}`);
+        return this.http.delete<void>(`${this.url}/planejamento/${id}`);
     }
 
 }

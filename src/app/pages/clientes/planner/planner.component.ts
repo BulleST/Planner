@@ -1,11 +1,9 @@
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faChevronLeft, faPlus, faTimes, faTrash, faTrashAlt, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { Cliente } from 'src/app/models/cliente.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EstadoCivil } from 'src/app/models/estadoCivil.model';
 import { FluxosPontuais } from 'src/app/models/fluxosPontuais.model';
@@ -15,7 +13,6 @@ import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimen
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
 import { Produto } from 'src/app/models/produto.model';
-import { ClienteService } from 'src/app/services/cliente.service';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { PlannerService } from 'src/app/services/planner.service';
 import { ProdutoService } from 'src/app/services/produto.service';
@@ -47,8 +44,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     loading = false;
     loadingProduto = false;
 
-
-    carteira = [
+    solucaoInicial = [
         { id: 0, tipo: 'Atual', rentabilidadeAtual: 0, retornoAnual: 0, retornoMensal: 0, patrimonioMaximo: 0, tempo: 0, },
         { id: 1, tipo: 'Sugerida', rentabilidadeAtual: 0, retornoAnual: 0, retornoMensal: 0, patrimonioMaximo: 0, tempo: 0, },
         { id: 2, tipo: 'Diferença', rentabilidadeAtual: 0, retornoAnual: 0, retornoMensal: 0, patrimonioMaximo: 0, tempo: 0, },
@@ -86,12 +82,15 @@ export class PlannerComponent implements OnInit, AfterViewInit {
 
     produtoHover?: Produto;
 
-    // Primeiro inserir produto de uma carteira
-    // pelo dropdown.
-    // Depois pode adicionar produto aleatório a uma carteira
-    enviadoPrimeiraVez: boolean = false;
-
     percentualTotalProduto = 0;
+
+    // se o usuario alterou a carteira setup, não pode adicionar um produto 
+    // fora da carteira selecionada antes de salvar e calcular os valores
+    // dessa carteira pela primeira vez
+    carteiraSetupInalterada = new CarteiraSetup;
+    mudouCarteiraSetup = false;
+
+    plannerIdEncrypted = '';
 
     constructor(
         private modal: ModalOpen,
@@ -107,15 +106,14 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     ) {
         this.plannerService.getObject().subscribe(res => {
             this.planner = res;
-            this.enviadoPrimeiraVez = this.planner.id != 0;
+            this.mudouCarteiraSetup = this.planner.id != 0;
             this.calculaPercentualProduto();
         });
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['planner_id'];
-            if (this.planner.id != 0 && !item['planner_id']) {
-                this.router.navigate(['clientes', 'planner', this.crypto.encrypt(this.planner.id)], { skipLocationChange: false })
-            }
             if (this.isEditPage) {
+                console.log('tchau')
+                this.plannerIdEncrypted = item['planner_id']
                 this.planner.id = this.crypto.decrypt(item['planner_id'])
                 this.plannerService.get(this.planner.id).subscribe({
                     next: res => {
@@ -123,7 +121,13 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
+                        this.carteiraSetupInalterada = res.carteiraSetup;
+                        this.mudouCarteiraSetup = false;
                         this.setChartPatrimonioIdade();
+                    },
+                    error: err => {
+                        this.plannerService.setObject(new Planejamento);
+                        this.router.navigate(['..']);
                     }
                 });
             }
@@ -216,11 +220,17 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         }
     }
 
-    carteiraSetupChange(carteiraSetup: any) {
-        if (carteiraSetup.value) {
-            this.planner.carteiraSetup_Id = carteiraSetup.value.id;
+    carteiraSetupChange(model: NgModel) {
+        if (model.value) {
+            let carteiraSetup = this.carteirasSetup.find(x => x.id == model.value) as CarteiraSetup;
+            this.planner.carteiraSetup = carteiraSetup;
         } else {
-            this.planner.carteiraSetup_Id = 0;
+            this.planner.carteiraSetup = undefined as unknown as CarteiraSetup;
+        }
+        if (this.planner.carteiraSetup_Id == this.carteiraSetupInalterada.id) {
+            this.mudouCarteiraSetup = false;
+        } else {
+            this.mudouCarteiraSetup = true;
         }
         this.saveData();
 
@@ -377,7 +387,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             next: res => {
                 this.loading = false;
                 this.plannerService.setObject(res);
-                this.enviadoPrimeiraVez = true;
+                this.mudouCarteiraSetup = true;
             },
             error: err => {
                 this.loading = false;
@@ -459,16 +469,18 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         if (this.planner.planejamentoProduto.length == 0) {
             this.erro.push('Insira um ou mais produtos no planner.');
             this.toastr.error('Insira um ou mais produtos no planner.');
-        } else {
-            let soma = this.planner.planejamentoProduto.map(x => x.percentual).reduce((x, y) => x + y);
-            if (soma > 100 || soma.toString() == '') {
-                this.erro.push('A soma do percentual dos produtos deve chegar a 100% no máximo.');
-                this.toastr.error('A soma do percentual dos produtos deve chegar a 100% no máximo.');
-                return false;
-            } else {
-                return true;
-            }
-        }
+        } 
+        // else {
+        //     let soma = this.planner.planejamentoProduto.map(x => x.percentual).reduce((x, y) => x + y);
+        //     console.log(soma)
+        //     if (soma > 100 || soma.toString() == '') {
+        //         this.erro.push('A soma do percentual dos produtos deve chegar a 100% no máximo.');
+        //         this.toastr.error('A soma do percentual dos produtos deve chegar a 100% no máximo.');
+        //         return false;
+        //     } else {
+        //         return true;
+        //     }
+        // }
         
         return true;
     }

@@ -1,12 +1,15 @@
 <div class="modal__content">
     <div class="modal__header pb-2" style="padding: 0 25px;">
-        <div>
-            <a class="link text-dark" href="" (click)="voltar()">
-                <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
-            </a>
-            <h3 class="text-orange">Planner</h3>
-        </div>
-        <button class="btn btn-yellow" (click)="resetForm()">Limpar campos</button>
+            <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
+                <a class="link text-dark" href="" (click)="voltar()">
+                    <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
+                </a>
+                <div>
+                     <button class="btn btn-yellow" (click)="resetForm()">Limpar campos</button>
+                     <a class="btn btn-primary ml-1" [routerLink]="['..', 'excluir', plannerIdEncrypted]" *ngIf="planner.id != 0">Excluir planner</a>
+                </div>
+            </div>
+            <h3 class="text-orange mt-1">Planner</h3>
     </div>
     <div class="modal__body mt-0">
         <form #form="ngForm" (ngSubmit)="send(form)" disabled class="needs-validation home editable">
@@ -37,23 +40,21 @@
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                     <label for="perfilInvestidor">Perfil de Investidor: <span class="text-danger">*</span></label>
-                                    <div class="form-floating">
-                                        <select class="form-control"
-                                                name="perfilInvestidor"
-                                                id="perfilInvestidor"
-                                                [class.form-control-loading]="loadingPerfilInvestidor"
-                                                #_perfilInvestidor="ngModel"
-                                                [(ngModel)]="planner.cliente.perfilInvestidor_Id"
-                                                [ngbPopover]="campoObrigatorio"
-                                                popoverClass="popover-danger"
-                                                [disablePopover]="_perfilInvestidor.errors == null"
-                                                triggers="mouseenter:mouseleave"
-                                                required
-                                                (ngModelChange)="perfilInvestidorChange();">
-                                            <option [ngValue]="undefined">Selecione</option>
-                                            <option [ngValue]="item.id" *ngFor="let item of perfilInvestidor">{{ item.descricao }} </option>
-                                        </select>
-                                    </div>
+                                    <select class="form-control"
+                                            name="perfilInvestidor"
+                                            id="perfilInvestidor"
+                                            [class.form-control-loading]="loadingPerfilInvestidor"
+                                            #_perfilInvestidor="ngModel"
+                                            [(ngModel)]="planner.cliente.perfilInvestidor_Id"
+                                            [ngbPopover]="campoObrigatorio"
+                                            popoverClass="popover-danger"
+                                            [disablePopover]="_perfilInvestidor.errors == null"
+                                            triggers="mouseenter:mouseleave"
+                                            required
+                                            (ngModelChange)="perfilInvestidorChange();">
+                                        <option [ngValue]="undefined">Selecione</option>
+                                        <option [ngValue]="item.id" *ngFor="let item of perfilInvestidor">{{ item.descricao }} </option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                     <label for="estadoCivil">Estado Civil: <span class="text-danger">*</span>
@@ -702,49 +703,37 @@
                                 <div class="d-flex justify-content-end align-items-center w-100">
                                     <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
                                         <p-dropdown
-                                                    class="form-control"
-                                                    id="carteirasSetup"
-                                                    name="carteirasSetup"
-                                                    #_carteirasSetup="ngModel"
-                                                    [class.form-control-loading]="loadingCarteiraSetup"
-                                                    [disabled]="loadingCarteiraSetup"
-                                                    [options]="carteirasSetup"
-                                                    [(ngModel)]="planner.carteiraSetup"
-                                                    optionLabel="nome"
-                                                    [filter]="true"
-                                                    filterBy="nome"
-                                                    [showClear]="true"
-                                                    placeholder="Selecione para adicionar"
-                                                    (ngModelChange)="carteiraSetupChange(_carteirasSetup)"
-                                                    [disabled]="loadingCarteiraSetup">
-                                            <ng-template pTemplate="selectedItem">
-                                                <div class="country-item country-item-value" *ngIf="planner.carteiraSetup">
-                                                    <p>{{planner.carteiraSetup.nome}}</p>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template let-p pTemplate="item">
-                                                <div class="country-item">
-                                                    <div>
-                                                        <p>{{p.nome}}</p>
-                                                    </div>
-                                                </div>
-                                            </ng-template>
+                                            class="form-control"
+                                            id="carteirasSetup"
+                                            name="carteirasSetup"
+                                            #_carteirasSetup="ngModel"
+                                            [class.form-control-loading]="loadingCarteiraSetup"
+                                            [disabled]="loadingCarteiraSetup"
+                                            [options]="carteirasSetup"
+                                            [(ngModel)]="planner.carteiraSetup_Id"
+                                            optionLabel="nome"
+                                            optionValue="id"
+                                            [filter]="true"
+                                            filterBy="nome"
+                                            [showClear]="true"
+                                            placeholder="Selecione para adicionar"
+                                            (ngModelChange)="carteiraSetupChange(_carteirasSetup)"
+                                            [required]="true">
                                         </p-dropdown>
                                     </div>
-                                    <!-- 
-                                        [ngbPopover]="formInvalido"
-                                        [disablePopover]="!(form.invalid || loading)" -->
                                     <button type="button"
                                             triggers="mouseenter:mouseleave"
                                             class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                             (click)="adicionarProdutoCarteira(form)"
-                                            *ngIf="planner.carteiraSetup 
-                                                && carteirasSetup.length > 0"> Adicionar </button>
+                                            *ngIf="(planner.carteiraSetup_Id != 0 && mudouCarteiraSetup)
+                                                    || planner.planejamentoProduto.length == 0"> Salvar </button>
+                                    
                                     <a class="link ml-3"
                                        [routerLink]="['produto']"
-                                       *ngIf="enviadoPrimeiraVez
-                                        && planner.planejamentoInvestimento.length > 0
-                                        && planner.planejamentoProduto.length > 0"> Adicionar outros produtos </a>
+                                       *ngIf="planner.planejamentoInvestimento.length > 0
+                                        && planner.planejamentoProduto.length > 0
+                                        && !mudouCarteiraSetup"
+                                    > Adicionar outros produtos </a>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -790,7 +779,7 @@
                                                        (keyup.arrowdown)="item.percentual = arrowDown(percentual.value, true)"
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
-                                                       [required]="enviadoPrimeiraVez"
+                                                       [required]="true"
                                                        [min]="0.1"
                                                        [max]="100 - percentualTotalProduto"
                                                        (ngModelChange)="calculaPercentualProduto()">
@@ -811,27 +800,12 @@
                                                        (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
-                                                       [required]="enviadoPrimeiraVez">
+                                                       [required]="true">
                                             </td>
                                             <td class="px-2" style="white-space: nowrap"> R$ {{ item.rentabilidadeLiquida | mask : 'separator' : ',' }} </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-montanteAtual-{{index}}"
-                                                       name="produto-montanteAtual-{{index}}"
-                                                       #montanteAtual="ngModel"
-                                                       [(ngModel)]="item.montanteAtual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$"
-                                                       (keyup.arrowup)="item.montanteAtual = arrowUp(montanteAtual.value)"
-                                                       (keyup.arrowdown)="item.montanteAtual = arrowDown(montanteAtual.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave">
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteSugerido | mask : 'separator' : ',' }} </td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.planoSugerido | mask : 'separator' : ','}} </td>
+                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : ',' }} </td>
+                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.sugerido | mask : 'separator' : ',' }} </td>
+                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.planoAcao | mask : 'separator' : ','}} </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)">
                                                     <fa-icon [icon]="faTrash"></fa-icon>
@@ -843,7 +817,9 @@
                                         <tr>
                                             <td></td>
                                             <td></td>
-                                            <td>Total: <span>{{ percentualTotalProduto | mask : 'separator.5'}}</span>%</td>
+                                            <td>Total: 
+                                                <span>{{ percentualTotalProduto }}</span>
+                                            %</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -893,7 +869,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of carteira">
+                                        <tr *ngFor="let item of solucaoInicial">
                                             <td class="px-3 bg-light text-right" style="white-space: nowrap;">
                                                 <small>{{item.tipo}}</small>
                                             </td>
@@ -976,7 +952,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                        <!-- Descrição -->
-                       <div class="form-row mb-2">
+                    <div class="form-row mb-2">
                         <div class="card card-body">
                             <div class="home__container-header mb-2">
                                 <h6>Descrição</h6>
@@ -1104,26 +1080,24 @@
                                             <small><b>Idade</b></small>
                                         </td>
                                         <td>
-                                            <div class="form-floating">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="idadeAposentadoria"
-                                                       name="idadeAposentadoria"
-                                                       #idadeAposentadoria="ngModel"
-                                                       [(ngModel)]="planner.cliente.idadeAposentadoria"
-                                                       mask="0*"
-                                                       suffix=" anos"
-                                                       [allowNegativeNumbers]="false"
-                                                       placeholder="0"
-                                                       (keyup.arrowup)="planner.cliente.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
-                                                       (keyup.arrowdown)="planner.cliente.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
-                                                       [ngbPopover]="campoObrigatorio"
-                                                       popoverClass="popover-danger"
-                                                       [disablePopover]="idadeAposentadoria.errors == null"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required
-                                                       (change)="saveData()">
-                                            </div>
+                                            <input type="text"
+                                                    class="form-control form-control-number"
+                                                    id="idadeAposentadoria"
+                                                    name="idadeAposentadoria"
+                                                    #idadeAposentadoria="ngModel"
+                                                    [(ngModel)]="planner.cliente.idadeAposentadoria"
+                                                    mask="0*"
+                                                    suffix=" anos"
+                                                    [allowNegativeNumbers]="false"
+                                                    placeholder="0"
+                                                    (keyup.arrowup)="planner.cliente.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
+                                                    (keyup.arrowdown)="planner.cliente.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
+                                                    [ngbPopover]="campoObrigatorio"
+                                                    popoverClass="popover-danger"
+                                                    [disablePopover]="idadeAposentadoria.errors == null"
+                                                    triggers="mouseenter:mouseleave"
+                                                    required
+                                                    (change)="saveData()">
                                         </td>
                                     </tr>
                                     <tr>
@@ -1131,28 +1105,26 @@
                                             <small><b>Renda Mensal</b></small>
                                         </td>
                                         <td>
-                                            <div class="form-floating">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="rendaMensalAposentadoria"
-                                                       name="rendaMensalAposentadoria"
-                                                       #rendaMensalAposentadoria="ngModel"
-                                                       [(ngModel)]="planner.cliente.rendaMensalAposentadoria"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
-                                                       [allowNegativeNumbers]="false"
-                                                       placeholder="R$ 00,00"
-                                                       (keyup.arrowup)="planner.cliente.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
-                                                       (keyup.arrowdown)="planner.cliente.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
-                                                       [ngbPopover]="campoObrigatorio"
-                                                       popoverClass="popover-danger"
-                                                       [disablePopover]="rendaMensalAposentadoria.errors == null"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required
-                                                       (change)="saveData()">
-                                            </div>
+                                            <input type="text"
+                                                    class="form-control form-control-number"
+                                                    id="rendaMensalAposentadoria"
+                                                    name="rendaMensalAposentadoria"
+                                                    #rendaMensalAposentadoria="ngModel"
+                                                    [(ngModel)]="planner.cliente.rendaMensalAposentadoria"
+                                                    mask="separator.5"
+                                                    thousandSeparator="."
+                                                    decimalMarker=","
+                                                    [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
+                                                    [allowNegativeNumbers]="false"
+                                                    placeholder="R$ 00,00"
+                                                    (keyup.arrowup)="planner.cliente.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
+                                                    (keyup.arrowdown)="planner.cliente.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
+                                                    [ngbPopover]="campoObrigatorio"
+                                                    popoverClass="popover-danger"
+                                                    [disablePopover]="rendaMensalAposentadoria.errors == null"
+                                                    triggers="mouseenter:mouseleave"
+                                                    required
+                                                    (change)="saveData()">
                                         </td>
                                     </tr>
                                     <tr>
@@ -1160,28 +1132,26 @@
                                             <small><b>Rentabilidade</b></small>
                                         </td>
                                         <td>
-                                            <div class="form-floating">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="rentabilidadeAposentadoria"
-                                                       name="rentabilidadeAposentadoria"
-                                                       #rentabilidadeAposentadoria="ngModel"
-                                                       [(ngModel)]="planner.cliente.rentabilidadeAposentadoria"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       [allowNegativeNumbers]="true"
-                                                       placeholder="00,00%"
-                                                       suffix="%"
-                                                       (keyup.arrowup)="planner.cliente.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
-                                                       (keyup.arrowdown)="planner.cliente.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
-                                                       [ngbPopover]="campoObrigatorio"
-                                                       popoverClass="popover-danger"
-                                                       [disablePopover]="rentabilidadeAposentadoria.errors == null"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required
-                                                       (change)="saveData()">
-                                            </div>
+                                            <input type="text"
+                                                    class="form-control form-control-number"
+                                                    id="rentabilidadeAposentadoria"
+                                                    name="rentabilidadeAposentadoria"
+                                                    #rentabilidadeAposentadoria="ngModel"
+                                                    [(ngModel)]="planner.cliente.rentabilidadeAposentadoria"
+                                                    mask="separator.5"
+                                                    thousandSeparator="."
+                                                    decimalMarker=","
+                                                    [allowNegativeNumbers]="true"
+                                                    placeholder="00,00%"
+                                                    suffix="%"
+                                                    (keyup.arrowup)="planner.cliente.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
+                                                    (keyup.arrowdown)="planner.cliente.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
+                                                    [ngbPopover]="campoObrigatorio"
+                                                    popoverClass="popover-danger"
+                                                    [disablePopover]="rentabilidadeAposentadoria.errors == null"
+                                                    triggers="mouseenter:mouseleave"
+                                                    required
+                                                    (change)="saveData()">
                                         </td>
                                     </tr>
                                 </tbody>

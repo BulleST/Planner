@@ -6,6 +6,7 @@ import { InvestimentoFormComponent } from './planner/investimento-form/investime
 import { ListComponent } from './list/list.component';
 import { ProdutoFormComponent } from './planner/produto-form/produto-form.component';
 import { ProdutoGuard } from './produto.guard';
+import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.component';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [
@@ -13,12 +14,11 @@ const routes: Routes = [
     ]},
     { path: 'planner', component: PlannerComponent, children: [
         { path: 'investimento', component: InvestimentoFormComponent },
-        // { path: 'produto/:produto_id', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
         { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
+        { path: 'excluir/:planner_id', component: DeletePlannerComponent },
     ] },
     { path: 'planner/:planner_id', component: PlannerComponent, children: [
         { path: 'investimento', component: InvestimentoFormComponent },
-        // { path: 'produto/:produto_id', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
         { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
     ] },
 ];
@@ -27,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PlannerRoutingModule { }
+export class ClientesRoutingModule { }

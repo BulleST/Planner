@@ -62,7 +62,6 @@ export class CreateComponent implements OnInit {
             // Enviar para a API
             if (urlArray.includes('empresas/editar')) {
             }
-            console.log(this.objeto)
             this.setupService.create(this.objeto).subscribe({
                 next: (res) => {
 

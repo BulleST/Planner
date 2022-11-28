@@ -70,7 +70,6 @@ export class DeleteComponent implements OnInit {
                     });
                 }
             } else {
-                console.log('else1');
                 this.voltar();
             }
         });

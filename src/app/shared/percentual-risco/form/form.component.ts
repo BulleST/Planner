@@ -42,10 +42,8 @@ export class FormPercentualRiscoComponent implements OnInit, OnChanges {
     ngOnInit(): void {
     }
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes)
         if (changes['objeto']){
             this.objeto = changes['objeto'].currentValue;
-            console.log(this.objeto)
         }
 
         if (changes['loading'])
@@ -64,7 +62,6 @@ export class FormPercentualRiscoComponent implements OnInit, OnChanges {
             return;
         }
         this.erro = [];
-        console.log(form.value)
         this.sendData.emit(form);
     }
 }

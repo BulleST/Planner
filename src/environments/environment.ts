@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  url: 'https://localhost:44308'
-//   url: 'https://souhi.azurewebsites.net'
+//   url: 'https://localhost:44308'
+  url: 'https://plannerweb.azurewebsites.net'
 };
 
 /*

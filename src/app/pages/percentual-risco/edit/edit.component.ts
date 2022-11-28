@@ -40,7 +40,6 @@ export class EditComponent implements OnInit {
                 this.objeto.id = this.crypto.decrypt(p.get('percentual_id'));
                 if (urlArray.includes('empresas/cadastrar')) {
                     let objeto = this.empresaService.object.percentualRisco.find(x => x.id == this.objeto.id);
-                    console.log(objeto)
                     if (objeto) {
                         this.objeto = objeto;
                         setTimeout(() => {

@@ -109,7 +109,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.planner = res;
             this.enviadoPrimeiraVez = this.planner.id != 0;
             this.calculaPercentualProduto();
-            console.log(this.planner.planejamentoInvestimento)
         });
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['planner_id'];
@@ -368,7 +367,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
 
         this.saveData();
         this.erro = [];
-        console.log(form.errors);
         if (form.invalid) {
             this.erro.push('Campos inválidos!');
             this.toastr.error('Campos inválidos!');
@@ -380,7 +378,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                 this.loading = false;
                 this.plannerService.setObject(res);
                 this.enviadoPrimeiraVez = true;
-                console.log(res);
             },
             error: err => {
                 this.loading = false;
@@ -491,7 +488,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.plannerService.edit(this.planner).subscribe({
             next: res => {
                 this.loading = false;
-                console.log(res);
                 this.plannerService.setObject(res);
             },
             error: err => {

@@ -57,7 +57,6 @@ export class EditComponent implements OnInit {
                     this.produtoService.get(this.objeto.id).subscribe({
                         next: (produto) => {
                             this.objeto = produto;
-                            console.log(produto)
                             setTimeout(() => {
                                 this.modal.setOpen(true);
                             }, 200);

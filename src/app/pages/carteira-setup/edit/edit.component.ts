@@ -78,7 +78,6 @@ export class EditComponent implements OnInit {
             if (this.urlArray.includes('empresas/editar')) {
 
             }
-            console.log(this.objeto)
             // Enviar para a API
             this.setupService.edit(this.objeto).subscribe({
                 next: (res) => {

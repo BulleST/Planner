@@ -97,10 +97,8 @@ export class InvestimentoFormComponent implements OnInit {
     send(model: NgForm) {
         this.loading = true;
         this.erro = [];
-        console.log(this.objeto)
         
         let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimentoTributacaoRel_Id == this.objeto.investimentoTributacaoRel_Id)
-        console.log(jaExiste)
         if(jaExiste) {
             this.erro.push('Esse investimento já está inserido.')
             this.toastr.error('Esse investimento já está inserido.')

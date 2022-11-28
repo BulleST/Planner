@@ -975,6 +975,33 @@
                     </div> -->
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                       <!-- Descrição -->
+                       <div class="form-row mb-2">
+                        <div class="card card-body">
+                            <div class="home__container-header mb-2">
+                                <h6>Descrição</h6>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <label for="descricao">Observações do planner: 
+                                    </label>
+                                    <textarea type="text"
+                                           name="descricao"
+                                           id="descricao"
+                                           class="form-control"
+                                           #descricao="ngModel"
+                                           [(ngModel)]="planner.descricao"
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="descricao.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           (change)="saveData()"
+                                           required>
+                                        </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Capacidade de Risco -->
                     <div class="form-row mb-2">
                         <div class="card card-body">
@@ -1037,7 +1064,7 @@
                                                    decimalMarker=","
                                                    [allowNegativeNumbers]="false"
                                                    placeholder="R$ 00,00"
-                                                   prefix="R$ "
+                                                   suffix="%"
                                                    readonly>
                                         </div>
                                         <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
@@ -1052,8 +1079,8 @@
                                                    thousandSeparator="."
                                                    decimalMarker=","
                                                    [allowNegativeNumbers]="false"
-                                                   placeholder="R$ 00,00"
-                                                   prefix="R$ "
+                                                   placeholder="R$ 00,00"                                                   suffix="%"
+                                                   suffix="%"
                                                    readonly>
                                         </div>
                                     </div>

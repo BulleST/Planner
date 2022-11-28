@@ -755,8 +755,8 @@ form .input-group-append.valid .input-group-text {
 .form-floating>.form-control:not(.form-floating>label~.form-control) {
     height: unset;
     line-height: 1.5;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .375rem .75rem;
+    height: 50px;
+    padding: 16px 15px 3px;
 }
 
 .form-floating>.form-control:not(.form-floating>label~.form-control)::placeholder {

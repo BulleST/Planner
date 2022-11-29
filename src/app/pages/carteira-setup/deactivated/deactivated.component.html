@@ -1,0 +1,25 @@
+<div class="modal" [class.active]="modalOpen">
+    <div class="modal__bg" (click)="voltar()"></div>
+    <div class="modal__inner" style="max-width: 600px;">
+        <div class="modal__content">
+            <div class="modal__header pb-2">
+                <h3 class="text-orange" [innerText]="active ? 'Ativar setup' : 'Desativar setup'"></h3>
+                <a (click)="voltar()" class="modal__header-close btn-close">
+                    <span></span>
+                    <span></span>
+                </a>
+            </div>
+            <div class="modal__body mt-0">
+                <p *ngIf="!active">Tem certeza que deseja desativar esse setup? <br>
+                    Esse registro não será apagado, apenas inativado, podendo haver futuras consultas.</p>
+                <p *ngIf="!active"><small>Obs.: Você não poderá utilizar esse setup enquanto estiver inativo.</small></p>
+
+                <p *ngIf="active">Tem certeza que deseja ativar esse setup? Esse registro será disponibilizado novamente.</p>
+                <button class="btn btn-grey ml-auto d-flex mt-2" (click)="send()">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" ></span> 
+                    <span [innerText]="active ? 'Ativar' : 'Desativar'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -36,9 +36,9 @@ export class EditComponent implements OnInit {
     ) {
 
         this.urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('setup_id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('setup_id'));
+        activatedRoute.params.subscribe(p => {
+            if (p['setup_id']) {
+                this.objeto.id = this.crypto.decrypt(p['setup_id']);
                 if (this.urlArray.includes('empresas/cadastrar')) {
                     let objeto = this.empresaService.object?.carteiraSetup.find(x => x.id == this.objeto.id);
                     if (!objeto) {
@@ -52,7 +52,6 @@ export class EditComponent implements OnInit {
                         error: (err) => {
                             this.voltar()
                         },
-                        complete: () => { },
                     })
                 }
             }
@@ -62,8 +61,14 @@ export class EditComponent implements OnInit {
     ngOnInit(): void {
     }
 
+     
     voltar() {
         this.modal.voltar();
+    }
+
+    resetForm() {
+        this.objeto = new CarteiraSetup
+        this.setupService.setObject(new CarteiraSetup);
     }
 
     send(form: NgForm) {

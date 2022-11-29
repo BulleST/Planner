@@ -112,7 +112,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['planner_id'];
             if (this.isEditPage) {
-                console.log('tchau')
                 this.plannerIdEncrypted = item['planner_id']
                 this.planner.id = this.crypto.decrypt(item['planner_id'])
                 this.plannerService.get(this.planner.id).subscribe({
@@ -470,17 +469,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.erro.push('Insira um ou mais produtos no planner.');
             this.toastr.error('Insira um ou mais produtos no planner.');
         } 
-        // else {
-        //     let soma = this.planner.planejamentoProduto.map(x => x.percentual).reduce((x, y) => x + y);
-        //     console.log(soma)
-        //     if (soma > 100 || soma.toString() == '') {
-        //         this.erro.push('A soma do percentual dos produtos deve chegar a 100% no máximo.');
-        //         this.toastr.error('A soma do percentual dos produtos deve chegar a 100% no máximo.');
-        //         return false;
-        //     } else {
-        //         return true;
-        //     }
-        // }
         
         return true;
     }

@@ -7,6 +7,11 @@ export class CarteiraSetup {
     id: number = 0;
     nome: string = '';
     empresa_Id: number = 0;
+    
+    @jsonIgnore()
+    ativo?: boolean;
+    dataDesativado?: Date;
+
     carteiraProdutoRel: CarteiraProdutoRel[] = [];
     carteiraRiscoRel: CarteiraRiscoRel[] = [];
 }

@@ -37,23 +37,31 @@ export class ListComponent implements OnInit {
         private table: Table,
     ) {
 
-        this.setupService.getList().subscribe(res => {
+        this.setupService.list.subscribe(res => {
             this.list = res;
             this.list.map(x => {
                 x.carteiraRiscoRel = x.carteiraRiscoRel ?? [];
                 return x;
             })
-        });
+        })
+        this.setupService.getList().subscribe();
 
         this.tableLinks = [
             { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
-            { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
         ]
 
         this.table.loading.subscribe(res => this.loading = res);
         this.table.selected.subscribe(res => {
             this.selected = res;
             if (res) {
+                if (this.tableLinks.length > 1)
+                    this.tableLinks.pop();
+                if (this.selected.dataDesativado) {
+                    this.tableLinks.push({ label: 'Ativar', routePath: ['ativar'], paramsFieldName: ['id'] })
+                } 
+                else {
+                    this.tableLinks.push({ label: 'Desativar', routePath: ['desativar'], paramsFieldName: ['id'] })
+                }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

@@ -19,6 +19,7 @@ export enum FilterType {
     numeric = 'numeric',
     date = 'date',
     datetime = 'datetime',
+    boolean = 'boolean',
 }
 
 export enum FilterDisplay {
@@ -37,4 +38,5 @@ export enum MaskType {
     cpf = 'cpf',
     rg = 'rg',
     any = 'any',
+    boolean = 'boolean',
 }

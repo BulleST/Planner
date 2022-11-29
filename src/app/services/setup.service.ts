@@ -127,6 +127,10 @@ export class CarteiraSetupService {
     getList(empresa_Id: number = 1) {
         return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/all/${empresa_Id}`).pipe(
             map(list => {
+                list = list.map(x => {
+                    x.ativo = x.dataDesativado != undefined ? false : true;
+                    return x;
+                })
                 this.list.next(list);
                 return list;
             })
@@ -138,6 +142,7 @@ export class CarteiraSetupService {
         return this.http.get<CarteiraSetup>(`${this.url}/carteiraSetup/${id}`)
             .pipe(map(item => {
                 this.setObject(item);
+                item.ativo = item.dataDesativado != undefined ? false : true;
                 return item;
             }));
     }
@@ -150,8 +155,12 @@ export class CarteiraSetupService {
         return this.http.put<CarteiraSetup>(`${this.url}/carteiraSetup/`, request);
     }
     
+    deactivated(id: number, active: boolean) {
+        return this.http.patch<void>(`${this.url}/carteiraSetup/${id}/${active}`, {});
+    }
+    
     delete(id: number) {
-        return this.http.delete<CarteiraSetup>(`${this.url}/carteiraSetup/${id}`);
+        return this.http.delete<void>(`${this.url}/carteiraSetup/${id}`);
     }
 
 }

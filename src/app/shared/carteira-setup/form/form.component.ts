@@ -191,19 +191,6 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     getRisco(tipoRisco_Id: number) {
         return this.tipoRiscos.find(x => x.id == tipoRisco_Id)
     }
-
-    // calcularPercentualProduto(tipoRisco?: TipoRisco) {
-    //     let percentualMaxProduto = 100;
-    //     let percentuais = this.objeto.carteiraProdutoRel
-    //         .filter(x => x.produtoTributacaoRel.produto.tipoRisco_Id == tipoRisco?.id)
-    //         .map(x => x.percentual);
-            
-    //     if (tipoRisco && percentuais.length > 0) {
-    //         percentualMaxProduto = 100 - percentuais.reduce((x, y) => x + y);
-    //     } 
-    //     console.log(percentualMaxProduto)
-    //     return percentualMaxProduto;
-    // }
     
     setChartProduto(str: string) {
         let index = 0;

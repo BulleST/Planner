@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faL, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
@@ -11,15 +11,16 @@ import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
-    selector: 'app-delete',
-    templateUrl: './delete.component.html',
-    styleUrls: ['./delete.component.css']
+    selector: 'app-deactivated',
+    templateUrl: './deactivated.component.html',
+    styleUrls: ['./deactivated.component.css']
 })
-export class DeleteComponent implements OnInit {
+export class DeactivatedComponent implements OnInit {
 
     faTimes = faTimes;
     modalOpen = false;
     id: number = 0;
+    active: boolean = false;
     erro: any[] = [];
     loading = false;
     urlArray = '';
@@ -36,11 +37,11 @@ export class DeleteComponent implements OnInit {
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
-        
-        this.urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+
         activatedRoute.params.subscribe(p => {
             if (p['setup_id']) {
                 this.id = this.crypto.decrypt(p['setup_id']);
+                this.active = this.activatedRoute.snapshot.routeConfig?.path?.includes('desativar') ? false : true;
                 setTimeout(() => {
                     this.modal.setOpen(true);
                 }, 200);
@@ -60,15 +61,10 @@ export class DeleteComponent implements OnInit {
     send() {
         this.loading = true;
         this.erro = [];
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar') || urlArray.includes('empresas/editar')) {
-            let result = this.setupRelService.delete_To_Empresa_List(this.id);
-            if (result)
-                this.voltar();
-        }
-        else {
-            // Enviar para a API
-            this.setupService.delete(this.id).subscribe({
+
+        // Enviar para a API
+        this.setupService.deactivated(this.id, this.active)
+            .subscribe({
                 next: async res => {
                     await lastValueFrom(this.setupService.getList());
                     this.voltar();
@@ -77,6 +73,7 @@ export class DeleteComponent implements OnInit {
                     this.loading = false;
                 }
             })
-        }
+
     }
+
 }

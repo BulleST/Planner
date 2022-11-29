@@ -10,7 +10,6 @@ import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DeleteRelComponent } from './delete-rel/delete-rel.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { ChartModule } from 'primeng/chart';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
@@ -18,6 +17,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TableModule } from 'primeng/table';
 import { SliderModule } from 'primeng/slider';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { DeleteRelComponent } from './delete-rel/delete-rel.component';
+import { DeactivatedComponent } from './deactivated/deactivated.component';
+
 @NgModule({
     declarations: [
         CarteiraSetupComponent,
@@ -26,6 +28,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
         EditComponent,
         DeleteComponent,
         DeleteRelComponent,
+        DeactivatedComponent
     ],
     imports: [
         CommonModule,

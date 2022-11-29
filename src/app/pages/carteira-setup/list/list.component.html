@@ -9,18 +9,6 @@
         </div>
     </div>
     <div class="page__body">
-        <!-- <app-list-shared
-                         [createLink]="['cadastrar']"
-                         [list]="list"
-                         [filterLink]="true"
-                         [filterTable]="true"
-                         [paginator]="true"
-                         [sortTable]="true"
-                         [menuTable]="true"
-                         [canCreate]="true"
-                         [selectable]="true"
-                         [tableLinks]="tableLinks"
-                         [columns]="setupColumns"></app-list-shared> -->
         <div *ngIf="list.length == 0 && !loading" class="p-2">
             <p>Nenhum registro encontrado. <a [routerLink]="['cadastrar']">Clique aqui para adicionar</a></p>
         </div>
@@ -45,7 +33,8 @@
                      [filterDelay]="100"
                      currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)">
                 <ng-template pTemplate="caption">
-                    <div class="header-box d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0">
+                    <div class="header-box d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0
+                        flex-lg-row flex-sm-column-reverse">
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 p-0">
                             <p *ngIf="!loading">
                                 <small> {{ list.length }} resultado(s) </small>
@@ -54,18 +43,21 @@
                                 <small> ({{selectedItems.length}}) linhas selecionadas </small>
                             </p>
                         </div>
-                        <div class=" my-2 ml-auto mr-2">
-                            <a class="btn btn-primary" [routerLink]="['cadastrar']">Adicionar</a>
+                        <div class="col-lg-9 col-md-9 col-sm-12 col-12 d-flex align-items-center justify-content-end flex-wrap flex-lg-row flex-sm-column-reverse px-0">
+                            <div class="col-lg-2 col-md-2 col-sm-12 my-2 px-0">
+                                <a class="btn btn-primary w-100 d-block" [routerLink]="['cadastrar']">Adicionar</a>
+                            </div>
+                            <div class="mr-2 d-sm-none d-md-block"></div>
+                            <div *ngIf="list.length > 0"
+                                 class="p-input-icon-left col-lg-4 col-md-4 col-sm-11 col-9 my-2">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" class="form-control "
+                                       (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
+                            </div>
+                            <a class="btn btn-filter my-2" [routerLink]="['filtrar']" *ngIf="list.length > 0">
+                                <fa-icon [icon]="faFilter"></fa-icon>
+                            </a>
                         </div>
-                        <div *ngIf="list.length > 0"
-                             class="p-input-icon-left col-lg-4 col-md-4 col-sm-12 col-12 my-2 p-0 pt-md-0 pt-sm-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" class="form-control "
-                                   (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
-                        </div>
-                        <a class="btn btn-filter my-2" [routerLink]="['filtrar']" *ngIf="list.length > 0">
-                            <fa-icon [icon]="faFilter"></fa-icon>
-                        </a>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns *ngIf="list.length > 0">
@@ -80,18 +72,17 @@
                                 <p-columnFilter [type]="item.filterType" [field]="item.field" [display]="item.filterDisplay" [showOperator]="false" [matchMode]="item.filterMatchMode" [showMatchModes]="item.filterShowMatchMode" [showAddButton]="item.filterShowAddButton"></p-columnFilter>
                             </div>
                         </th>
-                        <th [pSortableColumn]="'percentualTotal'">
+                        <th [pSortableColumn]="'ativo'">
                             <div class="d-flex align-items-center justify-content-between">
-                                <span class="mr-auto">Percentual total</span>
-                                <p-sortIcon [field]="'percentualTotal'"></p-sortIcon>
-                                <!-- <p-columnFilter [type]="'numeric'" [field]="'percentualTotal'" [display]="'menu'"></p-columnFilter> -->
-                                <p-columnFilter field="'percentualTotal'" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                                    <ng-template pTemplate="filter" let-filter="filterCallback">
-                                        <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3"></p-slider>
-                                        <!-- <div class="d-flex align-items-center justify-content-between px-2">
-                                            <span>{{activityValues[0]}}</span>
-                                            <span>{{activityValues[1]}}</span>
-                                        </div> -->
+                                <span class="mr-auto">Status</span>
+                                <p-sortIcon [field]="'ativo'"></p-sortIcon>
+                                <p-columnFilter [type]="'boolean'"  field="'ativo'" matchMode="equals" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <select name="ativo" id="ativo" #ativo class="form-control" (change)="dt.filter(ativo.value, 'ativo', 'equals')">
+                                            <option [value]="''">Todos</option>
+                                            <option [value]="true" selected>Ativo</option>
+                                            <option [value]="false">Inativo</option>
+                                        </select>
                                     </ng-template>
                                 </p-columnFilter>
                             </div>
@@ -109,7 +100,16 @@
                         </td>
 
                         <td>
-                            <p-progressBar [value]="item.percentualTotal" [showValue]="true" [unit]="'%'"></p-progressBar>
+                            <span class="flag" 
+                                [class.flag-green]="item.ativo" 
+                                [class.flag-red]="!item.ativo"
+                                [ngbPopover]="ativo"
+                                [disablePopover]="item.ativo"
+                                triggers="mouseenter:mouseleave"
+                                [innerText]="item.ativo ? 'Ativo' : 'Inativo'"></span>
+                            <ng-template #ativo>
+                                <div class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </div>
+                            </ng-template>
                         </td>
                         <td class="td-actions">
                             <div class="actions">
@@ -136,9 +136,7 @@
             </p-table>
             <div class="actions__nav" *ngIf="tableLinks.length > 0">
                 <div class="actions__nav-inner" *ngIf="selected">
-                    <a class="actions__nav-link"
-                       *ngFor="let item of tableLinks"
-                       [routerLink]="item.fullRoute">{{item.label}}</a>
+                    <a class="actions__nav-link" *ngFor="let item of tableLinks" [routerLink]="item.fullRoute">{{item.label}}</a>
                 </div>
             </div>
         </div>

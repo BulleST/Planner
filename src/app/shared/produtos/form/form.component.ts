@@ -111,7 +111,7 @@ export class FormProdutoComponent implements OnInit {
     ngOnInit(): void {
     }
     move(e: any) {
-        console.log(e)
+        // console.log(e)
     }
     send(form: NgForm) {
         if (form.invalid) {

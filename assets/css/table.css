@@ -16,12 +16,13 @@
 .p-datatable-header .p-input-icon-left {
     display: flex;
     position: relative;
+    padding: 0!important;
 }
 
 .p-datatable-header .p-input-icon-left .pi {
     position: absolute;
     top: 50%;
-    left: 3%;
+    left: 12px;
     transform: translateY(-50%);
     color: #606060;
     margin-top: 0;

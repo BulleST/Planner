@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkplanner=self.webpackChunkplanner||[]).push([[592],{703:(i,s,t)=>{t.d(s,{l:()=>c});var a=t(6886);class u{constructor(){this.id=void 0,this.descricao="",this.aliquota=0}}class c{constructor(){this.id=0,this.produto_Id=0,this.tributacao_Id=0,this.produto=new a.a7,this.tributacao=new u}}}}]);

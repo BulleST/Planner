@@ -28,6 +28,8 @@ export class RequestInterceptor implements HttpInterceptor {
         'perfilAcesso/getAll',
         'perfilInvestidor/getAll',
         'estadoCivil/getAll',
+        'accounts/authenticate',
+        'accounts/revoke-token',
     ]
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var a = this.excludeUrls.filter(x => request.url.includes(x));
@@ -62,8 +64,9 @@ export class RequestInterceptor implements HttpInterceptor {
                 console.error(err);
                 this.table.loading.next(false);
                 this.toastr.error('Ocorreu um erro no processamento da requisição');
-                this.alert.error(err.error.message);
+                this.toastr.error(err.error.message);
                 return throwError(err);
+                // return throwError(() => new Error(err));
             }),
         );
     }

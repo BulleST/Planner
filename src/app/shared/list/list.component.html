@@ -33,7 +33,7 @@
                     </p>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 col-12 d-flex align-items-center justify-content-end flex-wrap flex-lg-row flex-sm-column-reverse px-0">
-                    <div class="col-lg-2 col-md-2 col-sm-12 my-2 px-0">
+                    <div class="">
                         <a class="btn btn-primary w-100 d-block" *ngIf="canCreate" [routerLink]="createLink">Adicionar</a>
                     </div>
                     <div class="mr-2 d-sm-none d-md-block"></div>
@@ -43,9 +43,9 @@
                         <input pInputText type="text" class="form-control "
                             (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
                     </div>
-                    <a class="btn btn-filter my-2" [routerLink]="['filtrar']" *ngIf="filterLink && list.length > 0">
+                    <!-- <a class="btn btn-filter my-2" [routerLink]="['filtrar']" *ngIf="filterLink && list.length > 0">
                         <fa-icon [icon]="faFilter"></fa-icon>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </ng-template>

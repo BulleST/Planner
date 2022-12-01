@@ -28,6 +28,8 @@ import { SharedModule } from './shared/shared.module';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RequestInterceptor } from './helpers/request.interceptor';
 import { NavigationComponent } from './parts/navigation/navigation.component';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -47,6 +49,7 @@ registerLocaleData(localePt);
         BrowserModule,
         AppRoutingModule,
         SharedModule,
+        EmpresaSharedModule,
         FontAwesomeModule,
         BrowserAnimationsModule,
         HttpClientModule,
@@ -65,7 +68,8 @@ registerLocaleData(localePt);
         DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
-        { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     ],
     bootstrap: [AppComponent]
 })
@@ -77,16 +81,16 @@ export class AppModule {
 
         this.config.setTranslation({
             startsWith: 'Começa com',
-            contains: 'Contem',
+            contains: 'Contém',
             notContains: 'Não contem',
             endsWith: 'Termina com',
             equals: 'Igual a',
             notEquals: 'Diferente de',
             noFilter: 'Sem filtro',
-            // lt: '',
-            // lte: '',
-            // gt: '',
-            // gte: '',
+            lt: 'Menor que', // Less Than
+            lte: 'Menor que ou igual a', // Less Than or Equal to
+            gt: 'Maior que', // Greater than
+            gte: 'Maior que ou igual a', // Greater than or equal to
             is: 'Igual',
             isNot: 'Diferente',
             before: 'Anterior a',

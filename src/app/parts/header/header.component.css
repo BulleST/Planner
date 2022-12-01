@@ -14,11 +14,12 @@
 
 .header__userLogado {
     height: 100%;
-    position: absolute;
+    position: relative;
     display: flex;
     justify-content: center;
     width: auto;
     right: 20px;
+    max-width: 100%;
 }
 
 .header__userLogado-content {
@@ -81,10 +82,10 @@
 .header__userLogado-submenu {
     position: absolute;
     top: 0%;
-    left: 0;
-    right: 2vw;
+    left: auto;
+    right: 0vw;
     transform: translate(0, -100%);
-    min-width: 100%;
+    width: 200px;
     background-color: white;
     border: 1px #d2d2d2 solid;
     border-top: 0;
@@ -142,4 +143,14 @@ p.header__userLogado-submenu-link {
 
 .header__nav-link:hover {
     background: #00000026;
+}
+
+.dropdown-empresas {
+    background-color: #484848;
+    color: #fff;
+}
+
+.dropdown-empresas option {
+    color: #484848;
+    background: #fff;
 }

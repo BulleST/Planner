@@ -1,3 +1,4 @@
+import { jsonIgnore } from "json-ignore";
 import { Empresa } from "./empresa.model";
 import { PerfilAcesso } from "./usuario-perfil.model";
 
@@ -6,10 +7,12 @@ export class Usuario {
     empresa_Id: number = 0
     perfilAcesso: PerfilAcesso = new PerfilAcesso;
     perfilAcesso_Id: number = undefined as unknown as number;
-    // perfilAcesso: string = '';
-    nome: string = '';
+    name: string = '';
     email: string = '';
-    senha: string = '';
+    telefoneCelular: string = '';
+    
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
 }
 
 
@@ -21,7 +24,7 @@ export var userColumns = [
         filterDisplay: 'menu'
     },
     {
-        field: 'nome',
+        field: 'name',
         header: 'Nome',
         filterType: 'text',
         filterDisplay: 'menu'

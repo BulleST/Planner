@@ -1,3 +1,4 @@
+import { jsonIgnore } from "json-ignore";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { PerfilInvestidor } from "./perfilInvestidor.model";
 
@@ -5,7 +6,6 @@ export class PercentualRisco {
     id: number = 0;
     empresa_Id: number = 0;
     perfilInvestidor: PerfilInvestidor = undefined as unknown as PerfilInvestidor;
-    // perfilInvestidor: string = '';
     perfilInvestidor_Id: number = undefined as unknown as number;
     capacidadeRisco_Id: number = undefined as unknown as number;
     baixissimo: number = '' as unknown as number;
@@ -14,6 +14,9 @@ export class PercentualRisco {
     arrojado: number = '' as unknown as number;
     superArrojado: number = '' as unknown as number;
     hedge: number = '' as unknown as number;
+    
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
 }
 
 

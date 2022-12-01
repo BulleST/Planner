@@ -41,11 +41,6 @@ export class ListComponent implements OnInit {
         next: (res) => {
             this.list = res;
             this.loading = false;
-
-            //   this.list.map(item => {
-            //     item.cnpj = this.mask.applyMask(item.cnpj.toString().padStart(14, '0'), '00.000.000/0000-00') as unknown as number;
-            //     return item;
-            //   });
         }
     });
 

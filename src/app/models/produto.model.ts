@@ -1,3 +1,4 @@
+import { jsonIgnore } from "json-ignore";
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { Empresa } from "./empresa.model";
@@ -22,10 +23,14 @@ export class Produto {
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;
     cm?: boolean;
+    
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
 }
 
 export class ProdutoRequest {
     id: number = 0;
+    descricao: string = '';
     empresa_Id: number = 0;
     tipoAtivo_Id: number = undefined as unknown as number;
     tipoRisco_Id: number = undefined as unknown as number;
@@ -34,7 +39,6 @@ export class ProdutoRequest {
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;
     cm?: boolean;
-    descricao: string = '';
 }
 
 

@@ -15,20 +15,20 @@ import { StepsModule } from 'primeng/steps';
 import { ToastrModule } from "ngx-toastr";
 import { NgxMaskModule } from "ngx-mask";
 
-import { FormCreateUsuarioComponent } from "./usuarios/form-create/form-create.component";
+import { FormUsuarioComponent } from "./usuarios/form/form.component";
 import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
-import { FormEditUsuarioComponent } from "./usuarios/form-edit/form-edit.component";
 import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
 import { FormProdutoComponent } from './produtos/form/form.component';
 import { ListSharedComponent } from "./list/list.component";
+import { FormClienteComponent } from './cliente/form/form.component';
 
 @NgModule({
     declarations: [
-        FormCreateUsuarioComponent,
-        FormEditUsuarioComponent,
+        FormUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
         FormPercentualRiscoComponent,
+        FormClienteComponent,
         ListSharedComponent,
     ],
     imports: [
@@ -49,11 +49,11 @@ import { ListSharedComponent } from "./list/list.component";
         StepsModule
     ],
     exports: [
-        FormCreateUsuarioComponent,
-        FormEditUsuarioComponent,
+        FormUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
         FormPercentualRiscoComponent,
+        FormClienteComponent,
         ListSharedComponent,
     ],
 })

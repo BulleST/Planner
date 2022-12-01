@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faArrowRight, faCity, faCreditCardAlt, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faChevronLeft, faCity, faCreditCardAlt, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
 import { Empresa } from 'src/app/models/empresa.model';
@@ -15,7 +15,7 @@ import { Table } from 'src/app/utils/table';
     styleUrls: ['./create.component.css']
 })
 export class CreateComponent implements OnInit, OnDestroy {
-
+    faChevronLeft = faChevronLeft;
     faArrowRight = faArrowRight;
     faEllipsisV = faEllipsisV;
     faTimes = faTimes;
@@ -40,11 +40,12 @@ export class CreateComponent implements OnInit, OnDestroy {
             
         this.empresaService.empresaObject.subscribe(res => {
             this.objeto = res;
-        });
-
+            console.log(res)
+        });   
+        let id = 0;
         this.items =  [
             { 
-                id: '1',
+                id: (++id).toString(),
                 label: 'Dados Cadastrais',
                 routerLink: 'dados-cadastrais',
                 command: (event: any) => {
@@ -54,7 +55,7 @@ export class CreateComponent implements OnInit, OnDestroy {
                 icon: faCreditCardAlt.toString()
             },
             { 
-                id: '2',
+                id: (++id).toString(),
                 label: 'Usuários',
                 routerLink: 'usuarios',
                 command: (event: any) => {
@@ -63,7 +64,16 @@ export class CreateComponent implements OnInit, OnDestroy {
                 }
             },
             { 
-                id: '3',
+                id: (++id).toString(),
+                label: 'Clientes',
+                routerLink: 'clientes',
+                command: (event: any) => {
+                    this.table.selected.next(undefined);
+                    this.table.selectedItems.next([]);
+                }
+            },
+            { 
+                id: (++id).toString(),
                 label: 'Produtos',
                 routerLink: 'produtos',
                 command: (event: any) => {
@@ -73,7 +83,7 @@ export class CreateComponent implements OnInit, OnDestroy {
                
             },
             { 
-                id: '4',
+                id: (++id).toString(),
                 label: 'Carteira Setup',
                 routerLink: 'setup',
                 command: (event: any) => {
@@ -82,7 +92,7 @@ export class CreateComponent implements OnInit, OnDestroy {
                 }
             },
             { 
-                id: '5',
+                id: (++id).toString(),
                 label: 'Percentual de Risco',
                 routerLink: 'percentual-risco',
                 command: (event: any) => {

@@ -9,13 +9,13 @@
             <hr>
         </div>
         <div class="navigation__links">
-            <a class="navigation__links-item" [routerLink]="['minha-empresa']">
+            <a class="navigation__links-item" [routerLink]="['minha-empresa']" *ngIf="account?.empresa_Id !=  null">
                 <span class="navigation__item-icon">
                     <i class="pi pi-wallet"></i>
                 </span>
                Minha empresa
             </a>
-            <a class="navigation__links-item" [routerLink]="['empresas']">
+            <a class="navigation__links-item" [routerLink]="['empresas']" *ngIf="account?.role == 'Admin'">
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faCity"></fa-icon>
                 </span>

@@ -16,20 +16,10 @@ import { ListComponent } from './list/list.component';
 import { DeleteComponent } from './delete/delete.component';
 import { CreateComponent } from './create/create.component';
 
-import { DadosCadastraisComponent as Create_Empresa_DadosCadastraisComponent } from './create/dados-cadastrais/dados-cadastrais.component';
-import { PercentualRiscoComponent as Create_Empresa_PercentualRiscoComponent } from './create/percentual-risco/percentual-risco.component';
-import { ProdutosComponent as Create_Empresa_ProdutosComponent } from './create/produtos/produtos.component';
-import { SetupComponent as Create_Empresa_SetupComponent } from './create/setup/setup.component';
-import { UsuariosComponent as Create_Empresa_UsuariosComponent } from './create/usuarios/usuarios.component';
 
 import { EditComponent } from './edit/edit.component';
-import { ClientesComponent as Edit_Empresa_ClientesComponent } from './edit/clientes/clientes.component';
-import { ProdutosComponent as Edit_Empresa_ProdutosComponent } from './edit/produtos/produtos.component';
-import { SetupComponent as Edit_Empresa_SetupComponent } from './edit/setup/setup.component';
-import { UsuariosComponent as Edit_Empresa_UsuariosComponent } from './edit/usuarios/usuarios.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DadosCadastraisComponent as Edit_Empresa_DadosCadastraisComponent } from './edit/dados-cadastrais/dados-cadastrais.component';
-import { PercentualRiscoComponent as Edit_Empresa_PercentualRiscoComponent } from './edit/percentual-risco/percentual-risco.component';
+import { EmpresaSharedModule } from './shared/empresa-shared.module';
 
 
 @NgModule({
@@ -37,23 +27,8 @@ import { PercentualRiscoComponent as Edit_Empresa_PercentualRiscoComponent } fro
         EmpresasComponent,
         ListComponent,
         DeleteComponent,
-        
-        // CREATE COMPONENT STEPS
         CreateComponent,
-        Create_Empresa_DadosCadastraisComponent,
-        Create_Empresa_UsuariosComponent,
-        Create_Empresa_ProdutosComponent,
-        Create_Empresa_SetupComponent,
-        Create_Empresa_PercentualRiscoComponent,
-
-        // EDIT COMPONENT STEPS
         EditComponent,
-        Edit_Empresa_ClientesComponent,
-        Edit_Empresa_ProdutosComponent,
-        Edit_Empresa_SetupComponent,
-        Edit_Empresa_UsuariosComponent,
-        Edit_Empresa_DadosCadastraisComponent,
-        Edit_Empresa_PercentualRiscoComponent,
     ],
     imports: [
         CommonModule,
@@ -66,7 +41,8 @@ import { PercentualRiscoComponent as Edit_Empresa_PercentualRiscoComponent } fro
         NgxMaskModule.forChild(),
         StepsModule,
         CardModule,
-        SharedModule
+        SharedModule,
+        EmpresaSharedModule
     ],
     bootstrap: [EmpresasComponent]
 })

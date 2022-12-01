@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { lastValueFrom } from 'rxjs';
 import { PercentualRisco } from 'src/app/models/percentual-risco.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { PercentualRiscoService } from 'src/app/services/percentual-risco.service';
@@ -20,6 +21,7 @@ export class EditComponent implements OnInit {
     objeto: PercentualRisco = new PercentualRisco;
     erro: any[] = [];
     loading = false;
+    url = '';
 
     constructor(
         private router: Router,
@@ -34,28 +36,34 @@ export class EditComponent implements OnInit {
             this.modalOpen = res;
         });
 
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('percentual_id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('percentual_id'));
-                if (urlArray.includes('empresas/cadastrar')) {
-                    let objeto = this.empresaService.object.percentualRisco.find(x => x.id == this.objeto.id);
-                    if (objeto) {
-                        this.objeto = objeto;
-                        setTimeout(() => {
-                            this.modal.setOpen(true);
-                        }, 200);
-                    } else {
-                        this.voltar();
-                    }
-                } else {
-                    
-                }
+        activatedRoute.params.subscribe(p => {
+            if (p['percentual_id']) {
+                this.objeto.id = this.crypto.decrypt(p['percentual_id']);
+            } else {
+                this.voltar();
             }
-        })
+        });
+
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
+            this.objeto = this.empresaService.empresaObject.value.percentualRisco.find(x => x.id == this.objeto.id) as PercentualRisco;
+        } else {
+            this.riscoService.get(this.objeto.id).subscribe({
+                next: res => {
+                    this.objeto = res;
+                },
+                error: err => {
+                    this.voltar();
+                },
+            })
+        }
     }
 
     ngOnInit(): void {
+        console.log('oi')
+        setTimeout(() => {
+            this.modal.setOpen(true);
+        }, 200);
     }
 
     voltar() {
@@ -65,21 +73,27 @@ export class EditComponent implements OnInit {
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            let result = this.riscoService.edit_To_Empresa_List(this.objeto); 
-            if (result)
+        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
+            let result = this.riscoService.edit_To_Empresa_List(this.objeto);
+            if (result) {
+                this.toastr.success('Operação concluída');
                 this.voltar();
-        }
-        else {
-            if (urlArray.includes('empresas/editar')) {
-
             }
-            // Enviar para a API
-            this.toastr.success('Operação concluída');
+            this.loading = false;
         }
-
-        this.loading = false;
-        this.voltar();
+        else { // Enviar para a API
+            if (this.url.includes('empresas/editar')) {
+            }
+            this.riscoService.edit(this.objeto).subscribe({
+                next: async (res) => {
+                    await lastValueFrom(this.riscoService.getList());
+                    this.modal.voltar();
+                },
+                error: (error) => {
+                    this.loading = false;
+                },
+                complete: () => { }
+            });
+        }
     }
 }

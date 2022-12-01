@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Empresa, /**EmpresaEditRequest */ } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
 import { environment } from 'src/environments/environment';
+import { AccountService } from './account.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,37 +12,38 @@ import { environment } from 'src/environments/environment';
 export class EmpresaService {
     url = environment.url;
     list = new BehaviorSubject<Empresa[]>([]);
-    // objeto = new BehaviorSubject<Empresa | undefined>(undefined);
 	empresaObject: BehaviorSubject<Empresa>;
-	// public empresaObject: Observable<Empresa>;
+	empresaSelected: BehaviorSubject<Empresa | undefined> = new BehaviorSubject<Empresa | undefined>(undefined);
 	public empresa: Observable<Empresa>;
-
 
     constructor(
         private http: HttpClient,
         private crypto: Crypto,
+        private accountService: AccountService
     ) {
 		this.empresaObject = new BehaviorSubject<Empresa>(new Empresa);
-		// this.empresaObject = this.empresaSubject.asObservable();
-
-		this.empresaObject = new BehaviorSubject<Empresa>(new Empresa);
 		this.empresa = this.empresaObject.asObservable();
+        this.accountService.account.subscribe(res => {
+            if (res && res.role == 'Admin') {
+
+            } else {
+                this.empresaSelected.next(undefined)
+            }
+        })
     }
 
     public get object()  {
-        var e = localStorage.getItem('empresa')  
-        if (e) {
-            // this.setCreateObject(this.crypto.decrypt(e) new Empresa)
-            this.setObject(JSON.parse(e) as Empresa)
+        var e = localStorage.getItem('empresa') as string;
+        if (e && e.trim()) {
+            this.setObject(this.crypto.decrypt(e) as Empresa)
+            // this.setObject(JSON.parse(e) as Empresa)
         }
         return this.empresaObject.value;
     }
 
     setObject(value: Empresa) {
-        // localStorage.setItem('empresa', this.crypto.encrypt(value) ?? '')
-        localStorage.setItem('empresa', JSON.stringify(value))
+        localStorage.setItem('empresa', this.crypto.encrypt(value) ?? '')
         this.empresaObject.next(value);
-        // this.empresaObject.next(value);
     }
 
     getList() {

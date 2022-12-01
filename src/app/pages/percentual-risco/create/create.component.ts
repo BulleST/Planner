@@ -19,6 +19,7 @@ export class CreateComponent implements OnInit {
     modalOpen = false;
     objeto: PercentualRisco = new PercentualRisco;
     erro: any[] = [];
+    url = '';
     loading = false;
 
     constructor(
@@ -30,11 +31,7 @@ export class CreateComponent implements OnInit {
         private riscoService: PercentualRiscoService,
         private crypto: Crypto
     ) {
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
-                this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
-            }
-        });
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
@@ -53,19 +50,26 @@ export class CreateComponent implements OnInit {
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            var result = this.riscoService.add_To_Empresa_Create(this.objeto);
-            if (result) 
+        if (this.url.includes('empresas/cadastrar')) {
+            let result = this.riscoService.add_To_Empresa_List(this.objeto);
+            if (result) {
+                this.toastr.success('Operação concluída');
                 this.voltar();
-        } 
-        else {
-            if ( urlArray.includes('empresas/editar')) {
-
             }
-            // Enviar para a API
+            this.loading = false;
         }
-        this.toastr.success('Operação concluída');
-        this.loading = false;
+        else { // Enviar para a API
+            if (this.url.includes('empresas/editar')) {
+            }
+            this.riscoService.create(this.objeto).subscribe({
+                next: (res) => {
+                    this.modal.voltar();
+                    this.riscoService.getList().subscribe();
+                },
+                error: (error) => {
+                    this.loading = false;
+                },
+            });
+        }
     }
 }

@@ -58,47 +58,68 @@ export class CarteiraSetupService {
         this.objeto.next(value);
     }
 
-    add_To_Empresa_List(carteiraSetup: CarteiraSetup) {
-        let index = this.empresa.carteiraSetup.findIndex(x => x.empresa_Id == carteiraSetup.empresa_Id
-            && (x.nome.toLowerCase() == carteiraSetup.nome.toLowerCase()));
+    add_To_Empresa_List(item: CarteiraSetup) {
+        if (this.empresa) {
+            let index = this.empresa.carteiraSetup.findIndex(x => x.empresa_Id == item.empresa_Id&& (x.nome.toLowerCase() == item.nome.toLowerCase()));
 
+            if (index != -1) {
+                this.toastr.error('Essa carteira já está cadastrada para essa empresa!!')
+                return false;
+            }
+            if (item.carteiraProdutoRel.length == 0) {
+                this.toastr.error('Cadastre produtos para essa carteira!!')
+                return false;
+            }
 
-        if (index != -1) {
-            this.toastr.error('Essa carteira já está cadastrada para essa empresa!!')
-            return false;
+            this.empresa.carteiraSetup.sort((x, y) => y.id - y.id);
+            let lastId = this.empresa.carteiraSetup.length > 0 ? this.empresa.carteiraSetup[this.empresa.carteiraSetup.length - 1].id : 0;
+            item.id = ++lastId;
+            item.ativo = true;
+            item.registroNaoSalvo = true;
+
+            this.empresa.carteiraSetup.push(item);
+            this.empresaService.setObject(this.empresa)
+            this.toastr.success('Operação concluída');
+            this.table.resetSelection();
+            return true;
         }
-
-        this.empresa.carteiraSetup.sort((x, y) => y.id - y.id);
-        let lastId = this.empresa.carteiraSetup.length > 0 ? this.empresa.carteiraSetup[this.empresa.carteiraSetup.length - 1].id : 0;
-        carteiraSetup.id = ++lastId;
-
-        this.empresa.carteiraSetup.push(carteiraSetup);
-        this.empresaService.setObject(this.empresa)
-        this.toastr.success('Operação concluída');
-        this.table.resetSelection();
-        return true;
+        this.toastr.error('Nenhuma empresa selecionada.');
+        return false;
     }
 
-    edit_To_Empresa_List(carteiraSetup: CarteiraSetup) {
-        let index = this.empresa.carteiraSetup.findIndex(x => x.empresa_Id == carteiraSetup.empresa_Id
-            && x.nome.toLowerCase() == carteiraSetup.nome.toLowerCase()
-            && x.id != carteiraSetup.id)
+    edit_To_Empresa_List(item: CarteiraSetup) {
+        console.log(item)
+        if (this.empresa) {
+            var list = this.empresa.carteiraSetup ?? [];
+            
+            let index = list.findIndex(x => x.empresa_Id == item.empresa_Id && x.nome.toLowerCase() == item.nome.toLowerCase() && x.id != item.id)
+            if (index != -1) {
+                this.toastr.error('Essa carteira já está cadastrada para essa empresa!!')
+                return false;
+            }
 
-        if (index != -1) {
-            this.toastr.error('Essa carteira já está cadastrada para essa empresa!!')
-            return false;
-        }
-        index = this.empresa.carteiraSetup.findIndex(x => x.id == carteiraSetup.id)
-        if (index != -1) {
-            this.toastr.error('Registro não encontrado!!')
-            return false;
-        }
-        this.empresa.carteiraSetup.splice(index, 1, carteiraSetup);
-        this.empresaService.setObject(this.empresa);
+            index = list.findIndex(x => x.id == item.id)
+            if (index == -1) {
+                this.toastr.error('Registro não encontrado!!')
+                return false;
+            }
 
-        this.toastr.success('Operação concluída');
-        this.table.resetSelection();
-        return true;
+            if (item.carteiraProdutoRel.length == 0) {
+                this.toastr.error('Cadastre produtos para essa carteira!!')
+                return false;
+            }
+
+            item.ativo = true;
+            list.splice(index, 1, item);
+            this.empresa.carteiraSetup = list;
+            this.empresaService.setObject(this.empresa);
+
+            this.toastr.success('Operação concluída');
+            this.table.resetSelection();
+            return true;
+        }
+        this.toastr.error('Nenhuma empresa selecionada.');
+        return false;
     }
 
     delete_To_Empresa_List(id: number) {
@@ -150,15 +171,15 @@ export class CarteiraSetupService {
     create(request: CarteiraSetup) {
         return this.http.post<CarteiraSetup>(`${this.url}/carteiraSetup/`, request);
     }
-    
+
     edit(request: CarteiraSetup) {
         return this.http.put<CarteiraSetup>(`${this.url}/carteiraSetup/`, request);
     }
-    
+
     deactivated(id: number, active: boolean) {
         return this.http.patch<void>(`${this.url}/carteiraSetup/${id}/${active}`, {});
     }
-    
+
     delete(id: number) {
         return this.http.delete<void>(`${this.url}/carteiraSetup/${id}`);
     }

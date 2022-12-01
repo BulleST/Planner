@@ -976,7 +976,7 @@ tr.selected:nth-child(odd) td.td-actions {
 }
 
 .p-paginator .p-dropdown {
-    margin: 0 0 0 14px;
+    /* margin: 0 0 0 14px; */
 }
 
 .content .table-wrapper-top {

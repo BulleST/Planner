@@ -22,6 +22,7 @@ export class CreateComponent implements OnInit {
     objeto: Produto = new Produto;
     erro: any[] = [];
     loading = false;
+    url = '';
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -30,14 +31,7 @@ export class CreateComponent implements OnInit {
         private produtoService: ProdutoService,
         private crypto: Crypto
     ) {
-        // activatedRoute.paramMap.subscribe(p => {
-        //     if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
-        //         this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
-        //     }
-        // });
-
-        this.objeto.empresa_Id = 1;
-
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
@@ -60,17 +54,16 @@ export class CreateComponent implements OnInit {
     send(model: ProdutoRequest) {
         this.loading = true;
         this.erro = [];
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
+        if (this.url.includes('empresas/cadastrar')) {
             let result = this.produtoService.add_To_Empresa_List(this.objeto);
             if (result) {
                 this.toastr.success('Operação concluída');
                 this.voltar();
             }
+            this.loading = false;
         }
-        else {
-            // Enviar para a API
-            if (urlArray.includes('empresas/editar')) {
+        else { // Enviar para a API
+            if (this.url.includes('empresas/editar')) {
             }
             this.produtoService.create(model).subscribe({
                 next: (res) => {
@@ -78,11 +71,9 @@ export class CreateComponent implements OnInit {
                     this.produtoService.getList().subscribe();
                 },
                 error: (error) => {
-
+                    this.loading = false;
                 },
-                complete: () => { }
             });
         }
-        this.loading = false;
     }
 }

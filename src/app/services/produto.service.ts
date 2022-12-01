@@ -81,7 +81,13 @@ export class ProdutoService {
             list.sort((x, y) => x.id - y.id)
             var lastId = list.length == 0 ? 0 : list[list.length - 1].id;
             item.id = ++lastId;
-            list.push(item);
+            item.registroNaoSalvo = true;
+
+            let a = Object.assign({}, item)
+            a.produtoTributacaoRel.map(x => {
+                x.produto.produtoTributacaoRel = [];
+            });
+            list.push(a);
             this.empresa.produto = list;
             this.empresaService.setObject(this.empresa);
             this.toastr.success('Operação concluída');
@@ -92,7 +98,7 @@ export class ProdutoService {
         return false;
     }
 
-    edit_To_Empresa_Create(item: Produto) {
+    edit_To_Empresa_List(item: Produto) {
         if (this.empresa) {
             var list = this.empresa.produto ?? [];
             let index = list.findIndex(x => x.id == item.id);
@@ -124,13 +130,17 @@ export class ProdutoService {
                     return false;
                 }
 
-                list.splice(index, 1, item);
+                let produto = Object.assign({}, item)
+                produto.produtoTributacaoRel.map(x => {
+                    x.produto.produtoTributacaoRel = [];
+                });
+                list.splice(index, 1, produto);
                 this.empresa.produto = list;
                 this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
-                this.toastr.error('Usuário não encontrado!!');
+                this.toastr.error('Produto não encontrado!!');
                 return false;
             }
         }
@@ -150,7 +160,7 @@ export class ProdutoService {
                 this.table.resetSelection();
                 return true;
             } else {
-                this.toastr.error('Usuário não encontrado!!');
+                this.toastr.error('Produto não encontrado!!');
                 return false;
             }
         }

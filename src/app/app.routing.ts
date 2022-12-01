@@ -15,7 +15,7 @@ const percentualRisco = () => import('./pages/percentual-risco/percentual-risco.
 
 const routes: Routes = [
   {
-    path: '', component: InitialComponent,/*canActivate: [AuthGuard], */ children: [
+    path: '', component: InitialComponent, canActivate: [AuthGuard], /* canActivate: [AuthGuard], */ children: [
 
         { path: 'percentual-risco', loadChildren: percentualRisco },
         { path: 'carteira-setup', loadChildren: setup },

@@ -5,11 +5,15 @@ import { DeleteComponent } from './delete/delete.component';
 import { InvestimentoFormComponent } from './planner/investimento-form/investimento-form.component';
 import { ListComponent } from './list/list.component';
 import { ProdutoFormComponent } from './planner/produto-form/produto-form.component';
-import { ProdutoGuard } from './produto.guard';
+import { ProdutoGuard } from './planner/produto.guard';
 import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.component';
+import { CreateComponent } from './create/create.component';
+import { EditComponent } from './edit/edit.component';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [
+        { path: 'cadastrar', component: CreateComponent },
+        { path: 'editar/:cliente_id', component: EditComponent },
         { path: 'excluir/:cliente_id', component: DeleteComponent },
     ]},
     { path: 'planner', component: PlannerComponent, children: [

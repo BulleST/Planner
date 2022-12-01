@@ -1,3 +1,4 @@
+import { jsonIgnore } from "json-ignore";
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { Empresa } from "./empresa.model";
@@ -27,6 +28,9 @@ export class Cliente {
     idadeAposentadoria: number = '' as unknown as number;
     rendaMensalAposentadoria: number = '' as unknown as number;
     rentabilidadeAposentadoria: number = '' as unknown as number;
+    
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
 }
 
 
@@ -58,16 +62,7 @@ export var clienteColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-    }, {
-        field: 'rg', 
-        header: 'RG', 
-        maskType: MaskType.rg,
-        filterType: FilterType.text, 
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    }, {
+    },{
         field: 'dataNascimento', 
         header: 'Data de Nascimento', 
         maskType: MaskType.date,
@@ -79,15 +74,6 @@ export var clienteColumns: Column[] = [
     }, {
         field: 'idade', 
         header: 'Idade', 
-        maskType: MaskType.undefined,
-        filterType: FilterType.numeric, 
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    }, {
-        field: 'estadoCivil.descricao', 
-        header: 'Estado Civil', 
         maskType: MaskType.undefined,
         filterType: FilterType.numeric, 
         filterDisplay: FilterDisplay.menu,

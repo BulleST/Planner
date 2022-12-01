@@ -11,9 +11,13 @@ export class CarteiraSetup {
     @jsonIgnore()
     ativo?: boolean;
     dataDesativado?: Date;
-
+    
     carteiraProdutoRel: CarteiraProdutoRel[] = [];
     carteiraRiscoRel: CarteiraRiscoRel[] = [];
+    
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
+    
 }
 
 export var setupColumns: Column[] = [

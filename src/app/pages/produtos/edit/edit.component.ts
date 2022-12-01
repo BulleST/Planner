@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { lastValueFrom } from 'rxjs';
 import { Produto, ProdutoRequest } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
@@ -20,6 +21,7 @@ export class EditComponent implements OnInit {
 	objeto: Produto = new Produto;
 	erro: any[] = [];
 	loading = false;
+    url = '';
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -29,88 +31,67 @@ export class EditComponent implements OnInit {
 		private produtoService: ProdutoService,
         private crypto: Crypto,
 	) {
-		this.modal.getOpen().subscribe(res => {
-			this.modalOpen = res;
-		});
+        this.modal.getOpen().subscribe(res => {
+            this.modalOpen = res;
+        });
 
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('produto_id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('produto_id'));
-                if (urlArray.includes('empresas/cadastrar')) { // Se estiver na página de cadastro de uma empresa nova
-                    let obj = this.empresaService.object?.produto.find(x => x.id == this.objeto.id);
-                    if (obj) {
-                        this.objeto = obj;
-                        setTimeout(() => {
-                            this.modal.setOpen(true);
-                        }, 200);
-                    }
-                    else {
-                        this.voltar();
-                    }
-                } 
-                else { 
-                    // Se estiver no módulo de usuários
-                    if (urlArray.includes('empresas/editar')) {
-                        // Se estiver na página de visão geral de uma empresa já existente ou 
-                    }
-                    this.produtoService.get(this.objeto.id).subscribe({
-                        next: (produto) => {
-                            this.objeto = produto;
-                            setTimeout(() => {
-                                this.modal.setOpen(true);
-                            }, 200);
-                        }, 
-                        error: (err) => {
-                            this.toastr.error('Não foi possível carregar esse registro');
-                            this.voltar();
-                        },
-                        complete: () => {
-
-                        }
-                    });
-                }
+        activatedRoute.params.subscribe(p => {
+            if (p['produto_id']) {
+                this.objeto.id = this.crypto.decrypt(p['produto_id']);
             } else {
                 this.voltar();
             }
-        })
+        });
+
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
+            this.objeto = this.empresaService.empresaObject.value.produto.find(x => x.id == this.objeto.id) as Produto;
+        } else {
+            this.produtoService.get(this.objeto.id).subscribe({
+                next: res => {
+                    this.objeto = res;
+                },
+                error: err => {
+                    this.voltar();
+                },
+            })
+        }
 	}
 
 	ngOnInit(): void {
+        setTimeout(() => {
+            this.modal.setOpen(true);
+        }, 200);
 	}
 
 	voltar() {
         this.modal.voltar();
 	}
 
-	send(model: ProdutoRequest) {
-		this.loading = true;
-		this.erro = [];
-
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            let result = this.produtoService.edit_To_Empresa_Create(this.objeto); 
+    send(model: ProdutoRequest) {
+        this.loading = true;
+        this.erro = [];
+        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
+            let result = this.produtoService.edit_To_Empresa_List(this.objeto);
             if (result) {
-                this.voltar();
                 this.toastr.success('Operação concluída');
+                this.voltar();
             }
+            this.loading = false;
         }
-        else {
-            // Enviar para a API
-            if (urlArray.includes('empresas/editar')) {
-                // Enviar para a API
+        else { // Enviar para a API
+            if (this.url.includes('empresas/editar')) {
             }
-
             this.produtoService.edit(model).subscribe({
-                next: (res) => {
+                next: async (res) => {
+                    await lastValueFrom(this.produtoService.getList());
                     this.modal.voltar();
-                    this.produtoService.getList().subscribe();
                 },
-                error: (res) => {},
-                complete: () => {},
-            })
+                error: (error) => {
+                    this.loading = false;
+                },
+                complete: () => { }
+            });
         }
-        
-		this.loading = false;
-	}
+    }
 }

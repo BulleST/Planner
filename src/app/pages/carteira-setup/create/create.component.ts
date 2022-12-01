@@ -20,7 +20,7 @@ export class CreateComponent implements OnInit {
     objeto: CarteiraSetup = new CarteiraSetup;
     erro: any[] = [];
     loading = false;
-    loadingProduto = false;
+    url = '';
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -28,10 +28,8 @@ export class CreateComponent implements OnInit {
         private setupService: CarteiraSetupService,
         private toastr: ToastrService,
     ) {
-        // this.setupService.setObject(new CarteiraSetup);
-        this.setupService.getObject().subscribe(res => {
-            this.objeto = res as CarteiraSetup;
-        });
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+        
     }
 
     ngOnInit(): void {
@@ -49,29 +47,26 @@ export class CreateComponent implements OnInit {
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
-
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            var result = this.setupService.add_To_Empresa_List(this.objeto);
-            if (result){
+        if (this.url.includes('empresas/cadastrar')) {
+            let result = this.setupService.add_To_Empresa_List(this.objeto);
+            if (result) {
                 this.toastr.success('Operação concluída');
                 this.voltar();
             }
-        } 
-        else {
-            // Enviar para a API
-            if (urlArray.includes('empresas/editar')) {
+            this.loading = false;
+        }
+        else { // Enviar para a API
+            if (this.url.includes('empresas/editar')) {
             }
             this.setupService.create(this.objeto).subscribe({
                 next: (res) => {
-
+                    this.modal.voltar();
+                    this.setupService.getList().subscribe();
                 },
-                error: (err) => {
-
+                error: (error) => {
+                    this.loading = false;
                 },
-            })
+            });
         }
-
-        this.loading = false;
     }
 }

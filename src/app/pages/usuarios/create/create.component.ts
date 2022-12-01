@@ -1,12 +1,10 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/usuario.model';
-import { EmpresaService } from 'src/app/services/empresa.service';
-import { UsuarioService } from 'src/app/services/user.service.ts';
+import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
@@ -21,6 +19,7 @@ export class CreateComponent implements OnInit {
     objeto: Usuario = new Usuario;
     erro: any[] = [];
     loading = false;
+    url = '';
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -29,11 +28,7 @@ export class CreateComponent implements OnInit {
         private userService: UsuarioService,
         private crypto: Crypto
     ) {
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('empresa_id')) { // Rota = setup/cadastrar/<empresa_id>
-                this.objeto.empresa_Id = this.crypto.decrypt(p.get('empresa_id'));
-            }
-        });
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
@@ -49,22 +44,32 @@ export class CreateComponent implements OnInit {
         this.modal.voltar();
     }
 
+
+
     send(form: NgForm) {
         this.loading = true;
         this.erro = [];
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            // Adicionar ao objeto de cadastro de uma nova empresa
-            let result = this.userService.add_To_Empresa_Create(this.objeto);
-            if (result)
+        if (this.url.includes('empresas/cadastrar')) {
+            let result = this.userService.add_To_Empresa_List(this.objeto);
+            if (result) {
+                this.toastr.success('Operação concluída');
                 this.voltar();
-        } else if (urlArray.includes('empresas/editar')) {
-            // Enviar para a API também
+            }
+            this.loading = false;
         }
-        else {
-            // Enviar para a API
+        else { // Enviar para a API
+            if (this.url.includes('empresas/editar')) {
+            }
+            this.userService.create(this.objeto).subscribe({
+                next: (res) => {
+                    this.modal.voltar();
+                    this.userService.getList().subscribe();
+                },
+                error: (error) => {
+                    this.loading = false;
+                },
+            });
         }
-        this.toastr.success('Operação concluída');
-        this.loading = false;
     }
+
 }

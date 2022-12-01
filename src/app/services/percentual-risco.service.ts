@@ -45,18 +45,36 @@ export class PercentualRiscoService {
         this.objeto.next(value);
     }
 
-    add_To_Empresa_Create(item: PercentualRisco) {
+    add_To_Empresa_List(item: PercentualRisco) {
         if (this.empresa) {
             var list = this.empresa.percentualRisco ?? [];
+
             let perfilInvestidor = this.dropdownService.perfilInvestidor.value.find(x => x.id == item.perfilInvestidor_Id);
             if (!perfilInvestidor) {
-                this.toastr.error('Selecione um tipo de perfil de acesso válido!!');
+                this.toastr.error('Selecione um perfil de investidor válido!!');
                 return false;
             }
             item.perfilInvestidor = perfilInvestidor;
+
+            let existe = this.empresa.percentualRisco.find(x => x.perfilInvestidor_Id == item.perfilInvestidor_Id 
+                && x.baixissimo == item.baixissimo
+                && x.baixo == item.baixo
+                && x.moderado == item.moderado
+                && x.arrojado == item.arrojado
+                && x.superArrojado == item.superArrojado
+                && x.hedge == item.hedge
+                && x.empresa_Id == item.empresa_Id);
+            
+            if (existe) {
+                this.toastr.error('Um outro percentual de risco nessa empresa já está cadastrado com os mesmos dados!!');
+                return false;
+            }
+
             list.sort((x, y) => x.id - y.id)
             var lastId = list.length == 0 ? 0 : list[list.length - 1].id;
             item.id = ++lastId;
+            item.registroNaoSalvo = true;
+            
             list.push(item);
             this.empresa.percentualRisco = list;
             this.empresaService.setObject(this.empresa);
@@ -80,6 +98,22 @@ export class PercentualRiscoService {
                     return false;
                 }
                 item.perfilInvestidor = perfilInvestidor;
+
+                let existe = this.empresa.percentualRisco.find(x => x.perfilInvestidor_Id == item.perfilInvestidor_Id 
+                    && x.baixissimo == item.baixissimo
+                    && x.baixo == item.baixo
+                    && x.moderado == item.moderado
+                    && x.arrojado == item.arrojado
+                    && x.superArrojado == item.superArrojado
+                    && x.hedge == item.hedge
+                    && x.empresa_Id == item.empresa_Id
+                    && x.id != item.id);
+                
+                if (existe) {
+                    this.toastr.error('Um outro percentual de risco nessa empresa já está cadastrado com os mesmos dados!!');
+                    return false;
+                }
+
                 list.splice(index, 1, item);
                 this.empresa.percentualRisco = list;
                 this.empresaService.setObject(this.empresa);
@@ -94,7 +128,7 @@ export class PercentualRiscoService {
         return false;
     }
 
-    delete_To_Empresa_Create(id: number) {
+    delete_To_Empresa_List(id: number) {
         if (this.empresa) {
             var list = this.empresa.percentualRisco ?? [];
             let index = list.findIndex(x => x.id == id);
@@ -114,52 +148,24 @@ export class PercentualRiscoService {
         return false;
     }
 
-    getList() {
-        return this.http.get<PercentualRisco[]>(`${this.url}/PercentualRisco/`);
+    getList(empresa_Id: number = 1) {
+        return this.http.get<PercentualRisco[]>(`${this.url}/percentual-risco/all/${empresa_Id}`);
     }
 
-    get(id: number): BehaviorSubject<undefined | PercentualRisco> {
-        if (this.list.value.length == 0) {
-            return new BehaviorSubject<undefined | PercentualRisco>(undefined);
-        }
-
-        var index = this.list.value.findIndex(x => x.id == id);
-        if (index == -1) {
-            return new BehaviorSubject<undefined | PercentualRisco>(undefined);
-        }
-
-        var item = this.list.value[index];
-        return new BehaviorSubject<undefined | PercentualRisco>(item);
+    get(id: number) {
+        return this.http.get<PercentualRisco>(`${this.url}/percentual-risco/${id}`);
     }
 
     create(request: PercentualRisco) {
-        var id = 1;
-        if (this.list.value.length > 0) {
-            id = this.list.value[this.list.value.length - 1].id + 1;
-        }
-        request.id = id;
-        this.list.value.push(request);
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+        return this.http.post<PercentualRisco>(`${this.url}/percentual-risco/`, request);
     }
 
     edit(request: PercentualRisco) {
-        var index = this.list.value.findIndex(x => x.id == request.id);
-        if (index == -1) {
-            return new BehaviorSubject('Não encontrado')
-        }
-        this.list.value[index] = request;
-        this.list.next(this.list.value);
-        return new BehaviorSubject(request);
+        return this.http.put<PercentualRisco>(`${this.url}/percentual-risco/`, request);
     }
 
-    delete(model: PercentualRisco) {
-        var index = this.list.value.findIndex(x => x.id == model.id);
-        if (index != -1) {
-            this.list.value.splice(index, 1);
-            this.list.next(this.list.value);
-        }
-        return this.list;
+    delete(id: number) {
+        return this.http.delete<void>(`${this.url}/percentual-risco/${id}`);
     }
 
 }

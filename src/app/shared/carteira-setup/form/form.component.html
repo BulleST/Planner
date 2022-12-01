@@ -177,7 +177,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of objeto.carteiraProdutoRel;"
+                            <tr *ngFor="let item of objeto.carteiraProdutoRel; index as i"
                             [class.selected]="item.produtoTributacaoRel.produto.tipoRisco_Id == selectedRisco.id">
                                 <td></td>
                                 <td>{{item.id }}</td>
@@ -188,8 +188,8 @@
                                 <td>
                                     <input type="text"
                                            class="form-control"
-                                           id="percentual-{{item.id}}"
-                                           name="percentual-{{item.id}}"
+                                           id="percentual-{{i}}"
+                                           name="percentual-{{i}}"
                                            mask="separator"
                                            thousandSeparator="."
                                            decimalMarker=","

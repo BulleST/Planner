@@ -20,6 +20,8 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { ChartModule } from 'primeng/chart';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.component';
+import { CreateComponent } from './create/create.component';
+import { EditComponent } from './edit/edit.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.
     ProdutoFormComponent,
     RemoverProdutoComponent,
     DeletePlannerComponent,
+    CreateComponent,
+    EditComponent,
   ],
   imports: [
     CommonModule,

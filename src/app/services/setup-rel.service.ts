@@ -103,6 +103,7 @@ export class CarteiraProdutoRelService {
                 }
             }
             if (carteira_Setup_Index == -1) {
+                item.registroNaoSalvo = true;
                 this.empresa.carteiraSetup.push(carteira_Setup);
             }
             else {
@@ -119,37 +120,10 @@ export class CarteiraProdutoRelService {
         }
     }
 
-    delete_Rel_To_Empresa_List(carteiraSetup_id: number, rel_id: number) {
-        if (this.empresa) {
-            let carteira_Setup_Index = this.empresa.carteiraSetup.findIndex(x => x.id == carteiraSetup_id);
-            if (carteira_Setup_Index != -1) {
-                let carteira_Setup = this.empresa.carteiraSetup[carteira_Setup_Index];
-                let rel_Index = carteira_Setup.carteiraProdutoRel.findIndex(x => x.id == rel_id);
-                if (rel_Index != -1) {
-                    carteira_Setup.carteiraProdutoRel.splice(rel_Index, 1);
-                    this.empresa.carteiraSetup.splice(carteira_Setup_Index, 1, carteira_Setup);
-                    this.empresaService.setObject(this.empresa);
-                    this.toastr.success('Operação concluída');
-                    this.table.resetSelection();
-                    return true;
-                } else {
-                    this.toastr.error('Setup não encontrado!!');
-                    return false;
-                }
-            } else {
-                this.toastr.error('Setup não encontrado!!');
-                return false;
-            }
-        } else {
-            this.toastr.error('Nenhuma empresa selecionada.');
-            return false;
-        }
-    }
-
-    delete_To_Empresa_List(carteiraSetup_Id: number) {
+    delete_To_Empresa_List(id: number) {
         if (this.empresa) {
             let list = this.empresa.carteiraSetup ?? [];
-            let index = list.findIndex(x => x.id == carteiraSetup_Id);
+            let index = list.findIndex(x => x.id == id);
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.carteiraSetup = list;

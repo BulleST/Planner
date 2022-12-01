@@ -1,0 +1,316 @@
+<form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
+    <div class="d-flex flex-wrap row">
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+            <div class="card card-body">
+                <div class="form-row">
+                    <div class="form-group col-lg-5 col-md-5 col-sm-12 col-12">
+                        <label for="nome">Nome Completo: <span class="text-danger">*</span></label>
+                        <input type="text"
+                               class="form-control"
+                               name="nome"
+                               id="nome"
+                               #nome="ngModel"
+                               [(ngModel)]="objeto.nome"
+                               required
+                               popoverClass="popover-danger"
+                               [ngbPopover]="campoObrigatorio"
+                               triggers="mouseenter:mouseleave">
+                        <div *ngIf="nome.touched && nome.errors">
+                            <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                        <label for="perfilInvestidor">Perfil de Investidor: <span class="text-danger">*</span></label>
+                        <select
+                                class="form-control"
+                                name="perfilInvestidor"
+                                id="perfilInvestidor"
+                                #_perfilInvestidor="ngModel"
+                                [(ngModel)]="objeto.perfilInvestidor_Id"
+                                [class.form-control-loading]="loadingPerfilInvestidor"
+                                required
+                                popoverClass="popover-danger"
+                                [ngbPopover]="campoObrigatorio"
+                                triggers="mouseenter:mouseleave">
+                            <option [ngValue]="undefined">Selecione</option>
+                            <option [ngValue]="item.id" *ngFor="let item of perfilInvestidor">{{ item.descricao }}</option>
+                        </select>
+                        <div *ngIf="_perfilInvestidor.touched && _perfilInvestidor.errors">
+                            <p class="text-danger" *ngIf="_perfilInvestidor.errors['required']">Este campo é obrigatório.</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-6 col-12">
+                        <label for="estadoCivil">Estado Civil: <span class="text-danger">*</span></label>
+                        <select
+                                class="form-control"
+                                name="estadoCivil"
+                                id="estadoCivil"
+                                #_estadoCivil="ngModel"
+                                [(ngModel)]="objeto.estadoCivil_Id"
+                                [class.form-control-loading]="loadingEstadoCivil"
+                                required
+                                popoverClass="popover-danger"
+                                [ngbPopover]="campoObrigatorio"
+                                triggers="mouseenter:mouseleave">
+                            <option [ngValue]="undefined">Selecione</option>
+                            <option [ngValue]="item.id" *ngFor="let item of estadoCivil">{{ item.descricao }}</option>
+                        </select>
+                        <div *ngIf="_estadoCivil.touched && _estadoCivil.errors">
+                            <p class="text-danger" *ngIf="_estadoCivil.errors['required']">Este campo é obrigatório.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-3 col-md-3 col-sm-6 col-12">
+                        <label for="cpf">CPF: <span class="text-danger">*</span></label>
+                        <input type="text"
+                               class="form-control"
+                               name="cpf"
+                               id="cpf"
+                               #cpf="ngModel"
+                               [(ngModel)]="objeto.cpf"
+                               popoverClass="popover-danger"
+                               [ngbPopover]="campoObrigatorio"
+                               triggers="mouseenter:mouseleave"
+                               mask="000.000.000-00"
+                               placeholder="000.000.000-00"
+                               required>
+                        <div *ngIf="cpf.touched && cpf.errors">
+                            <p class="text-danger" *ngIf="cpf.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="cpf.errors['mask']">CPF inválido.</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-6 col-12">
+                        <label for="rg">RG: <span class="text-danger">*</span></label>
+                        <input type="text"
+                               class="form-control"
+                               name="rg"
+                               id="rg"
+                               #rg="ngModel"
+                               [(ngModel)]="objeto.rg"
+                               popoverClass="popover-danger"
+                               [ngbPopover]="campoObrigatorio"
+                               triggers="mouseenter:mouseleave"
+                               mask="00.000.000-0"
+                               placeholder="00.000.000-0"
+                               required>
+                        <div *ngIf="rg.touched && rg.errors">
+                            <p class="text-danger" *ngIf="rg.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="rg.errors['mask']">RG inválido.</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                        <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span></label>
+                        <input type="date"
+                               class="form-control"
+                               name="dataNascimento"
+                               id="dataNascimento"
+                               #dataNascimento="ngModel"
+                               [(ngModel)]="objeto.dataNascimento"
+                               popoverClass="popover-danger"
+                               [ngbPopover]="campoObrigatorio"
+                               triggers="mouseenter:mouseleave"
+                               (ngModelChange)="calculaIdade()"
+                               required>
+                        <div *ngIf="dataNascimento.touched && dataNascimento.errors">
+                            <p class="text-danger" *ngIf="dataNascimento.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="dataNascimento.errors['date']">Data inválida.</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-2 col-md-2 col-sm-6 col-12">
+                        <label for="idade">Idade: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               name="idade"
+                               id="idade"
+                               class="form-control form-control-number"
+                               #idade="ngModel"
+                               [(ngModel)]="objeto.idade"
+                               [ngbPopover]="campoObrigatorio"
+                               popoverClass="popover-danger"
+                               [disablePopover]="idade.errors == null"
+                               triggers="mouseenter:mouseleave"
+                               (keyup.arrowup)="objeto.idade = arrowUp(idade.value)"
+                               (keyup.arrowdown)="objeto.idade = arrowDown(idade.value, true)"
+                               mask="0*"
+                               suffix=" anos"
+                               required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+                        <label for="email">E-mail: <span class="text-danger">*</span></label>
+                        <input type="email"
+                               [email]="true"
+                               class="form-control"
+                               name="email"
+                               id="email"
+                               #email="ngModel"
+                               [(ngModel)]="objeto.email"
+                               required
+                               popoverClass="popover-danger"
+                               [ngbPopover]="campoObrigatorio"
+                               triggers="mouseenter:mouseleave">
+                        <div *ngIf="email.touched && email.errors">
+                            <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                        <label for="receita">Receita: <span class="text-danger">*</span></label>
+                        <input type="text"
+                               class="form-control"
+                               id="receita"
+                               name="receita"
+                               #receita="ngModel"
+                               [(ngModel)]="objeto.receita"
+                               mask="separator"
+                               thousandSeparator="."
+                               decimalMarker=","
+                               prefix="R$ "
+                               [ngbPopover]="campoObrigatorio"
+                               popoverClass="popover-danger"
+                               [disablePopover]="receita.errors == null"
+                               triggers="mouseenter:mouseleave"
+                               (keyup.arrowup)="objeto.receita = arrowUp(receita.value)"
+                               (keyup.arrowdown)="objeto.receita = arrowDown(receita.value, true)"
+                               required>
+                        <div *ngIf="receita.touched && receita.errors">
+                            <p class="text-danger" *ngIf="receita.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="receita.errors['mask']">Valor inválido.</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                        <label for="despesa">Despesas: <span class="text-danger">*</span></label>
+                        <input type="text"
+                               class="form-control"
+                               id="despesa"
+                               name="despesa"
+                               #despesa="ngModel"
+                               [(ngModel)]="objeto.despesa"
+                               mask="separator"
+                               thousandSeparator="."
+                               decimalMarker=","
+                               prefix="R$ "
+                               [ngbPopover]="campoObrigatorio"
+                               popoverClass="popover-danger"
+                               [disablePopover]="despesa.errors == null"
+                               triggers="mouseenter:mouseleave"
+                               (keyup.arrowup)="objeto.despesa = arrowUp(despesa.value)"
+                               (keyup.arrowdown)="objeto.despesa = arrowDown(despesa.value, true)"
+                               required>
+                        <div *ngIf="despesa.touched && despesa.errors">
+                            <p class="text-danger" *ngIf="despesa.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="despesa.errors['mask']">Valor inválido.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <div class="card card-body">
+            <div class="p-datatable-wrapper">
+                <table class="table table-editable table-responsive w-100 d-md-table d-sm-table ">
+                    <thead class="primary">
+                        <tr>
+                            <th></th>
+                            <th>Aposentadoria</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bg-light px-3 text-right" style="white-space: nowrap;">
+                                <small><b>Idade</b></small>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control form-control-number"
+                                       id="idadeAposentadoria"
+                                       name="idadeAposentadoria"
+                                       #idadeAposentadoria="ngModel"
+                                       [(ngModel)]="objeto.idadeAposentadoria"
+                                       mask="0*"
+                                       suffix=" anos"
+                                       [allowNegativeNumbers]="false"
+                                       placeholder="0"
+                                       (keyup.arrowup)="objeto.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
+                                       (keyup.arrowdown)="objeto.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
+                                       [ngbPopover]="campoObrigatorio"
+                                       popoverClass="popover-danger"
+                                       [disablePopover]="idadeAposentadoria.errors == null"
+                                       triggers="mouseenter:mouseleave"
+                                       required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light px-3 text-right" style="white-space: nowrap;">
+                                <small><b>Renda Mensal</b></small>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control form-control-number"
+                                       id="rendaMensalAposentadoria"
+                                       name="rendaMensalAposentadoria"
+                                       #rendaMensalAposentadoria="ngModel"
+                                       [(ngModel)]="objeto.rendaMensalAposentadoria"
+                                       mask="separator.5"
+                                       thousandSeparator="."
+                                       decimalMarker=","
+                                       [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
+                                       [allowNegativeNumbers]="false"
+                                       placeholder="R$ 00,00"
+                                       (keyup.arrowup)="objeto.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
+                                       (keyup.arrowdown)="objeto.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
+                                       [ngbPopover]="campoObrigatorio"
+                                       popoverClass="popover-danger"
+                                       [disablePopover]="rendaMensalAposentadoria.errors == null"
+                                       triggers="mouseenter:mouseleave"
+                                       required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light px-3 text-right" style="white-space: nowrap;">
+                                <small><b>Rentabilidade</b></small>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control form-control-number"
+                                       id="rentabilidadeAposentadoria"
+                                       name="rentabilidadeAposentadoria"
+                                       #rentabilidadeAposentadoria="ngModel"
+                                       [(ngModel)]="objeto.rentabilidadeAposentadoria"
+                                       mask="separator.5"
+                                       thousandSeparator="."
+                                       decimalMarker=","
+                                       [allowNegativeNumbers]="true"
+                                       placeholder="00,00%"
+                                       suffix="%"
+                                       (keyup.arrowup)="objeto.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
+                                       (keyup.arrowdown)="objeto.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
+                                       [ngbPopover]="campoObrigatorio"
+                                       popoverClass="popover-danger"
+                                       [disablePopover]="rentabilidadeAposentadoria.errors == null"
+                                       triggers="mouseenter:mouseleave"
+                                       required>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex p-0 mt-1">
+        <div *ngIf="erro || form.invalid" class="m-0">
+            <p class="text-red" *ngFor="let err of erro">{{err}}</p>
+            <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+        </div>
+        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
+    </div>
+</form>
+<ng-template #campoObrigatorio>
+    <div class="py-3 px-4"> Este campo é obrigatório </div>
+</ng-template>

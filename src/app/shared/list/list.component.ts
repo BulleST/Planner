@@ -48,7 +48,6 @@ export class ListSharedComponent implements OnInit, OnChanges {
         private datePipe: DatePipe,
     ) {
         this.filters = this.columns.map(x => x.field);
-
         this.table.loading.subscribe(res => {
             this.loading = res
         });

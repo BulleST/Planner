@@ -7,12 +7,19 @@
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, itaque expedita hic laboriosam</p>
                 </div>
                 <br>
-                <form #form="ngForm" (ngSubmit)="logar(form)">
+                <form #form="ngForm" (ngSubmit)="logar()">
                     <div class="form-row">
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
                             <div class="form-floating">
-                                <input type="email" email class="form-control" id="email" name="email" #email="ngModel"
-                                    [(ngModel)]="login.email" placeholder="example@gmail.com" required>
+                                <input type="email"
+                                       email
+                                       class="form-control"
+                                       id="email"
+                                       name="email"
+                                       #email="ngModel"
+                                       [(ngModel)]="login.email"
+                                       placeholder="example@gmail.com"
+                                       required>
                                 <label for="email">
                                     <span>E-mail <span class="text-danger">*</span></span>
                                 </label>
@@ -26,9 +33,14 @@
                     <div class="form-row">
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
                             <div class="form-floating">
-                                <input [type]="showHide.value ? 'password' : 'text'" class="form-control" id="password"
-                                    name="password" #password="ngModel" [(ngModel)]="login.password"
-                                    placeholder="******" required>
+                                <input [type]="showHide.value ? 'password' : 'text'"
+                                       class="form-control"
+                                       id="password"
+                                       name="password"
+                                       #password="ngModel"
+                                       [(ngModel)]="login.password"
+                                       placeholder="******"
+                                       required>
                                 <label for="password">
                                     <span>Senha <span class="text-danger">*</span></span>
                                 </label>
@@ -42,7 +54,7 @@
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="d-flex align-items-center">
                                 <input type="checkbox" name="showHide" id="showHide" #showHide="ngModel" ngModel
-                                    [value]="true">
+                                       [value]="true">
                                 <label for="showHide" class="ml-2">
                                     <span *ngIf="showHide.value">Exibir</span>
                                     <span *ngIf="!showHide.value">Esconder</span> senha </label>
@@ -50,8 +62,9 @@
                         </div>
                     </div>
                     <div class="form-row">
+                        <p class="text-danger col-12 px-2 mb-2" *ngIf="err">{{err}}</p>
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
-                            <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                            <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading">Login</button>
                         </div>
                     </div>
                     <div class="form-row justify-content-between">
@@ -67,7 +80,7 @@
         </div>
     </div>
     <div class="col-lg-6 col-md-12 col-sm-12 col-12 login__bg"
-        style="background-image: url(./../../../../assets/img/login-bg.jpg);">
+         style="background-image: url(./../../../../assets/img/login-bg.jpg);">
         <img src="./../../../../assets/img/logo1-small-white.png">
     </div>
 </section>

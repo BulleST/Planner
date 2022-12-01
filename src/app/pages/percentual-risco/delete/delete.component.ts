@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { lastValueFrom } from 'rxjs';
 import { PercentualRisco } from 'src/app/models/percentual-risco.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { PercentualRiscoService } from 'src/app/services/percentual-risco.service';
@@ -19,6 +20,7 @@ export class DeleteComponent implements OnInit {
     modalOpen = false;
     objeto: PercentualRisco = new PercentualRisco;
     erro: any[] = [];
+    url = '';
     loading = false;
 
     constructor(
@@ -33,28 +35,33 @@ export class DeleteComponent implements OnInit {
             this.modalOpen = res;
         });
 
-        activatedRoute.paramMap.subscribe(p => {
-            if (p.get('percentual_id')) {
-                this.objeto.id = this.crypto.decrypt(p.get('percentual_id'));
-                var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-                if (urlArray.includes('empresas/cadastrar')) {
-                    let objeto = this.empresaService.object?.percentualRisco.find(x => x.id == this.objeto.id);
-                    if (objeto) {
-                        this.objeto = objeto;
-                        setTimeout(() => {
-                            this.modal.setOpen(true);
-                        }, 200);
-                    } else {
-                        this.voltar();
-                    }
-                } else {
-
-                }
+        activatedRoute.params.subscribe(p => {
+            if (p['percentual_id']) {
+                this.objeto.id = this.crypto.decrypt(p['percentual_id']);
+            } else {
+                this.voltar();
             }
-        })
+        });
+
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
+            this.objeto = this.empresaService.empresaObject.value.percentualRisco.find(x => x.id == this.objeto.id) as PercentualRisco;
+        } else {
+            this.riscoService.get(this.objeto.id).subscribe({
+                next: res => {
+                    this.objeto = res;
+                },
+                error: err => {
+                    this.voltar();
+                },
+            })
+        }
     }
 
     ngOnInit(): void {
+        setTimeout(() => {
+            this.modal.setOpen(true);
+        }, 200);
     }
 
     voltar() {
@@ -65,20 +72,29 @@ export class DeleteComponent implements OnInit {
         this.loading = true;
         this.erro = [];
 
-        var urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (urlArray.includes('empresas/cadastrar')) {
-            let result = this.riscoService.delete_To_Empresa_Create(this.objeto.id); 
-            if (result)
+        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
+            let result = this.riscoService.delete_To_Empresa_List(this.objeto.id);
+            if (result) {
+                this.toastr.success('Operação concluída');
                 this.voltar();
-        }
-        else {
-            // Enviar para a API
-            if (urlArray.includes('empresas/editar')) {
-
             }
+            this.loading = false;
         }
-        this.toastr.success('Operação concluída');
-        this.loading = false;
+        else { // Enviar para a API
+            if (this.url.includes('empresas/editar')) {
+            }
+
+            this.riscoService.delete(this.objeto.id).subscribe({
+                next: async res => {
+                    await lastValueFrom(this.riscoService.getList())
+                    this.voltar();
+                    this.riscoService.setObject(new PercentualRisco);
+                },
+                error: err => {
+                    this.loading = false;
+                }
+            });
+        }
     }
 
 }

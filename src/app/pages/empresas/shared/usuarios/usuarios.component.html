@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="card-header d-flex align-items-center py-2"> <!--bg-primary-->
+        <span class="title-icon"> <!--text-white-->
+            <fa-icon [icon]="faUser"></fa-icon>
+        </span>
+        <div>
+            <h3 class="card-header-title">Usuários</h3> <!--text-white-->
+            <p class="card-header-subtitle"><small>Inclua usuários dessa empresa para acessar o sistema</small></p> <!--text-white-->
+        </div>
+    </div>
+    <div class="card-body">
+        <app-list-shared [createLink]="['cadastrar']"
+                         [list]="objeto.usuario"
+                         [filterTable]="true"
+                         [paginator]="true"
+                         [sortTable]="true"
+                         [menuTable]="true"
+                         [canCreate]="true"
+                         [tableLinks]="tableLinks"
+                         [columns]="userColumns"
+                         [selectable]="true"
+                        ></app-list-shared>
+        <div class="d-flex justify-content-between px-2 mt-auto">
+            <button class="btn btn-step btn-step-prev mt-2" title="Anteiror" (click)="previous()">
+                <fa-icon [icon]="faArrowLeft"></fa-icon>
+                <span class="btn-step-text">Anterior</span>
+            </button>
+            <button class="btn btn-step btn-step-next mt-2" title="Próximo" (click)="next()">
+                <span class="btn-step-text">Próximo</span>
+                <fa-icon [icon]="faArrowRight"></fa-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

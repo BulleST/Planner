@@ -31,8 +31,9 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     @Input() loading = false;
     @Input() erro: any[] = [];
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
-    /*@Input()*/ produtos: Produto[] = [];
-    /*@Input()*/ carteirasSetup: CarteiraSetup[] = [];
+    
+    produtos: Produto[] = [];
+    carteirasSetup: CarteiraSetup[] = [];
 
     faPlus = faPlus;
     faTrashAlt = faTrashAlt;
@@ -48,8 +49,6 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     produto?: Produto;
     produtoTributacaoRel?: ProdutoTributacaoRel;
     percentual: number = '' as unknown as number;
-    // percentualMaxProduto: number = '' as unknown as number;
-
     tipoRiscos: TipoRisco[] = [];
 
     dataRisco: any;
@@ -63,7 +62,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     };
     chartWidth: string = '0';
     selectedRisco: TipoRisco = new TipoRisco;
-    urlArray = '';
+    url = '';
 
     @ViewChild('chartProdutos') private chartProdutos;
     
@@ -89,8 +88,8 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
                 this.tipoRiscoChange();
             }
         });
-        this.urlArray = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (this.urlArray.includes('empresas/cadastrar')) {
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+        if (this.url.includes('empresas/cadastrar')) {
             this.empresaService.empresaObject.subscribe(res => {
                 this.carteirasSetup = res.carteiraSetup;
                 this.produtos = res.produto;
@@ -160,7 +159,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
 
     async tipoRiscoChange() {
         let produtos: Produto[] = [];
-        if (this.urlArray.includes('empresas/cadastrar')) {
+        if (this.url.includes('empresas/cadastrar')) {
             produtos = this.empresaService.empresaObject.value.produto;
         } else {
             produtos = await lastValueFrom(this.produtoService.getList())
@@ -170,7 +169,6 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         }
         this.percentual = '' as unknown as number;
 
-        // this.percentualMaxProduto = this.calcularPercentualProduto(this.selectedRisco);
         this.calcularPercentuais();
 
     }
@@ -178,14 +176,14 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     calcularPercentuais() {
         this.tipoRiscos = this.tipoRiscos.map(x => {
             let produtosRel = this.objeto.carteiraProdutoRel
-                .filter(p => p.produtoTributacaoRel.produto.tipoRisco_Id == x.id);
+            .filter(p => p.produtoTributacaoRel.produto.tipoRisco_Id == x.id);
             if (produtosRel.length > 0) {
                 x.percentualDisponivel = 100 - produtosRel.map(x => x.percentual).reduce((x,y) => x+y)
             } else {
                 x.percentualDisponivel = 100
             }
             return x;
-        })
+        });
     }
 
     getRisco(tipoRisco_Id: number) {
@@ -323,29 +321,26 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
             }
             
             this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produtoTributacaoRel.produto.tipoRisco_Id, y.produtoTributacaoRel.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
-            // this.calcularPercentualProduto(this.selectedRisco);
             this.calcularPercentuais();
             this.setChartProduto('adicionarProduto');
             this.setupService.setObject(this.objeto);
             
             delete this.produtoTributacaoRel;
             delete this.produto;
-            // this.percentualMaxProduto = 0;
             this.percentual = '' as unknown as number;
 
         }
     }
 
     removeProduto(item: CarteiraProdutoRel) {
-        let index = this.objeto.carteiraProdutoRel.findIndex(x => x.produtoTributacaoRel.tributacao_Id == item.produtoTributacaoRel.tributacao_Id
-            && x.produtoTributacaoRel.produto_Id == item.produtoTributacaoRel.produto_Id);
+        let index = this.objeto.carteiraProdutoRel
+            .findIndex(x => x.produtoTributacaoRel.tributacao.id == item.produtoTributacaoRel.tributacao.id
+                &&  x.produtoTributacaoRel.produto.id == item.produtoTributacaoRel.produto.id);
         if (index != -1) {
             this.objeto.carteiraProdutoRel.splice(index, 1);
-            this.setChartProduto('removeProduto');
-            // this.calcularPercentualProduto(this.selectedRisco);
-            this.calcularPercentuais();
-            
             this.setupService.setObject(this.objeto);
+            this.setChartProduto('removeProduto');
+            this.calcularPercentuais();
         }
     }
 

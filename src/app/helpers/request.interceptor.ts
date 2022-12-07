@@ -20,7 +20,7 @@ export class RequestInterceptor implements HttpInterceptor {
         private alert: AlertService
     ) { }
 
-    excludeUrls = [
+    excludeUrlsToastr = [
         'tributacao/getAll',
         'tipoLiquidez/getAll',
         'tipoRisco/getAll',
@@ -28,33 +28,50 @@ export class RequestInterceptor implements HttpInterceptor {
         'perfilAcesso/getAll',
         'perfilInvestidor/getAll',
         'estadoCivil/getAll',
-        'accounts/authenticate',
         'accounts/revoke-token',
+        'accounts/authenticate',
+        'accounts/verify-email',
+        'accounts/register',
+    ]
+    excludeUrlsLoading = [
+        'tributacao/getAll',
+        'tipoLiquidez/getAll',
+        'tipoRisco/getAll',
+        'tipoAtivo/getAll',
+        'perfilAcesso/getAll',
+        'perfilInvestidor/getAll',
+        'estadoCivil/getAll',
+        'accounts/verify-email',
     ]
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        var a = this.excludeUrls.filter(x => request.url.includes(x));
+        var a = this.excludeUrlsLoading.filter(x => request.url.includes(x));
         if (a.length == 0) {
           this.table.loading.next(true);
+          console.log('oi')
         }
+
         this.table.resetSelection();
         return next.handle(request).pipe(
             tap((data: any) => {
                 if (data.type == 0) {
-                    
-                } else {
+                    // request in progress
+                } 
+                else {
+                    console.log('tchau')
                     this.table.loading.next(false);
-                    if ([200, 204, 201].includes(data.status) && (request.method == 'POST' || request.method == 'DELETE' || request.method == 'PUT')) {
-                        if (request.method == 'POST') {
-                            var a = this.excludeUrls.filter(x => request.url.includes(x));
-                            if (a.length == 0) {
+                    if ([200, 204, 201].includes(data.status) 
+                        && ['POST', 'PUT', 'DELETE'].includes(request.method)) {
+                        var a = this.excludeUrlsToastr.filter(x => request.url.includes(x));
+                        if (a.length == 0) {
+                            if (request.method == 'POST') {
                                 this.toastr.success('Operação concluída com sucesso');
                             }
-                        }
-                        if (request.method == 'DELETE') {
-                            this.toastr.success('Registro excluído com sucesso');
-                        }
-                        if (request.method == 'PUT') {
-                            this.toastr.success('Registro atualizado com sucesso');
+                            if (request.method == 'DELETE') {
+                                this.toastr.success('Registro excluído com sucesso');
+                            }
+                            if (request.method == 'PUT') {
+                                this.toastr.success('Registro atualizado com sucesso');
+                            }
                         }
                     }
                 }
@@ -63,8 +80,20 @@ export class RequestInterceptor implements HttpInterceptor {
             catchError(err => {
                 console.error(err);
                 this.table.loading.next(false);
-                this.toastr.error('Ocorreu um erro no processamento da requisição');
-                this.toastr.error(err.error.message);
+                if (err.status == 401) {
+                    if (!this.accountService.accountValue) {
+                        this.toastr.error('Faça login')
+                        this.router.navigate(['account', 'login']);
+                    } 
+                    this.toastr.error('Acesso não autorizado.');
+                } else {
+                    this.toastr.error('Ocorreu um erro no processamento da requisição.');
+                    if (err.statusText.includes('Unkown Error')) {
+                        this.toastr.error("Não foi possível localizar a causa do erro.");
+                    } else {
+                        this.toastr.error(err.error.message ?? err.message);
+                    }
+                }
                 return throwError(err);
                 // return throwError(() => new Error(err));
             }),

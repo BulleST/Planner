@@ -32,6 +32,16 @@ export class CreateComponent implements OnInit {
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
+
+        if (this.url.includes('empresas/editar')) {
+            activatedRoute.parent?.parent?.params.subscribe(p => {
+                if (p['empresa_id']) {
+                    this.objeto.empresa_Id = this.crypto.decrypt(p['empresa_id']);
+                } else {
+                    this.voltar();
+                }
+            });
+        }
     }
 
     ngOnInit(): void {
@@ -63,7 +73,7 @@ export class CreateComponent implements OnInit {
             this.userService.create(this.objeto).subscribe({
                 next: (res) => {
                     this.modal.voltar();
-                    this.userService.getList().subscribe();
+                    this.userService.getList(this.objeto.empresa_Id).subscribe();
                 },
                 error: (error) => {
                     this.loading = false;

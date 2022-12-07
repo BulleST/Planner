@@ -33,10 +33,8 @@ export class LoginComponent implements OnInit {
         this.loadingHelper.loading.next(true);
         this.accountService.login(this.login).subscribe({
             next: res => {
-                console.log(res)
             }, 
             error: err => {
-                console.log(err)
                 this.err = err.error.message
             }
         });

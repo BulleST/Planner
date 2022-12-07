@@ -1,0 +1,19 @@
+<div class="modal active d-flex align-items-center justify-content-center flex-column" >
+    <div class="modal__bg"></div>
+    <div class="content d-flex align-items-center justify-content-center flex-column">
+        <h4 class="text-white">VERIFICAÇÃO DE CONTA</h4>
+        <br>
+        <span class="spinner-border mr-1" *ngIf="loading"></span>
+        <br *ngIf="loading">
+        <p class="text-white" *ngIf="loading">Verificando...</p>
+        
+        <h5 class="text-white" *ngIf="!loading && erro">Erro</h5>
+        <p class="text-white" *ngIf="!loading && erro">{{erro}}</p>
+        
+        <p class="text-white mb-2" *ngIf="!loading && mensagemSucesso">{{mensagemSucesso}}</p>
+        <a class="link text-white" routerLink="/account/login" >
+            <span class="mr-2"><fa-icon [icon]="faChevronCircleLeft"></fa-icon></span>
+            Ir para login
+        </a>
+    </div>
+</div>

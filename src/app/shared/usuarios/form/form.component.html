@@ -68,7 +68,9 @@
                 required
                 popoverClass="popover-danger"
                 [ngbPopover]="campoObrigatorio" 
-                triggers="mouseenter:mouseleave">
+                [disablePopover]="isEditPage"
+                triggers="mouseenter:mouseleave"
+                [readonly]="isEditPage">
             <div *ngIf="email.touched && email.errors">
                 <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
                 <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>

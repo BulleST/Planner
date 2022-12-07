@@ -49,7 +49,7 @@ export class UsuarioService {
 
     add_To_Empresa_List(item: Usuario) {
         if (this.empresa) {
-            var list = this.empresa.usuario ?? [];
+            var list = this.empresa.account ?? [];
             let perfilAcesso = this.dropdownService.perfilAcesso.value.find(x => x.id == item.perfilAcesso_Id);
             if (!perfilAcesso) {
                 this.toastr.error('Selecione um perfil de acesso válido!!');
@@ -57,7 +57,7 @@ export class UsuarioService {
             }
             item.perfilAcesso = perfilAcesso;
 
-            let existe = this.empresa.usuario.find(x => x.email == item.email)
+            let existe = this.empresa.account.find(x => x.email == item.email)
             if (existe) {
                 this.toastr.error('E-mail já foram cadastrados!!');
                 return false;
@@ -69,7 +69,7 @@ export class UsuarioService {
             item.registroNaoSalvo = true;
             
             list.push(item);
-            this.empresa.usuario = list;
+            this.empresa.account = list;
             this.empresaService.setObject(this.empresa);
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
@@ -80,9 +80,8 @@ export class UsuarioService {
     }
 
     edit_To_Empresa_List(item: Usuario) {
-        console.log(item);
         if (this.empresa) {
-            var list = this.empresa.usuario ?? [];
+            var list = this.empresa.account ?? [];
             let index = list.findIndex(x => x.id == item.id);
             if (index != -1) {
                 let perfilAcesso = this.dropdownService.perfilAcesso.value.find(x => x.id == item.perfilAcesso_Id);
@@ -92,14 +91,14 @@ export class UsuarioService {
                 }
                 item.perfilAcesso = perfilAcesso;
 
-                let existe = this.empresa.usuario.find(x => x.email == item.email && x.id != item.id)
+                let existe = this.empresa.account.find(x => x.email == item.email && x.id != item.id)
                 if (existe) {
                     this.toastr.error('E-mail já foram cadastrados!!');
                     return false;
                 }
 
                 list.splice(index, 1, item);
-                this.empresa.usuario = list;
+                this.empresa.account = list;
                 this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 return true;
@@ -114,11 +113,11 @@ export class UsuarioService {
 
     delete_To_Empresa_List(id: number) {
         if (this.empresa) {
-            var list = this.empresa.usuario ?? [];
+            var list = this.empresa.account ?? [];
             let index = list.findIndex(x => x.id == id);
             if (index != -1) {
                 list.splice(index, 1);
-                this.empresa.usuario = list;
+                this.empresa.account = list;
                 this.empresaService.setObject(this.empresa);
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
@@ -132,8 +131,8 @@ export class UsuarioService {
         return false;
     }
 
-    getList() {
-        return this.http.get<Usuario[]>(`${this.url}/usuario/`);
+    getList(empresa_Id: number) {
+        return this.http.get<Usuario[]>(`${this.url}/usuario/all/${empresa_Id}`);
     }
 
     get(id: number) {
@@ -145,11 +144,14 @@ export class UsuarioService {
     }
 
     edit(request: Usuario) {
-        return this.http.put(`${this.url}/usuario/${request.id}`, request);
+        return this.http.put(`${this.url}/usuario`, request);
     }
 
     delete(id: number) {
         return this.http.delete(`${this.url}/usuario/${id}`);
     }
 
+    deactivated(id: number, ativo?: boolean) {
+        return this.http.patch(`${this.url}/usuario/${id}/${ativo}`, {});
+    }
 }

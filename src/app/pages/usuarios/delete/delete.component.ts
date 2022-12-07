@@ -47,7 +47,7 @@ export class DeleteComponent implements OnInit {
         });
         
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.usuario.find(x => x.id == this.objeto.id) as Usuario;
+            this.objeto = this.empresaService.empresaObject.value.account.find(x => x.id == this.objeto.id) as Usuario;
         } 
     }
 
@@ -77,7 +77,7 @@ export class DeleteComponent implements OnInit {
 
             this.userService.delete(this.objeto.id).subscribe({
                 next: async res => {
-                    await lastValueFrom(this.userService.getList())
+                    await lastValueFrom(this.userService.getList(this.objeto.empresa_Id))
                     this.voltar();
                     this.userService.setObject(new Usuario);
                 },

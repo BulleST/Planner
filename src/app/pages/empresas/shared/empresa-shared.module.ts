@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 
@@ -32,7 +33,8 @@ import { TableModule } from 'primeng/table';
     FontAwesomeModule,
     FormsModule,
     NgbPopoverModule,
-    TableModule
+    TableModule,
+    NgxMaskModule.forChild(),
   ],
   exports: [
     ClientesComponent,

@@ -802,10 +802,27 @@
                                                        triggers="mouseenter:mouseleave"
                                                        [required]="true">
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.rentabilidadeLiquida | mask : 'separator' : ',' }} </td>
+                                            <td class="px-2" style="white-space: nowrap">{{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}%</td>
                                             <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : ',' }} </td>
                                             <td class="px-2" style="white-space: nowrap"> R$ {{ item.sugerido | mask : 'separator' : ',' }} </td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.planoAcao | mask : 'separator' : ','}} </td>
+                                            <td class="px-2" style="white-space: nowrap"> 
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="produto-planoAcao-{{index}}"
+                                                       name="produto-planoAcao-{{index}}"
+                                                       #planoAcao="ngModel"
+                                                       [(ngModel)]="item.planoAcao"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [allowNegativeNumbers]="true"
+                                                       (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
+                                                       (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, false)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       [required]="true">
+                                                     </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)">
                                                     <fa-icon [icon]="faTrash"></fa-icon>
@@ -1210,7 +1227,7 @@
                                                    placeholder="R$ 00,00"
                                                    prefix="R$ "
                                                    (keyup.arrowup)="item.valor = arrowUp(valor.value)"
-                                                   (keyup.arrowdown)="item.valor = arrowDown(valor.value)"
+                                                   (keyup.arrowdown)="item.valor = arrowDown(valor.value, true)"
                                                    [ngbPopover]="campoObrigatorio"
                                                    popoverClass="popover-danger"
                                                    [disablePopover]="valor.errors == null"

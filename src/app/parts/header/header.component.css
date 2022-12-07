@@ -4,12 +4,12 @@
     top: 0;
     left: 0;
     width: 100vw;
-    /* background-color: var(--primary); */
     background-color: white;
+    background-color: var(--primary);
     box-shadow: 2px 2px 2px #0000000d;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .header__userLogado {
@@ -29,8 +29,8 @@
     height: 80%;
     padding: 0 25px;
     box-sizing: border-box;
-    background-color: var(--primary);
     background-color: #fff;
+    background-color: var(--primary);
     z-index: 2;
     position: relative;
     cursor: pointer;
@@ -40,7 +40,9 @@
 
 .header__userLogado-content:hover {
     background-color: #f5f5f5;
+    background-color: var(--primary-dark);
     border: 1px #d2d2d2 solid;
+    border-color: var(--primary);
     border-top: none;
     border-bottom: none;
     height: 100%;
@@ -48,18 +50,21 @@
 
 .header__userLogado-content.header__userLogado-submenu--open {
     border: 1px #d2d2d2 solid;
+    border-color: var(--primary);
+    background-color: var(--primary-dark);
     border-top: none;
     border-bottom: none;
     height: 100%;
 }
 
 .header__userLogado-img {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     background-size: cover;
     background-position: center;
     border-radius: 50%;
     border: 1px #c7c6c6 solid;
+    background-color: #fff;
     cursor: pointer;
     margin-left: -15px;
 }
@@ -72,11 +77,11 @@
 .header__userLogado-text p {
     margin: 0;
     color: #fafcff;
-    color: var(--primary-light);
+    /* color: var(--primary-light); */
     cursor: pointer;
     line-height: 16px;
-    font-size: 11px;
-    font-family: Regular;
+    font-size: 13px;
+    font-family: 'Regular';
 }
 
 .header__userLogado-submenu {

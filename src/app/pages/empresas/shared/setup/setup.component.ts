@@ -44,6 +44,10 @@ export class SetupComponent implements OnInit {
        
         this.empresaService.empresaObject.subscribe(res => {
             this.objeto = res;
+            this.objeto.carteiraSetup = this.objeto.carteiraSetup.map(x => {
+                x.ativo = x.dataDesativado != undefined ? false : true;
+                return x
+            })
         });
         this.filters = this.setupColumns.map(x => x.field);
         

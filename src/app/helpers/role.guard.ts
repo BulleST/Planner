@@ -7,7 +7,7 @@ import { AccountService } from '../services/account.service';
 @Injectable({
     providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
     constructor(
         private accountService: AccountService,
         private router: Router,
@@ -19,12 +19,19 @@ export class AuthGuard implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        if (!this.accountService.accountValue) {
-            this.toastr.error('Acesso não autorizado. Faça login.');
+        let account = this.accountService.accountValue;
+        if (!account) {
+            this.toastr.error('Acesso não autorizado. ');
+            this.toastr.error('Faça login. ');
             this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
+            return false;
+        } else if (route.data['roles'] && !route.data['roles'].includes(account?.role)) {
+            this.toastr.error('Acesso não autorizado.1');
+            this.router.navigate([''])
             return false;
         }
         return true;
     }
 
 }
+

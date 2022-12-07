@@ -56,7 +56,7 @@ export class ListSharedComponent implements OnInit, OnChanges {
             this.table.selected.subscribe(res => {
                 this.selected = res;
                 if (this.selected) {
-                   this.tableLinks = this.table.encryptParams(this.tableLinks);
+                    this.tableLinks = this.table.encryptParams(this.tableLinks);
                 }
             });
             this.table.selectedItems.subscribe(res => this.selectedItems = res);
@@ -68,9 +68,9 @@ export class ListSharedComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['list'])
+        if (changes['list']) {
             this.list = changes['list'].currentValue;
-        if (changes['selectable'])
+        } if (changes['selectable'])
             this.selectable = changes['selectable'].currentValue;
         if (changes['createLink'])
             this.createLink = changes['createLink'].currentValue;
@@ -84,8 +84,9 @@ export class ListSharedComponent implements OnInit, OnChanges {
             this.sortTable = changes['sortTable'].currentValue;
         if (changes['menuTable'])
             this.menuTable = changes['menuTable'].currentValue;
-        if (changes['columns'])
+        if (changes['columns']) {
             this.columns = changes['columns'].currentValue;
+        }
         if (changes['canCreate'])
             this.canCreate = changes['canCreate'].currentValue;
     }
@@ -104,6 +105,7 @@ export class ListSharedComponent implements OnInit, OnChanges {
     }
 
     getCellData(row: any, col: Column): any {
+        // console.log(col.field, row)
         return this.table.getCellData(row, col);
     }
 }

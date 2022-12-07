@@ -42,7 +42,6 @@ export class PlannerService {
 
     setObject(value: Planejamento) {
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
-        console.log(value)
         this.objeto.next(value);
     }
 
@@ -54,8 +53,9 @@ export class PlannerService {
         }));
     }
     
-    get(id: number) {
-        return this.http.get<Planejamento>(`${this.url}/planejamento/${id}`).pipe(map(item => {
+    getByClienteId(cliente_id: number) {
+        console.log(cliente_id)
+        return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(item => {
             item.principaisObjetivos = item.principaisObjetivos ? item.principaisObjetivos : [];
             this.setObject(item);
             return item;

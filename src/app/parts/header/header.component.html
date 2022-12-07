@@ -1,23 +1,11 @@
 <header class="header" [class.dark]="modoEscuroAtivado">
-    <div class="ml-auto d-flex align-items-center col-lg-3 col-md-4 col-sm-8 col-12 mr-2">
-        <label for="empresa_Id">Empresa:</label>
-        <select *ngIf="showEmpresas"
-                class="form-control ml-2 dropdown-empresas"
-                name="empresa_Id"
-                id="empresa_Id"
-                #empresa_Id="ngModel"
-                [(ngModel)]="empresaSelectedId"
-                (change)="empresaChange()">
-            <option [ngValue]="undefined">Todas</option>
-            <option [ngValue]="item.id" *ngFor="let item of empresas">{{item.nome}}</option>
-        </select>
-    </div>
-    <div class="header__userLogado">
+    <div class="header__userLogado ml-auto">
         <div class="header__userLogado-content" [class.header__userLogado-submenu--open]="userLogadoOpen"
              (click)="toggleMenuHeader()">
             <div class="header__userLogado-img"></div>
             <div class="header__userLogado-text">
-                <p><strong>{{nomeAbreviado}}</strong></p>
+                <p>Nome User</p>
+                <!-- <p>{{nomeAbreviado}}</p> -->
             </div>
         </div>
     </div>

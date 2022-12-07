@@ -37,16 +37,16 @@ export class EditComponent implements OnInit {
         });
 
         activatedRoute.params.subscribe(p => {
-            console.log(p['usuario_id'])
             if (p['usuario_id']) {
                 this.objeto.id = this.crypto.decrypt(p['usuario_id']);
             } else {
                 this.voltar();
             }
         });
+
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.usuario.find(x => x.id == this.objeto.id) as Usuario;
+            this.objeto = this.empresaService.empresaObject.value.account.find(x => x.id == this.objeto.id) as Usuario;
         }
         else {
             this.userService.get(this.objeto.id).subscribe({
@@ -87,7 +87,7 @@ export class EditComponent implements OnInit {
             }
             this.userService.edit(this.objeto).subscribe({
                 next: async (res) => {
-                    await lastValueFrom(this.userService.getList());
+                    await lastValueFrom(this.userService.getList(this.objeto.empresa_Id));
                     this.modal.voltar();
                 },
                 error: (error) => {

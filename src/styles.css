@@ -1136,9 +1136,10 @@ color: #fff;
 
 .form-control[readonly],
 .form-control.ng-touched.ng-invalid[readonly] {
-    opacity: 0.5;
-    background-color: #d9d9d9;
-    border-color: #505050;
+    opacity: 0.9!important;
+    background-color: #e5e5e5!important;
+    border-color: #787272!important;
+    cursor: not-allowed!important;
 }
 
 .form-group label[for]:not(.inputFile-content, .inputFile-button),

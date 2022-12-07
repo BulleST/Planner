@@ -66,6 +66,7 @@ export class DeleteComponent implements OnInit {
             let result = this.setupService.delete_To_Empresa_List(this.objeto.id);
             if (result)
                 this.voltar();
+            this.loading = false;
         }
         else {
             // Enviar para a API

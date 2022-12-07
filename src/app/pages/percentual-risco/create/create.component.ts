@@ -35,6 +35,16 @@ export class CreateComponent implements OnInit {
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });
+
+        if (this.url.includes('empresas/editar')) {
+            activatedRoute.parent?.parent?.params.subscribe(p => {
+                if (p['empresa_id']) {
+                    this.objeto.empresa_Id = this.crypto.decrypt(p['empresa_id']);
+                } else {
+                    this.voltar();
+                }
+            });
+        }
     }
 
     ngOnInit(): void {

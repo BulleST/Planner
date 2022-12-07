@@ -1,7 +1,12 @@
 <aside class="navigation" [class.open]="menuOpen">
-    <button class="navigation__toggle" (click)="toggleAside()">
-        <span></span><span></span><span></span>
-    </button>
+    <div class="navigation__toggle-content">
+        <button class="navigation__toggle" (click)="toggleAside()">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="navigation__toggle-logo">
+            <img src="assets/img/logo-planner.png" alt="Logo Planner">
+        </div>
+    </div>
     <div class="navigation__content">
         <div class="navigation__logo">
             <!-- <h3>Logo</h3> -->
@@ -9,43 +14,50 @@
             <hr>
         </div>
         <div class="navigation__links">
-            <a class="navigation__links-item" [routerLink]="['minha-empresa']" *ngIf="account?.empresa_Id !=  null">
+            <!-- *ngIf="account?.role == Role.Master || account?.role == Role.Backoffice" -->
+            <!-- <a class="navigation__links-item"  *ngIf="account?.role == Role.Master || account?.role == Role.Backoffice" [routerLink]="['minha-empresa', account?.empresa?.nome]" >
                 <span class="navigation__item-icon">
-                    <i class="pi pi-wallet"></i>
+                    <fa-icon [icon]="faIdCard"></fa-icon>
                 </span>
                Minha empresa
-            </a>
-            <a class="navigation__links-item" [routerLink]="['empresas']" *ngIf="account?.role == 'Admin'">
+            </a> -->
+            <!-- *ngIf="account?.role == Role.Admin" -->
+            <!-- <a class="navigation__links-item"  *ngIf="account?.role == Role.Admin" [routerLink]="['empresas']" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faCity"></fa-icon>
                 </span>
                Empresas
-            </a>
-            <a class="navigation__links-item" [routerLink]="['clientes']">
+            </a> -->
+            <!-- *ngIf="account?.role == Role.Master || account?.role == Role.Backoffice" -->
+            <a class="navigation__links-item" [routerLink]="['clientes']" >
                 <span class="navigation__item-icon">
                     <i class="pi pi-wallet"></i>
                 </span>
                Clientes
             </a>
-            <a class="navigation__links-item" [routerLink]="['produtos']">
+            <!-- *ngIf="account?.role == Role.Master" -->
+            <a class="navigation__links-item" [routerLink]="['produtos']" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
                 </span>
                 Produtos
             </a>
-            <a class="navigation__links-item" [routerLink]="['carteira-setup']">
+            <!-- *ngIf="account?.role == Role.Master" -->
+            <a class="navigation__links-item" [routerLink]="['carteira-setup']" >
                 <span class="navigation__item-icon">
                     <i class="pi pi-wallet"></i>
                 </span>
                 Setup
             </a>
-            <a class="navigation__links-item" [routerLink]="['usuarios']">
+            <!-- *ngIf="account?.role == Role.Master" -->
+            <a class="navigation__links-item" [routerLink]="['usuarios']" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faUsers"></fa-icon>
                 </span>
                 Usuários
             </a>
-            <a class="navigation__links-item" [routerLink]="['percentual-risco']">
+            <!-- *ngIf="account?.role == Role.Master" -->
+            <a class="navigation__links-item" [routerLink]="['percentual-risco']" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faPercent"></fa-icon>
                 </span>

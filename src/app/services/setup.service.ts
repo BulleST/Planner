@@ -59,17 +59,23 @@ export class CarteiraSetupService {
     }
 
     add_To_Empresa_List(item: CarteiraSetup) {
+        console.log(item);
         if (this.empresa) {
-            let index = this.empresa.carteiraSetup.findIndex(x => x.empresa_Id == item.empresa_Id&& (x.nome.toLowerCase() == item.nome.toLowerCase()));
+            let existe = this.empresa.carteiraSetup.find(x => x.nome.toLowerCase() == item.nome.toLowerCase() && x.id != item.id && x.empresa_Id == item.empresa_Id);
+            if (existe) {
+                this.toastr.error('Setup já cadastrado nessa empresa.');
+                return false;
+            }
 
-            if (index != -1) {
-                this.toastr.error('Essa carteira já está cadastrada para essa empresa!!')
-                return false;
-            }
             if (item.carteiraProdutoRel.length == 0) {
-                this.toastr.error('Cadastre produtos para essa carteira!!')
+                this.toastr.error('Insira produtos nesse setup.');
                 return false;
             }
+
+            item.carteiraProdutoRel.map(x => {
+                x.carteiraSetup_Id = 0;
+                return x
+            })
 
             this.empresa.carteiraSetup.sort((x, y) => y.id - y.id);
             let lastId = this.empresa.carteiraSetup.length > 0 ? this.empresa.carteiraSetup[this.empresa.carteiraSetup.length - 1].id : 0;
@@ -88,28 +94,29 @@ export class CarteiraSetupService {
     }
 
     edit_To_Empresa_List(item: CarteiraSetup) {
-        console.log(item)
         if (this.empresa) {
-            var list = this.empresa.carteiraSetup ?? [];
-            
-            let index = list.findIndex(x => x.empresa_Id == item.empresa_Id && x.nome.toLowerCase() == item.nome.toLowerCase() && x.id != item.id)
-            if (index != -1) {
-                this.toastr.error('Essa carteira já está cadastrada para essa empresa!!')
-                return false;
-            }
-
-            index = list.findIndex(x => x.id == item.id)
+            let index = this.empresa.carteiraSetup.findIndex(x => x.id == item.id);
             if (index == -1) {
-                this.toastr.error('Registro não encontrado!!')
+                this.toastr.error('Setup não encontrado.');
                 return false;
             }
-
+            let existe = this.empresa.carteiraSetup.find(x => x.nome.toLowerCase() == item.nome.toLowerCase() && x.id != item.id && x.empresa_Id == item.empresa_Id);
+            if (existe) {
+                this.toastr.error('Setup já cadastrado nessa empresa.');
+                return false;
+            }
             if (item.carteiraProdutoRel.length == 0) {
-                this.toastr.error('Cadastre produtos para essa carteira!!')
+                this.toastr.error('Insira produtos nesse setup.');
                 return false;
             }
-
+            if (item.id == 0) {
+                this.empresa.carteiraSetup.sort((x, y) => y.id - y.id);
+                let lastId = this.empresa.carteiraSetup.length > 0 ? this.empresa.carteiraSetup[this.empresa.carteiraSetup.length - 1].id : 0;
+                item.id = ++lastId;
+            }
             item.ativo = true;
+
+            var list = this.empresa.carteiraSetup ?? [];
             list.splice(index, 1, item);
             this.empresa.carteiraSetup = list;
             this.empresaService.setObject(this.empresa);
@@ -124,7 +131,7 @@ export class CarteiraSetupService {
 
     delete_To_Empresa_List(id: number) {
         let index = this.empresa.carteiraSetup.findIndex(x => x.id == id)
-        if (index != -1) {
+        if (index == -1) {
             this.toastr.error('Registro não encontrado!!')
             return false;
         }

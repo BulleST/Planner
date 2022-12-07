@@ -21,7 +21,7 @@ const routes: Routes = [
         { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
         { path: 'excluir/:planner_id', component: DeletePlannerComponent },
     ] },
-    { path: 'planner/:planner_id', component: PlannerComponent, children: [
+    { path: 'planner/:cliente_id', component: PlannerComponent, children: [
         { path: 'investimento', component: InvestimentoFormComponent },
         { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
     ] },

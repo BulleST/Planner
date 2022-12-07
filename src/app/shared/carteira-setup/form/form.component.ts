@@ -292,12 +292,13 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
             let p: Produto = Object.assign({}, this.produto)
             p.produtoTributacaoRel = [];
             this.produtoTributacaoRel.produto = p;
+            this.produtoTributacaoRel.produto_Id = p.id;
             
 
             let carteiraProdutoRel: CarteiraProdutoRel = {
                 id: 0,
                 percentual: this.percentual,
-                carteiraSetup_Id: this.objeto.id,
+                carteiraSetup_Id: 0,
                 produtoTributacaoRel_Id: this.produtoTributacaoRel.id,
                 produtoTributacaoRel: this.produtoTributacaoRel
             }
@@ -321,6 +322,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
             }
             
             this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produtoTributacaoRel.produto.tipoRisco_Id, y.produtoTributacaoRel.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
+            
             this.calcularPercentuais();
             this.setChartProduto('adicionarProduto');
             this.setupService.setObject(this.objeto);

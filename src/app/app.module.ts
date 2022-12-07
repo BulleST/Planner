@@ -30,6 +30,7 @@ import { RequestInterceptor } from './helpers/request.interceptor';
 import { NavigationComponent } from './parts/navigation/navigation.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
+import { MinhaEmpresaComponent } from './parts/minha-empresa/minha-empresa.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -44,6 +45,7 @@ registerLocaleData(localePt);
         LoadingComponent,
         AlertComponent,
         NavigationComponent,
+        MinhaEmpresaComponent,
     ],
     imports: [
         BrowserModule,

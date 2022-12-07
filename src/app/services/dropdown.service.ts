@@ -10,7 +10,7 @@ import { TipoAtivo } from "../models/tipoAtivo.model";
 import { TipoLiquidez } from "../models/tipoLiquidez.model";
 import { TipoRisco } from "../models/tipoRisco.model";
 import { Tributacao } from "../models/tributacao.model";
-import { PerfilAcesso } from "../models/usuario-perfil.model";
+import { PerfilAcesso } from "../models/account-perfil.model";
 import { EmpresaService } from "./empresa.service";
 
 @Injectable({

@@ -1,9 +1,9 @@
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
-import { CarteiraSetup } from "./carteiraSetup.model";
-import { Cliente } from "./cliente.model";
-import { PercentualRisco } from "./percentual-risco.model";
-import { Produto } from "./produto.model";
-import { Usuario } from "./usuario.model";
+import { CarteiraSetup, CarteiraSetupRequest } from "./carteiraSetup.model";
+import { Cliente, ClienteRequest } from "./cliente.model";
+import { PercentualRisco, PercentualRiscoRequest } from "./percentual-risco.model";
+import { Produto, ProdutoRequest } from "./produto.model";
+import { Usuario, UsuarioRequest } from "./usuario.model";
 
 export class Empresa {
     id: number = 0;
@@ -11,23 +11,23 @@ export class Empresa {
     cnpj: number = '' as unknown as number;
     email: string = '';
     cliente: Cliente[] = [];
-    usuario: Usuario[] = [];
+    account: Usuario[] = [];
     produto: Produto[] = [];
     carteiraSetup: CarteiraSetup[] = [];
     percentualRisco: PercentualRisco[] = [];
 }
 
-
-
-export class EmpresaEditRequest {
+export class EmpresaRequest {
     id: number = 0;
     nome: string = '';
     cnpj: number = '' as unknown as number;
     email: string = '';
+    cliente: ClienteRequest[] = [];
+    account: UsuarioRequest[] = [];
+    produto: ProdutoRequest[] = [];
+    carteiraSetup: CarteiraSetupRequest[] = [];
+    percentualRisco: PercentualRiscoRequest[] = [];
 }
-
-
-
 
 export var empresaColumns: Column[] = [
     { 

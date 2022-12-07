@@ -5,6 +5,7 @@ import { faChevronLeft, faTimes, faWallet } from '@fortawesome/free-solid-svg-ic
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
+import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -27,9 +28,18 @@ export class CreateComponent implements OnInit {
         private modal: ModalOpen,
         private setupService: CarteiraSetupService,
         private toastr: ToastrService,
+        private crypto: Crypto,
     ) {
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        
+        if (this.url.includes('empresas/editar')) {
+            activatedRoute.parent?.parent?.params.subscribe(p => {
+                if (p['empresa_id']) {
+                    this.objeto.empresa_Id = this.crypto.decrypt(p['empresa_id']);
+                } else {
+                    this.voltar();
+                }
+            });
+        }
     }
 
     ngOnInit(): void {

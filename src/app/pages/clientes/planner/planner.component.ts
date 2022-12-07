@@ -13,6 +13,8 @@ import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimen
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
 import { Produto } from 'src/app/models/produto.model';
+import { AccountService } from 'src/app/services/account.service';
+import { ClienteService } from 'src/app/services/cliente.service';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { PlannerService } from 'src/app/services/planner.service';
 import { ProdutoService } from 'src/app/services/produto.service';
@@ -90,11 +92,12 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     carteiraSetupInalterada = new CarteiraSetup;
     mudouCarteiraSetup = false;
 
-    plannerIdEncrypted = '';
+    clienteIdEncrypted = '';
 
     constructor(
         private modal: ModalOpen,
         private plannerService: PlannerService,
+        private clienteService: ClienteService,
         private isMobile: IsMobile,
         private toastr: ToastrService,
         private activatedRoute: ActivatedRoute,
@@ -103,6 +106,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         private produtoService: ProdutoService,
         private crypto: Crypto,
         private router: Router,
+        private accountService: AccountService,
     ) {
         this.plannerService.getObject().subscribe(res => {
             this.planner = res;
@@ -110,11 +114,11 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.calculaPercentualProduto();
         });
         this.activatedRoute.params.subscribe(item => {
-            this.isEditPage = !!item['planner_id'];
+            this.isEditPage = !!item['cliente_id'];
             if (this.isEditPage) {
-                this.plannerIdEncrypted = item['planner_id']
-                this.planner.id = this.crypto.decrypt(item['planner_id'])
-                this.plannerService.get(this.planner.id).subscribe({
+                this.clienteIdEncrypted = item['cliente_id']
+                this.planner.cliente_Id = this.crypto.decrypt(item['cliente_id'])
+                this.plannerService.getByClienteId(this.planner.cliente_Id).subscribe({
                     next: res => {
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
@@ -125,12 +129,14 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                         this.setChartPatrimonioIdade();
                     },
                     error: err => {
-                        this.plannerService.setObject(new Planejamento);
-                        this.router.navigate(['..']);
+                        this.voltar();
+                        // this.toastr.warning('Esse cliente não tem planejamento.')
+                        // this.toastr.warning('Cadastre um novo planejamento para esse cliente.')
                     }
                 });
             }
         });
+
         this.isMobile.get().subscribe(res => this.mobile = res);
         this.setup.list.subscribe(res => this.carteirasSetup = res);
         this.setup.getList().subscribe({
@@ -367,7 +373,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         // } 
 
         this.planner.planejamentoProduto = [];
-        this.planner.usuario_Id = 1;
+        this.planner.usuario_Id = this.accountService.accountValue?.id ?? 0;
         this.planner.cliente.empresa_Id = 1;
         if (!this.planner.cliente.empresa) {
             this.planner.cliente.empresa = new Empresa;

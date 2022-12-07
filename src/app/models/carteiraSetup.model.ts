@@ -1,6 +1,6 @@
 import { jsonIgnore } from "json-ignore";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
-import { CarteiraProdutoRel } from "./carteira-produto-rel";
+import { CarteiraProdutoRel, CarteiraProdutoRelRequest } from "./carteira-produto-rel";
 import { CarteiraRiscoRel } from "./carteira-risco-rel.model";
 
 export class CarteiraSetup {
@@ -19,6 +19,24 @@ export class CarteiraSetup {
     registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
     
 }
+
+
+export class CarteiraSetupRequest {
+    id: number = 0;
+    nome: string = '';
+    empresa_Id: number = 0;
+    
+    @jsonIgnore()
+    ativo?: boolean;
+    dataDesativado?: Date;
+    
+    carteiraProdutoRel: CarteiraProdutoRelRequest[] = [];
+    
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
+    
+}
+
 
 export var setupColumns: Column[] = [
     { 

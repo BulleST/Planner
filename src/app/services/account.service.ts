@@ -13,9 +13,9 @@ import { map, catchError, tap } from 'rxjs/operators';
 })
 export class AccountService {
     url = environment.url;
-    
-	private accountSubject: BehaviorSubject<Account | undefined>;
-	public account: Observable<Account | undefined>;
+
+    private accountSubject: BehaviorSubject<Account | undefined>;
+    public account: Observable<Account | undefined>;
 
     constructor(
         private router: Router,
@@ -23,12 +23,15 @@ export class AccountService {
         private http: HttpClient,
         private loadingHelper: Loading,
         private crypto: Crypto,
-    ) { 
-		this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
-		this.account = this.accountSubject.asObservable();
+    ) {
+        this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
+        this.account = this.accountSubject.asObservable();
     }
 
     setAccount(value?: Account) {
+        if (value) {
+            value.role = value.perfilAcesso_Id;
+        }
         this.accountSubject.next(value)
         let encrypted = this.crypto.encrypt(value);
         localStorage.setItem('account', encrypted ?? '')
@@ -37,7 +40,7 @@ export class AccountService {
     public get accountValue(): Account | undefined {
         var account = localStorage.getItem('account') as string;
         if (this.accountSubject.value == undefined && account != undefined && account.trim() != '') {
-			var accountObj = this.crypto.decrypt(account) as Account;
+            var accountObj = this.crypto.decrypt(account) as Account;
             this.accountSubject.next(accountObj);
         }
         return this.accountSubject.value;
@@ -64,17 +67,19 @@ export class AccountService {
     }
 
     logout() {
-        this.http.post<any>(`${this.url}/accounts/revoke-token`, { token: this.accountValue?.refreshToken})
-        .subscribe({
-            next: res => {
-                this.setAccount(undefined)
-                this.router.navigate(['account', 'login']);
+        this.http.post<any>(`${this.url}/accounts/revoke-token`, { token: this.accountValue?.refreshToken })
+            .subscribe({
+                next: res => {
+                    this.setAccount(undefined)
+                    this.router.navigate(['account', 'login']);
+                    localStorage.clear();
+                },
+                error: error => {
+                    return throwError(() => new Error(error));
+                    localStorage.clear();
 
-            },
-            error: error => {
-                return throwError(() => new Error(error));
-            }
-        });
+                }
+            });
     }
 
     register(model: Register) {
@@ -87,6 +92,10 @@ export class AccountService {
 
     forgotPassword(email: string) {
 
+    }
+
+    verifyEmail(token: string) {
+        return this.http.post(`${this.url}/accounts/verify-email`, { token: token });
     }
 
 

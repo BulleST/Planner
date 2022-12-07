@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AccountRoutingModule } from './account-routing.module';
+import { AccountRoutingModule } from './account.routing';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { AccountComponent } from './account.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { NgxMaskModule } from 'ngx-mask';
     ForgotPasswordComponent,
     CreateAccountComponent,
     AccountComponent,
+    VerifyEmailComponent
   ],
   imports: [
     CommonModule,

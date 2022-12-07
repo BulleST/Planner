@@ -5,7 +5,22 @@ import { PerfilInvestidor } from "./perfilInvestidor.model";
 export class PercentualRisco {
     id: number = 0;
     empresa_Id: number = 0;
-    perfilInvestidor: PerfilInvestidor = undefined as unknown as PerfilInvestidor;
+    perfilInvestidor?: PerfilInvestidor;
+    perfilInvestidor_Id: number = undefined as unknown as number;
+    capacidadeRisco_Id: number = undefined as unknown as number;
+    baixissimo: number = '' as unknown as number;
+    baixo: number = '' as unknown as number;
+    moderado: number = '' as unknown as number;
+    arrojado: number = '' as unknown as number;
+    superArrojado: number = '' as unknown as number;
+    hedge: number = '' as unknown as number;
+    
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
+}
+export class PercentualRiscoRequest {
+    id: number = 0;
+    empresa_Id: number = 0;
     perfilInvestidor_Id: number = undefined as unknown as number;
     capacidadeRisco_Id: number = undefined as unknown as number;
     baixissimo: number = '' as unknown as number;

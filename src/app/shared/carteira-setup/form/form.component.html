@@ -199,7 +199,7 @@
                                            [placeholder]="getRisco(item.produtoTributacaoRel.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
                                            [(ngModel)]="item.percentual"
                                            (change)="calcularPercentuais(); setChartProduto('')">
-
+                                           
                                     <!-- {{item.percentual | mask : 'separator' : '.' }}% -->
                                 </td>
                                 <td>

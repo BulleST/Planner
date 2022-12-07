@@ -11,9 +11,9 @@ import { Loading } from 'src/app/utils/loading';
 import { Table } from 'src/app/utils/table';
 
 @Component({
-  selector: 'app-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+    selector: 'app-edit',
+    templateUrl: './edit.component.html',
+    styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
     faChevronLeft = faChevronLeft;
@@ -39,8 +39,8 @@ export class EditComponent implements OnInit {
     ) {
         this.table.loading.subscribe(res => this.loading = res);
         let id = 0;
-        this.items =  [
-            { 
+        this.items = [
+            {
                 id: (++id).toString(),
                 label: 'Dados Cadastrais',
                 routerLink: 'dados-cadastrais',
@@ -50,53 +50,67 @@ export class EditComponent implements OnInit {
                 },
                 icon: faCreditCardAlt.toString()
             },
-            { 
+            {
                 id: (++id).toString(),
                 label: 'Usuários',
                 routerLink: 'usuarios',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
                     this.table.selectedItems.next([]);
+                    this.validateDadosCadastrais();
                 }
             },
-            { 
+            {
                 id: (++id).toString(),
                 label: 'Clientes',
                 routerLink: 'clientes',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
                     this.table.selectedItems.next([]);
+                    this.validateDadosCadastrais();
                 }
             },
-            { 
+            {
                 id: (++id).toString(),
                 label: 'Produtos',
                 routerLink: 'produtos',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
                     this.table.selectedItems.next([]);
+                    this.validateDadosCadastrais();
                 }
-               
+
             },
-            { 
+            {
                 id: (++id).toString(),
                 label: 'Carteira Setup',
                 routerLink: 'setup',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
                     this.table.selectedItems.next([]);
+                    this.validateDadosCadastrais();
                 }
             },
-            { 
+            {
                 id: (++id).toString(),
                 label: 'Percentual de Risco',
                 routerLink: 'percentual-risco',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
                     this.table.selectedItems.next([]);
+                    this.validateDadosCadastrais();
                 }
             },
         ];
+
+        this.empresaService.empresaObject.subscribe(res => {
+            this.objeto = res;
+            this.objeto.produto = this.objeto.produto ?? []; 
+            this.objeto.percentualRisco = this.objeto.percentualRisco ?? []; 
+            this.objeto.cliente = this.objeto.cliente ?? []; 
+            this.objeto.account = this.objeto.account ?? []; 
+            this.objeto.carteiraSetup = this.objeto.carteiraSetup ?? []; 
+        });  
 
         activatedRoute.params.subscribe(p => {
             if (p['empresa_id']) {
@@ -104,12 +118,12 @@ export class EditComponent implements OnInit {
                 this.empresaService.get(this.objeto.id).subscribe({
                     next: res => {
                         this.objeto = res;
-                        this.empresaService.empresaSelected.next(res);
+                        // this.empresaService.empresaSelected.next(res);
                         this.empresaService.empresaObject.next(res);
-                        console.log(res)              
-                    }, 
+                        console.log(res)
+                    },
                     error: err => {
-
+                        this.voltar();
                     }
                 })
             } else {
@@ -125,13 +139,26 @@ export class EditComponent implements OnInit {
         this.router.navigate(['..'], { relativeTo: this.activatedRoute });
     }
 
-    send(form: NgForm) {
-        this.loading = true;
+    validateDadosCadastrais() {
+        let valid = true;
         this.erro = [];
-        this.empresaService.create(this.objeto);
-        this.voltar();
-        this.toastr.success('Operação concluída');
-        this.loading = false;
+        if (this.objeto.cnpj.toString().padStart(14, '0').length != 14) {
+            valid = false;
+        }
+        else if (parseInt(this.objeto.cnpj.toString()) == 0) {
+            valid = false;
+        }
+        else if (!this.objeto.nome.trim() || !this.objeto.email.trim()) {
+            valid = false;
+        }
+        else {
+            valid = true;
+        }
+        if (!valid) {
+            this.toastr.error('Dados cadastrais inválidos.');
+            this.erro.push('Dados cadastrais inválidos');
+            this.router.navigate(['dados-cadastrais'], { relativeTo: this.activatedRoute })
+        }
+        return valid;
     }
-
 }

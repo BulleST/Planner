@@ -132,7 +132,7 @@ export class FormProdutoComponent implements OnInit {
             tipoAtivo_Id: this.objeto.tipoAtivo_Id, 
             tipoRisco_Id: this.objeto.tipoRisco_Id, 
             tipoLiquidez_Id: this.objeto.tipoLiquidez_Id, 
-            produtoTributacaoRel: this.objeto.produtoTributacaoRel.map(x => ({ tributacao_Id: x.id})),
+            produtoTributacaoRel: this.objeto.produtoTributacaoRel.map(x => ({ tributacao_Id: x.tributacao_Id})),
             taxaAdm: this.objeto.taxaAdm, 
             taxaPfee: this.objeto.taxaPfee, 
             descricao: this.objeto.descricao.trim(),

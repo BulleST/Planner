@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscriber } from 'rxjs';
-import { PerfilAcesso } from 'src/app/models/usuario-perfil.model';
+import { PerfilAcesso } from 'src/app/models/account-perfil.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -19,6 +19,7 @@ export class FormUsuarioComponent implements OnInit {
     @Input() objeto: Usuario = new Usuario;
     @Input() loading = false;
     @Input() erro: any[] = [];
+    @Input() isEditPage: boolean = false;
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
 
     perfil: PerfilAcesso[] = [];

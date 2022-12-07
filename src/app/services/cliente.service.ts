@@ -88,7 +88,6 @@ export class ClienteService {
     }
 
     edit_To_Empresa_List(item: Cliente) {
-        console.log(item);
         if (this.empresa) {
             var list = this.empresa.cliente ?? [];
             let index = list.findIndex(x => x.id == item.id);

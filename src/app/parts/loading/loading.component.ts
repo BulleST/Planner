@@ -8,6 +8,7 @@ import { Table } from 'src/app/utils/table';
   styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent implements OnInit {
+    
   loading = false;
   constructor(
     private table: Table

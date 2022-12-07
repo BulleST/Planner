@@ -7,6 +7,7 @@ import { Account } from 'src/app/models/account.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { lastValueFrom } from 'rxjs';
+import { Role } from 'src/app/models/account-perfil.model';
 
 @Component({
     selector: 'app-header',
@@ -14,6 +15,7 @@ import { lastValueFrom } from 'rxjs';
     styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+    Role = Role;
     faSignOut = faSignOut;
     faIdCard = faIdCard;
     faKey = faKey;
@@ -21,10 +23,6 @@ export class HeaderComponent implements OnInit {
     userLogadoOpen = false;
     userLogado?: Account;
     nomeAbreviado = '';
-    showEmpresas = false;
-    empresas: Empresa[] = [];
-    empresaSelected?: Empresa;
-    empresaSelectedId?: number;
 
     constructor(
         private modoEscuro: ModoEscuro,
@@ -34,20 +32,10 @@ export class HeaderComponent implements OnInit {
     ) {
         this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
         this.header.menuHeaderOpen.subscribe(res => this.userLogadoOpen = res);
-        this.empresaService.empresaSelected.subscribe(res => {
-            this.empresaSelected = res;
-            this.empresaSelectedId = res?.id;
-        })
+        this.accountService.accountValue
         this.accountService.account.subscribe(async res => {
             this.userLogado = res;
             if (res) {
-                if (res?.role == 'Admin') {
-                    this.showEmpresas = true;
-                    this.empresas = await lastValueFrom(this.empresaService.getList());
-                } else {
-                    this.showEmpresas = false;
-                    this.empresas = [];
-                }
                 let array = res?.name.split(' ')
                 if (array.length == 1) {
                     this.nomeAbreviado = array[0];
@@ -69,13 +57,5 @@ export class HeaderComponent implements OnInit {
         this.accountService.logout();
     }
 
-    empresaChange() {
-        if (this.empresaSelectedId) {
-            this.empresaSelected = this.empresas.find(x => x.id == this.empresaSelectedId);
-        } else {
-            this.empresaSelected = undefined;
-        }
-        this.empresaService.empresaSelected.next(this.empresaSelected);
-    }
 
 }

@@ -60,7 +60,6 @@ export class EditComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log('oi')
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);

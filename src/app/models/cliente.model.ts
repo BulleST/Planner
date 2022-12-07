@@ -9,14 +9,14 @@ export class Cliente {
     id: number = 0;
     empresa: Empresa = new Empresa;
     empresa_Id: number = undefined as unknown as number;
-    perfilInvestidor: PerfilInvestidor = undefined as unknown as PerfilInvestidor;
+    perfilInvestidor?: PerfilInvestidor;
     perfilInvestidor_Id: number = undefined as unknown as number;
     nome: string = '';
     idade: number = '' as unknown as number;
     altura: number = '' as unknown as number;
     peso: number = '' as unknown as number;
     imc: number = '' as unknown as number;
-    estadoCivil: EstadoCivil = undefined as unknown as EstadoCivil;
+    estadoCivil?: EstadoCivil;
     estadoCivil_Id: number = undefined as unknown as number;
     dataNascimento: Date = '' as unknown as Date;
     cpf: number = '' as unknown as number;
@@ -31,6 +31,29 @@ export class Cliente {
     
     @jsonIgnore()
     registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
+}
+
+
+export class ClienteRequest {
+    id: number = 0;
+    empresa: Empresa = new Empresa;
+    empresa_Id: number = undefined as unknown as number;
+    perfilInvestidor_Id: number = undefined as unknown as number;
+    nome: string = '';
+    idade: number = '' as unknown as number;
+    altura: number = '' as unknown as number;
+    peso: number = '' as unknown as number;
+    imc: number = '' as unknown as number;
+    estadoCivil_Id: number = undefined as unknown as number;
+    dataNascimento: Date = '' as unknown as Date;
+    cpf: number = '' as unknown as number;
+    rg: number = '' as unknown as number;
+    email: string = '';
+    receita: number = '' as unknown as number;
+    despesa: number = '' as unknown as number;
+    idadeAposentadoria: number = '' as unknown as number;
+    rendaMensalAposentadoria: number = '' as unknown as number;
+    rentabilidadeAposentadoria: number = '' as unknown as number;
 }
 
 

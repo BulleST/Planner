@@ -47,7 +47,6 @@ export class RequestInterceptor implements HttpInterceptor {
         var a = this.excludeUrlsLoading.filter(x => request.url.includes(x));
         if (a.length == 0) {
           this.table.loading.next(true);
-          console.log('oi')
         }
 
         this.table.resetSelection();

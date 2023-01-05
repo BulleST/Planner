@@ -872,73 +872,292 @@
                                         </tr>
                                         <tr class="">
                                             <th colspan="2" class="text-right primary">Montante Total</th>
-                                            <th style="background-color: var(--primary-light);color: #fff">0</th>
+                                            <th class="p-0">
+                                                <input type="text"
+                                                        class="form-control form-control-solucaoInicial"
+                                                        id="solucao_rentabilidade_Atual"
+                                                        name="solucao_rentabilidade_Atual"
+                                                        #solucao_rentabilidade_Atual="ngModel"
+                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.montante"
+                                                        mask="separator.5"
+                                                        thousandSeparator="."
+                                                        decimalMarker=","
+                                                        prefix="R$ "
+                                                        [readOnly]="true">
+                                            </th>
                                             <th class="primary">Exposição a Risco</th>
-                                            <th colspan="2" style="background-color: var(--primary-light);color: #fff">0</th>
+                                            <th class="p-0" colspan="2">
+                                                <input type="text"
+                                                        class="form-control form-control-solucaoInicial"
+                                                        id="solucao_rentabilidade_Atual"
+                                                        name="solucao_rentabilidade_Atual"
+                                                        #solucao_rentabilidade_Atual="ngModel"
+                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.riscoAssumido"
+                                                        mask="separator.5"
+                                                        thousandSeparator="."
+                                                        decimalMarker=","
+                                                        suffix="%"
+                                                        [readOnly]="true">
+                                            </th>
                                         </tr>
                                         <tr class="subheader" class="primary">
                                             <th style="white-space: nowrap;" class="text-right">Carteira</th>
-                                            <th style="white-space: nowrap;">Rentabilidade Atual <small>(ano)</small></th>
-                                            <th style="white-space: nowrap;">Retorno anual <small>(R$)</small></th>
-                                            <th style="white-space: nowrap;">Retorno mensal <small>(R$)</small></th>
-                                            <th style="white-space: nowrap;">Patrimônio Máximo <small>(R$)</small></th>
+                                            <th style="white-space: nowrap;">Rent. Atual <small>(ano)</small></th>
+                                            <th style="white-space: nowrap;">Retorno Anual</th>
+                                            <th style="white-space: nowrap;">Retorno Mensal</th>
+                                            <th style="white-space: nowrap;">Patrimônio Máximo</th>
                                             <th style="white-space: nowrap;">Tempo <small>(anos)</small></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of solucaoInicial">
+                                        <tr>
                                             <td class="px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <small>{{item.tipo}}</small>
+                                                <small>Atual</small>
                                             </td>
                                             <td>
                                                 <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="rentabilidadeAtual-{{item.id}}"
-                                                       name="rentabilidadeAtual-{{item.id}}"
-                                                       #rentabilidadeAtual="ngModel"
-                                                       [(ngModel)]="item.rentabilidadeAtual">
+                                                       class="form-control"
+                                                       id="solucao_rentabilidade_Atual"
+                                                       name="solucao_rentabilidade_Atual"
+                                                       #solucao_rentabilidade_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [readOnly]="true">
                                             </td>
                                             <td>
                                                 <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="retornoAnual-{{item.id}}"
-                                                       name="retornoAnual-{{item.id}}"
-                                                       #retornoAnual="ngModel"
-                                                       [(ngModel)]="item.retornoAnual">
+                                                       class="form-control"
+                                                       id="solucao_retornoAnual_Atual"
+                                                       name="solucao_retornoAnual_Atual"
+                                                       #solucao_retornoAnual_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
                                             </td>
                                             <td>
                                                 <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="retornoMensal-{{item.id}}"
-                                                       name="retornoMensal-{{item.id}}"
-                                                       #retornoMensal="ngModel"
-                                                       [(ngModel)]="item.retornoMensal">
+                                                       class="form-control"
+                                                       id="solucao_retornoMensal_Atual"
+                                                       name="solucao_retornoMensal_Atual"
+                                                       #solucao_retornoMensal_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
                                             </td>
                                             <td>
                                                 <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="patrimonioMaximo-{{item.id}}"
-                                                       name="patrimonioMaximo-{{item.id}}"
-                                                       #patrimonioMaximo="ngModel"
-                                                       [(ngModel)]="item.patrimonioMaximo">
+                                                       class="form-control"
+                                                       id="solucao_plMax_Atual"
+                                                       name="solucao_plMax_Atual"
+                                                       #solucao_plMax_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
                                             </td>
                                             <td>
                                                 <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="tempo-{{item.id}}"
-                                                       name="tempo-{{item.id}}"
-                                                       #tempo="ngModel"
-                                                       [(ngModel)]="item.tempo">
+                                                       class="form-control"
+                                                       id="solucao_idadeMax_Atual"
+                                                       name="solucao_idadeMax_Atual"
+                                                       #solucao_idadeMax_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="py-2 bg-light text-center font-weight-bold" style="white-space: nowrap;">Melhora de Desempenho</td>
-                                            <td class="py-2">
-                                                <!-- <fa-icon [icon]="faArrowRight"></fa-icon> -->
+                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
+                                                <small>Sugerida</small>
                                             </td>
-                                            <td class="py-2">0</td>
-                                            <td class="py-2">+120</td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_rentabilidade_Sugerida"
+                                                       name="solucao_rentabilidade_Sugerida"
+                                                       #solucao_rentabilidade_Sugerida="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Sugerida"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoAnual_Sugerido"
+                                                       name="solucao_retornoAnual_Sugerido"
+                                                       #solucao_retornoAnual_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoMensal_Sugerido"
+                                                       name="solucao_retornoMensal_Sugerido"
+                                                       #solucao_retornoMensal_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_plMax_Sugerido"
+                                                       name="solucao_plMax_Sugerido"
+                                                       #solucao_plMax_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_idadeMax_Sugerido"
+                                                       name="solucao_idadeMax_Sugerido"
+                                                       #solucao_idadeMax_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
+                                            </td>
                                         </tr>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
+                                                <small>Diferença</small>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_rentabilidade_Diferenca"
+                                                       name="solucao_rentabilidade_Diferenca"
+                                                       #solucao_rentabilidade_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoAnual_Diferenca"
+                                                       name="solucao_retornoAnual_Diferenca"
+                                                       #solucao_retornoAnual_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoMensal_Diferenca"
+                                                       name="solucao_retornoMensal_Diferenca"
+                                                       #solucao_retornoMensal_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td class="border-primary border-left border-top">
+                                                <!-- {{planner.planejamentoAgregandoValor!.plMax_Diferenca}} <br> -->
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_plMax_Diferenca"
+                                                       name="solucao_plMax_Diferenca"
+                                                       #solucao_plMax_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td class="border-primary border">
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_idadeMax_Diferenca"
+                                                       name="solucao_idadeMax_Diferenca"
+                                                       #solucao_idadeMax_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
+                                            </td>
+                                            <td class="px-3 bg-light text-center" style="white-space: nowrap;" colspan="2">
+                                                <span><b>Melhora de Desempenho</b></span>
+                                            </td>
+                                            <td class="px-3 bg-light text-left">
+                                                <span>
+                                                    <fa-icon [icon]="faArrowRight"></fa-icon>
+                                                </span>
+                                            </td>
+                                            <td class="border-primary border-left border-bottom">
+                                                <input type="text"
+                                                       class="form-control h2 mb-0 font-weight-bold"
+                                                       style="font-size: 20px"
+                                                       id="solucao_pL_Desempenho"
+                                                       name="solucao_pL_Desempenho"
+                                                       #solucao_pL_Desempenho="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.pL_Desempenho"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td class="border-primary border">
+                                                <input type="text"
+                                                       class="form-control h2 mb-0 font-weight-bold"
+                                                       style="font-size: 20px"
+                                                       id="solucao_idade_Desempenho"
+                                                       name="solucao_idade_Desempenho"
+                                                       #solucao_idade_Desempenho="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idade_Desempenho"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
+                                            </td>
+                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>

@@ -50,3 +50,9 @@ export class Account {
     empresa?: Empresa;
     empresa_Id?: number;
 }
+
+export class ResetPassword {
+    token: string = '';
+    password: string = '';
+    confirmPassword: string = '';
+}

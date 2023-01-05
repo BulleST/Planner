@@ -12,6 +12,7 @@ import { CreateAccountComponent } from './create-account/create-account.componen
 import { AccountComponent } from './account.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
     ForgotPasswordComponent,
     CreateAccountComponent,
     AccountComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     CommonModule,

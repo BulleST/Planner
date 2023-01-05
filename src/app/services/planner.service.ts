@@ -54,7 +54,6 @@ export class PlannerService {
     }
     
     getByClienteId(cliente_id: number) {
-        console.log(cliente_id)
         return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(item => {
             item.principaisObjetivos = item.principaisObjetivos ? item.principaisObjetivos : [];
             this.setObject(item);

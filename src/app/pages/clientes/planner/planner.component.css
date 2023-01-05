@@ -1,0 +1,10 @@
+.form-control-solucaoInicial,
+.form-control-solucaoInicial:focus,
+.form-control-solucaoInicial:hover,
+.form-control-solucaoInicial:hover:focus {
+    background-color: var(--primary)!important;
+    border-radius: 0;
+    color: #fff;
+    outline: none!important;
+    box-shadow: none!important
+}

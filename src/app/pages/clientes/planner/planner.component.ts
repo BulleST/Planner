@@ -46,12 +46,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     loading = false;
     loadingProduto = false;
 
-    solucaoInicial = [
-        { id: 0, tipo: 'Atual', rentabilidadeAtual: 0, retornoAnual: 0, retornoMensal: 0, patrimonioMaximo: 0, tempo: 0, },
-        { id: 1, tipo: 'Sugerida', rentabilidadeAtual: 0, retornoAnual: 0, retornoMensal: 0, patrimonioMaximo: 0, tempo: 0, },
-        { id: 2, tipo: 'Diferença', rentabilidadeAtual: 0, retornoAnual: 0, retornoMensal: 0, patrimonioMaximo: 0, tempo: 0, },
-    ];
-
     carteirasSetup: CarteiraSetup[] = [];
     loadingCarteiraSetup = true;
 

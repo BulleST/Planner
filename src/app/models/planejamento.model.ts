@@ -2,6 +2,7 @@ import { CarteiraSetup } from "./carteiraSetup.model";
 import { Cliente } from "./cliente.model";
 import { FluxosPontuais } from "./fluxosPontuais.model";
 import { PrincipaisObjetivos } from "./objetivos.model";
+import { PlanejamentoAgregandoValor } from "./planejamento-agregandoValor.model";
 import { PlanejamentoInvestimento } from "./planejamento-investimento.model";
 import { PlanejamentoProduto } from "./planejamento-produto.model";
 import { PlanejamentoGrafico } from "./planejamentoGrafico.model";
@@ -51,8 +52,8 @@ export class Planejamento {
     planoAcao_RentabilidadeMedia: number = 0;
     planoAcao_RentabilidadeReal: number = 0;
 
+    planejamentoAgregandoValor: PlanejamentoAgregandoValor = new PlanejamentoAgregandoValor;
     planejamentoGrafico: PlanejamentoGrafico[] = [];
-
     planejamentoInvestimento: PlanejamentoInvestimento[] = [];
     planejamentoProduto: PlanejamentoProduto[] = [];
     planejamentoFluxosPontuais: FluxosPontuais[] = []; 

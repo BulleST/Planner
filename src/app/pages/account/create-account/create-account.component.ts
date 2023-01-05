@@ -13,7 +13,7 @@ import { NgForm } from '@angular/forms';
     styleUrls: ['./../account.component.css']
 })
 export class CreateAccountComponent implements OnInit {
-    faChevron = faChevronCircleLeft;
+    faChevronCircleLeft = faChevronCircleLeft;
     objeto = new Register;
     loading: boolean = false;
 

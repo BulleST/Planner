@@ -3,7 +3,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Account, Login, Register } from '../models/account.model';
+import { Account, Login, Register, ResetPassword } from '../models/account.model';
 import { Crypto } from '../utils/crypto';
 import { Loading } from '../utils/loading';
 import { map, catchError, tap } from 'rxjs/operators';
@@ -86,18 +86,17 @@ export class AccountService {
         return this.http.post(`${this.url}/accounts/register`, model);
     }
 
-    resetPassword(token: string, senha: string) {
+    resetPassword(object: ResetPassword) {
+        return this.http.post(`${this.url}/accounts/reset-password`, object);
 
     }
 
     forgotPassword(email: string) {
-
+        return this.http.post(`${this.url}/accounts/forgot-password`, { email: email });
     }
 
     verifyEmail(token: string) {
         return this.http.post(`${this.url}/accounts/verify-email`, { token: token });
     }
-
-
 
 }

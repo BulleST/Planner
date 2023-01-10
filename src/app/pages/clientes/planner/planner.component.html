@@ -1,7 +1,7 @@
 <div class="modal__content">
     <div class="modal__header pb-2" style="padding: 0 25px;">
             <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
-                <a class="link text-dark" href="" (click)="voltar()">
+                <a class="link text-dark" (click)="voltar()">
                     <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
                 </a>
                 <div>
@@ -36,7 +36,8 @@
                                            [disablePopover]="nome.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           tabindex="1">
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                     <label for="perfilInvestidor">Perfil de Investidor: <span class="text-danger">*</span></label>
@@ -51,7 +52,8 @@
                                             [disablePopover]="_perfilInvestidor.errors == null"
                                             triggers="mouseenter:mouseleave"
                                             required
-                                            (ngModelChange)="perfilInvestidorChange();">
+                                            (ngModelChange)="perfilInvestidorChange();"
+                                            tabindex="2">
                                         <option [ngValue]="undefined">Selecione</option>
                                         <option [ngValue]="item.id" *ngFor="let item of perfilInvestidor">{{ item.descricao }} </option>
                                     </select>
@@ -71,7 +73,8 @@
                                             [disablePopover]="_estadoCivil.errors == null"
                                             triggers="mouseenter:mouseleave"
                                             required
-                                            (ngModelChange)="saveData()">
+                                            (ngModelChange)="saveData()"
+                                            tabindex="3">
                                         <option [ngValue]="undefined">Selecione</option>
                                         <option [ngValue]="item.id" *ngFor="let item of estadoCivil">{{item.descricao}}</option>
                                     </select>
@@ -94,7 +97,8 @@
                                            [disablePopover]="cpf.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           tabindex="4">
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6">
                                     <label for="rg">RG: <span class="text-danger">*</span>
@@ -112,7 +116,8 @@
                                            [disablePopover]="rg.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           tabindex="5">
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-6">
                                     <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span>
@@ -129,7 +134,8 @@
                                            [disablePopover]="dataNascimento.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           tabindex="6">
                                 </div>
                                 <div class="form-group col-lg-2 col-md-2 col-sm-6 col-6">
                                     <label for="idade">Idade: <span class="text-danger">*</span>
@@ -149,7 +155,8 @@
                                            mask="0*"
                                            suffix=" anos"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           tabindex="7">
                                 </div>
                             </div>
                             <div class="form-row">
@@ -169,7 +176,8 @@
                                            [disablePopover]="email.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           tabindex="8">
                                 </div>
                             </div>
                             <!-- <div class="form-row">
@@ -265,7 +273,8 @@
                                                (keyup.arrowup)="planner.cliente.receita = arrowUp(receita.value)"
                                                (keyup.arrowdown)="planner.cliente.receita = arrowDown(receita.value, true)"
                                                required
-                                               (change)="saveData()">
+                                               (change)="saveData()"
+                                               tabindex="9">
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="despesa">Despesas: <span class="text-danger">*</span></label>
@@ -286,7 +295,8 @@
                                                (keyup.arrowup)="planner.cliente.despesa = arrowUp(despesa.value)"
                                                (keyup.arrowdown)="planner.cliente.despesa = arrowDown(despesa.value, true)"
                                                required
-                                               (change)="saveData()">
+                                               (change)="saveData()"
+                                               tabindex="10">
                                     </div>
                                 </div>
                             </div>
@@ -317,7 +327,8 @@
                                                (keyup.arrowup)="planner.taxaSelic = arrowUp(taxaSelic.value)"
                                                (keyup.arrowdown)="planner.taxaSelic = arrowDown(taxaSelic.value, true)"
                                                required
-                                               (change)="saveData()">
+                                               (change)="saveData()"
+                                               tabindex="11">
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="taxaIpca">Taxa IPCA: <span class="text-danger">*</span></label>
@@ -338,7 +349,8 @@
                                                (keyup.arrowup)="planner.taxaIpca = arrowUp(taxaIpca.value)"
                                                (keyup.arrowdown)="planner.taxaIpca = arrowDown(taxaIpca.value, true)"
                                                required
-                                               (change)="saveData()">
+                                               (change)="saveData()"
+                                               tabindex="12">
                                     </div>
                                 </div>
                             </div>
@@ -379,6 +391,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -392,6 +405,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -405,6 +419,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -418,6 +433,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -431,6 +447,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -444,6 +461,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -457,6 +475,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                         </tr>
                                         <tr>
@@ -473,6 +492,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -486,6 +506,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -499,6 +520,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -512,6 +534,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -525,6 +548,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -538,6 +562,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -551,6 +576,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        readonly>
+                                                       <!-- tabindex="0" -->
                                             </td>
                                         </tr>
                                     </tbody>
@@ -875,29 +901,31 @@
                                             <th class="p-0">
                                                 <input type="text"
                                                         class="form-control form-control-solucaoInicial"
-                                                        id="solucao_rentabilidade_Atual"
-                                                        name="solucao_rentabilidade_Atual"
-                                                        #solucao_rentabilidade_Atual="ngModel"
+                                                        id="solucao_montante_Atual"
+                                                        name="solucao_montante_Atual"
+                                                        #solucao_montante_Atual="ngModel"
                                                         [(ngModel)]="planner.planejamentoAgregandoValor!.montante"
                                                         mask="separator.5"
                                                         thousandSeparator="."
                                                         decimalMarker=","
                                                         prefix="R$ "
                                                         [readOnly]="true">
+                                                        <!-- tabindex="0" -->
                                             </th>
                                             <th class="primary">Exposição a Risco</th>
                                             <th class="p-0" colspan="2">
                                                 <input type="text"
                                                         class="form-control form-control-solucaoInicial"
-                                                        id="solucao_rentabilidade_Atual"
-                                                        name="solucao_rentabilidade_Atual"
-                                                        #solucao_rentabilidade_Atual="ngModel"
+                                                        id="solucao_riscoAssumido_Atual"
+                                                        name="solucao_riscoAssumido_Atual"
+                                                        #solucao_riscoAssumido_Atual="ngModel"
                                                         [(ngModel)]="planner.planejamentoAgregandoValor!.riscoAssumido"
                                                         mask="separator.5"
                                                         thousandSeparator="."
                                                         decimalMarker=","
                                                         suffix="%"
                                                         [readOnly]="true">
+                                                        <!-- tabindex="0" -->
                                             </th>
                                         </tr>
                                         <tr class="subheader" class="primary">
@@ -926,6 +954,7 @@
                                                        decimalMarker=","
                                                        suffix="%"
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -939,6 +968,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -952,6 +982,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -965,6 +996,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -977,6 +1009,7 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                         </tr>
                                         <tr>
@@ -995,6 +1028,7 @@
                                                        decimalMarker=","
                                                        suffix="%"
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1008,6 +1042,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1021,6 +1056,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1034,6 +1070,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1046,6 +1083,7 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                         </tr>
                                         <tr>
@@ -1064,6 +1102,7 @@
                                                        decimalMarker=","
                                                        suffix="%"
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1077,6 +1116,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1090,6 +1130,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td class="border-primary border-left border-top">
                                                 <!-- {{planner.planejamentoAgregandoValor!.plMax_Diferenca}} <br> -->
@@ -1104,6 +1145,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td class="border-primary border">
                                                 <input type="text"
@@ -1116,6 +1158,7 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                         </tr>
                                         <tr>
@@ -1142,6 +1185,7 @@
                                                        decimalMarker=","
                                                        prefix="R$ "
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                             <td class="border-primary border">
                                                 <input type="text"
@@ -1155,6 +1199,7 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">
+                                                       <!-- tabindex="0" -->
                                             </td>
                                         </tr>
                                         
@@ -1195,8 +1240,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                    <label for="descricao">Observações do planner: 
-                                    </label>
+                                    <label for="descricao">Observações do planner: <span class="text-danger">*</span></label>
                                     <textarea type="text"
                                            name="descricao"
                                            id="descricao"
@@ -1208,7 +1252,8 @@
                                            [disablePopover]="descricao.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            (change)="saveData()"
-                                           required>
+                                           required
+                                           tabindex="13">
                                         </textarea>
                                 </div>
                             </div>
@@ -1239,6 +1284,7 @@
                                                    placeholder="R$ 00,00"
                                                    prefix="R$ "
                                                    readonly>
+                                                   <!-- tabindex="0" -->
                                         </div>
                                         <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
                                             <label for="rE_Planejado"> Planejada:</label>
@@ -1255,6 +1301,7 @@
                                                    placeholder="R$ 00,00"
                                                    prefix="R$ "
                                                    readonly>
+                                                   <!-- tabindex="0" -->
                                         </div>
                                     </div>
                                 </div>
@@ -1278,6 +1325,7 @@
                                                    placeholder="R$ 00,00"
                                                    suffix="%"
                                                    readonly>
+                                                   <!-- tabindex="0" -->
                                         </div>
                                         <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
                                             <label for="riscoTolerado"> Tolerado:</label>
@@ -1294,6 +1342,7 @@
                                                    placeholder="R$ 00,00"                                                   suffix="%"
                                                    suffix="%"
                                                    readonly>
+                                                   <!-- tabindex="0" -->
                                         </div>
                                     </div>
                                 </div>

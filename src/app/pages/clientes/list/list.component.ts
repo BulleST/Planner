@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { faCity, faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
+import { Column } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Cliente, clienteColumns } from 'src/app/models/cliente.model';
+import { Planejamento } from 'src/app/models/planejamento.model';
 import { ClienteService } from 'src/app/services/cliente.service';
+import { PlannerService } from 'src/app/services/planner.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
 
@@ -31,6 +35,8 @@ export class ListComponent implements OnInit {
         private clienteService: ClienteService,
         public crypto: Crypto,
         private mask: MaskApplierService,
+        private router: Router,
+        private plannerService: PlannerService,
     ) {
         this.filters = this.columns.map(x => x.field);
         this.table.loading.subscribe(res => this.loading = res);
@@ -54,6 +60,10 @@ export class ListComponent implements OnInit {
     ngOnInit(): void {
     }
 
+    create() {
+        this.plannerService.setObject(new Planejamento);
+        this.router.navigate(['clientes', 'planner'])
+    }
     onRowSelect(event: any) {
         this.table.onRowSelect(event);
     }
@@ -64,5 +74,8 @@ export class ListComponent implements OnInit {
 
     onAllRowToggle(event: any) {
         this.table.onAllRowToggle(event);
+    }
+    getCellData(row: any, col: Column): any {
+        return this.table.getCellData(row, col);
     }
 }

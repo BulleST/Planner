@@ -8,6 +8,7 @@ import { Crypto } from '../utils/crypto';
 import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Planejamento } from '../models/planejamento.model';
+import { PlanejamentoAgregandoValor } from '../models/planejamento-agregandoValor.model';
 
 @Injectable({
     providedIn: 'root'
@@ -41,6 +42,8 @@ export class PlannerService {
     }
 
     setObject(value: Planejamento) {
+        value.planejamentoAgregandoValor = value.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : value.planejamentoAgregandoValor 
+
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
         this.objeto.next(value);
     }
@@ -56,6 +59,7 @@ export class PlannerService {
     getByClienteId(cliente_id: number) {
         return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(item => {
             item.principaisObjetivos = item.principaisObjetivos ? item.principaisObjetivos : [];
+            item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
             this.setObject(item);
             return item;
         }));
@@ -66,11 +70,17 @@ export class PlannerService {
     }
 
     create(request: Planejamento) {
-        return this.http.post<Planejamento>(`${this.url}/planejamento/`, request);
+        return this.http.post<Planejamento>(`${this.url}/planejamento/`, request).pipe(map(item => {
+            item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
+            return item;
+        }));
     }
     
     edit(request: Planejamento) {
-        return this.http.put<Planejamento>(`${this.url}/planejamento/`, request);
+        return this.http.put<Planejamento>(`${this.url}/planejamento/`, request).pipe(map(item => {
+            item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
+            return item;
+        }));
     }
     
     delete(id: number) {

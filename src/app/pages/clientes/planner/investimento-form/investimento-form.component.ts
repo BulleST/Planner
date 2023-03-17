@@ -89,9 +89,6 @@ export class InvestimentoFormComponent implements OnInit {
         this.loading = true;
         this.erro = [];
         
-        console.log(this.objeto)
-        console.log(this.planner.planejamentoInvestimento)
-        console.log(this.investimento)
         this.objeto.investimento = this.investimento;
         this.objeto.investimento_Id = this.investimento.id;
         let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimento_Id == this.objeto.investimento_Id)

@@ -24,6 +24,9 @@ export class HeaderComponent implements OnInit {
     userLogadoOpen = false;
     userLogado?: Account;
     nomeAbreviado = '';
+    perfil = '';
+
+
     constructor(
         private modoEscuro: ModoEscuro,
         private accountService: AccountService,
@@ -42,6 +45,7 @@ export class HeaderComponent implements OnInit {
                 } else {
                     this.nomeAbreviado = array[0] + ' ' + array[array.length - 1];
                 }
+                this.perfil = Role[res.perfilAcesso_Id]
             }
         })
     }

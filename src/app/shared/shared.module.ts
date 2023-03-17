@@ -22,6 +22,7 @@ import { FormProdutoComponent } from './produtos/form/form.component';
 import { ListSharedComponent } from "./list/list.component";
 import { FormClienteComponent } from './cliente/form/form.component';
 import { EmpresaSelectComponent } from './empresa-select/empresa-select.component';
+import { DeactivatedComponent } from "./deactivated/deactivated.component";
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import { EmpresaSelectComponent } from './empresa-select/empresa-select.componen
         FormClienteComponent,
         ListSharedComponent,
         EmpresaSelectComponent,
+        DeactivatedComponent
     ],
     imports: [
         CommonModule,
@@ -58,6 +60,7 @@ import { EmpresaSelectComponent } from './empresa-select/empresa-select.componen
         FormClienteComponent,
         ListSharedComponent,
         EmpresaSelectComponent,
+        DeactivatedComponent,
     ],
 })
 export class SharedModule {

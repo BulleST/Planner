@@ -1,6 +1,8 @@
 import { jsonIgnore } from "json-ignore";
 import { Empresa } from "./empresa.model";
 import { PerfilAcesso } from "./account-perfil.model";
+import { FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
+import { FilterMatchMode } from "primeng/api";
 
 export class Usuario {
     id: number = 0;
@@ -10,7 +12,8 @@ export class Usuario {
     name: string = '';
     email: string = '';
     telefoneCelular: string = '';
-    ativo: boolean = true;
+    dataDesativado?: Date;
+    ativo?: boolean;
     @jsonIgnore()
     registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
 }
@@ -22,6 +25,8 @@ export class UsuarioRequest {
     name: string = '';
     email: string = '';
     telefoneCelular: string = '';
+    dataDesativado?: Date;
+    ativo?: boolean;
     
     @jsonIgnore()
     registroNaoSalvo?: boolean = false; 
@@ -33,25 +38,46 @@ export var userColumns = [
     {
         field: 'id',
         header: 'Id',
-        filterType: 'text',
-        filterDisplay: 'menu'
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
     },
     {
         field: 'name',
         header: 'Nome',
-        filterType: 'text',
-        filterDisplay: 'menu'
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
     },
     {
         field: 'email',
         header: 'E-mail',
-        filterType: 'text',
-        filterDisplay: 'menu'
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+    },
+    {
+        field: 'telefoneCelular',
+        header: 'Telefone/Celular',
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        maskType: MaskType.telefoneCelular,
     },
     {
         field: 'perfilAcesso.perfil',
         header: 'Tipo de Acesso',
-        filterType: 'text',
-        filterDisplay: 'menu'
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+    },
+    {
+        field: 'ativo',
+        header: 'Ativo',
+        maskType: MaskType.boolean,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+        booleanValues: {
+            'true': 'ativo',
+            'false': 'inativo',
+        }
     },
 ];

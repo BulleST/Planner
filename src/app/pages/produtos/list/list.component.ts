@@ -10,6 +10,7 @@ import { Produto, produtoColumns } from 'src/app/models/produto.model';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
+import { Table } from 'src/app/utils/table';
 
 @Component({
     selector: 'app-list-produtos',
@@ -26,19 +27,30 @@ export class ListComponent implements OnInit {
     constructor(
         private empresaService: EmpresaService,
         private produtoService: ProdutoService,
-        private currency: CurrencyPipe
+        private currency: CurrencyPipe,
+        private table: Table,
+
     ) {
         this.empresaService.empresaObject.subscribe(res => {
             this.objeto = res;
         });
         
-        this.tableLinks = [
-            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
-            { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
-        ]
-
         this.produtoService.list.subscribe(res => this.list = res);
         this.produtoService.getList().subscribe();
+
+        this.tableLinks = [
+            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+        ];
+
+        this.table.selected.subscribe(res => {
+            if (res) {
+                this.tableLinks = [
+                    { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+                    { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] },
+                ];
+                this.tableLinks = this.table.encryptParams(this.tableLinks);
+            }
+        });
     }
 
     ngOnInit(): void {

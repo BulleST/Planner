@@ -19,32 +19,35 @@ export class ListComponent implements OnInit {
     
     columns = userColumns;
     list: Usuario[] = [];
-    selected?: any;
-    selectedItems: any[] = [];
-    filters: string[] = [];
-    // routeRow: string[] = [];
-    loading = false;
     tableLinks: MenuTableLink[] = [];
+
+    selectedItems: any[] = [];
 
     constructor(
         private userService: UsuarioService,
         private empresaService: EmpresaService,
         private table: Table
     ) { 
-        this.userService.getList(1).subscribe();
+
         this.userService.list.subscribe(res => this.list = res);
-        this.filters = this.columns.map(x => x.field);
-        this.table.loading.subscribe(res => {
-            this.loading = res
-        });
+        this.userService.getList().subscribe();
+
+
+        this.tableLinks = [
+            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+            { label: 'Resetar senha', routePath: [ 'reset-password'], paramsFieldName: ['id'] },
+        ];
 
         this.table.selected.subscribe(res => {
-            this.selected = res;
-            if (this.selected) {
+            if (res) {
+                this.tableLinks = [
+                    { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+                    { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] },
+                    { label: 'Resetar senha', routePath: [ 'reset-password'], paramsFieldName: ['id'] },
+                ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
-        this.table.selectedItems.subscribe(res => this.selectedItems = res);
 
     }
 
@@ -61,10 +64,6 @@ export class ListComponent implements OnInit {
 
     onAllRowToggle(event: any) {
         this.table.onAllRowToggle(event);
-    }
-
-    getCellData(row: any, col: Column): any {
-        return this.table.getCellData(row, col);
     }
 
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { Crypto } from '../utils/crypto';
 import { Usuario } from '../models/usuario.model';
 import { environment } from 'src/environments/environment';
@@ -131,8 +131,15 @@ export class UsuarioService {
         return false;
     }
 
-    getList(empresa_Id: number) {
-        return this.http.get<Usuario[]>(`${this.url}/usuario/all/${empresa_Id}`);
+    getList(empresa_Id: number = 1) {
+        return this.http.get<Usuario[]>(`${this.url}/usuario/all/${empresa_Id}`)
+            .pipe(map(list => {
+                list = list.map(x => {
+                    x.ativo = !x.dataDesativado;
+                    return x;
+                });
+                this.list.next(list);
+            }));
     }
 
     get(id: number) {
@@ -153,5 +160,9 @@ export class UsuarioService {
 
     deactivated(id: number, ativo?: boolean) {
         return this.http.patch(`${this.url}/usuario/${id}/${ativo}`, {});
+    }
+
+    resetPassword(id: number) {
+        return this.http.patch(`${this.url}/usuario/reset-password/${id}`, {});
     }
 }

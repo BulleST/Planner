@@ -177,6 +177,7 @@ hr {
     font-size: 12px;
     border-radius: 3px;
     text-align: center;
+    text-transform: capitalize;
 }
 
 .flag-green {

@@ -19,11 +19,9 @@ export class Produto {
     tipoRisco: TipoRisco = new TipoRisco;
     tipoLiquidez_Id: number = undefined as unknown as number;
     tipoLiquidez: TipoLiquidez = new TipoLiquidez;
-    // produtoTributacaoRel: ProdutoTributacaoRel[] = [];
-    taxaAdm: number =  '' as unknown as number;
-    taxaPfee: number = '' as unknown as number;
-    cm?: boolean;
-    
+    dataDesativado?: Date;
+    ativo?: boolean;
+
     @jsonIgnore()
     registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
 }
@@ -33,86 +31,76 @@ export class ProdutoRequest {
     descricao: string = '';
     empresa_Id: number = 0;
     tipoAtivo_Id: number = undefined as unknown as number;
-    tipoRisco_Id: number = undefined as unknown as number;
     tipoLiquidez_Id: number = undefined as unknown as number;
-    // produtoTributacaoRel: ProdutoTributacaoRelRequest[] = [];
-    taxaAdm: number =  '' as unknown as number;
-    taxaPfee: number = '' as unknown as number;
-    cm?: boolean;
+    tipoRisco_Id: number = undefined as unknown as number;
+    dataDesativado?: Date;
+
 }
 
 
 export var produtoColumns: Column[] = [
-    { 
-        field: 'id', 
-        header: 'Id', 
+    {
+        field: 'id',
+        header: 'Id',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-     },
-    { 
-        field: 'descricao', 
-        header: 'Nome', 
+    },
+    {
+        field: 'descricao',
+        header: 'Nome',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-     },
-    { 
-        field: 'tipoAtivo.nome', 
-        header: 'Ativo', 
+    },
+    {
+        field: 'tipoAtivo.nome',
+        header: 'Ativo',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
         filterShowMatchMode: true,
         filterMatchMode: FilterMatchMode.CONTAINS,
-     },
-    { 
-        field: 'tipoRisco.nome', 
-        header: 'Risco', 
+    },
+    {
+        field: 'tipoRisco.nome',
+        header: 'Risco',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
         filterShowMatchMode: true,
         filterMatchMode: FilterMatchMode.CONTAINS,
-     },
-    { 
-        field: 'tipoLiquidez.nome', 
-        header: 'Liquidez', 
+    },
+    {
+        field: 'tipoLiquidez.nome',
+        header: 'Liquidez',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
         filterShowMatchMode: true,
         filterMatchMode: FilterMatchMode.CONTAINS,
-     },
-    { 
-        field: 'taxaAdm', 
-        header: 'Taxa ADM', 
-        maskType: MaskType.percentage,
-        decimal: '1.0-2',
-        filterType: FilterType.numeric, 
+    },
+    {
+        field: 'ativo',
+        header: 'Ativo',
+        maskType: MaskType.boolean,
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-     },
-    { 
-        field: 'taxaPfee', 
-        header: 'Taxa PFEE', 
-        maskType: MaskType.percentage,
-        decimal: '1.0-2',
-        filterType: FilterType.numeric, 
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-     },
+        booleanValues: {
+            'true': 'ativo',
+            'false': 'inativo',
+        }
+    },
 ];

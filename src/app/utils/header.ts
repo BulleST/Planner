@@ -26,11 +26,6 @@ export class Header {
 
     toggleMenuAside(): void {
         this.setMenuAside(!this.open.value);
-        // console.log(this.table.selected)
-        // setTimeout(() => {
-        //     if (this.table.selected.value != undefined)
-        //         this.table.exibirMenuTable(); 
-        // }, 40);
     }
 
     setMenuAside(value: boolean) {

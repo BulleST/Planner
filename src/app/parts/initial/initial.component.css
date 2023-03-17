@@ -14,7 +14,7 @@
     }
 
     .main-content.navigation-open {
-        max-width: calc(100vw - 240px);
+        max-width: calc(100vw - 230px);
         margin-left: auto;
     }
 }

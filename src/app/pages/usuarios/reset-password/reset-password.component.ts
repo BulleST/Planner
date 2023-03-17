@@ -10,11 +10,11 @@ import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
-    selector: 'app-delete',
-    templateUrl: './delete.component.html',
-    styleUrls: ['./delete.component.css']
+  selector: 'app-reset-password',
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.css']
 })
-export class DeleteComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit {
 
     faTimes = faTimes;
     modalOpen = false;
@@ -43,9 +43,7 @@ export class DeleteComponent implements OnInit {
             }
         });
         
-        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.account.find(x => x.id == this.objeto.id) as Usuario;
-        } 
+       
     }
 
     ngOnInit(): void {
@@ -60,29 +58,14 @@ export class DeleteComponent implements OnInit {
 
     send() {
         this.loading = true;
-        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            let result = this.userService.delete_To_Empresa_List(this.objeto.id);
-            if (result) {
-                this.toastr.success('Operação concluída');
+        this.userService.resetPassword(this.objeto.id).subscribe({
+            next: async res => {
                 this.voltar();
+            },
+            error: err => {
+                this.loading = false;
             }
-            this.loading = false;
-        }
-        else { // Enviar para a API
-            if (this.url.includes('empresas/editar')) {
-            }
-
-            this.userService.delete(this.objeto.id).subscribe({
-                next: async res => {
-                    await lastValueFrom(this.userService.getList(this.objeto.empresa_Id))
-                    this.voltar();
-                    this.userService.setObject(new Usuario);
-                },
-                error: err => {
-                    this.loading = false;
-                }
-            });
-        }
+        });
 
     }
 

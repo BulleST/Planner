@@ -14,18 +14,18 @@ const empresas = () => import('./pages/empresas/empresas.module').then(res => re
 const usuarios = () => import('./pages/usuarios/usuarios.module').then(res => res.UsuariosModule);
 const produtos = () => import('./pages/produtos/produtos.module').then(res => res.ProdutosModule);
 const setup = () => import('./pages/carteira-setup/carteira-setup.module').then(res => res.CarteiraSetupModule);
-const percentualRisco = () => import('./pages/percentual-risco/percentual-risco.module').then(res => res.PercentualRiscoModule);
+// const percentualRisco = () => import('./pages/percentual-risco/percentual-risco.module').then(res => res.PercentualRiscoModule);
 
 const routes: Routes = [
     {
         path: '', component: InitialComponent, canActivate: [AuthGuard], children: [
 
-            {
-                path: 'percentual-risco',
-                loadChildren: percentualRisco,
-                canActivate: [RoleGuard],
-                data: { roles: [ Role.Admin, Role.Master] }
-            },
+            // {
+            //     path: 'percentual-risco',
+            //     loadChildren: percentualRisco,
+            //     canActivate: [RoleGuard],
+            //     data: { roles: [ Role.Admin, Role.Master] }
+            // },
             {
                 path: 'carteira-setup',
                 loadChildren: setup,

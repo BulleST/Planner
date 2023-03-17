@@ -26,9 +26,10 @@ export class DeactivatedComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private modal: ModalOpen,
         private empresaService: EmpresaService,
-        private setupService: CarteiraSetupService,
+        public setupService: CarteiraSetupService,
         private crypto: Crypto,
     ) {
+
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });

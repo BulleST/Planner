@@ -12,6 +12,7 @@ export interface Column {
     filterShowMatchMode?: boolean;
     filterShowAddButton?: boolean;
     filterMatchMode?: FilterMatchMode;
+    booleanValues?: any;
 }
 
 export enum FilterType {
@@ -26,8 +27,6 @@ export enum FilterDisplay {
     menu = 'menu'
 }
 
-
-
 export enum MaskType {
     undefined,
     money = 'money',
@@ -39,4 +38,5 @@ export enum MaskType {
     rg = 'rg',
     any = 'any',
     boolean = 'boolean',
+    telefoneCelular = 'telefoneCelular',
 }

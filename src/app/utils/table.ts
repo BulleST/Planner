@@ -5,8 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { Crypto } from './crypto';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MaskApplierService } from 'ngx-mask';
-import { Column, MaskType } from '../helpers/column.interface';
+import { Column, FilterType, MaskType } from '../helpers/column.interface';
 import { MenuTableLink } from '../helpers/menu-links.interface';
+import { FilterMatchMode } from 'primeng/api';
 
 @Injectable({
     providedIn: 'root'
@@ -111,11 +112,10 @@ export class Table {
     getCellData(row: any, col: Column): any {
         const nestedProperties: string[] = col.field.split('.');
         let value: any = row;
-
+        
         // console.log(col.field, row)
-
         for (const prop of nestedProperties) {
-            value = value[prop] ?? '-';
+            value = value ? value[prop] ?? undefined : undefined;
         }
         if (col.maskType && value != undefined && value.toString().trim() != '') {
             if (col.maskType == MaskType.percentage) {
@@ -134,10 +134,15 @@ export class Table {
                 value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC');
             } else if (col.maskType == MaskType.dateTime) {
                 value = this.datePipe.transform(value, 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
-
-            } else {
+            } else if (col.maskType == MaskType.boolean) {
+                value = col.booleanValues[value]
+            } else if (col.maskType == MaskType.telefoneCelular) {
+                value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000' ))
+            }  else {
                 return value ?? '-';
             }
+
+            this.mask
         }
         return value ?? '-';
     }

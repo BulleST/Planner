@@ -17,7 +17,7 @@ import { Table } from 'src/app/utils/table';
     styleUrls: ['./list.component.css']
 })
 export class ListSharedComponent implements OnInit, OnChanges {
-
+    maskType = MaskType;
     faFilter = faFilter;
     faTimes = faTimes;
     faEllipsisV = faEllipsisV;

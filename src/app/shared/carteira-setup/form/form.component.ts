@@ -193,7 +193,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         var chartHeight = 70;
         tipoRiscos.forEach(item => chartHeight+=30);
         this.chartHeight = chartHeight + 'px';
-
+        
         this.optionsProduto = {
             onClick: (e: any) => { },
             indexAxis: 'y',
@@ -331,20 +331,15 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
                 });
             }
         }
-
         this.erro = riscos.filter(x => x.percentual != 100).map(x => {
             return `A soma do percentual dos produtos para cada tipo de risco ${x.tipoRisco.nome} deve ser 100%.`
         });
-
         if (this.objeto.carteiraProdutoRel.length == 0) {
             this.erro.push('Você deve selecionar pelo menos um produto');
         }
-
         if(this.erro.length > 0) {
             invalid = true;
         }
         return invalid;
     }
 }
-
-

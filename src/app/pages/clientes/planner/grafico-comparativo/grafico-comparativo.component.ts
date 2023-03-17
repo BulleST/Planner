@@ -109,7 +109,6 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
     }
 
     setChartRisco_Investimento() {
-        console.log(this)
         let riscos: TipoRisco[] = [];
         this.investimentos.map((i: PlanejamentoInvestimento, index: number )=> {
             var indexRisco = riscos.findIndex(x => x.id == i.investimento.tipoRisco_Id);
@@ -120,10 +119,7 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
             }
             return i
         })
-        console.log(riscos)
         this.chartRiscoOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));
-        // this.chartRiscoOptions_Investimento.plugins.title.text = 'Investimento';
-        // this.chartRiscoOptions_Investimento.plugins.title.position = 'left'
         this.chartRiscoData_Investimento =  {
             labels: [
               'Red',
@@ -201,10 +197,7 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
             }
             return i
         })
-        console.log(riscos)
         this.chartRiscoOptions_Produto = JSON.parse(JSON.stringify(this.chartOptions));
-        // this.chartRiscoOptions_Produto.plugins.title.text = 'Produto';
-        // this.chartRiscoOptions_Produto.plugins.title.position = 'left'
         this.chartRiscoData_Produto =  {
             labels: [
               'Red',

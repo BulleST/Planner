@@ -56,12 +56,4 @@ export var setupColumns: Column[] = [
         filterDisplay: FilterDisplay.menu,
         filterShowMatchMode: true,
     },
-    { 
-        field: 'dataDesativado', 
-        header: 'Desativado em', 
-        maskType: MaskType.dateTime,
-        filterType: FilterType.date, 
-        filterDisplay: FilterDisplay.menu,
-        filterShowMatchMode: true,
-    },
 ];

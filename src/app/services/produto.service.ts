@@ -173,6 +173,10 @@ export class ProdutoService {
     getList(empresa_Id: number = 1) {
         return this.http.get<Produto[]>(`${this.url}/produto/all/${empresa_Id}`).pipe(
             map(list => {
+                list = list.map(x => {
+                    x.ativo = !x.dataDesativado;
+                    return x;
+                });
                 this.list.next(list);
                 return list;
             })
@@ -189,6 +193,10 @@ export class ProdutoService {
 
     edit(request: ProdutoRequest) {
         return this.http.put<Produto>(`${this.url}/produto/`, request);
+    }
+
+    deactivated(id: number, active: boolean) {
+        return this.http.patch<void>(`${this.url}/produto/${id}/${active}`, {});
     }
 
     delete(id: number) {

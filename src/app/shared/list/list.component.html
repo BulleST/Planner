@@ -43,9 +43,6 @@
                         <input pInputText type="text" class="form-control "
                             (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
                     </div>
-                    <!-- <a class="btn btn-filter my-2" [routerLink]="['filtrar']" *ngIf="filterLink && list.length > 0">
-                        <fa-icon [icon]="faFilter"></fa-icon>
-                    </a> -->
                 </div>
             </div>
         </ng-template>
@@ -65,12 +62,33 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
-            <tr [class.selected]="item == selected" [class.selectable]="selectable" [class.selected-many]="selectedItems.includes(item)" [pSelectableRow]="selectable == true ? item : null" [pSelectableRowIndex]="selectable ? rowIndex : null">
+            <tr [class.selected]="item == selected" 
+                [class.selectable]="selectable" 
+                [class.selected-many]="selectedItems.includes(item)" 
+                [pSelectableRow]="selectable == true ? item : null" 
+                [pSelectableRowIndex]="selectable ? rowIndex : null">
                 <td [attr.data-id]="item.id">
                     <p-tableCheckbox [value]="item" *ngIf="selectable"></p-tableCheckbox>
                 </td>
                 <td *ngFor="let col of columns">
-                    <p>{{getCellData(item, col)}}</p>
+                    <p *ngIf="col.maskType == maskType.boolean; else comun">
+                            <span class="flag" 
+                                [class.flag-green]="item.ativo" 
+                                [class.flag-red]="!item.ativo"
+                                [ngbPopover]="ativo"
+                                [disablePopover]="item.ativo"
+                                triggers="mouseenter:mouseleave">
+                                {{getCellData(item, col)}} 
+                            </span>
+                            <ng-template #ativo>
+                                <div class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </div>
+                            </ng-template>
+                    </p>
+                    <ng-template #comun>
+                        <p>
+                            {{getCellData(item, col)}}
+                        </p>
+                    </ng-template>
                 </td>
                 <td class="td-actions">
                     <div class="actions" *ngIf="menuTable">

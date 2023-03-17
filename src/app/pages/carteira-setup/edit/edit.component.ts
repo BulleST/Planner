@@ -49,7 +49,6 @@ export class EditComponent implements OnInit {
             this.setupService.get(this.objeto.id).subscribe({
                 next: res => {
                     this.objeto = res;
-                    console.log(res)
                 },
                 error: err => {
                     this.voltar();

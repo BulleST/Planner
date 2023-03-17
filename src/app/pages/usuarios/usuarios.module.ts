@@ -12,6 +12,8 @@ import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TableModule } from 'primeng/table';
+import { DeactivatedComponent } from './deactivated/deactivated.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -21,6 +23,8 @@ import { TableModule } from 'primeng/table';
     ListComponent,
     EditComponent,
     DeleteComponent,
+    DeactivatedComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,

@@ -34,10 +34,10 @@ import { DeleteComponent as CarteiraSetup_DeleteComponent } from './../carteira-
 
 
 // PercentualRisco
-import { PercentualRiscoComponent } from './shared/percentual-risco/percentual-risco.component';
-import { CreateComponent as PercentualRisco_CreateComponent } from './../percentual-risco/create/create.component';
-import { EditComponent as PercentualRisco_EditComponent } from './../percentual-risco/edit/edit.component';
-import { DeleteComponent as PercentualRisco_DeleteComponent } from './../percentual-risco/delete/delete.component';
+// import { PercentualRiscoComponent } from './shared/percentual-risco/percentual-risco.component';
+// import { CreateComponent as PercentualRisco_CreateComponent } from './../percentual-risco/create/create.component';
+// import { EditComponent as PercentualRisco_EditComponent } from './../percentual-risco/edit/edit.component';
+// import { DeleteComponent as PercentualRisco_DeleteComponent } from './../percentual-risco/delete/delete.component';
 
 
 import { CarteiraSetupGuard } from 'src/app/helpers/carteira-setup.guard';
@@ -72,12 +72,12 @@ const routes: Routes = [
                     { path: 'excluir/:setup_id', component: CarteiraSetup_DeleteComponent },
                 ]
             },
-            { path: 'percentual-risco', component: PercentualRiscoComponent, children: [
-                    { path: 'cadastrar', component: PercentualRisco_CreateComponent },
-                    { path: 'editar/:percentual_id', component: PercentualRisco_EditComponent },
-                    { path: 'excluir/:percentual_id', component: PercentualRisco_DeleteComponent },
-                ]
-            },
+            // { path: 'percentual-risco', component: PercentualRiscoComponent, children: [
+            //         { path: 'cadastrar', component: PercentualRisco_CreateComponent },
+            //         { path: 'editar/:percentual_id', component: PercentualRisco_EditComponent },
+            //         { path: 'excluir/:percentual_id', component: PercentualRisco_DeleteComponent },
+            //     ]
+            // },
         ]
     },
     { path: 'cadastrar', redirectTo: 'cadastrar/dados-cadastrais', pathMatch: 'prefix' },
@@ -107,12 +107,12 @@ const routes: Routes = [
                     { path: 'excluir/:setup_id', component: CarteiraSetup_DeleteComponent },
                 ]
             },
-            { path: 'percentual-risco', component: PercentualRiscoComponent, children: [
-                    { path: 'cadastrar', component: PercentualRisco_CreateComponent },
-                    { path: 'editar/:percentual_id', component: PercentualRisco_EditComponent },
-                    { path: 'excluir/:percentual_id', component: PercentualRisco_DeleteComponent },
-                ]
-            },
+            // { path: 'percentual-risco', component: PercentualRiscoComponent, children: [
+            //         { path: 'cadastrar', component: PercentualRisco_CreateComponent },
+            //         { path: 'editar/:percentual_id', component: PercentualRisco_EditComponent },
+            //         { path: 'excluir/:percentual_id', component: PercentualRisco_DeleteComponent },
+            //     ]
+            // },
         ]
     },
 ];

@@ -1,11 +1,17 @@
 <header class="header" [class.dark]="modoEscuroAtivado">
+    <div class="header-logo">
+        <img src="assets/img/logo-planner.png" alt="Logo Planner">
+    </div>
     <div class="header__userLogado ml-auto">
         <div class="header__userLogado-content" [class.header__userLogado-submenu--open]="userLogadoOpen"
              (click)="toggleMenuHeader()">
-            <div class="header__userLogado-img"></div>
+            <div class="header__userLogado-img">
+                <fa-icon [icon]="faUser"></fa-icon>
+            </div>
             <div class="header__userLogado-text">
-                <p>Nome User</p>
-                <!-- <p>{{nomeAbreviado}}</p> -->
+                <!-- <p>Nome User</p> -->
+                <p>{{nomeAbreviado}}</p>
+                <p>{{userLogado?.email}}</p>
             </div>
         </div>
     </div>

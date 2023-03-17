@@ -11,6 +11,7 @@ import { ListComponent } from './list/list.component';
 import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TableModule } from 'primeng/table';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ToastrModule,
     SharedModule,
     FontAwesomeModule,
+    TableModule,
   ],
   exports: [
     CreateComponent

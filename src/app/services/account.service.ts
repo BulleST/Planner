@@ -7,6 +7,7 @@ import { Account, Login, Register, ResetPassword } from '../models/account.model
 import { Crypto } from '../utils/crypto';
 import { Loading } from '../utils/loading';
 import { map, catchError, tap } from 'rxjs/operators';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 export class AccountService {
     url = environment.url;
 
-    private accountSubject: BehaviorSubject<Account | undefined>;
+    accountSubject: BehaviorSubject<Account | undefined>;
     public account: Observable<Account | undefined>;
 
     constructor(
@@ -23,6 +24,7 @@ export class AccountService {
         private http: HttpClient,
         private loadingHelper: Loading,
         private crypto: Crypto,
+        private empresaService: EmpresaService,
     ) {
         this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
         this.account = this.accountSubject.asObservable();
@@ -34,7 +36,7 @@ export class AccountService {
         }
         this.accountSubject.next(value)
         let encrypted = this.crypto.encrypt(value);
-        localStorage.setItem('account', encrypted ?? '')
+        localStorage.setItem('account', encrypted ?? '');
     }
 
     public get accountValue(): Account | undefined {
@@ -47,9 +49,8 @@ export class AccountService {
     }
 
     login(model: Login) {
-        return this.http.post<Account>(`${this.url}/accounts/authenticate`, model).pipe(
+        return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
             tap((res) => {
-                console.log(res)
                 this.loadingHelper.loading.next(false);
                 this.setAccount(res);
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
@@ -67,7 +68,7 @@ export class AccountService {
     }
 
     logout() {
-        this.http.post<any>(`${this.url}/accounts/revoke-token`, { token: this.accountValue?.refreshToken })
+        this.http.post<any>(`${this.url}/accounts/revoke-token`, {}, { withCredentials: true } /**/)
             .subscribe({
                 next: res => {
                     this.setAccount(undefined)
@@ -80,6 +81,14 @@ export class AccountService {
 
                 }
             });
+    }
+
+    refreshToken() {
+        return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
+            .pipe(map((account) => {
+                this.setAccount(account)
+                return account;
+            }));
     }
 
     register(model: Register) {

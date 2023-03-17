@@ -9,6 +9,7 @@ import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
 import { CarteiraProdutoRel } from '../models/carteira-produto-rel';
 import { CarteiraSetup } from '../models/carteiraSetup.model';
+import { Produto } from '../models/produto.model';
 
 @Injectable({
     providedIn: 'root'
@@ -86,9 +87,13 @@ export class CarteiraProdutoRelService {
                     var mesmaCarteira = (x.nome.toLowerCase() == item.nome.toLowerCase() && x.id != item.id) 
                                          || x.id == item.id;
                     
-                    var relJaCadastrado = carteira_Produto_Existentes.map(x => x.produtoTributacaoRel)
-                                                            .find(y => y.produto_Id == carteiraProdutoRel.produtoTributacaoRel.produto_Id 
-                                                                    && y.tributacao_Id == carteiraProdutoRel.produtoTributacaoRel.tributacao_Id);
+                                        //  var relJaCadastrado = carteira_Produto_Existentes.map(x => x.produtoTributacaoRel)
+                                        //  .find(y => y.produto_Id == carteiraProdutoRel.produtoTributacaoRel.produto_Id 
+                                        //          && y.tributacao_Id == carteiraProdutoRel.produtoTributacaoRel.tributacao_Id);
+
+                                        
+                                        var relJaCadastrado = carteira_Produto_Existentes.map(x => x.produto)
+                                        .find(y => y.id == carteiraProdutoRel.produto_Id);
                     return mesmaCarteira && relJaCadastrado;
                 });
                 if (!validacao) {
@@ -96,8 +101,10 @@ export class CarteiraProdutoRelService {
                         id: ++last_Id_Rel,
                         carteiraSetup_Id: carteira_Setup.id,
                         percentual: 0,
-                        produtoTributacaoRel_Id: 0,
-                        produtoTributacaoRel: carteiraProdutoRel.produtoTributacaoRel,
+                        // produtoTributacaoRel_Id: 0,
+                        // produtoTributacaoRel: carteiraProdutoRel.produtoTributacaoRel,
+                        produto: new Produto,
+                        produto_Id: 0,
                     }
                     carteira_Setup.carteiraProdutoRel.push(c);
                 }

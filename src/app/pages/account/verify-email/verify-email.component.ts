@@ -24,13 +24,11 @@ export class VerifyEmailComponent implements OnInit {
         private table: Table
     ) { 
         // this.table.loading.next(true);
-        console.log('oi')
         const token = this.activatedRoute.snapshot.queryParams['token'];
         this.router.navigate([], { relativeTo: this.activatedRoute, replaceUrl: true });
         this.accountService.verifyEmail(token)
             .subscribe({
                 next: (res) => {
-                    console.log(res)
                     this.loading = false;
                     this.erro = '';
                     this.mensagemSucesso = res['message'];

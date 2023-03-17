@@ -1,24 +1,29 @@
 import { CarteiraSetup } from "./carteiraSetup.model";
-import { ProdutoTributacaoRel } from "./produto-tributacao-rel.model";
+// import { ProdutoTributacaoRel } from "./produto-tributacao-rel.model";
 import { Column, FilterDisplay, FilterType, MaskType } from '../helpers/column.interface';
 import { CarteiraRiscoRel } from "./carteira-risco-rel.model";
 import { FilterMatchMode } from "primeng/api";
+import { Produto } from "./produto.model";
 
 export class CarteiraProdutoRel {
     id: number = 0;
     carteiraSetup_Id: number = 0;
     carteiraSetup?: CarteiraSetup;
     percentual: number = 0;
-    produtoTributacaoRel_Id: number = 0;
-    produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
+    produto_Id: number = 0;
+    produto: Produto = new Produto;
+    // produtoTributacaoRel_Id: number = 0;
+    // produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
 }
 
 export class CarteiraProdutoRelRequest {
     id: number = 0;
     carteiraSetup_Id: number = 0;
     percentual: number = 0;
-    produtoTributacaoRel_Id: number = 0;
-    produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
+    produto_Id: number = 0;
+    produto: Produto = new Produto;
+    // produtoTributacaoRel_Id: number = 0;
+    // produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
 }
 
 export var setupRelColumns: Column[] = [

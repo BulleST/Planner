@@ -13,12 +13,7 @@ export class ModalOpen {
         private location: Location,
         private router: Router
     ) {
-        // console.log('getState: ', this.location.getState())
-        // this.location.onUrlChange((url, state) => {
-        //     console.log('url: ', url)
-        //     console.log('state: ', state)
-        // })
-        // console.log(this.location.path())
+       
     }
     getOpen(): BehaviorSubject<boolean> {
         let value = this.openSubject.value ?? localStorage.getItem('modal') === 'true' ? true : false;
@@ -35,7 +30,6 @@ export class ModalOpen {
     }
 
     voltar() {
-        console.log(this.location)
         this.setOpen(false);
         // this.router.dispose()
         setTimeout(() => {

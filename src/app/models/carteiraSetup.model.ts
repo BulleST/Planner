@@ -10,6 +10,7 @@ export class CarteiraSetup {
     
     @jsonIgnore()
     ativo?: boolean;
+
     dataDesativado?: Date;
     
     carteiraProdutoRel: CarteiraProdutoRel[] = [];
@@ -52,6 +53,14 @@ export var setupColumns: Column[] = [
         header: 'Carteira', 
         maskType: MaskType.undefined,
         filterType: FilterType.text, 
+        filterDisplay: FilterDisplay.menu,
+        filterShowMatchMode: true,
+    },
+    { 
+        field: 'dataDesativado', 
+        header: 'Desativado em', 
+        maskType: MaskType.dateTime,
+        filterType: FilterType.date, 
         filterDisplay: FilterDisplay.menu,
         filterShowMatchMode: true,
     },

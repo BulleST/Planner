@@ -1,135 +1,79 @@
 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
-    <div class="d-flex flex-wrap align-items-stretch mb-2">
-        <div class="col-lg-12 col-md-12 col-sm-12 pl-0 pr-1">
-            <div class="card card-body">
-                <div class="form-row">
-                    <div class="form-group col-sm-12">
-                        <label for="carteiraSetup" class="h6">Carteira: <span class="text-danger">*</span></label>
-                        <div>
-                            <input type="text"
-                                   class="form-control my-1"
-                                   name="nome"
-                                   id="nome"
-                                   #nome="ngModel"
-                                   [(ngModel)]="objeto.nome"
-                                   placeholder="Digite para cadastrar nova carteira">
+    <div class="row d-flex flex-wrap align-items-stretch mb-2">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+        </div>
+        <div class="col-12 d-flex flex-wrap mt-2">
+            <div class="col-xl-4 col-lg-5 col-md-5 col-sm-12 col-12 ps-0 pe-sm-2 pe-0">
+                <div class="card card-body mb-2">
+                    <div class="form-row">
+                        <div class="form-group col-sm-12">
+                            <label for="carteiraSetup" class="h6">Nome: <span class="text-danger">*</span></label>
+                            <div>
+                                <input type="text"
+                                    class="form-control my-1"
+                                    name="nome"
+                                    id="nome"
+                                    #nome="ngModel"
+                                    [(ngModel)]="objeto.nome"
+                                    placeholder="Digite para cadastrar nova carteira">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- <div class="col-lg-3 col-md-4 col-sm-12 px-0 d-md-block d-sm-none">
-            <div class="card card-body h-100">
-                <h6 class="mt-auto font-weight-light">Total Carteira</h6>
-                <h2 class="">{{objeto.percentualTotalRisco | currency : 'BRL' : '' : '1.2-2'}}%</h2>
-            </div>
-        </div> -->
-    </div>
-    <div class="form-row chart-container card card-body">
-        <div class="d-flex">
-            <div>
-                <h6>Divisão da carteira: <span class="text-danger">*</span></h6>
-                <p class="text-danger"><small>Clique para editar</small></p>
-                <div class="d-flex ml-auto mt-1 mb-2">
-                    <!-- <a title="Adicionar risco" *ngIf="objeto.percentualDisponivelRisco > 0" [routerLink]="['risco']" class="btn btn-small btn-primary ml-1 px-2">
-                        <small> Adicionar </small>
-                    </a> -->
-                </div>
-            </div>
-        </div>
-        <div>
-            <!-- <p-chart type="verticalBar" [options]="optionsRisco" [data]="dataRisco" [width]="chartWidth" height="100px" (onDataSelect)="selectData($event)"></p-chart> -->
-            <p-chart type="verticalBar" #chartProdutos [options]="optionsProduto" [data]="dataProduto" [width]="chartWidth" height="200"></p-chart>
-        </div>
-    </div>
-    <div class="card mt-2">
-        <div class="card-body bg-white">
-            <div class="mt-2 mb-2">
-                <p class="h6 text-center">Selecione o Risco</p>
-                <div class="d-flex align-items-center justify-content-center col-sm-12">
-                    <div *ngFor="let item of tipoRiscos" class="mx-2">
-                        <input type="radio"
-                               class="mr-1 mt-1"
-                               name="tipoRisco"
-                               id="tipoRisco-{{item.nome}}"
-                               #tipoRisco="ngModel"
-                               [(ngModel)]="selectedRisco"
-                               (ngModelChange)="tipoRiscoChange()"
-                               [value]="item"
-                               [checked]="item.id == selectedRisco.id">
-                        <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
+                <div class="card card-body mb-2">
+                    <div class="form-row mt-2 mb-2">
+                        <div class="d-flex align-items-start justify-content-start flex-wrap col-12">
+                            <p class="h6 me-3 w-100">Selecione o Risco</p>
+                            <div *ngFor="let item of tipoRiscos" class="mx-2">
+                                <input type="radio"
+                                       class="mr-1 mt-1"
+                                       name="tipoRisco"
+                                       id="tipoRisco-{{item.nome}}"
+                                       #tipoRisco="ngModel"
+                                       [(ngModel)]="selectedRisco"
+                                       (ngModelChange)="tipoRiscoChange()"
+                                       [value]="item"
+                                       [checked]="item.id == selectedRisco.id">
+                                <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-row justify-content-center mt-2">
-                <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                    <label for="produto">Produto: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                class="form-control"
-                                id="produto"
-                                name="produto"
-                                #_produto="ngModel"
-                                [options]="produtos"
-                                [(ngModel)]="produto"
-                                optionLabel="descricao"
-                                [filter]="true"
-                                filterBy="descricao, tipoRisco.nome"
-                                [showClear]="true"
-                                placeholder="Selecione">
-                        <ng-template pTemplate="selectedItem">
-                            <div class="country-item country-item-value" *ngIf="produto">
-                                <div>{{produto.descricao}}</div>
+                    <div class="form-row justify-content-center flex-column">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+                            <label for="produto">Produto: <span class="text-danger">*</span></label>
+                            <p-dropdown
+                                        class="form-control novalidate"
+                                        id="produto"
+                                        name="produto"
+                                        #_produto="ngModel"
+                                        [options]="produtos"
+                                        [(ngModel)]="produto"
+                                        optionLabel="descricao"
+                                        [filter]="true"
+                                        filterBy="descricao, tipoRisco.nome"
+                                        [showClear]="true"
+                                        placeholder="Selecione">
+                                <ng-template pTemplate="selectedItem">
+                                    <div class="country-item country-item-value" *ngIf="produto">
+                                        <div>{{produto.descricao}}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-p pTemplate="item">
+                                    <div class="country-item">
+                                        <div>
+                                            <p>{{p.descricao}}</p>
+                                            <p><strong>Tipo Risco:</strong> {{p.tipoRisco.nome}}</p>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                            <div class="mt-1 px-1">
+                                <p class="text-danger" *ngIf="selectedRisco == undefined">Selecione um risco para continuar.</p>
+                                <p class="text-danger" *ngIf=" selectedRisco != undefined && produtos.length == 0">Nenhum produto para {{selectedRisco.nome}}.</p>
                             </div>
-                        </ng-template>
-                        <ng-template let-p pTemplate="item">
-                            <div class="country-item">
-                                <div>
-                                    <p>{{p.descricao}}</p>
-                                    <p><strong>Tipo Risco:</strong> {{p.tipoRisco.nome}}</p>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div class="mt-1 px-1">
-                        <p class="text-danger" *ngIf="selectedRisco == undefined">Selecione um risco para continuar.</p>
-                        <p class="text-danger" *ngIf=" selectedRisco != undefined && produtos.length == 0">Nenhum produto para {{selectedRisco.nome}}.</p>
-                    </div>
-                </div>
-                <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                    <label for="tributacao">Tributação: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                class="form-control"
-                                [class.p-disabled]="produto == undefined"
-                                id="tributacao"
-                                name="tributacao"
-                                #_tributacao="ngModel"
-                                [disabled]="produto == undefined"
-                                [(ngModel)]="produtoTributacaoRel"
-                                [options]="produto == undefined ? [] : produto.produtoTributacaoRel"
-                                optionLabel="tributacao.descricao"
-                                [filter]="true"
-                                filterBy="descricao, aliquota"
-                                [showClear]="true"
-                                placeholder="Selecione">
-                        <ng-template pTemplate="selectedItem">
-                            <div class="country-item country-item-value" *ngIf="produtoTributacaoRel">
-                                <div>{{produtoTributacaoRel.tributacao.descricao}}</div>
-                            </div>
-                        </ng-template>
-                        <ng-template let-rel pTemplate="item">
-                            <div class="country-item">
-                                <div>
-                                    <p>{{rel.tributacao.descricao}}</p>
-                                    <p><strong>Alíquota:</strong> {{ rel.tributacao.aliquota | currency : 'BRL' : '' : '1.0-2' }}</p>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                </div>
-                <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                    <label for="percentual">Percentual: <span class="text-danger">*</span></label>
-                    <div class="d-flex">
-                        <div class="col-lg-8 col-md-8 col-sm-12 pl-0">
+                        </div>
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+                            <label for="percentual">Percentual: <span class="text-danger">*</span></label>
                             <input type="text"
                                    class="form-control"
                                    id="percentual"
@@ -143,74 +87,83 @@
                                    [placeholder]="selectedRisco.percentualDisponivel + '%' + ' disponível'"
                                    [disabled]="produto == undefined"
                                    [(ngModel)]="percentual">
+                            <div class="mt-1 px-1">
+                                <p class="text-danger" *ngIf="_percentual.touched && _percentual.value ==''">Informe o percentual</p>
+                                <p class="text-danger" *ngIf="percentual > selectedRisco.percentualDisponivel">Valor máximo disponível é {{selectedRisco.percentualDisponivel}}%</p>
+                            </div>
                         </div>
-                        <button type="button"
-                                class="btn btn-grey"
-                                (click)="adicionarProduto()"
-                                [disabled]="produto == undefined 
-                                || produtoTributacaoRel == undefined 
-                                || percentual.toString() == ''
-                                || percentual > selectedRisco.percentualDisponivel"> 
-                            Adicionar 
-                        </button>
-                    </div>
-                    <div class="mt-1 px-1">
-                        <p class="text-danger" *ngIf="_percentual.touched && _percentual.value ==''">Informe o percentual</p>
-                        <p class="text-danger" *ngIf="percentual > selectedRisco.percentualDisponivel">Valor máximo disponível é {{selectedRisco.percentualDisponivel}}%</p>
+                        <div class="form-group align-items-end px-1">
+                            <button type="button"
+                                    class="btn btn-grey w-100"
+                                    (click)="adicionarProduto()"
+                                    [disabled]="produto == undefined 
+                                        || percentual.toString() == ''
+                                        || percentual > selectedRisco.percentualDisponivel"> Adicionar </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div *ngIf="objeto.carteiraProdutoRel.length > 0" class="col-lg-11 col-md-12 px-2 mx-auto">
-                <p class="h6 text-center">Itens selecionados</p>
-                <div class="overflow-x-auto w-100">
-                    <table class="table table-striped table-borderless table-editable">
-                        <thead>
-                            <tr>
-                                <th class="bg-dark text-white font-weight-normal"></th>
-                                <th class="bg-dark text-white font-weight-normal">Id</th>
-                                <th class="bg-dark text-white font-weight-normal">Risco</th>
-                                <th class="bg-dark text-white font-weight-normal">Produto</th>
-                                <th class="bg-dark text-white font-weight-normal">Tributação</th>
-                                <th class="bg-dark text-white font-weight-normal">Alíquota</th>
-                                <th class="bg-dark text-white font-weight-normal">Percentual</th>
-                                <th class="bg-dark text-white font-weight-normal"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of objeto.carteiraProdutoRel; index as i"
-                            [class.selected]="item.produtoTributacaoRel.produto.tipoRisco_Id == selectedRisco.id">
-                                <td></td>
-                                <td>{{item.id }}</td>
-                                <td>{{item.produtoTributacaoRel.produto.tipoRisco?.nome}}</td>
-                                <td>{{item.produtoTributacaoRel.produto.descricao}}</td>
-                                <td>{{item.produtoTributacaoRel.tributacao.descricao}}</td>
-                                <td>{{item.produtoTributacaoRel.tributacao.aliquota | mask : 'separator' : '.' }}%</td>
-                                <td>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="percentual-{{i}}"
-                                           name="percentual-{{i}}"
-                                           mask="separator"
-                                           thousandSeparator="."
-                                           decimalMarker=","
-                                           suffix="%"
-                                           #_percentual="ngModel"
-                                           [max]="getRisco(item.produtoTributacaoRel.produto.tipoRisco_Id)?.percentualDisponivel"
-                                           [placeholder]="getRisco(item.produtoTributacaoRel.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
-                                           [(ngModel)]="item.percentual"
-                                           (change)="calcularPercentuais(); setChartProduto('')">
-                                           
-                                    <!-- {{item.percentual | mask : 'separator' : '.' }}% -->
-                                </td>
-                                <td>
-                                    <button type="button" class="btn-trash ml-auto d-block px-2 text-dark" (click)="removeProduto(item)">
-                                        <fa-icon [icon]="faTrashAlt" class="d-md-none d-sm-block"></fa-icon>
-                                        <span class="d-md-block d-sm-none btn btn-dark">Excluir</span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="col-xl-8 col-lg-7 col-md-7 col-sm-12 col-12 px-0">
+                <div class="card card-body mb-2">
+                    <div>
+                        <h6>Divisão da carteira: <span class="text-danger">*</span></h6>
+                    </div>
+                    <div>
+                        <p-chart type="verticalBar"
+                                #chartProdutos
+                                [options]="optionsProduto"
+                                [data]="dataProduto"
+                                [height]="chartHeight"></p-chart>
+                    </div>
+                </div>
+                <div class="card card-body mb-2">
+                    <div *ngIf="objeto.carteiraProdutoRel.length > 0" class="col-12 px-2">
+                        <p class="h6 text-center">Itens selecionados</p>
+                        <div class="overflow-x-auto w-100">
+                            <table class="table table-striped table-borderless table-editable">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-dark text-white font-weight-normal"></th>
+                                        <th class="bg-dark text-white font-weight-normal">Id</th>
+                                        <th class="bg-dark text-white font-weight-normal">Risco</th>
+                                        <th class="bg-dark text-white font-weight-normal">Produto</th>
+                                        <th class="bg-dark text-white font-weight-normal">Percentual</th>
+                                        <th class="bg-dark text-white font-weight-normal" style="width: 80px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of objeto.carteiraProdutoRel; index as i"
+                                        [class.selected]="item.produto.tipoRisco_Id == selectedRisco.id">
+                                        <td></td>
+                                        <td>{{item.id }}</td>
+                                        <td>{{item.produto.tipoRisco.nome}}</td>
+                                        <td>{{item.produto.descricao}}</td>
+                                        <td style="width: 80px;">
+                                            <input type="text"
+                                                class="form-control"
+                                                id="percentual-{{i}}"
+                                                name="percentual-{{i}}"
+                                                mask="separator"
+                                                thousandSeparator="."
+                                                decimalMarker=","
+                                                suffix="%"
+                                                #_percentual="ngModel"
+                                                [max]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel"
+                                                [placeholder]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
+                                                [(ngModel)]="item.percentual"
+                                                (change)=" setChartProduto('');calcularPercentuais();">
+                                        </td>
+                                        <td class="td-action">
+                                            <button type="button" class="btn-trash ml-auto d-block px-2 text-dark" (click)="removeProduto(item)">
+                                                <fa-icon [icon]="faTrashAlt" class="d-md-none d-block"></fa-icon>
+                                                <span class="d-md-block d-none btn btn-dark">Excluir</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -220,7 +173,8 @@
             <p class="text-red" *ngFor="let err of erro">{{err}}</p>
             <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
         </div>
-        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading || validatePercentualRisco()">
+        <button class="btn btn-primary mr-0 ml-auto"
+                [disabled]="form.invalid || loading || validatePercentualRisco()">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
     </div>
 </form>

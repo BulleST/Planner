@@ -13,7 +13,7 @@
                 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
                   
                     <div class="form-row">
-                        <div class="form-group col-lg-5 col-md-5 col-sm-12">
+                        <div class="form-group col-lg-4 col-md-4 col-12">
                             <label for="investimento">Investimento: <span class="text-danger">*</span></label>
                             <select class="form-control"
                                 [class.form-control-loading]="loadingInvestimentos"
@@ -33,48 +33,10 @@
                                 <p class="text-danger" *ngIf="_investimento.errors['required']">Esse campo é obrigatório</p>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-md-4 col-sm-9">
-                            <label for="investimentoTributacaoRel">Tributação: <span class="text-danger">*</span></label>
-                            <select class="form-control"
-                                name="investimentoTributacaoRel" 
-                                id="investimentoTributacaoRel"
-                                #_investimentoTributacaoRel="ngModel"
-                                [(ngModel)]="objeto.investimentoTributacaoRel"
-                                [ngbPopover]="campoObrigatorio" 
-                                popoverClass="popover-danger"
-                                [disablePopover]="_investimentoTributacaoRel.errors == null" 
-                                triggers="mouseenter:mouseleave"
-                                [disabled]="!investimento"
-                                required
-                                (ngModelChange)="tributacaoChange(_investimentoTributacaoRel.value)">
-                                <option [ngValue]="undefined" *ngIf="investimento">Selecione</option>
-                                <option [ngValue]="undefined" *ngIf="!investimento">Selecione um investimento</option>
-                                <option [ngValue]="item" *ngFor="let item of investimento ? investimento.investimentoTributacaoRel : []">
-                                    {{item.tributacao.descricao}}
-                                </option>
-                            </select>
-                            <div *ngIf="_investimentoTributacaoRel.errors && _investimentoTributacaoRel.touched">
-                                <p class="text-danger" *ngIf="_investimentoTributacaoRel.errors['required']">Esse campo é obrigatório</p>
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-3 col-md-3 col-sm-3">
-                            <label for="aliquota">Alíquota: </label>
-                            <input type="text"
-                                class="form-control"
-                                name="aliquota" 
-                                id="aliquota"
-                                #_aliquota="ngModel"
-                                [(ngModel)]="aliquota"
-                                mask="separator.2"
-                                thousandSeparator="."
-                                decimalMarker=","
-                                suffix="%"
-                                readonly>
-                        </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                            <label for="rentabilidade">Rentabilidade Bruta: <span class="text-danger">*</span></label>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                            <label for="rentabilidade">Rentabilidade Bruta: </label>
                             <input type="text"
                                    class="form-control"
                                    id="rentabilidade"
@@ -90,14 +52,13 @@
                                    [disablePopover]="rentabilidade.errors == null" 
                                    triggers="mouseenter:mouseleave"
                                    (keyup.arrowup)="objeto.rentabilidade = arrowUp(rentabilidade.value)"
-                                   (keyup.arrowdown)="objeto.rentabilidade = arrowDown(rentabilidade.value)" 
-                                   required>
+                                   (keyup.arrowdown)="objeto.rentabilidade = arrowDown(rentabilidade.value)" >
                                    <div *ngIf="rentabilidade.errors && rentabilidade.touched">
                                        <p class="text-danger" *ngIf="rentabilidade.errors['required']">Esse campo é obrigatório</p>
                                    </div>
                         </div>
-                        <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                            <label for="rentabilidadeLiquida">Rentabilidade Líquida: <span class="text-danger">*</span></label>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                            <label for="rentabilidadeLiquida">Rentabilidade Líquida: </label>
                             <input type="text"
                                    class="form-control"
                                    id="rentabilidadeLiquida"
@@ -113,17 +74,29 @@
                                    [disablePopover]="rentabilidadeLiquida.errors == null" 
                                    triggers="mouseenter:mouseleave"
                                    (keyup.arrowup)="objeto.rentabilidadeLiquida = arrowUp(rentabilidadeLiquida.value)"
-                                   (keyup.arrowdown)="objeto.rentabilidadeLiquida = arrowDown(rentabilidadeLiquida.value)" 
-                                   required>
-                                   <div *ngIf="rentabilidadeLiquida.errors && rentabilidadeLiquida.touched">
-                                       <p class="text-danger" *ngIf="rentabilidadeLiquida.errors['required']">Esse campo é obrigatório</p>
-                                   </div>
+                                   (keyup.arrowdown)="objeto.rentabilidadeLiquida = arrowDown(rentabilidadeLiquida.value)" >
                         </div>
-                    </div>
-                    <div class="form-row">
-                        
-                        <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                            <label for="montanteAtual">Montante Atual: <span class="text-danger">*</span></label>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                            <label for="custosTaxas">Custos/Taxas: </label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="custosTaxas"
+                                   name="custosTaxas"
+                                   #custosTaxas="ngModel"
+                                   [(ngModel)]="objeto.custosTaxas"
+                                   mask="separator.5"
+                                   thousandSeparator="."
+                                   decimalMarker=","
+                                   suffix="%" 
+                                   [ngbPopover]="campoObrigatorio" 
+                                   popoverClass="popover-danger"
+                                   [disablePopover]="custosTaxas.errors == null" 
+                                   triggers="mouseenter:mouseleave"
+                                   (keyup.arrowup)="objeto.custosTaxas = arrowUp(custosTaxas.value)"
+                                   (keyup.arrowdown)="objeto.custosTaxas = arrowDown(custosTaxas.value)" >
+                        </div>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                            <label for="montanteAtual">Montante Atual: </label>
                             <input type="text"
                                    class="form-control"
                                    id="montanteAtual"
@@ -139,14 +112,10 @@
                                    [disablePopover]="montanteAtual.errors == null" 
                                    triggers="mouseenter:mouseleave"
                                    (keyup.arrowup)="objeto.montanteAtual = arrowUp(montanteAtual.value)"
-                                   (keyup.arrowdown)="objeto.montanteAtual = arrowDown(montanteAtual.value)" 
-                                   required>
-                                   <div *ngIf="montanteAtual.errors && montanteAtual.touched">
-                                       <p class="text-danger" *ngIf="montanteAtual.errors['required']">Esse campo é obrigatório</p>
-                                   </div>
+                                   (keyup.arrowdown)="objeto.montanteAtual = arrowDown(montanteAtual.value)" >
                         </div>
-                        <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                            <label for="sugerido">Montante Sugerido: <span class="text-danger">*</span></label>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                            <label for="sugerido">Montante Sugerido: </label>
                             <input type="text"
                                    class="form-control"
                                    id="sugerido"
@@ -162,14 +131,10 @@
                                    [disablePopover]="sugerido.errors == null" 
                                    triggers="mouseenter:mouseleave"
                                    (keyup.arrowup)="objeto.sugerido = arrowUp(sugerido.value)"
-                                   (keyup.arrowdown)="objeto.sugerido = arrowDown(sugerido.value)" 
-                                   required>
-                                   <div *ngIf="sugerido.errors && sugerido.touched">
-                                       <p class="text-danger" *ngIf="sugerido.errors['required']">Esse campo é obrigatório</p>
-                                   </div>
+                                   (keyup.arrowdown)="objeto.sugerido = arrowDown(sugerido.value)" >
                         </div>
-                        <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                            <label for="planoAcao">Plano de Ação: <span class="text-danger">*</span></label>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                            <label for="planoAcao">Plano de Ação: </label>
                             <input type="text"
                                    class="form-control"
                                    id="planoAcao"
@@ -185,11 +150,7 @@
                                    [disablePopover]="planoAcao.errors == null" 
                                    triggers="mouseenter:mouseleave"
                                    (keyup.arrowup)="objeto.planoAcao = arrowUp(planoAcao.value)"
-                                   (keyup.arrowdown)="objeto.planoAcao = arrowDown(planoAcao.value)" 
-                                   required>
-                                   <div *ngIf="planoAcao.errors && planoAcao.touched">
-                                       <p class="text-danger" *ngIf="planoAcao.errors['required']">Esse campo é obrigatório</p>
-                                   </div>
+                                   (keyup.arrowdown)="objeto.planoAcao = arrowDown(planoAcao.value)" >
                         </div>
                     </div>
                     <div class="d-flex p-0 mt-3">

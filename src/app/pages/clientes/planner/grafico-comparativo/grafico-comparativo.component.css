@@ -1,0 +1,111 @@
+.modal__bg-grafico {
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s;
+    position: fixed;
+    z-index: 1;
+    background: #00000030;
+}
+
+.modal__bg-grafico.active {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-grafico.modal {
+    position: absolute;
+    top: 0;
+    left: auto;
+    right: 0;
+    transform: translate(0px, 50px);
+    width: 90%;
+    max-width: 1100px;
+    height: auto;
+    max-height: 90vw;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    z-index: 2;
+    overflow: visible;
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-grafico.modal.active {
+    z-index: 1;
+    transition: .5s;
+}
+.navigation-open .modal-grafico.modal {
+    max-width: 900px;
+}
+.modal-grafico .modal__inner {
+    position: absolute;
+    width: 0;
+    max-width: 100%;
+    top: 0;
+    right: 0;
+    left: auto;
+    transform: none;
+    overflow: visible;
+    box-shadow: 2px 2px 4px #00000069;
+    transition: 1s, 1s opacity 3s, 1s visibility 2s;
+}
+
+.active.modal-grafico .modal__inner {
+    width: 100%;
+    transition: 1s;
+    transition: 1s, 1s opacity 3s, 1s visibility 3s;
+}
+.modal-grafico .modal__inner .modal-arrow {
+    position: absolute;
+    right: 0;
+    transform: translateY(-100%);
+    z-index: 1005;
+    top: 1px;
+    width: 15px;
+    height: 15px;
+    filter: drop-shadow(0px -2px 1px rgba(0, 0, 0, 0.4));
+    border: #0000008f;
+    opacity: 0;
+    transition: 0.3s;
+}
+.modal-grafico.active .modal__inner .modal-arrow {
+    opacity: 1;
+    right: 107px;
+}
+.modal-grafico .modal__inner .modal-arrow::before {
+    content: '';
+    background: var(--primary);
+    background-color: white;
+    width: 15px;
+    height: 15px;
+    clip-path: polygon(51% 39%, 0% 100%, 100% 100%);
+    position: relative;
+    display: flex;
+}
+
+.modal-grafico .modal__content {
+    max-height: 80vh;
+    overflow: auto;
+}
+
+.modal-grafico .modal__header {
+    background-color: var(--primary);
+    background-color: white;
+}
+
+.modal-grafico .btn-close {
+    background-color: var(--primary);
+    background-color: white;
+    color: #fff;
+    opacity: 1;
+    position: static;
+    margin-left: auto;
+    width: auto;
+    height: auto;
+    margin-right: 15px;
+}
+
+.modal-grafico .btn-close span {
+    /* background-color: #fff; */
+    width: 15px;
+}

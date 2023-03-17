@@ -32,12 +32,9 @@ export class EditComponent implements OnInit {
         private modal: ModalOpen,
         private crypto: Crypto,
         private setupService: CarteiraSetupService,
-        private setupRelService: CarteiraProdutoRelService,
         private empresaService: EmpresaService,
-        private produtoService: ProdutoService,
     ) {
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-
         activatedRoute.params.subscribe(p => {
             if (p['setup_id']) {
                 this.objeto.id = this.crypto.decrypt(p['setup_id']);
@@ -52,6 +49,7 @@ export class EditComponent implements OnInit {
             this.setupService.get(this.objeto.id).subscribe({
                 next: res => {
                     this.objeto = res;
+                    console.log(res)
                 },
                 error: err => {
                     this.voltar();

@@ -1,15 +1,14 @@
 <div class="modal__content">
     <div class="modal__header pb-2" style="padding: 0 25px;">
-            <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
-                <a class="link text-dark" (click)="voltar()">
-                    <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
-                </a>
-                <div>
-                     <button class="btn btn-yellow" (click)="resetForm()">Limpar campos</button>
-                     <!-- <a class="btn btn-primary ml-1" [routerLink]="['..', 'excluir', plannerIdEncrypted]" *ngIf="planner.id != 0">Excluir planner</a> -->
-                </div>
+        <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
+            <a class="link text-dark" (click)="voltar()">
+                <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar </a>
+            <div>
+                <button class="btn btn-yellow" (click)="resetForm()">Limpar campos</button>
+                <!-- <a class="btn btn-primary ml-1" [routerLink]="['..', 'excluir', plannerIdEncrypted]" *ngIf="planner.id != 0">Excluir planner</a> -->
             </div>
-            <h3 class="text-orange mt-1">Planner</h3>
+        </div>
+        <h3 class="text-orange mt-1">Planner</h3>
     </div>
     <div class="modal__body mt-0">
         <form #form="ngForm" (ngSubmit)="send(form)" disabled class="needs-validation home editable">
@@ -308,7 +307,7 @@
                                     <h6>Taxas</h6>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
+                                   <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
                                         <label for="taxaSelic">Taxa Selic: <span class="text-danger">*</span></label>
                                         <input type="text"
                                                class="form-control"
@@ -329,8 +328,8 @@
                                                required
                                                (change)="saveData()"
                                                tabindex="11">
-                                    </div>
-                                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                    </div> 
+                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="taxaIpca">Taxa IPCA: <span class="text-danger">*</span></label>
                                         <input type="text"
                                                class="form-control"
@@ -356,916 +355,15 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Cálculos -->
-                    <div class="form-row mb-2">
-                        <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Cálculos</h6>
-                            </div>
-                            <div class="form-row">
-                                <table class="table table-editable table-responsive">
-                                    <thead class="primary">
-                                        <tr>
-                                            <th></th>
-                                            <th>Baixíssimo</th>
-                                            <th>Baixo</th>
-                                            <th>Moderado</th>
-                                            <th>Arrojado</th>
-                                            <th style="white-space: nowrap;">Super Arrojado</th>
-                                            <th>Hedge</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right"><small><b>Sugestão</b></small></td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Baixissimo"
-                                                       name="sugestao_Baixissimo"
-                                                       #sugestao_Baixissimo="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Baixissimo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Baixo"
-                                                       name="sugestao_Baixo"
-                                                       #sugestao_Baixo="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Baixo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Moderado"
-                                                       name="sugestao_Moderado"
-                                                       #sugestao_Moderado="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Moderado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Arrojado"
-                                                       name="sugestao_Arrojado"
-                                                       #sugestao_Arrojado="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Arrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_SuperArrojado"
-                                                       name="sugestao_SuperArrojado"
-                                                       #sugestao_SuperArrojado="ngModel"
-                                                       [(ngModel)]="planner.sugestao_SuperArrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Hedge"
-                                                       name="sugestao_Hedge"
-                                                       #sugestao_Hedge="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Hedge"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Total"
-                                                       name="sugestao_Total"
-                                                       #sugestao_Total="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Total"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right"><small><b>Plano</b></small></td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Baixissimo"
-                                                       name="plano_Baixissimo"
-                                                       #plano_Baixissimo="ngModel"
-                                                       [(ngModel)]="planner.plano_Baixissimo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Baixo"
-                                                       name="plano_Baixo"
-                                                       #plano_Baixo="ngModel"
-                                                       [(ngModel)]="planner.plano_Baixo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Moderado"
-                                                       name="plano_Moderado"
-                                                       #plano_Moderado="ngModel"
-                                                       [(ngModel)]="planner.plano_Moderado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Arrojado"
-                                                       name="plano_Arrojado"
-                                                       #plano_Arrojado="ngModel"
-                                                       [(ngModel)]="planner.plano_Arrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_SuperArrojado"
-                                                       name="plano_SuperArrojado"
-                                                       #plano_SuperArrojado="ngModel"
-                                                       [(ngModel)]="planner.plano_SuperArrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Hedge"
-                                                       name="plano_Hedge"
-                                                       #plano_Hedge="ngModel"
-                                                       [(ngModel)]="planner.plano_Hedge"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Total"
-                                                       name="sugestao_Total"
-                                                       #sugestao_Total="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Total"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Investimento -->
-                    <div class="form-row mb-2">
-                        <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Investimento</h6>
-                                <a class="btn btn-primary" [routerLink]="['investimento']">Adicionar</a>
-                            </div>
-                            <div class="form-row">
-                                <p-table [value]="planner.planejamentoInvestimento"
-                                         [responsive]="true"
-                                         responsiveLayout="scroll"
-                                         class="table table-editable"
-                                         emptyMessage="Nenhum registro">
-                                    <ng-template pTemplate="header">
-                                        <tr class="primary">
-                                            <th class="text-right">Investimento</th>
-                                            <th style="white-space: nowrap;">Tributação</th>
-                                            <th style="white-space: nowrap;">Rentabilidade</th>
-                                            <th style="white-space: nowrap;">Rentab. Liquida</th>
-                                            <th style="white-space: nowrap;">Montante Atual</th>
-                                            <th style="white-space: nowrap;">Montante Sugerida</th>
-                                            <th style="white-space: nowrap;">Plano de Ação</th>
-                                            <th class="td-actions"></th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-item let-index="rowIndex">
-                                        <tr>
-                                            <td class=" px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <small>
-                                                    <b>{{ item.investimentoTributacaoRel?.investimento?.descricao}}</b>
-                                                </small>
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap"> 
-                                                {{ item.investimentoTributacaoRel?.tributacao?.descricao }} 
-                                            </td>
-                                            <td class="">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-rentabilidade-{{index}}"
-                                                       name="investimento-rentabilidade-{{index}}"
-                                                       #rentabilidade="ngModel"
-                                                       [(ngModel)]="item.rentabilidade"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="true"
-                                                       (keyup.arrowup)="item.rentabilidade = arrowUp(rentabilidade.value)"
-                                                       (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave">
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-rentabilidadeLiquida-{{index}}"
-                                                       name="investimento-rentabilidadeLiquida-{{index}}"
-                                                       #rentabilidadeLiquida="ngModel"
-                                                       [(ngModel)]="item.rentabilidadeLiquida"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       (keyup.arrowup)="item.rentabilidadeLiquida = arrowUp(rentabilidadeLiquida.value)"
-                                                       (keyup.arrowdown)="item.rentabilidadeLiquida = arrowDown(rentabilidadeLiquida.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required>
-                                                        <!-- {{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}% -->
-                                                     </td>
-                                            <td class="">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-montanteAtual-{{index}}"
-                                                       name="investimento-montanteAtual-{{index}}"
-                                                       #montanteAtual="ngModel"
-                                                       [(ngModel)]="item.montanteAtual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$"
-                                                       (keyup.arrowup)="item.montanteAtual = arrowUp(montanteAtual.value)"
-                                                       (keyup.arrowdown)="item.montanteAtual = arrowDown(montanteAtual.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required>
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap">
-                                                <input type="text"
-                                                class="form-control form-control-number"
-                                                id="investimento-sugerido-{{index}}"
-                                                name="investimento-sugerido-{{index}}"
-                                                #sugerido="ngModel"
-                                                [(ngModel)]="item.sugerido"
-                                                mask="separator.5"
-                                                thousandSeparator="."
-                                                decimalMarker=","
-                                                prefix="R$ "
-                                                (keyup.arrowup)="item.sugerido = arrowUp(sugerido.value)"
-                                                (keyup.arrowdown)="item.sugerido = arrowDown(sugerido.value, true)"
-                                                [ngbPopover]="setaUpDown"
-                                                triggers="mouseenter:mouseleave"
-                                                required>
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap">  <input type="text"
-                                                class="form-control form-control-number"
-                                                id="investimento-planoAcao-{{index}}"
-                                                name="investimento-planoAcao-{{index}}"
-                                                #planoAcao="ngModel"
-                                                [(ngModel)]="item.planoAcao"
-                                                mask="separator.5"
-                                                thousandSeparator="."
-                                                decimalMarker=","
-                                                prefix="R$ "
-                                                (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
-                                                (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, true)"
-                                                [ngbPopover]="setaUpDown"
-                                                triggers="mouseenter:mouseleave"
-                                                required></td>
-                                            <td class="td-actions">
-                                                <a class="btn btn-trash" title="Remover linha" (click)="removerInvestimento(item)">
-                                                    <fa-icon [icon]="faTrash"></fa-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td></td>
-                                            <td [attr.colspan]="6" class="py-2 px-2 text-grey"> Nenhum registro </td>
-                                            <td></td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Produto -->
-                    <div class="form-row mb-2">
-                        <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Produto</h6>
-                                <div class="d-flex justify-content-end align-items-center w-100">
-                                    <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
-                                        <p-dropdown
-                                            class="form-control"
-                                            id="carteirasSetup"
-                                            name="carteirasSetup"
-                                            #_carteirasSetup="ngModel"
-                                            [class.form-control-loading]="loadingCarteiraSetup"
-                                            [disabled]="loadingCarteiraSetup"
-                                            [options]="carteirasSetup"
-                                            [(ngModel)]="planner.carteiraSetup_Id"
-                                            optionLabel="nome"
-                                            optionValue="id"
-                                            [filter]="true"
-                                            filterBy="nome"
-                                            [showClear]="true"
-                                            placeholder="Selecione para adicionar"
-                                            (ngModelChange)="carteiraSetupChange(_carteirasSetup)"
-                                            [required]="true">
-                                        </p-dropdown>
-                                    </div>
-                                    <button type="button"
-                                            triggers="mouseenter:mouseleave"
-                                            class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
-                                            (click)="adicionarProdutoCarteira(form)"
-                                            *ngIf="(planner.carteiraSetup_Id != 0 && mudouCarteiraSetup)
-                                                    || planner.planejamentoProduto.length == 0"> Salvar </button>
-                                    
-                                    <a class="link ml-3"
-                                       [routerLink]="['produto']"
-                                       *ngIf="planner.planejamentoInvestimento.length > 0
-                                        && planner.planejamentoProduto.length > 0
-                                        && !mudouCarteiraSetup"
-                                    > Adicionar outros produtos </a>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <p class="text-danger px-2" *ngIf="planner.planejamentoInvestimento.length == 0">* Insira um investimento para adicionar um produto</p>
-                                <p-table
-                                         [value]="planner.planejamentoProduto"
-                                         [responsive]="true"
-                                         responsiveLayout="scroll"
-                                         class="table table-editable"
-                                         emptyMessage="Nenhum registro">
-                                    <ng-template pTemplate="header" let-columns>
-                                        <tr class="primary">
-                                            <th class="text-right" style="white-space: nowrap;">Produto</th>
-                                            <th style="white-space: nowrap;">Tributação</th>
-                                            <th style="white-space: nowrap;">Percentual</th>
-                                            <th style="white-space: nowrap;">Rentabilidade</th>
-                                            <th style="white-space: nowrap;">Rentab. Liquida</th>
-                                            <th style="white-space: nowrap;">Montante Atual</th>
-                                            <th style="white-space: nowrap;">Montante Sugerida</th>
-                                            <th style="white-space: nowrap;">Plano de Ação</th>
-                                            <th class="td-actions"></th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-item let-index="rowIndex">
-                                        <tr>
-                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <small><b>{{ item.produtoTributacaoRel?.produto?.descricao }}</b></small>
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap"> {{ item.produtoTributacaoRel?.tributacao?.descricao }} </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-percentual-{{index}}"
-                                                       name="produto-percentual-{{index}}"
-                                                       #percentual="ngModel"
-                                                       [(ngModel)]="item.percentual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="true"
-                                                       (keyup.arrowup)="item.percentual = arrowUp(percentual.value)"
-                                                       (keyup.arrowdown)="item.percentual = arrowDown(percentual.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       [required]="true"
-                                                       [min]="0.1"
-                                                       [max]="100 - percentualTotalProduto"
-                                                       (ngModelChange)="calculaPercentualProduto()">
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-rentabilidade-{{index}}"
-                                                       name="produto-rentabilidade-{{index}}"
-                                                       #rentabilidade="ngModel"
-                                                       [(ngModel)]="item.rentabilidade"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="true"
-                                                       (keyup.arrowup)="item.rentabilidade = arrowUp(rentabilidade.value)"
-                                                       (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       [required]="true">
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap">{{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}%</td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : ',' }} </td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.sugerido | mask : 'separator' : ',' }} </td>
-                                            <td class="px-2" style="white-space: nowrap"> 
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-planoAcao-{{index}}"
-                                                       name="produto-planoAcao-{{index}}"
-                                                       #planoAcao="ngModel"
-                                                       [(ngModel)]="item.planoAcao"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [allowNegativeNumbers]="true"
-                                                       (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
-                                                       (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, false)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       [required]="true">
-                                                     </td>
-                                            <td class="td-actions">
-                                                <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)">
-                                                    <fa-icon [icon]="faTrash"></fa-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="footer">
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Total: 
-                                                <span>{{ percentualTotalProduto }}</span>
-                                            %</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td></td>
-                                            <td [attr.colspan]="7" class="py-2 px-2 text-grey"> Nenhum registro </td>
-                                            <td></td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Solução Inicial -->
-                    <div class="form-row mb-2">
-                        <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Solução Inicial</h6>
-                            </div>
-                            <div class="form-row">
-                                <table class="table table-editable table-responsive">
-                                    <thead>
-                                        <tr class="primary">
-                                            <th colspan="6" class="text-center p-2">
-                                                <h6>Agregando Valor</h6>
-                                            </th>
-                                        </tr>
-                                        <tr class="">
-                                            <th colspan="2" class="text-right primary">Montante Total</th>
-                                            <th class="p-0">
-                                                <input type="text"
-                                                        class="form-control form-control-solucaoInicial"
-                                                        id="solucao_montante_Atual"
-                                                        name="solucao_montante_Atual"
-                                                        #solucao_montante_Atual="ngModel"
-                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.montante"
-                                                        mask="separator.5"
-                                                        thousandSeparator="."
-                                                        decimalMarker=","
-                                                        prefix="R$ "
-                                                        [readOnly]="true">
-                                                        <!-- tabindex="0" -->
-                                            </th>
-                                            <th class="primary">Exposição a Risco</th>
-                                            <th class="p-0" colspan="2">
-                                                <input type="text"
-                                                        class="form-control form-control-solucaoInicial"
-                                                        id="solucao_riscoAssumido_Atual"
-                                                        name="solucao_riscoAssumido_Atual"
-                                                        #solucao_riscoAssumido_Atual="ngModel"
-                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.riscoAssumido"
-                                                        mask="separator.5"
-                                                        thousandSeparator="."
-                                                        decimalMarker=","
-                                                        suffix="%"
-                                                        [readOnly]="true">
-                                                        <!-- tabindex="0" -->
-                                            </th>
-                                        </tr>
-                                        <tr class="subheader" class="primary">
-                                            <th style="white-space: nowrap;" class="text-right">Carteira</th>
-                                            <th style="white-space: nowrap;">Rent. Atual <small>(ano)</small></th>
-                                            <th style="white-space: nowrap;">Retorno Anual</th>
-                                            <th style="white-space: nowrap;">Retorno Mensal</th>
-                                            <th style="white-space: nowrap;">Patrimônio Máximo</th>
-                                            <th style="white-space: nowrap;">Tempo <small>(anos)</small></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <small>Atual</small>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_rentabilidade_Atual"
-                                                       name="solucao_rentabilidade_Atual"
-                                                       #solucao_rentabilidade_Atual="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Atual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_retornoAnual_Atual"
-                                                       name="solucao_retornoAnual_Atual"
-                                                       #solucao_retornoAnual_Atual="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Atual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_retornoMensal_Atual"
-                                                       name="solucao_retornoMensal_Atual"
-                                                       #solucao_retornoMensal_Atual="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Atual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_plMax_Atual"
-                                                       name="solucao_plMax_Atual"
-                                                       #solucao_plMax_Atual="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Atual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_idadeMax_Atual"
-                                                       name="solucao_idadeMax_Atual"
-                                                       #solucao_idadeMax_Atual="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Atual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <small>Sugerida</small>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_rentabilidade_Sugerida"
-                                                       name="solucao_rentabilidade_Sugerida"
-                                                       #solucao_rentabilidade_Sugerida="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Sugerida"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_retornoAnual_Sugerido"
-                                                       name="solucao_retornoAnual_Sugerido"
-                                                       #solucao_retornoAnual_Sugerido="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Sugerido"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_retornoMensal_Sugerido"
-                                                       name="solucao_retornoMensal_Sugerido"
-                                                       #solucao_retornoMensal_Sugerido="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Sugerido"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_plMax_Sugerido"
-                                                       name="solucao_plMax_Sugerido"
-                                                       #solucao_plMax_Sugerido="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Sugerido"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_idadeMax_Sugerido"
-                                                       name="solucao_idadeMax_Sugerido"
-                                                       #solucao_idadeMax_Sugerido="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Sugerido"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <small>Diferença</small>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_rentabilidade_Diferenca"
-                                                       name="solucao_rentabilidade_Diferenca"
-                                                       #solucao_rentabilidade_Diferenca="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Diferenca"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_retornoAnual_Diferenca"
-                                                       name="solucao_retornoAnual_Diferenca"
-                                                       #solucao_retornoAnual_Diferenca="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Diferenca"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_retornoMensal_Diferenca"
-                                                       name="solucao_retornoMensal_Diferenca"
-                                                       #solucao_retornoMensal_Diferenca="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Diferenca"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td class="border-primary border-left border-top">
-                                                <!-- {{planner.planejamentoAgregandoValor!.plMax_Diferenca}} <br> -->
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_plMax_Diferenca"
-                                                       name="solucao_plMax_Diferenca"
-                                                       #solucao_plMax_Diferenca="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Diferenca"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td class="border-primary border">
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="solucao_idadeMax_Diferenca"
-                                                       name="solucao_idadeMax_Diferenca"
-                                                       #solucao_idadeMax_Diferenca="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Diferenca"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
-                                            </td>
-                                            <td class="px-3 bg-light text-center" style="white-space: nowrap;" colspan="2">
-                                                <span><b>Melhora de Desempenho</b></span>
-                                            </td>
-                                            <td class="px-3 bg-light text-left">
-                                                <span>
-                                                    <fa-icon [icon]="faArrowRight"></fa-icon>
-                                                </span>
-                                            </td>
-                                            <td class="border-primary border-left border-bottom">
-                                                <input type="text"
-                                                       class="form-control h2 mb-0 font-weight-bold"
-                                                       style="font-size: 20px"
-                                                       id="solucao_pL_Desempenho"
-                                                       name="solucao_pL_Desempenho"
-                                                       #solucao_pL_Desempenho="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.pL_Desempenho"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                            <td class="border-primary border">
-                                                <input type="text"
-                                                       class="form-control h2 mb-0 font-weight-bold"
-                                                       style="font-size: 20px"
-                                                       id="solucao_idade_Desempenho"
-                                                       name="solucao_idade_Desempenho"
-                                                       #solucao_idade_Desempenho="ngModel"
-                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idade_Desempenho"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       [readOnly]="true">
-                                                       <!-- tabindex="0" -->
-                                            </td>
-                                        </tr>
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Patrimônio por Idade -->
-                    <div class="form-row mb-2">
-                        <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Patrimônio por Idade</h6>
-                            </div>
-                            <div class="form-row chart-container" id="chart-patrimonio-idade">
-                                <p-chart #chartPatrimonioIdade [data]="chartPatrimonioIdadeData" [options]="chartPatrimonioIdadeOptions" [width]="chartSize['chart-patrimonio-idade']['width']" [height]="chartSize['chart-patrimonio-idade']['height']"></p-chart>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Capital Segurado -->
-                    <!-- <div class="form-row mb-2">
-                        <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Capital Segurado</h6>
-                            </div>
-                            <div class="form-row chart-container" id="chart-capital-segurado">
-                                <p-chart #chartCapitalSegurado [data]="chartCapitalSeguradoData" [options]="chartCapitalSeguradoOptions" [width]="chartSize['chart-capital-segurado']['width']" [height]="chartSize['chart-patrimonio-idade']['height']"></p-chart>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                       <!-- Descrição -->
-                    <div class="form-row mb-2">
-                        <div class="card card-body">
-                            <div class="home__container-header mb-2">
-                                <h6>Descrição</h6>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                    <label for="descricao">Observações do planner: <span class="text-danger">*</span></label>
-                                    <textarea type="text"
-                                           name="descricao"
-                                           id="descricao"
-                                           class="form-control"
-                                           #descricao="ngModel"
-                                           [(ngModel)]="planner.descricao"
-                                           [ngbPopover]="campoObrigatorio"
-                                           popoverClass="popover-danger"
-                                           [disablePopover]="descricao.errors == null"
-                                           triggers="mouseenter:mouseleave"
-                                           (change)="saveData()"
-                                           required
-                                           tabindex="13">
-                                        </textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Capacidade de Risco -->
                     <div class="form-row mb-2">
                         <div class="card card-body">
                             <div class="home__container-header mb-4">
                                 <h6>Capacidade de Risco</h6>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 px-0">
+                            <div class="form-row">
+                                
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 px-0">
                                 <div class="form-container">
                                     <div class="form-container-title font-weight-bold">Reserva de Emergência</div>
                                     <div class="form-container-body">
@@ -1284,7 +382,6 @@
                                                    placeholder="R$ 00,00"
                                                    prefix="R$ "
                                                    readonly>
-                                                   <!-- tabindex="0" -->
                                         </div>
                                         <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
                                             <label for="rE_Planejado"> Planejada:</label>
@@ -1301,12 +398,11 @@
                                                    placeholder="R$ 00,00"
                                                    prefix="R$ "
                                                    readonly>
-                                                   <!-- tabindex="0" -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 px-0">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 px-0">
                                 <div class="form-container mb-0">
                                     <div class="form-container-title font-weight-bold">Risco</div>
                                     <div class="form-container-body">
@@ -1325,7 +421,6 @@
                                                    placeholder="R$ 00,00"
                                                    suffix="%"
                                                    readonly>
-                                                   <!-- tabindex="0" -->
                                         </div>
                                         <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
                                             <label for="riscoTolerado"> Tolerado:</label>
@@ -1339,20 +434,49 @@
                                                    thousandSeparator="."
                                                    decimalMarker=","
                                                    [allowNegativeNumbers]="false"
-                                                   placeholder="R$ 00,00"                                                   suffix="%"
+                                                   placeholder="R$ 00,00" suffix="%"
                                                    suffix="%"
                                                    readonly>
-                                                   <!-- tabindex="0" -->
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <!-- Descrição -->
+                    <div class="form-row mb-2">
+                        <div class="card card-body">
+                            <div class="home__container-header mb-2">
+                                <h6>Descrição</h6>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <label for="descricao">Observações do planner: <span class="text-danger">*</span></label>
+                                    <textarea type="text"
+                                              name="descricao"
+                                              id="descricao"
+                                              class="form-control"
+                                              #descricao="ngModel"
+                                              [(ngModel)]="planner.descricao"
+                                              [ngbPopover]="campoObrigatorio"
+                                              popoverClass="popover-danger"
+                                              [disablePopover]="descricao.errors == null"
+                                              triggers="mouseenter:mouseleave"
+                                              (change)="saveData()"
+                                              required
+                                              tabindex="13">
+                                        </textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- Aposentadoria -->
                     <div class="form-row mb-2">
-                        <div class="home__container">
-                            <table class="table table-editable table-responsive w-100 d-md-table d-sm-table">
+                        <div class="home__container table-responsive mb-2">
+                            <table class="table table-editable w-100 d-md-table d-sm-table mb-0">
                                 <thead class="primary">
                                     <tr>
                                         <th></th>
@@ -1366,23 +490,23 @@
                                         </td>
                                         <td>
                                             <input type="text"
-                                                    class="form-control form-control-number"
-                                                    id="idadeAposentadoria"
-                                                    name="idadeAposentadoria"
-                                                    #idadeAposentadoria="ngModel"
-                                                    [(ngModel)]="planner.cliente.idadeAposentadoria"
-                                                    mask="0*"
-                                                    suffix=" anos"
-                                                    [allowNegativeNumbers]="false"
-                                                    placeholder="0"
-                                                    (keyup.arrowup)="planner.cliente.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
-                                                    (keyup.arrowdown)="planner.cliente.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
-                                                    [ngbPopover]="campoObrigatorio"
-                                                    popoverClass="popover-danger"
-                                                    [disablePopover]="idadeAposentadoria.errors == null"
-                                                    triggers="mouseenter:mouseleave"
-                                                    required
-                                                    (change)="saveData()">
+                                                   class="form-control form-control-number"
+                                                   id="idadeAposentadoria"
+                                                   name="idadeAposentadoria"
+                                                   #idadeAposentadoria="ngModel"
+                                                   [(ngModel)]="planner.cliente.idadeAposentadoria"
+                                                   mask="0*"
+                                                   suffix=" anos"
+                                                   [allowNegativeNumbers]="false"
+                                                   placeholder="0"
+                                                   (keyup.arrowup)="planner.cliente.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
+                                                   (keyup.arrowdown)="planner.cliente.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
+                                                   [ngbPopover]="campoObrigatorio"
+                                                   popoverClass="popover-danger"
+                                                   [disablePopover]="idadeAposentadoria.errors == null"
+                                                   triggers="mouseenter:mouseleave"
+                                                   required
+                                                   (change)="saveData()">
                                         </td>
                                     </tr>
                                     <tr>
@@ -1391,25 +515,25 @@
                                         </td>
                                         <td>
                                             <input type="text"
-                                                    class="form-control form-control-number"
-                                                    id="rendaMensalAposentadoria"
-                                                    name="rendaMensalAposentadoria"
-                                                    #rendaMensalAposentadoria="ngModel"
-                                                    [(ngModel)]="planner.cliente.rendaMensalAposentadoria"
-                                                    mask="separator.5"
-                                                    thousandSeparator="."
-                                                    decimalMarker=","
-                                                    [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
-                                                    [allowNegativeNumbers]="false"
-                                                    placeholder="R$ 00,00"
-                                                    (keyup.arrowup)="planner.cliente.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
-                                                    (keyup.arrowdown)="planner.cliente.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
-                                                    [ngbPopover]="campoObrigatorio"
-                                                    popoverClass="popover-danger"
-                                                    [disablePopover]="rendaMensalAposentadoria.errors == null"
-                                                    triggers="mouseenter:mouseleave"
-                                                    required
-                                                    (change)="saveData()">
+                                                   class="form-control form-control-number"
+                                                   id="rendaMensalAposentadoria"
+                                                   name="rendaMensalAposentadoria"
+                                                   #rendaMensalAposentadoria="ngModel"
+                                                   [(ngModel)]="planner.cliente.rendaMensalAposentadoria"
+                                                   mask="separator.5"
+                                                   thousandSeparator="."
+                                                   decimalMarker=","
+                                                   [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
+                                                   [allowNegativeNumbers]="false"
+                                                   placeholder="R$ 00,00"
+                                                   (keyup.arrowup)="planner.cliente.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
+                                                   (keyup.arrowdown)="planner.cliente.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
+                                                   [ngbPopover]="campoObrigatorio"
+                                                   popoverClass="popover-danger"
+                                                   [disablePopover]="rendaMensalAposentadoria.errors == null"
+                                                   triggers="mouseenter:mouseleave"
+                                                   required
+                                                   (change)="saveData()">
                                         </td>
                                     </tr>
                                     <tr>
@@ -1418,25 +542,25 @@
                                         </td>
                                         <td>
                                             <input type="text"
-                                                    class="form-control form-control-number"
-                                                    id="rentabilidadeAposentadoria"
-                                                    name="rentabilidadeAposentadoria"
-                                                    #rentabilidadeAposentadoria="ngModel"
-                                                    [(ngModel)]="planner.cliente.rentabilidadeAposentadoria"
-                                                    mask="separator.5"
-                                                    thousandSeparator="."
-                                                    decimalMarker=","
-                                                    [allowNegativeNumbers]="true"
-                                                    placeholder="00,00%"
-                                                    suffix="%"
-                                                    (keyup.arrowup)="planner.cliente.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
-                                                    (keyup.arrowdown)="planner.cliente.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
-                                                    [ngbPopover]="campoObrigatorio"
-                                                    popoverClass="popover-danger"
-                                                    [disablePopover]="rentabilidadeAposentadoria.errors == null"
-                                                    triggers="mouseenter:mouseleave"
-                                                    required
-                                                    (change)="saveData()">
+                                                   class="form-control form-control-number"
+                                                   id="rentabilidadeAposentadoria"
+                                                   name="rentabilidadeAposentadoria"
+                                                   #rentabilidadeAposentadoria="ngModel"
+                                                   [(ngModel)]="planner.cliente.rentabilidadeAposentadoria"
+                                                   mask="separator.5"
+                                                   thousandSeparator="."
+                                                   decimalMarker=","
+                                                   [allowNegativeNumbers]="true"
+                                                   placeholder="00,00%"
+                                                   suffix="%"
+                                                   (keyup.arrowup)="planner.cliente.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
+                                                   (keyup.arrowdown)="planner.cliente.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
+                                                   [ngbPopover]="campoObrigatorio"
+                                                   popoverClass="popover-danger"
+                                                   [disablePopover]="rentabilidadeAposentadoria.errors == null"
+                                                   triggers="mouseenter:mouseleave"
+                                                   required
+                                                   (change)="saveData()">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1445,8 +569,8 @@
                     </div>
                     <!-- Fluxos Pontuais -->
                     <div class="form-row mb-2">
-                        <div class="home__container">
-                            <table class="table table-editable table-responsive w-100 d-table">
+                        <div class="home__container table-responsive mb-2">
+                            <table class="table table-editable w-100 mb-0">
                                 <thead class="primary">
                                     <tr>
                                         <th colspan="3" class="pl-4">
@@ -1555,6 +679,849 @@
                             </table>
                         </div>
                     </div> -->
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <!-- Cálculos -->
+                    <div class="form-row mb-2">
+                        <div class="home__container">
+                            <div class="home__container-header mb-2">
+                                <h6>Cálculos</h6>
+                            </div>
+                            <div class="form-row">
+                                <table class="table table-editable table-responsive">
+                                    <thead class="primary">
+                                        <tr>
+                                            <th></th>
+                                            <th>Baixíssimo</th>
+                                            <th>Baixo</th>
+                                            <th>Moderado</th>
+                                            <th>Arrojado</th>
+                                            <th style="white-space: nowrap;">Super Arrojado</th>
+                                            <th>Hedge</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right"><small><b>Sugestão</b></small></td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_Baixissimo"
+                                                       name="sugestao_Baixissimo"
+                                                       #sugestao_Baixissimo="ngModel"
+                                                       [(ngModel)]="planner.sugestao_Baixissimo"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_Baixo"
+                                                       name="sugestao_Baixo"
+                                                       #sugestao_Baixo="ngModel"
+                                                       [(ngModel)]="planner.sugestao_Baixo"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_Moderado"
+                                                       name="sugestao_Moderado"
+                                                       #sugestao_Moderado="ngModel"
+                                                       [(ngModel)]="planner.sugestao_Moderado"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_Arrojado"
+                                                       name="sugestao_Arrojado"
+                                                       #sugestao_Arrojado="ngModel"
+                                                       [(ngModel)]="planner.sugestao_Arrojado"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_SuperArrojado"
+                                                       name="sugestao_SuperArrojado"
+                                                       #sugestao_SuperArrojado="ngModel"
+                                                       [(ngModel)]="planner.sugestao_SuperArrojado"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_Hedge"
+                                                       name="sugestao_Hedge"
+                                                       #sugestao_Hedge="ngModel"
+                                                       [(ngModel)]="planner.sugestao_Hedge"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_Total"
+                                                       name="sugestao_Total"
+                                                       #sugestao_Total="ngModel"
+                                                       [(ngModel)]="planner.sugestao_Total"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right"><small><b>Plano</b></small></td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="plano_Baixissimo"
+                                                       name="plano_Baixissimo"
+                                                       #plano_Baixissimo="ngModel"
+                                                       [(ngModel)]="planner.plano_Baixissimo"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="plano_Baixo"
+                                                       name="plano_Baixo"
+                                                       #plano_Baixo="ngModel"
+                                                       [(ngModel)]="planner.plano_Baixo"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="plano_Moderado"
+                                                       name="plano_Moderado"
+                                                       #plano_Moderado="ngModel"
+                                                       [(ngModel)]="planner.plano_Moderado"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="plano_Arrojado"
+                                                       name="plano_Arrojado"
+                                                       #plano_Arrojado="ngModel"
+                                                       [(ngModel)]="planner.plano_Arrojado"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="plano_SuperArrojado"
+                                                       name="plano_SuperArrojado"
+                                                       #plano_SuperArrojado="ngModel"
+                                                       [(ngModel)]="planner.plano_SuperArrojado"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="plano_Hedge"
+                                                       name="plano_Hedge"
+                                                       #plano_Hedge="ngModel"
+                                                       [(ngModel)]="planner.plano_Hedge"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="sugestao_Total"
+                                                       name="sugestao_Total"
+                                                       #sugestao_Total="ngModel"
+                                                       [(ngModel)]="planner.sugestao_Total"
+                                                       mask="separator"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       readonly>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Investimento -->
+                    <div class="form-row mb-2">
+                        <div class="home__container">
+                            <div class="home__container-header mb-2 position-relative">
+                                <h6>Investimento</h6>
+                                <a class="btn btn-primary" [routerLink]="['investimento']">Adicionar</a>
+                                
+                            </div>
+                            <div class="form-row">
+                                <p-table [value]="planner.planejamentoInvestimento"
+                                         [responsive]="true"
+                                         responsiveLayout="scroll"
+                                         class="table table-editable"
+                                         emptyMessage="Nenhum registro">
+                                    <ng-template pTemplate="header">
+                                        <tr class="primary">
+                                            <th class="text-right">Investimento</th>
+                                            <th style="white-space: nowrap;">Custos/Taxas</th>
+                                            <th style="white-space: nowrap;">Rentabilidade</th>
+                                            <th style="white-space: nowrap;">Rentab. Liquida</th>
+                                            <th style="white-space: nowrap;">Montante Atual</th>
+                                            <th style="white-space: nowrap;">Montante Sugerida</th>
+                                            <th style="white-space: nowrap;">Plano de Ação</th>
+                                            <th class="td-actions"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-item let-index="rowIndex">
+                                        <tr>
+                                            <td class=" px-3 bg-light text-right" style="white-space: nowrap;">
+                                                <span class="small font-weight-bold">{{ item.investimento.descricao}}</span>
+                                            </td>
+                                            <td class="px-2" style="white-space: nowrap">
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="investimento-custosTaxas-{{index}}"
+                                                       name="investimento-custosTaxas-{{index}}"
+                                                       #custosTaxas="ngModel"
+                                                       [(ngModel)]="item.custosTaxas"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [allowNegativeNumbers]="false"
+                                                       (keyup.arrowup)="item.custosTaxas = arrowUp(custosTaxas.value)"
+                                                       (keyup.arrowdown)="item.custosTaxas = arrowDown(custosTaxas.value, false)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       required>
+                                            </td>
+                                            <td class="">
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="investimento-rentabilidade-{{index}}"
+                                                       name="investimento-rentabilidade-{{index}}"
+                                                       #rentabilidade="ngModel"
+                                                       [(ngModel)]="item.rentabilidade"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [allowNegativeNumbers]="true"
+                                                       (keyup.arrowup)="item.rentabilidade = arrowUp(rentabilidade.value)"
+                                                       (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave">
+                                            </td>
+                                            <td class="px-2" style="white-space: nowrap">
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="investimento-rentabilidadeLiquida-{{index}}"
+                                                       name="investimento-rentabilidadeLiquida-{{index}}"
+                                                       #rentabilidadeLiquida="ngModel"
+                                                       [(ngModel)]="item.rentabilidadeLiquida"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       (keyup.arrowup)="item.rentabilidadeLiquida = arrowUp(rentabilidadeLiquida.value)"
+                                                       (keyup.arrowdown)="item.rentabilidadeLiquida = arrowDown(rentabilidadeLiquida.value, true)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       required>
+                                                <!-- {{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}% -->
+                                            </td>
+                                            <td class="">
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="investimento-montanteAtual-{{index}}"
+                                                       name="investimento-montanteAtual-{{index}}"
+                                                       #montanteAtual="ngModel"
+                                                       [(ngModel)]="item.montanteAtual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$"
+                                                       (keyup.arrowup)="item.montanteAtual = arrowUp(montanteAtual.value)"
+                                                       (keyup.arrowdown)="item.montanteAtual = arrowDown(montanteAtual.value, true)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       required>
+                                            </td>
+                                            <td class="px-2" style="white-space: nowrap">
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="investimento-sugerido-{{index}}"
+                                                       name="investimento-sugerido-{{index}}"
+                                                       #sugerido="ngModel"
+                                                       [(ngModel)]="item.sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       (keyup.arrowup)="item.sugerido = arrowUp(sugerido.value)"
+                                                       (keyup.arrowdown)="item.sugerido = arrowDown(sugerido.value, true)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       required>
+                                            </td>
+                                            <td class="px-2" style="white-space: nowrap"> <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="investimento-planoAcao-{{index}}"
+                                                       name="investimento-planoAcao-{{index}}"
+                                                       #planoAcao="ngModel"
+                                                       [(ngModel)]="item.planoAcao"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
+                                                       (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, true)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       required></td>
+                                            <td class="td-actions">
+                                                <a class="btn btn-trash" title="Remover linha" (click)="removerInvestimento(item)">
+                                                    <fa-icon [icon]="faTrash"></fa-icon>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td></td>
+                                            <td [attr.colspan]="6" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                            <td></td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Produto -->
+                    <div class="form-row mb-2">
+                        <div class="home__container">
+                            <div class="home__container-header mb-2">
+                                <h6>Produto</h6>
+                                <div class="d-flex justify-content-end align-items-center w-100">
+                                    <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
+                                        <p-dropdown
+                                                    class="form-control"
+                                                    id="carteirasSetup"
+                                                    name="carteirasSetup"
+                                                    #_carteirasSetup="ngModel"
+                                                    [class.form-control-loading]="loadingCarteiraSetup"
+                                                    [disabled]="loadingCarteiraSetup"
+                                                    [options]="carteirasSetup"
+                                                    [(ngModel)]="planner.carteiraSetup_Id"
+                                                    optionLabel="nome"
+                                                    optionValue="id"
+                                                    [filter]="true"
+                                                    filterBy="nome"
+                                                    [showClear]="true"
+                                                    placeholder="Selecione para adicionar"
+                                                    (ngModelChange)="carteiraSetupChange(_carteirasSetup)"
+                                                    [required]="true">
+                                        </p-dropdown>
+                                    </div>
+                                    <button type="button"
+                                            triggers="mouseenter:mouseleave"
+                                            class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
+                                            (click)="adicionarProdutoCarteira(form)"
+                                            *ngIf="(planner.carteiraSetup_Id != 0 && mudouCarteiraSetup)
+                                || planner.planejamentoProduto.length == 0"> Salvar </button>
+                                    <a class="link ml-3"
+                                       [routerLink]="['produto']"
+                                       *ngIf="planner.planejamentoInvestimento.length > 0
+                                                && planner.planejamentoProduto.length > 0
+                                                && !mudouCarteiraSetup"> Adicionar outros produtos </a>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <p class="text-danger px-2" *ngIf="planner.planejamentoInvestimento.length == 0">* Insira um investimento para adicionar um produto</p>
+                                <p-table
+                                         [value]="planner.planejamentoProduto"
+                                         [responsive]="true"
+                                         responsiveLayout="scroll"
+                                         class="table table-editable"
+                                         emptyMessage="Nenhum registro">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr class="primary">
+                                            <th class="text-right position-sticky" style="white-space: nowrap;">Produto</th>
+                                            <th style="white-space: nowrap;">Custos/Taxas</th>
+                                            <th style="white-space: nowrap;">Percentual</th>
+                                            <th style="white-space: nowrap;">Rentabilidade</th>
+                                            <th style="white-space: nowrap;">Rentab. Liquida</th>
+                                            <th style="white-space: nowrap;">Montante Atual</th>
+                                            <th style="white-space: nowrap;">Montante Sugerida</th>
+                                            <th style="white-space: nowrap;">Plano de Ação</th>
+                                            <th class="td-actions"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-item let-index="rowIndex">
+                                        <tr>
+                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                                <small><b>{{ item.produtoTributacaoRel?.produto?.descricao }}</b></small>
+                                            </td>
+                                            <td> 
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="investimento-custosTaxas-{{index}}"
+                                                       name="investimento-custosTaxas-{{index}}"
+                                                       #custosTaxas="ngModel"
+                                                       [(ngModel)]="item.custosTaxas"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [allowNegativeNumbers]="false"
+                                                       (keyup.arrowup)="item.custosTaxas = arrowUp(custosTaxas.value)"
+                                                       (keyup.arrowdown)="item.custosTaxas = arrowDown(custosTaxas.value, false)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave">
+                                            </td>
+                                            <td class="px-2" style="white-space: nowrap">
+                                                       {{ item.percentual | mask : 'separator' : ',' }}%
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="produto-rentabilidade-{{index}}"
+                                                       name="produto-rentabilidade-{{index}}"
+                                                       #rentabilidade="ngModel"
+                                                       [(ngModel)]="item.rentabilidade"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [allowNegativeNumbers]="true"
+                                                       (keyup.arrowup)="item.rentabilidade = arrowUp(rentabilidade.value)"
+                                                       (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       [required]="true">
+                                            </td>
+                                            <td class="px-2" style="white-space: nowrap">{{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}%</td>
+                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : ',' }} </td>
+                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.sugerido | mask : 'separator' : ',' }} </td>
+                                            <td class="px-2" style="white-space: nowrap">
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="produto-planoAcao-{{index}}"
+                                                       name="produto-planoAcao-{{index}}"
+                                                       #planoAcao="ngModel"
+                                                       [(ngModel)]="item.planoAcao"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [allowNegativeNumbers]="true"
+                                                       (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
+                                                       (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, false)"
+                                                       [ngbPopover]="setaUpDown"
+                                                       triggers="mouseenter:mouseleave"
+                                                       [required]="true">
+                                            </td>
+                                            <td class="td-actions">
+                                                <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)">
+                                                    <fa-icon [icon]="faTrash"></fa-icon>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Total: <span>{{ percentualTotalProduto }}</span> %</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td></td>
+                                            <td [attr.colspan]="7" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                            <td></td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Solução Inicial -->
+                    <div class="form-row mb-2">
+                        <div class="home__container">
+                            <div class="home__container-header mb-2">
+                                <h6>Solução Inicial</h6>
+                            </div>
+                            <div class="form-row table-responsive mb-2">
+                                <table class="table table-editable mb-0">
+                                    <thead>
+                                        <tr class="primary">
+                                            <th colspan="6" class="text-center p-2">
+                                                <h6>Agregando Valor</h6>
+                                            </th>
+                                        </tr>
+                                        <tr class="">
+                                            <th colspan="2" class="text-right primary">Montante Total</th>
+                                            <th class="p-0">
+                                                <input type="text"
+                                                       class="form-control form-control-solucaoInicial"
+                                                       id="solucao_montante_Atual"
+                                                       name="solucao_montante_Atual"
+                                                       #solucao_montante_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.montante"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </th>
+                                            <th class="primary">Exposição a Risco</th>
+                                            <th class="p-0" colspan="2">
+                                                <input type="text"
+                                                       class="form-control form-control-solucaoInicial"
+                                                       id="solucao_riscoAssumido_Atual"
+                                                       name="solucao_riscoAssumido_Atual"
+                                                       #solucao_riscoAssumido_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.riscoAssumido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [readOnly]="true">
+                                            </th>
+                                        </tr>
+                                        <tr class="subheader" class="primary">
+                                            <th style="white-space: nowrap;" class="text-right">Carteira</th>
+                                            <th style="white-space: nowrap;">Rent. Atual <small>(ano)</small></th>
+                                            <th style="white-space: nowrap;">Retorno Anual</th>
+                                            <th style="white-space: nowrap;">Retorno Mensal</th>
+                                            <th style="white-space: nowrap;">Patrimônio Máximo</th>
+                                            <th style="white-space: nowrap;">Tempo <small>(anos)</small></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
+                                                <small>Atual</small>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_rentabilidade_Atual"
+                                                       name="solucao_rentabilidade_Atual"
+                                                       #solucao_rentabilidade_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoAnual_Atual"
+                                                       name="solucao_retornoAnual_Atual"
+                                                       #solucao_retornoAnual_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoMensal_Atual"
+                                                       name="solucao_retornoMensal_Atual"
+                                                       #solucao_retornoMensal_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_plMax_Atual"
+                                                       name="solucao_plMax_Atual"
+                                                       #solucao_plMax_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_idadeMax_Atual"
+                                                       name="solucao_idadeMax_Atual"
+                                                       #solucao_idadeMax_Atual="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Atual"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
+                                                <small>Sugerida</small>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_rentabilidade_Sugerida"
+                                                       name="solucao_rentabilidade_Sugerida"
+                                                       #solucao_rentabilidade_Sugerida="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Sugerida"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoAnual_Sugerido"
+                                                       name="solucao_retornoAnual_Sugerido"
+                                                       #solucao_retornoAnual_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoMensal_Sugerido"
+                                                       name="solucao_retornoMensal_Sugerido"
+                                                       #solucao_retornoMensal_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_plMax_Sugerido"
+                                                       name="solucao_plMax_Sugerido"
+                                                       #solucao_plMax_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_idadeMax_Sugerido"
+                                                       name="solucao_idadeMax_Sugerido"
+                                                       #solucao_idadeMax_Sugerido="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Sugerido"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
+                                                <small>Diferença</small>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_rentabilidade_Diferenca"
+                                                       name="solucao_rentabilidade_Diferenca"
+                                                       #solucao_rentabilidade_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoAnual_Diferenca"
+                                                       name="solucao_retornoAnual_Diferenca"
+                                                       #solucao_retornoAnual_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_retornoMensal_Diferenca"
+                                                       name="solucao_retornoMensal_Diferenca"
+                                                       #solucao_retornoMensal_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td class="border-primary border-left border-top">
+                                                <!-- {{planner.planejamentoAgregandoValor!.plMax_Diferenca}} <br> -->
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_plMax_Diferenca"
+                                                       name="solucao_plMax_Diferenca"
+                                                       #solucao_plMax_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td class="border-primary border">
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="solucao_idadeMax_Diferenca"
+                                                       name="solucao_idadeMax_Diferenca"
+                                                       #solucao_idadeMax_Diferenca="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Diferenca"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
+                                            </td>
+                                            <td class="px-3 bg-light text-center" style="white-space: nowrap;" colspan="2">
+                                                <span><b>Melhora de Desempenho</b></span>
+                                            </td>
+                                            <td class="px-3 bg-light text-left">
+                                                <span>
+                                                    <fa-icon [icon]="faArrowRight"></fa-icon>
+                                                </span>
+                                            </td>
+                                            <td class="border-primary border-left border-bottom">
+                                                <input type="text"
+                                                       class="form-control h2 mb-0 font-weight-bold"
+                                                       style="font-size: 20px"
+                                                       id="solucao_pL_Desempenho"
+                                                       name="solucao_pL_Desempenho"
+                                                       #solucao_pL_Desempenho="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.pL_Desempenho"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       prefix="R$ "
+                                                       [readOnly]="true">
+                                            </td>
+                                            <td class="border-primary border">
+                                                <input type="text"
+                                                       class="form-control h2 mb-0 font-weight-bold"
+                                                       style="font-size: 20px"
+                                                       id="solucao_idade_Desempenho"
+                                                       name="solucao_idade_Desempenho"
+                                                       #solucao_idade_Desempenho="ngModel"
+                                                       [(ngModel)]="planner.planejamentoAgregandoValor!.idade_Desempenho"
+                                                       mask="separator.5"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       [readOnly]="true">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Patrimônio por Idade -->
+                    <div class="form-row mb-2">
+                        <div class="home__container">
+                            <div class="home__container-header mb-2">
+                                <h6>Patrimônio por Idade</h6>
+                            </div>
+                            <div class="form-row chart-container" id="chart-patrimonio-idade">
+                                <p-chart #chartPatrimonioIdade [data]="chartPatrimonioIdadeData" [options]="chartPatrimonioIdadeOptions" [width]="chartSize['chart-patrimonio-idade']['width']" [height]="chartSize['chart-patrimonio-idade']['height']"></p-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Comparativo Investimento x Produto -->
+                    <div class="form-row mb-2">
+                        <app-grafico-comparativo style="width: 100%" #investimentoGraficos [investimentos]="planner.planejamentoInvestimento" [produtos]="planner.planejamentoProduto"></app-grafico-comparativo>
+                    </div>
                 </div>
             </div>
             <div class="form-footer-submit-fixed">

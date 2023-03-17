@@ -1,18 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { x } from 'pdfkit';
-import { Empresa } from 'src/app/models/empresa.model';
 import { PercentualRisco } from 'src/app/models/percentual-risco.model';
 import { PerfilInvestidor } from 'src/app/models/perfilInvestidor.model';
-import { Produto } from 'src/app/models/produto.model';
-import { Tributacao } from 'src/app/models/tributacao.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
-import { EmpresaService } from 'src/app/services/empresa.service';
-import { Crypto } from 'src/app/utils/crypto';
-import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
     selector: 'app-form-percentual-risco',

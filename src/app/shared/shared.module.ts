@@ -21,6 +21,7 @@ import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component
 import { FormProdutoComponent } from './produtos/form/form.component';
 import { ListSharedComponent } from "./list/list.component";
 import { FormClienteComponent } from './cliente/form/form.component';
+import { EmpresaSelectComponent } from './empresa-select/empresa-select.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { FormClienteComponent } from './cliente/form/form.component';
         FormPercentualRiscoComponent,
         FormClienteComponent,
         ListSharedComponent,
+        EmpresaSelectComponent,
     ],
     imports: [
         CommonModule,
@@ -55,6 +57,7 @@ import { FormClienteComponent } from './cliente/form/form.component';
         FormPercentualRiscoComponent,
         FormClienteComponent,
         ListSharedComponent,
+        EmpresaSelectComponent,
     ],
 })
 export class SharedModule {

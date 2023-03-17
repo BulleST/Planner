@@ -73,10 +73,10 @@ export class ProdutoService {
                 return false;
             }
             item.tipoLiquidez = tipoLiquidez;
-            if (item.produtoTributacaoRel.length == 0) {
-                this.toastr.error('Selecione pelo menos uma tributação');
-                return false;
-            }
+            // if (item.produtoTributacaoRel.length == 0) {
+            //     this.toastr.error('Selecione pelo menos uma tributação');
+            //     return false;
+            // }
 
             list.sort((x, y) => x.id - y.id)
             var lastId = list.length == 0 ? 0 : list[list.length - 1].id;
@@ -84,9 +84,9 @@ export class ProdutoService {
             item.registroNaoSalvo = true;
 
             let a = Object.assign({}, item)
-            a.produtoTributacaoRel.map(x => {
-                x.produto.produtoTributacaoRel = [];
-            });
+            // a.produtoTributacaoRel.map(x => {
+            //     x.produto.produtoTributacaoRel = [];
+            // });
             list.push(a);
             this.empresa.produto = list;
             this.empresaService.setObject(this.empresa);
@@ -125,15 +125,15 @@ export class ProdutoService {
                 }
                 item.tipoLiquidez = tipoLiquidez;
 
-                if (item.produtoTributacaoRel.length == 0) {
-                    this.toastr.error('Selecione pelo menos uma tributação');
-                    return false;
-                }
+                // if (item.produtoTributacaoRel.length == 0) {
+                //     this.toastr.error('Selecione pelo menos uma tributação');
+                //     return false;
+                // }
 
                 let produto = Object.assign({}, item)
-                produto.produtoTributacaoRel.map(x => {
-                    x.produto.produtoTributacaoRel = [];
-                });
+                // produto.produtoTributacaoRel.map(x => {
+                //     x.produto.produtoTributacaoRel = [];
+                // });
                 list.splice(index, 1, produto);
                 this.empresa.produto = list;
                 this.empresaService.setObject(this.empresa);

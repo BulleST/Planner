@@ -1,6 +1,6 @@
 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
     <div class="form-row">
-        <div class="form-group col-lg-12 col-md-12 col-sm-12">
+        <div class="form-group col-lg-6 col-md-8 col-sm-12 col-12">
             <label for="descricao">Nome: <span class="text-danger">*</span></label>
             <input type="text"
                    class="form-control"
@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-lg-4 col-md-4 col-sm-12">
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
             <label for="tipoAtivo_Id">Tipo Ativo: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
@@ -38,7 +38,7 @@
                 <p class="text-danger" *ngIf="tipoAtivo_Id.errors['required']">Este campo é obrigatório.</p>
             </div>
         </div>
-        <div class="form-group col-lg-4 col-md-4 col-sm-12">
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
             <label for="tipoRisco_Id">Tipo Risco: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
@@ -58,7 +58,7 @@
                 <p class="text-danger" *ngIf="tipoRisco_Id.errors['required']">Este campo é obrigatório.</p>
             </div>
         </div>
-        <div class="form-group col-lg-4 col-md-4 col-sm-12">
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
             <label for="tipoLiquidez_Id">Tipo Liquidez: <span class="text-danger">*</span></label>
             <select
                     class="form-control"
@@ -79,130 +79,6 @@
             </div>
         </div>
     </div>
-    <div class="form-row">
-        <div class="form-group col-lg-6 col-md-6 col-sm-12">
-            <label for="taxaAdm">Taxa ADM: <span class="text-danger">*</span></label>
-            <input type="text"
-                   class="form-control"
-                   name="taxaAdm"
-                   id="taxaAdm"
-                   #taxaAdm="ngModel"
-                   [(ngModel)]="objeto.taxaAdm"
-                   required
-                   popoverClass="popover-danger"
-                   [ngbPopover]="campoObrigatorio"
-                   triggers="mouseenter:mouseleave"
-                   mask="separator"
-                   thousandSeparator="."
-                   decimalMarker=","
-                   suffix=" %">
-            <div *ngIf="taxaAdm.touched && taxaAdm.errors">
-                <p class="text-danger" *ngIf="taxaAdm.errors['required']">Este campo é obrigatório.</p>
-                <p class="text-danger" *ngIf="taxaAdm.errors['mask']">Esse campo é incorreto</p>
-            </div>
-        </div>
-        <div class="form-group col-lg-6 col-md-6 col-sm-12">
-            <label for="taxaPfee">Taxa PFEE: <span class="text-danger">*</span></label>
-            <input type="text"
-                   class="form-control"
-                   name="taxaPfee"
-                   id="taxaPfee"
-                   #taxaPfee="ngModel"
-                   [(ngModel)]="objeto.taxaPfee"
-                   required
-                   popoverClass="popover-danger"
-                   [ngbPopover]="campoObrigatorio"
-                   triggers="mouseenter:mouseleave"
-                   mask="separator"
-                   thousandSeparator="."
-                   decimalMarker=","
-                   suffix=" %">
-            <div *ngIf="taxaPfee.touched && taxaPfee.errors">
-                <p class="text-danger" *ngIf="taxaPfee.errors['required']">Este campo é obrigatório.</p>
-                <p class="text-danger" *ngIf="taxaPfee.errors['mask']">Esse campo é incorreto</p>
-            </div>
-        </div>
-    </div>
-    <!-- <div class="form-row d-flex w-100 flex-wrap align-items-stretch">
-        <p class="col-12 mb-1">Tributação: <span class="text-danger">*</span></p>
-        <p class="col-12 mb-1"><small>Clique e arraste para selecionar as tributações aplicadas a esse produto</small></p>
-        <div class="col-lg-6 col-md-6 col-sm-12">
-            <div class="w-100 bg-light"
-                 cdkDropList
-                 #listOne="cdkDropList"
-                 [cdkDropListData]="_tributacao"
-                 [cdkDropListConnectedTo]="[listTwo]"
-                 (cdkDropListDropped)="drop($event)"
-                 [class.empty]="objeto.tributacao.length == 0 && !loading">
-                <div *ngIf="_tributacao.length == 0 && loadingTributacao" class="bg-light d-flex align-items-center justify-content-center flex-column" style="height: 300px;">
-                    <span class="spinner-border spinner-border-sm"></span>
-                    <p class="mt-1">Carregando...</p>
-                </div>
-                <div *ngIf="_tributacao.length > 0 && !loadingTributacao">
-                    <div class="p-0 d-flex" *ngFor="let item of _tributacao" cdkDrag>
-                        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                        <div class="d-flex align-items-center justify-content-center px-2 mr-2 bg-primary text-light border-bottom"> {{item.id}} </div>
-                        <div class=" w-100 pl-3 py-1 border-bottom">
-                            <p class="mb-0"><small><strong>{{item.descricao}}</strong></small></p>
-                            <p class="mb-0"><small><strong>Alíquota: </strong> {{ item.aliquota | currency : 'BRL' : '' : '1.2-2' }}%</small></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-12">
-            <div class="w-100 bg-light cdkDrag"
-                 cdkDropList
-                 #listTwo="cdkDropList"
-                 [cdkDropListData]="objeto.tributacao"
-                 [cdkDropListConnectedTo]="[listOne]"
-                 (cdkDropListDropped)="drop($event)"
-                 [class.empty]="objeto.tributacao.length == 0">
-                <div class="p-0 d-flex" *ngFor="let item of objeto.tributacao" cdkDrag>
-                    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                    <div class="d-flex align-items-center justify-content-center px-2 mr-2 bg-primary text-light border-bottom"> {{item.id}} </div>
-                    <div class=" w-100 pl-3 py-1 border-bottom">
-                        <p class="mb-0"><small><strong>{{item.descricao}}</strong></small></p>
-                        <p class="mb-0"><small><strong>Alíquota: </strong> {{ item.aliquota | currency : 'BRL' : '' : '1.2-2' }}%</small></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <p-pickList 
-    [source]="_produtoTributacaoRel" 
-    sourceHeader="Selecione ou arraste para o lado"
-    sourceFilterPlaceholder="Pesquisar"
-    [target]="objeto.produtoTributacaoRel" 
-    targetHeader="Solte aqui para selecionar"
-    targetFilterPlaceholder="Pesquisar"
-    [metaKeySelection]="true"
-    [filterBy]="'tributacao.descricao, tributaca.aliquota'"
-    (onMoveToTarget)="move($event)"
-    (onMoveToSource)="move($event)"
-    [dragdrop]="true">
-    <ng-template pTemplate="sourceFilter" let-options="options">
-        <div class="p-picklist-filter">
-            <input ngModel #sourceFilter="ngModel" type="text" (keyup)="options.filter(sourceFilter.value)" role="textbox" class="form-control h-auto" placeholder="Filtrar por nome">
-            <span *ngIf="!sourceFilter.value" class="p-picklist-filter-icon pi pi-search"></span>
-            <span *ngIf="sourceFilter.value" class="p-picklist-filter-icon pi pi-times" (click)="options.reset(); sourceFilter.reset();"></span>
-        </div>
-    </ng-template>
-    <ng-template pTemplate="targetFilter" let-options="options">
-        <div class="p-picklist-filter">
-            <input ngModel #targetFilter="ngModel" type="text" (keyup)="options.filter(targetFilter.value)" role="textbox" class="form-control h-auto" placeholder="Filtrar por nome">
-            <span *ngIf="!targetFilter.value" class="p-picklist-filter-icon pi pi-search"></span>
-            <span *ngIf="targetFilter.value" class="p-picklist-filter-icon pi pi-times" (click)="options.reset(); targetFilter.reset()"></span>
-        </div>
-    </ng-template>
-        <ng-template let-item pTemplate="item">
-            <div>
-                {{item.tributacao.descricao}} <br>
-                <strong>Alíquota: </strong> {{ item.tributacao.aliquota | currency : 'BRL' : '' : '1.2-2' }}%
-            </div>
-        </ng-template>
-    </p-pickList>
     <div class="d-flex p-0 mt-1">
         <div *ngIf="erro || form.invalid" class="m-0">
             <p class="text-red" *ngFor="let err of erro">{{err}}</p>

@@ -147,3 +147,22 @@
 .mat-option-text {
     font-size: 14px !important;
 }
+.td-action {
+    position: sticky;
+    right: 0;
+}
+
+.table-striped tbody tr:nth-of-type(odd) .td-action{
+    background-color: #f3f3f3;
+}
+.table-striped tbody tr:nth-of-type(even) .td-action{
+    background-color: white;
+}
+
+.table-striped tbody tr.selected:nth-of-type(even) .td-action {
+    background-color: #b9c8f3;
+}
+
+.table-striped tbody tr.selected:nth-of-type(odd) .td-action {
+    background-color: #bcc9f1;
+}

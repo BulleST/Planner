@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
         if (!this.accountService.accountValue) {
             this.toastr.error('Acesso não autorizado. Faça login.');
             this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
+            this.accountService.setAccount(undefined)
             return false;
         }
         return true;

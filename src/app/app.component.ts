@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { EmpresaService } from './services/empresa.service';
 import { IsMobile } from './utils/mobile';
 
 @Component({
@@ -10,9 +11,11 @@ import { IsMobile } from './utils/mobile';
 export class AppComponent implements OnInit {
 
     constructor(
-        private isMobile: IsMobile
+        private isMobile: IsMobile,
+        private empresaService: EmpresaService
     ) {
         this.isMobile.set();
+        // this.empresaService.getList().subscribe();
     }
     ngOnInit(): void {
         

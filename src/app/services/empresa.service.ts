@@ -10,10 +10,11 @@ import { AccountService } from './account.service';
     providedIn: 'root'
 })
 export class EmpresaService {
+
     url = environment.url;
     list = new BehaviorSubject<Empresa[]>([]);
 	empresaObject: BehaviorSubject<Empresa>;
-	public empresa: Observable<Empresa>;
+    public empresa: Observable<Empresa>;
 
     constructor(
         private http: HttpClient,
@@ -22,14 +23,6 @@ export class EmpresaService {
     ) {
 		this.empresaObject = new BehaviorSubject<Empresa>(new Empresa);
 		this.empresa = this.empresaObject.asObservable();
-        this.accountService.account.subscribe(res => {
-            if (res && res.perfilAcesso.perfil == 'Master') {
-                
-            } 
-            else if (res && res.perfilAcesso.perfil == 'Backoffice') {
-                // this.setObject(res.empresa_Id)
-            }
-        })
     }
 
     public get object()  {

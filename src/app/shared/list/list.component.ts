@@ -105,7 +105,6 @@ export class ListSharedComponent implements OnInit, OnChanges {
     }
 
     getCellData(row: any, col: Column): any {
-        // console.log(col.field, row)
         return this.table.getCellData(row, col);
     }
 }

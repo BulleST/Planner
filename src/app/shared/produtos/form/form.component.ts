@@ -1,19 +1,11 @@
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
 import { Produto, ProdutoRequest } from 'src/app/models/produto.model';
 import { TipoAtivo } from 'src/app/models/tipoAtivo.model';
 import { TipoLiquidez } from 'src/app/models/tipoLiquidez.model';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
-import { Tributacao } from 'src/app/models/tributacao.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
-import { EmpresaService } from 'src/app/services/empresa.service';
-import { Crypto } from 'src/app/utils/crypto';
-import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
     selector: 'app-form-produto',
@@ -26,8 +18,8 @@ export class FormProdutoComponent implements OnInit {
     @Input() erro: any[] = [];
     @Output() sendData: EventEmitter<ProdutoRequest> = new EventEmitter<ProdutoRequest>();
 
-    _tributacao: Tributacao[] = [];
-    _produtoTributacaoRel: ProdutoTributacaoRel[] = [];
+    // _tributacao: Tributacao[] = [];
+    // _produtoTributacaoRel: ProdutoTributacaoRel[] = [];
     _tipoAtivo: TipoAtivo[] = [];
     _tipoRisco: TipoRisco[] = [];
     _tipoLiquidez: TipoLiquidez[] = [];
@@ -42,30 +34,30 @@ export class FormProdutoComponent implements OnInit {
         private dropdownService: DropdownService
     ) {
 
-        this.dropdownService.tributacao.subscribe(res => {
-            this._tributacao = res.filter(x => !this.objeto.produtoTributacaoRel.map(y => y.id).includes(x.id))
-        });
-        this.dropdownService.getTributacao().subscribe({
-            next: (res) => {
-                this._tributacao = res.filter(x => !this.objeto.produtoTributacaoRel.map(y => y.tributacao_Id).includes(x.id))
+        // this.dropdownService.tributacao.subscribe(res => {
+        //     this._tributacao = res.filter(x => !this.objeto.produtoTributacaoRel.map(y => y.id).includes(x.id))
+        // });
+        // this.dropdownService.getTributacao().subscribe({
+        //     next: (res) => {
+        //         this._tributacao = res.filter(x => !this.objeto.produtoTributacaoRel.map(y => y.tributacao_Id).includes(x.id))
 
-                this._produtoTributacaoRel = this._tributacao.map(x => {
-                                                    return {
-                                                        id: 0,
-                                                        produto: this.objeto,
-                                                        produto_Id: this.objeto.id,
-                                                        tributacao_Id: x.id,
-                                                        tributacao: x
-                                                    }
-                                                })
-                this.loadingTributacao = false;
-            },
-            error: (err) => {
-                console.error(err)
-                this.loadingTributacao = false;
-            },
-            complete: () => this.loadingTributacao = false
-        });
+        //         this._produtoTributacaoRel = this._tributacao.map(x => {
+        //                                             return {
+        //                                                 id: 0,
+        //                                                 produto: this.objeto,
+        //                                                 produto_Id: this.objeto.id,
+        //                                                 tributacao_Id: x.id,
+        //                                                 tributacao: x
+        //                                             }
+        //                                         })
+        //         this.loadingTributacao = false;
+        //     },
+        //     error: (err) => {
+        //         console.error(err)
+        //         this.loadingTributacao = false;
+        //     },
+        //     complete: () => this.loadingTributacao = false
+        // });
 
         this.dropdownService.tipoLiquidez.subscribe(res => this._tipoLiquidez = res);
         this.dropdownService.getLiquidez().subscribe({
@@ -119,11 +111,11 @@ export class FormProdutoComponent implements OnInit {
             this.erro = ['Campos inválidos'];
             return;
         }
-        if (this.objeto.produtoTributacaoRel.length == 0) {
-            this.toastr.error('Selecione pelo menos uma tributação para continuar');
-            this.erro = ['Selecione pelo menos uma tributação para continuar'];
-            return;
-        }
+        // if (this.objeto.produtoTributacaoRel.length == 0) {
+        //     this.toastr.error('Selecione pelo menos uma tributação para continuar');
+        //     this.erro = ['Selecione pelo menos uma tributação para continuar'];
+        //     return;
+        // }
         this.erro = [];
 
         let model: ProdutoRequest = {
@@ -132,7 +124,7 @@ export class FormProdutoComponent implements OnInit {
             tipoAtivo_Id: this.objeto.tipoAtivo_Id, 
             tipoRisco_Id: this.objeto.tipoRisco_Id, 
             tipoLiquidez_Id: this.objeto.tipoLiquidez_Id, 
-            produtoTributacaoRel: this.objeto.produtoTributacaoRel.map(x => ({ tributacao_Id: x.tributacao_Id})),
+            // produtoTributacaoRel: this.objeto.produtoTributacaoRel.map(x => ({ tributacao_Id: x.tributacao_Id})),
             taxaAdm: this.objeto.taxaAdm, 
             taxaPfee: this.objeto.taxaPfee, 
             descricao: this.objeto.descricao.trim(),
@@ -140,18 +132,18 @@ export class FormProdutoComponent implements OnInit {
 
         this.sendData.emit(model);
     }
-    drop(event: CdkDragDrop<ProdutoTributacaoRel[]>) {
-        if (event.previousContainer === event.container) {
-            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-        } else {
-            transferArrayItem(
-                event.previousContainer.data,
-                event.container.data,
-                event.previousIndex,
-                event.currentIndex,
-            );
-        }
-        this.objeto.produtoTributacaoRel.sort((x, y) => x.id - y.id)
-        this._tributacao.sort((x, y) => x.id - y.id)
-    }
+    // drop(event: CdkDragDrop<ProdutoTributacaoRel[]>) {
+    //     if (event.previousContainer === event.container) {
+    //         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    //     } else {
+    //         transferArrayItem(
+    //             event.previousContainer.data,
+    //             event.container.data,
+    //             event.previousIndex,
+    //             event.currentIndex,
+    //         );
+    //     }
+    //     this.objeto.produtoTributacaoRel.sort((x, y) => x.id - y.id)
+    //     this._tributacao.sort((x, y) => x.id - y.id)
+    // }
 }

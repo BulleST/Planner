@@ -11,7 +11,6 @@ import { Header } from 'src/app/utils/header';
     styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-    // get Role(): typeof Role { return Role };
     Role = Role;
     faHandHoldingDollar = faHandHoldingDollar;
     faUsers = faUsers;

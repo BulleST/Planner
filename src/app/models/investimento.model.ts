@@ -1,4 +1,4 @@
-import { InvestimentoTributacaoRel } from "./investimento-tributacao-rel.model";
+// import { InvestimentoTributacaoRel } from "./investimento-tributacao-rel.model";
 import { TipoAtivo } from "./tipoAtivo.model";
 import { TipoLiquidez } from "./tipoLiquidez.model";
 import { TipoRisco } from "./tipoRisco.model";
@@ -12,6 +12,6 @@ export class Investimento {
     tipoLiquidez_Id: number = 0;
     tipoLiquidez: TipoLiquidez = new TipoLiquidez;
     descricao: string = '';
-    investimentoTributacaoRel: InvestimentoTributacaoRel[] = [];
+    // investimentoTributacaoRel: InvestimentoTributacaoRel[] = [];
 }
 

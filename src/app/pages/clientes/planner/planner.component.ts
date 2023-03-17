@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faArrowRight, faChevronLeft, faPlus, faTimes, faTrash, faTrashAlt, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faChartPie, faChevronLeft, faPlus, faTimes, faTrash, faTrashAlt, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
@@ -38,6 +38,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     faArrowRight = faArrowRight;
     faPlus = faPlus;
     faTrashAlt = faTrashAlt;
+    faChartPie = faChartPie;
 
     modalOpen = false;
 
@@ -245,21 +246,22 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.setChartWidth('chart-patrimonio-idade');
         this.planner.planejamentoGrafico.sort((x, y) => x.idade - y.idade)
         this.chartPatrimonioIdadeData = {
-            labels: this.planner.planejamentoGrafico.map(x => x.idade),
-            // labels: Array.from({length: 21}, (_, i) => i * 5),
+            // labels: this.planner.planejamentoGrafico.map(x => x.idade),
+            labels: Array.from({length: 18}, (_, i) => i * 5), // int[]
             datasets: [
                 {
                     type: 'line',
                     label: 'Planejado',
-                    // data: Array.from({length: 21}, (_, i) => parseInt((Math.random() * (100 - 0) + 0).toString())),
-                    data: this.planner.planejamentoGrafico.map(x => x.valorPlanejado),
+                    data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
+                    // data: this.planner.planejamentoGrafico.map(x => x.valorPlanejado),
                     backgroundColor: '#242424',
+                    borderColor: '#2424247a'
                 },
                 {
                     type: 'bar',
                     label: 'Realidade Atual',
-                    // data: Array.from({length: 21}, (_, i) => parseInt((Math.random() * (100 - 0) + 0).toString())),
-                    data: this.planner.planejamentoGrafico.map(x => x.valorAtual),
+                    data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
+                    // data: this.planner.planejamentoGrafico.map(x => x.valorAtual),
                     backgroundColor: '#2d7a95',
                 },
             ]
@@ -292,7 +294,27 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                     min: 0,
                     max: 100,
                     suggestedMax: 100,
-                }
+                    display: true,
+                    title: {
+                        text: 'Idade',
+                        display: true,
+                        align: 'start',
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                },
+                yAxes: {
+                    title: {
+                        text: 'Valor',
+                        display: true,
+                        align: 'start',
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+
+                }  
             },
         };
     }

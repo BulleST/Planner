@@ -3,9 +3,12 @@
         <span class="title-icon">
             <fa-icon [icon]="faCity"></fa-icon>
         </span>
-        <div>
+        <div class="mr-auto">
             <h3 class="page__header-title">Clientes</h3>
-            <p class="page__header-subtitle"><small>Clientes cadastrados em <strong>"Empresa X"</strong></small></p>
+            <p class="page__header-subtitle"><small>Clientes cadastrados em <strong>{{empresaSelected.nome || "Empresa X"}}</strong></small></p>
+        </div>
+        <div class=" ml-auto mb-0 col-xl-3 col-lg-4 col-md-5 col-sm-8 col-12 px-0">
+            <app-empresa-select></app-empresa-select>
         </div>
     </div>
     <div class="page__body">

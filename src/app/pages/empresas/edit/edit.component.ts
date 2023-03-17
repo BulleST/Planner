@@ -118,9 +118,7 @@ export class EditComponent implements OnInit {
                 this.empresaService.get(this.objeto.id).subscribe({
                     next: res => {
                         this.objeto = res;
-                        // this.empresaService.empresaSelected.next(res);
                         this.empresaService.empresaObject.next(res);
-                        console.log(res)
                     },
                     error: err => {
                         this.voltar();

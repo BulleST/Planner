@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
-import { InvestimentoTributacaoRel } from 'src/app/models/investimento-tributacao-rel.model';
 import { Investimento } from 'src/app/models/investimento.model';
 import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimento.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
@@ -85,20 +84,17 @@ export class InvestimentoFormComponent implements OnInit {
     arrowDown(value: number, allowNegative: boolean = false) {
         return arrowDown(value, allowNegative)
     }
-    
-    tributacaoChange(investimentoTributacaoRel: InvestimentoTributacaoRel) {
-        this.objeto.investimentoTributacaoRel_Id = investimentoTributacaoRel?.id ?? 0;
-        let investimento: Investimento = Object.assign({}, this.investimento)
-        investimento.investimentoTributacaoRel = [];
-        this.objeto.investimentoTributacaoRel.investimento = investimento;
-        this.aliquota = this.objeto.investimentoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
-    }
 
     send(model: NgForm) {
         this.loading = true;
         this.erro = [];
         
-        let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimentoTributacaoRel_Id == this.objeto.investimentoTributacaoRel_Id)
+        console.log(this.objeto)
+        console.log(this.planner.planejamentoInvestimento)
+        console.log(this.investimento)
+        this.objeto.investimento = this.investimento;
+        this.objeto.investimento_Id = this.investimento.id;
+        let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimento_Id == this.objeto.investimento_Id)
         if(jaExiste) {
             this.erro.push('Esse investimento já está inserido.')
             this.toastr.error('Esse investimento já está inserido.')

@@ -33,7 +33,6 @@ export class ForgotPasswordComponent implements OnInit {
         this.accountService.forgotPassword(this.object.email)
         .subscribe({
             next: (res) => {
-                console.log(res)
                 this.loading = false;
                 this.erro = '';
                 this.alertService.success(res['message']);

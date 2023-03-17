@@ -17,6 +17,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TableModule } from 'primeng/table';
 import { SliderModule } from 'primeng/slider';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { DeactivatedComponent } from './deactivated/deactivated.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
         CreateComponent,
         EditComponent,
         DeleteComponent,
+        DeactivatedComponent,
     ],
     imports: [
         CommonModule,

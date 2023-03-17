@@ -48,13 +48,18 @@ export class ListComponent implements OnInit {
 
         this.tableLinks = [
             { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
-            { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
         ];
 
         this.table.loading.subscribe(res => this.loading = res);
         this.table.selected.subscribe(res => {
             this.selected = res;
+
+    
             if (this.selected) {
+                this.tableLinks = [
+                    { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
+                    { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] },
+                ];
                this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { ToastrService } from 'ngx-toastr';
 import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
-import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';

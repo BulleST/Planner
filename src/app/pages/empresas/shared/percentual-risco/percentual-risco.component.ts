@@ -71,16 +71,13 @@ export class PercentualRiscoComponent implements OnInit {
 
         // Atribuindo apenas os produtos que não estão
         // em uma carteira setup para não ser salvo duplicado
-        let produtosCarteiraSetup = obj.carteiraSetup.flatMap(x => x.carteiraProdutoRel).map(x => x.produtoTributacaoRel.produto)
+        // let produtosCarteiraSetup = obj.carteiraSetup.flatMap(x => x.carteiraProdutoRel).map(x => x.produtoTributacaoRel.produto)
+        let produtosCarteiraSetup = obj.carteiraSetup.flatMap(x => x.carteiraProdutoRel).map(x => x.produto)
         let produtosCarteiraSetupId = produtosCarteiraSetup.map(x => x.id);
         let produtos = obj.produto.filter(x => !produtosCarteiraSetupId.includes(x.id))
         
         obj.produto = produtos.map(x => {
-            x.produtoTributacaoRel = [];
             delete x.empresa;
-            delete x.tipoAtivo;
-            delete x.tipoRisco;
-            delete x.tipoLiquidez;
             if (x.registroNaoSalvo) {
                 x.id = 0; // removendo o id adicionado pelo front daqueles que não foram salvos no db
             }
@@ -94,22 +91,8 @@ export class PercentualRiscoComponent implements OnInit {
             x.carteiraProdutoRel.map(rel => {
                 if (x.registroNaoSalvo) {
                     // removendo o id adicionado pelo front daqueles que não foram salvos no db
-                    rel.produtoTributacaoRel_Id = 0; 
-                    rel.produtoTributacaoRel.id = 0; 
                     rel.carteiraSetup_Id = 0; 
                 }
-                // removendo o id adicionado pelo front daqueles que não foram salvos no db
-                if (rel.produtoTributacaoRel.produto.registroNaoSalvo) {
-                    rel.produtoTributacaoRel.produto.id = 0; 
-                    rel.produtoTributacaoRel.produto_Id = 0; 
-                }
-                
-                rel.produtoTributacaoRel.produto.produtoTributacaoRel = [];
-                delete rel.produtoTributacaoRel.produto.empresa;
-                delete rel.produtoTributacaoRel.produto.tipoAtivo;
-                delete rel.produtoTributacaoRel.produto.tipoRisco;
-                delete rel.produtoTributacaoRel.produto.tipoLiquidez;
-                
                 return rel
             })
             return x;
@@ -142,7 +125,6 @@ export class PercentualRiscoComponent implements OnInit {
                 }, 
                 error: err => {
                     this.loading = false;
-                    console.log(err);
                     this.erro.push(err.error.message)
                 }
             });
@@ -156,7 +138,6 @@ export class PercentualRiscoComponent implements OnInit {
                 }, 
                 error: err => {
                     this.loading = false;
-                    console.log(err);
                     this.erro.push(err.error.message)
                 }
             });

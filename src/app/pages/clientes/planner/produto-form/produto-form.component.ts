@@ -5,7 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
-import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
+// import { ProdutoTributacaoRel } from 'src/app/models/produto-tributacao-rel.model';
 import { Produto } from 'src/app/models/produto.model';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
@@ -110,40 +110,40 @@ export class ProdutoFormComponent implements OnInit {
             this.produtos = this.produtoService.list.value
             .filter(x => x.tipoRisco_Id == this.selectedRisco?.id)
         } 
-        this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
-        this.objeto.produtoTributacaoRel_Id = 0;
+        // this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
+        // this.objeto.produtoTributacaoRel_Id = 0;
         this.produto = undefined;
         this.aliquota = '';
         this.loadingProdutos = false;
     }
 
     produtoChange() {
-        this.objeto.produtoTributacaoRel_Id = 0;
-        this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
+        // this.objeto.produtoTributacaoRel_Id = 0;
+        // this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
         this.aliquota = '';
     }
 
 
-    tributacaoChange(produtoTributacaoRel: ProdutoTributacaoRel) {
-        let rels = this.planner.planejamentoProduto.map(x => x.produtoTributacaoRel)
-        .find(x => x.produto_Id == produtoTributacaoRel.produto_Id && x.tributacao_Id == produtoTributacaoRel.tributacao_Id)
+    // tributacaoChange(produtoTributacaoRel: ProdutoTributacaoRel) {
+    //     let rels = this.planner.planejamentoProduto.map(x => x.produtoTributacaoRel)
+    //     .find(x => x.produto_Id == produtoTributacaoRel.produto_Id && x.tributacao_Id == produtoTributacaoRel.tributacao_Id)
 
-        if (rels) {
-            this.objeto.produtoTributacaoRel_Id = 0;
-            this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
-            this.aliquota = '';
-            this.produto = undefined;
-            this.alertService.error('Você não pode inserir essa tributação e produto, pois já estão cadastrados.', { keepAfterRouteChange: false, })
-        } else {
-            this.objeto.produtoTributacaoRel_Id = produtoTributacaoRel?.id ?? 0;
-            let produto: Produto = Object.assign({}, this.produto)
-            produto.produtoTributacaoRel = [];
-            this.objeto.produtoTributacaoRel.produto = produto;
-            this.aliquota = this.objeto.produtoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
-        }
+    //     if (rels) {
+    //         this.objeto.produtoTributacaoRel_Id = 0;
+    //         this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
+    //         this.aliquota = '';
+    //         this.produto = undefined;
+    //         this.alertService.error('Você não pode inserir essa tributação e produto, pois já estão cadastrados.', { keepAfterRouteChange: false, })
+    //     } else {
+    //         this.objeto.produtoTributacaoRel_Id = produtoTributacaoRel?.id ?? 0;
+    //         let produto: Produto = Object.assign({}, this.produto)
+    //         produto.produtoTributacaoRel = [];
+    //         this.objeto.produtoTributacaoRel.produto = produto;
+    //         this.aliquota = this.objeto.produtoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
+    //     }
 
 
-    }
+    // }
 
 
     arrowUp(value: number) {

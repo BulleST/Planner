@@ -1,20 +1,20 @@
 .main {
-    min-height: calc(100vh - 50px - 26px);
     padding: 0;
-    margin-top: 10px;
-    background-color: #f3f3f3;
+    z-index: 0;
+    position: relative;
 }
-
 @media (min-width: 800px) {
     .main-content {
         max-width: calc(100vw);
         transition: .3s;
         margin-right: 0;
         margin-left: auto;
+        /* margin-top: 60px; */
+        min-height: calc(100vh - 26px);
     }
 
     .main-content.navigation-open {
-        max-width: calc(100vw - 230px - 20px);
+        max-width: calc(100vw - 240px);
         margin-left: auto;
     }
 }

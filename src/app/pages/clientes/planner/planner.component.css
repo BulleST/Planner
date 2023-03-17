@@ -8,3 +8,13 @@
     outline: none!important;
     box-shadow: none!important
 }
+
+.table td.position-sticky, 
+.table th.position-sticky {
+    position: sticky;
+    left: 0;
+}
+
+.table-editable .form-control {
+    min-width: 110px;
+}

@@ -2,11 +2,11 @@ import { jsonIgnore } from "json-ignore";
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { Empresa } from "./empresa.model";
-import { ProdutoTributacaoRel, ProdutoTributacaoRelRequest } from "./produto-tributacao-rel.model";
+// import { ProdutoTributacaoRel, ProdutoTributacaoRelRequest } from "./produto-tributacao-rel.model";
 import { TipoAtivo } from "./tipoAtivo.model";
 import { TipoLiquidez } from "./tipoLiquidez.model";
 import { TipoRisco } from "./tipoRisco.model";
-import { Tributacao } from "./tributacao.model";
+// import { Tributacao } from "./tributacao.model";
 
 export class Produto {
     id: number = undefined as unknown as number;
@@ -14,12 +14,12 @@ export class Produto {
     empresa_Id: number = undefined as unknown as number;
     empresa?: Empresa;
     tipoAtivo_Id: number = undefined as unknown as number;
-    tipoAtivo?: TipoAtivo;
+    tipoAtivo: TipoAtivo = new TipoAtivo;
     tipoRisco_Id: number = undefined as unknown as number;
-    tipoRisco?: TipoRisco;
+    tipoRisco: TipoRisco = new TipoRisco;
     tipoLiquidez_Id: number = undefined as unknown as number;
-    tipoLiquidez?: TipoLiquidez;
-    produtoTributacaoRel: ProdutoTributacaoRel[] = [];
+    tipoLiquidez: TipoLiquidez = new TipoLiquidez;
+    // produtoTributacaoRel: ProdutoTributacaoRel[] = [];
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;
     cm?: boolean;
@@ -35,7 +35,7 @@ export class ProdutoRequest {
     tipoAtivo_Id: number = undefined as unknown as number;
     tipoRisco_Id: number = undefined as unknown as number;
     tipoLiquidez_Id: number = undefined as unknown as number;
-    produtoTributacaoRel: ProdutoTributacaoRelRequest[] = [];
+    // produtoTributacaoRel: ProdutoTributacaoRelRequest[] = [];
     taxaAdm: number =  '' as unknown as number;
     taxaPfee: number = '' as unknown as number;
     cm?: boolean;

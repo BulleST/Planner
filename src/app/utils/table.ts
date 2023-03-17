@@ -111,8 +111,11 @@ export class Table {
     getCellData(row: any, col: Column): any {
         const nestedProperties: string[] = col.field.split('.');
         let value: any = row;
+
+        // console.log(col.field, row)
+
         for (const prop of nestedProperties) {
-            value = value[prop];
+            value = value[prop] ?? '-';
         }
         if (col.maskType && value != undefined && value.toString().trim() != '') {
             if (col.maskType == MaskType.percentage) {
@@ -129,8 +132,8 @@ export class Table {
                 value = this.mask.applyMask(value, col.mask);
             } else if (col.maskType == MaskType.date) {
                 value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC');
-                
             } else if (col.maskType == MaskType.dateTime) {
+                value = this.datePipe.transform(value, 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
 
             } else {
                 return value ?? '-';

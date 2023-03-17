@@ -48,7 +48,8 @@ export class DeleteComponent implements OnInit {
             let podeExcluir = this.empresaService.empresaObject.value.carteiraSetup
                 .map(x => x.carteiraProdutoRel)
                 .flat()
-                .find(x => x.produtoTributacaoRel.produto.id == this.objeto.id);
+                // .find(x => x.produtoTributacaoRel.produto.id == this.objeto.id);
+                .find(x => x.produto.id == this.objeto.id);
             if (podeExcluir) {
                 this.voltar();
                 this.toastr.error('Você não pode excluir esse produto, pois ele está associado a um setup.')

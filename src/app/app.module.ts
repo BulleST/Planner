@@ -1,4 +1,4 @@
-import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
+import { APP_INITIALIZER, DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
 import { CurrencyPipe, DatePipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { BrowserModule } from '@angular/platform-browser';
@@ -31,6 +31,9 @@ import { NavigationComponent } from './parts/navigation/navigation.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
 import { MinhaEmpresaComponent } from './parts/minha-empresa/minha-empresa.component';
+import { appInitializer } from './helpers/app.initializer';
+import { AccountService } from './services/account.service';
+
 registerLocaleData(localePt);
 
 @NgModule({
@@ -70,6 +73,7 @@ registerLocaleData(localePt);
         DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
+        { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     ],

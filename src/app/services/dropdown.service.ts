@@ -9,7 +9,6 @@ import { PerfilInvestidor } from "../models/perfilInvestidor.model";
 import { TipoAtivo } from "../models/tipoAtivo.model";
 import { TipoLiquidez } from "../models/tipoLiquidez.model";
 import { TipoRisco } from "../models/tipoRisco.model";
-import { Tributacao } from "../models/tributacao.model";
 import { PerfilAcesso } from "../models/account-perfil.model";
 import { EmpresaService } from "./empresa.service";
 
@@ -23,7 +22,6 @@ export class DropdownService {
     tipoRisco = new BehaviorSubject<TipoRisco[]>([]);
     tipoLiquidez = new BehaviorSubject<TipoLiquidez[]>([]);
     perfilAcesso = new BehaviorSubject<PerfilAcesso[]>([]);
-    tributacao = new BehaviorSubject<Tributacao[]>([]);
     perfilInvestidor = new BehaviorSubject<PerfilInvestidor[]>([]);
     carteiraSetup = new BehaviorSubject<CarteiraSetup[]>([]);
     estadoCivil = new BehaviorSubject<EstadoCivil[]>([]);
@@ -66,14 +64,7 @@ export class DropdownService {
             return res;
         }));
     }
-
-    getTributacao() {
-        return this.http.get<Tributacao[]>(`${this.url}/tributacao/getAll`).pipe(map(res => {
-            this.tributacao.next(res);
-            return res;
-        }));
-    }
-
+    
     getPerfilInvestidor() {
         return this.http.get<PerfilInvestidor[]>(`${this.url}/perfilInvestidor/getAll`).pipe(map(res => {
             this.perfilInvestidor.next(res);

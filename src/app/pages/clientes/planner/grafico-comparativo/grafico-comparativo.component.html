@@ -1,0 +1,64 @@
+<!-- <div class="modal__bg modal__bg-grafico" [class.active]="open" (click)="voltar()"></div>
+<div class="modal modal-grafico" [class.active]="open">
+    <div class="modal__inner">
+        <span class="modal-arrow"></span>
+        <div class="modal__content">
+            <div class="modal__header">
+                <a (click)="voltar()" class="modal__header-close btn-close">
+                    <span></span>
+                    <span></span>
+                </a>
+            </div>
+            <div class="modal__body mt-0">
+                
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="home__container col-12">
+    <div class="home__container-header mb-2">
+        <h6>Comparativo</h6>
+    </div>
+    <div class="d-flex flex-wrap">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4 ps-md-0">
+            <p class="card-header border  text-center font-weight-bold w-100">Risco</p>
+            <div class="card card-body rounded-0 d-flex flex-wrap flex-row p-0 pt-4">
+                <div class="col-sm-6 col-6 px-1">
+                    <p class="text-center font-weight-bold w-100 mb-2">Investimento</p>
+                    <p-chart type="pie" #chartRisco_Investimento [data]="chartRiscoData_Investimento" [options]="chartRiscoOptions_Investimento"></p-chart>
+                </div>
+                <div class="col-sm-6 col-6 px-1">
+                    <p class="text-center font-weight-bold w-100 mb-2">Produto</p>
+                    <p-chart type="pie" #chartRisco_Produto [data]="chartRiscoData_Produto" [options]="chartRiscoOptions_Produto"></p-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4 px-sm-0">
+            <p class="card-header border  text-center font-weight-bold w-100">Liquidez</p>
+            <div class="card card-body rounded-0 d-flex flex-wrap flex-row p-0 pt-4">
+                <div class="col-sm-6 col-6 px-1">
+                    <p class="text-center font-weight-bold w-100 mb-2">Investimento</p>
+                    <p-chart type="pie" #chartLiquidez_Investimento [data]="chartLiquidezData_Investimento" [options]="chartLiquidezOptions_Investimento"></p-chart>
+                </div>
+                <div class="col-sm-6 col-6 px-1">
+                    <p class="text-center font-weight-bold w-100 mb-2">Produto</p>
+                    <p-chart type="pie" #chartLiquidez_Produto [data]="chartLiquidezData_Produto" [options]="chartLiquidezOptions_Produto"></p-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-12 mb-4 pe-md-0">
+            <p class="card-header border  text-center font-weight-bold w-100">Ativo</p>
+            <div class="card card-body rounded-0 d-flex flex-wrap flex-row p-0 pt-4">
+                <div class="col-sm-6 col-6 px-1">
+                    <p class="text-center font-weight-bold w-100 mb-2">Investimento</p>
+                    <p-chart type="pie" #chartAtivo_Investimento [data]="chartAtivoData_Investimento" [options]="chartAtivoOptions_Investimento"></p-chart>
+                </div>
+                <div class="col-sm-6 col-6 px-1">
+                    <p class="text-center font-weight-bold w-100 mb-2">Produto</p>
+                    <p-chart type="pie" #chartAtivo_Produto [data]="chartAtivoData_Produto" [options]="chartAtivoOptions_Produto"></p-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

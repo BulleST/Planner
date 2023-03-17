@@ -9,11 +9,7 @@ import { DropdownService } from './dropdown.service';
 import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
-import { CarteiraProdutoRel } from '../models/carteira-produto-rel';
 import { CarteiraSetup } from '../models/carteiraSetup.model';
-import { AlertService } from '../parts/alert/alert.service';
-import { ProdutoTributacaoRel } from '../models/produto-tributacao-rel.model';
-import { MaskApplierService } from 'ngx-mask';
 import { CarteiraRiscoRel } from '../models/carteira-risco-rel.model';
 
 @Injectable({
@@ -45,6 +41,7 @@ export class CarteiraSetupService {
             let obj = this.crypto.decrypt(e);
             obj.carteiraRiscoRel = !obj.carteiraRiscoRel || !obj.carteiraRiscoRel.length ? [] : obj.carteiraRiscoRel;
             obj.carteiraProdutoRel = !obj.carteiraProdutoRel || !obj.carteiraProdutoRel.length ? [] : obj.carteiraProdutoRel;
+            obj.ativo = obj.dataDesativado == undefined || obj.dataDesativado == null || !obj.dataDesativado  || !obj.dataDesativado.trim();
             this.objeto.next(obj);
         }
 
@@ -52,6 +49,7 @@ export class CarteiraSetupService {
     }
 
     setObject(value: CarteiraSetup) {
+        value.ativo = value.dataDesativado == undefined || value.dataDesativado == null || !value.dataDesativado  || !value.dataDesativado.toString().trim();
         value.carteiraRiscoRel = !value.carteiraRiscoRel || !value.carteiraRiscoRel.length ? [] : value.carteiraRiscoRel;
         value.carteiraProdutoRel = !value.carteiraProdutoRel || !value.carteiraProdutoRel.length ? [] : value.carteiraProdutoRel;
         localStorage.setItem('setup', this.crypto.encrypt(value) ?? '');
@@ -59,7 +57,6 @@ export class CarteiraSetupService {
     }
 
     add_To_Empresa_List(item: CarteiraSetup) {
-        console.log(item);
         if (this.empresa) {
             let existe = this.empresa.carteiraSetup.find(x => x.nome.toLowerCase() == item.nome.toLowerCase() && x.id != item.id && x.empresa_Id == item.empresa_Id);
             if (existe) {

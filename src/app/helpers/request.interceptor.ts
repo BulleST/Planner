@@ -32,6 +32,9 @@ export class RequestInterceptor implements HttpInterceptor {
         'accounts/authenticate',
         'accounts/verify-email',
         'accounts/register',
+        'accounts/get-login',
+        'accounts/refresh-token',
+        'accounts/authenticate',
     ]
     excludeUrlsLoading = [
         'tributacao/getAll',
@@ -44,8 +47,9 @@ export class RequestInterceptor implements HttpInterceptor {
         'accounts/verify-email',
     ]
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        var a = this.excludeUrlsLoading.filter(x => request.url.includes(x));
-        if (a.length == 0) {
+        var notLoading = this.excludeUrlsLoading.filter(x => request.url.includes(x));
+        var notToastr = this.excludeUrlsToastr.filter(x => request.url.includes(x));
+        if (notLoading.length == 0) {
           this.table.loading.next(true);
         }
 
@@ -56,12 +60,10 @@ export class RequestInterceptor implements HttpInterceptor {
                     // request in progress
                 } 
                 else {
-                    console.log('tchau')
                     this.table.loading.next(false);
                     if ([200, 204, 201].includes(data.status) 
                         && ['POST', 'PUT', 'DELETE'].includes(request.method)) {
-                        var a = this.excludeUrlsToastr.filter(x => request.url.includes(x));
-                        if (a.length == 0) {
+                        if (notToastr.length == 0) {
                             if (request.method == 'POST') {
                                 this.toastr.success('Operação concluída com sucesso');
                             }
@@ -80,12 +82,14 @@ export class RequestInterceptor implements HttpInterceptor {
                 console.error(err);
                 this.table.loading.next(false);
                 if (err.status == 401) {
-                    if (!this.accountService.accountValue) {
+                    this.router.navigate(['account', 'login']);
                         this.toastr.error('Faça login')
-                        this.router.navigate(['account', 'login']);
-                    } 
-                    this.toastr.error('Acesso não autorizado.');
-                } else {
+                        this.toastr.error('Acesso não autorizado.');
+                } 
+                else if (err.status == 403) {
+                        this.toastr.error('Permissão negada.');
+                }
+                else {
                     this.toastr.error('Ocorreu um erro no processamento da requisição.');
                     if (err.statusText.includes('Unkown Error')) {
                         this.toastr.error("Não foi possível localizar a causa do erro.");

@@ -41,12 +41,11 @@
 
 
 .navigation__toggle-logo {
-    height: 70%;
+    height: 55px;
     overflow: hidden;
-    max-width: 150px;
-    position: relative;
-    width: 150px;
-    transform: translateY(-5px);
+    transform: translateY(-5px) translateX(-40px);
+    padding: 5px 5px 5px 50px;
+    z-index: -1;
 }
 
 .navigation__toggle-logo img {

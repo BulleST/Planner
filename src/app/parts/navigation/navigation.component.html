@@ -3,66 +3,62 @@
         <button class="navigation__toggle" (click)="toggleAside()">
             <span></span><span></span><span></span>
         </button>
-        <div class="navigation__toggle-logo">
-            <img src="assets/img/logo-planner.png" alt="Logo Planner">
-        </div>
     </div>
     <div class="navigation__content">
         <div class="navigation__logo">
-            <!-- <h3>Logo</h3> -->
             <img src="assets/img/logo-planner.png" alt="Logo Planner">
             <hr>
         </div>
         <div class="navigation__links">
             <!-- *ngIf="account?.role == Role.Master || account?.role == Role.Backoffice" -->
-            <!-- <a class="navigation__links-item"  *ngIf="account?.role == Role.Master || account?.role == Role.Backoffice" [routerLink]="['minha-empresa', account?.empresa?.nome]" >
+            <a class="navigation__links-item"  *ngIf="account?.role == Role.Master || account?.role == Role.Backoffice" [routerLink]="['minha-empresa', account?.empresa?.nome]" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faIdCard"></fa-icon>
                 </span>
                Minha empresa
-            </a> -->
-            <!-- *ngIf="account?.role == Role.Admin" -->
-            <!-- <a class="navigation__links-item"  *ngIf="account?.role == Role.Admin" [routerLink]="['empresas']" >
+            </a>
+            <!-- -->
+            <a class="navigation__links-item"  *ngIf="account?.role == Role.Admin" [routerLink]="['empresas']" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faCity"></fa-icon>
                 </span>
                Empresas
-            </a> -->
-            <!-- *ngIf="account?.role == Role.Master || account?.role == Role.Backoffice" -->
-            <a class="navigation__links-item" [routerLink]="['clientes']" >
+            </a>
+            <!---->
+            <a class="navigation__links-item" [routerLink]="['clientes']"  *ngIf="account?.role == Role.Admin || account?.role == Role.Master || account?.role == Role.Backoffice" >
                 <span class="navigation__item-icon">
                     <i class="pi pi-wallet"></i>
                 </span>
                Clientes
             </a>
-            <!-- *ngIf="account?.role == Role.Master" -->
-            <a class="navigation__links-item" [routerLink]="['produtos']" >
+            <!-- -->
+            <a class="navigation__links-item" [routerLink]="['produtos']" *ngIf="account?.role == Role.Admin || account?.role == Role.Master">
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
                 </span>
                 Produtos
             </a>
-            <!-- *ngIf="account?.role == Role.Master" -->
-            <a class="navigation__links-item" [routerLink]="['carteira-setup']" >
+            <!-- -->
+            <a class="navigation__links-item" [routerLink]="['carteira-setup']" *ngIf="account?.role == Role.Admin || account?.role == Role.Master" >
                 <span class="navigation__item-icon">
                     <i class="pi pi-wallet"></i>
                 </span>
                 Setup
             </a>
-            <!-- *ngIf="account?.role == Role.Master" -->
-            <a class="navigation__links-item" [routerLink]="['usuarios']" >
+            <!-- -->
+            <a class="navigation__links-item" [routerLink]="['usuarios']" *ngIf="account?.role == Role.Admin || account?.role == Role.Master">
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faUsers"></fa-icon>
                 </span>
                 Usuários
             </a>
-            <!-- *ngIf="account?.role == Role.Master" -->
-            <a class="navigation__links-item" [routerLink]="['percentual-risco']" >
+            <!-- -->
+            <!-- <a class="navigation__links-item" [routerLink]="['percentual-risco']" *ngIf="account?.role == Role.Admin || account?.role == Role.Master" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faPercent"></fa-icon>
                 </span>
                Percentual de Risco
-            </a>
+            </a> -->
         </div>
     </div>
 </aside>

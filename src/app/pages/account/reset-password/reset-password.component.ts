@@ -35,7 +35,6 @@ export class ResetPasswordComponent implements OnInit {
         this.accountService.resetPassword(this.objeto)
         .subscribe({
             next: (res) => {
-                console.log(res)
                 this.loading = false;
                 this.erro = '';
                 this.alertService.success(res['message']);

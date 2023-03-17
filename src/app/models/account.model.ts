@@ -27,7 +27,7 @@ export interface Account {
     isVerified: boolean;
     jwtToken: string;
     refreshToken: string;
-    empresa_Id?: number;
+    empresa_Id: number;
     empresa?: Empresa;
     perfilAcesso_Id: number;
     perfilAcesso: PerfilAcesso;
@@ -39,7 +39,7 @@ export class Account {
     name: string = '';
     telefoneCelular: number = 0;
     email: string = '';
-    role?: Role
+    role?: Role;
     created: Date = new Date;
     updated?: Date;
     isVerified: boolean = false;
@@ -48,7 +48,7 @@ export class Account {
     perfilAcesso_Id: number = undefined as unknown as number;
     perfilAcesso: PerfilAcesso = undefined as unknown as PerfilAcesso;
     empresa?: Empresa;
-    empresa_Id?: number;
+    empresa_Id: number = undefined as unknown as number;
 }
 
 export class ResetPassword {

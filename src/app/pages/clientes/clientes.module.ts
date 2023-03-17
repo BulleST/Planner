@@ -22,6 +22,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.component';
 import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
+import { GraficoComparativoComponent } from './planner/grafico-comparativo/grafico-comparativo.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { EditComponent } from './edit/edit.component';
     DeletePlannerComponent,
     CreateComponent,
     EditComponent,
+    GraficoComparativoComponent,
   ],
   imports: [
     CommonModule,

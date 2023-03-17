@@ -56,8 +56,6 @@ export class CreateComponent implements OnInit, OnDestroy {
             this.objeto.cliente = this.objeto.cliente ?? []; 
             this.objeto.account = this.objeto.account ?? []; 
             this.objeto.carteiraSetup = this.objeto.carteiraSetup ?? []; 
-
-            console.log(res)
         });   
         let id = 0;
         this.items =  [

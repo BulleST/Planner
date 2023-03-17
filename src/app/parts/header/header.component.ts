@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faIdCard, faKey, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { faIdCard, faKey, faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Header } from 'src/app/utils/header';
 import { ModoEscuro } from 'src/app/utils/modo-escuro';
 import { AccountService } from 'src/app/services/account.service';
@@ -19,11 +19,11 @@ export class HeaderComponent implements OnInit {
     faSignOut = faSignOut;
     faIdCard = faIdCard;
     faKey = faKey;
+    faUser = faUser;
     modoEscuroAtivado = false;
     userLogadoOpen = false;
     userLogado?: Account;
     nomeAbreviado = '';
-
     constructor(
         private modoEscuro: ModoEscuro,
         private accountService: AccountService,

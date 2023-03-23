@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Crypto } from '../utils/crypto';
@@ -9,6 +7,9 @@ import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Planejamento } from '../models/planejamento.model';
 import { PlanejamentoAgregandoValor } from '../models/planejamento-agregandoValor.model';
+import { AccountService } from './account.service';
+import { Account } from '../models/account.model';
+import { Role } from '../models/account-perfil.model';
 
 @Injectable({
     providedIn: 'root'
@@ -18,15 +19,16 @@ export class PlannerService {
     url = environment.url;
     objeto = new BehaviorSubject<Planejamento>(new Planejamento);
     empresa = new Empresa;
+    account = new Account;
 
     constructor(
         private http: HttpClient,
         private crypto: Crypto,
+        private accountService: AccountService,
         private empresaService: EmpresaService
     ) { 
-        this.empresaService.empresaObject.subscribe(res => {
-            this.empresa = res;
-        });
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
+        this.empresaService.empresa.subscribe(res => this.empresa = res);
     }
 
     getObject(): BehaviorSubject<Planejamento> {
@@ -37,25 +39,21 @@ export class PlannerService {
             let obj = this.crypto.decrypt(e);
             this.objeto.next(obj);
         }
-
         return this.objeto;
     }
-
     setObject(value: Planejamento) {
         value.planejamentoAgregandoValor = value.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : value.planejamentoAgregandoValor 
-
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
         this.objeto.next(value);
     }
-
-    getList(empresa_id: number = 1) {
-        return this.http.get<Planejamento[]>(`${this.url}/planejamento/all/${empresa_id}`)
+    getList() {
+        var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
+        return this.http.get<Planejamento[]>(`${this.url}/planejamento/all/${empresaId}`)
         .pipe(map(list => {
             this.list.next(list);
             return list;
         }));
     }
-    
     getByClienteId(cliente_id: number) {
         return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(item => {
             item.principaisObjetivos = item.principaisObjetivos ? item.principaisObjetivos : [];
@@ -64,27 +62,26 @@ export class PlannerService {
             return item;
         }));
     }
-    
     send(request: Planejamento) {
         return this.http.post<Planejamento>(`${this.url}/planejamento/`, request);
     }
-
     create(request: Planejamento) {
+        var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
+        request.cliente.empresa_Id = empresaId;
+        request.account_Id = this.account.id;
+        request.cliente.usuario_Id = this.account.id;
         return this.http.post<Planejamento>(`${this.url}/planejamento/`, request).pipe(map(item => {
             item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
             return item;
         }));
     }
-    
     edit(request: Planejamento) {
         return this.http.put<Planejamento>(`${this.url}/planejamento/`, request).pipe(map(item => {
             item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
             return item;
         }));
     }
-    
     delete(id: number) {
         return this.http.delete<void>(`${this.url}/planejamento/${id}`);
     }
-
 }

@@ -1,5 +1,5 @@
 <div *ngIf="list.length == 0 && !loading" class="p-2">
-    <p>Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink">Clique aqui para adicionar</a></p>
+    <p>Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Clique aqui para adicionar</a></p>
 </div>
 <div class="content" *ngIf="list.length > 0">
     <p-table
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 col-12 d-flex align-items-center justify-content-end flex-wrap flex-lg-row flex-sm-column-reverse px-0">
                     <div class="">
-                        <a class="btn btn-primary w-100 d-block" *ngIf="canCreate" [routerLink]="createLink">Adicionar</a>
+                        <a class="btn btn-primary w-100 d-block" *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Adicionar</a>
                     </div>
                     <div class="mr-2 d-sm-none d-md-block"></div>
                     <div *ngIf="list.length > 0 && filterTable"
@@ -61,14 +61,14 @@
                 <th></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
-            <tr [class.selected]="item == selected" 
-                [class.selectable]="selectable" 
-                [class.selected-many]="selectedItems.includes(item)" 
-                [pSelectableRow]="selectable == true ? item : null" 
-                [pSelectableRowIndex]="selectable ? rowIndex : null">
+        <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex" >
+            <tr [class.selected]="item == selected && eval(menuTable, item) " 
+                [class.selectable]="selectable && eval(menuTable, item) " 
+                [class.selected-many]="selectedItems.includes(item) && eval(menuTable, item) " 
+                [pSelectableRow]="selectable && eval(menuTable, item) ? item : null" 
+                [pSelectableRowIndex]="selectable && eval(menuTable, item) ? rowIndex : null">
                 <td [attr.data-id]="item.id">
-                    <p-tableCheckbox [value]="item" *ngIf="selectable"></p-tableCheckbox>
+                    <p-tableCheckbox [value]="item" *ngIf="selectable && eval(menuTable, item)"></p-tableCheckbox>
                 </td>
                 <td *ngFor="let col of columns">
                     <p *ngIf="col.maskType == maskType.boolean; else comun">
@@ -91,7 +91,7 @@
                     </ng-template>
                 </td>
                 <td class="td-actions">
-                    <div class="actions" *ngIf="menuTable">
+                    <div class="actions" *ngIf="menuTable && eval(menuTable, item)">
                         <button class="actions__toggle" [class.active]="item == selected">
                             <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
                                 <fa-icon [icon]="faEllipsisV"></fa-icon>
@@ -113,7 +113,7 @@
             </tr>
         </ng-template>
     </p-table>
-    <div class="actions__nav" *ngIf="tableLinks.length > 0">
+    <div class="actions__nav" *ngIf="tableLinks.length > 0 && menuTable">
         <div class="actions__nav-inner" *ngIf="selected">
             <a class="actions__nav-link"
                *ngFor="let item of tableLinks"

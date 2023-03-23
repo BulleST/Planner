@@ -25,7 +25,6 @@ export class DeactivatedComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: ModalOpen,
-        private empresaService: EmpresaService,
         public setupService: CarteiraSetupService,
         private crypto: Crypto,
     ) {
@@ -44,11 +43,6 @@ export class DeactivatedComponent implements OnInit {
                 this.voltar();
             }
         });
-
-
-        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.carteiraSetup.find(x => x.id == this.objeto.id) as CarteiraSetup;
-        }
     }
 
     ngOnInit(): void {
@@ -61,27 +55,4 @@ export class DeactivatedComponent implements OnInit {
         this.modal.voltar();
     }
 
-    send() {
-        this.loading = true;
-        this.erro = [];
-        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            let result = this.setupService.delete_To_Empresa_List(this.objeto.id);
-            if (result)
-                this.voltar();
-            this.loading = false;
-        }
-        else {
-            // Enviar para a API
-            this.setupService.deactivated(this.objeto.id, !this.objeto.ativo).subscribe({
-                next: async res => {
-                    await lastValueFrom(this.setupService.getList());
-                    this.voltar();
-                    this.setupService.setObject(new CarteiraSetup);
-                },
-                error: err => {
-                    this.loading = false;
-                }
-            })
-        }
-    }
 }

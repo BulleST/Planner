@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="card-body">
-        <form #form="ngForm" (ngSubmit)="next(form)" class="d-flex flex-column h-100">
+        <form #form="ngForm" (ngSubmit)="send(form)" class="d-flex flex-column h-100">
             <div class="form-row">
                 <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
                     <label for="nome">Nome: <span class="text-danger">*</span></label>
@@ -78,7 +78,16 @@
             <div class="form-row mt-auto">
                 <div class="col-lg-12 d-flex align-items-center">
                     <p *ngIf="form.invalid" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para continuar</p>
-                    <button type="submit" class="btn ml-auto btn-step btn-step-next mt-2" [disabled]="form.invalid || !cnpjValid" [title]="form.invalid ? 'Preencha os campos corretamente para continuar' : 'Próximo passo'">
+                    
+                    <button type="submit" class="btn ml-auto btn-step btn-step-next mt-2" 
+                            *ngIf="isEditPage"
+                            [disabled]="form.invalid || !cnpjValid" 
+                            [title]="form.invalid ? 'Preencha os campos corretamente para continuar' : 'Próximo passo'">
+                        <span class="btn-step-text">Salvar dados cadastrais</span>
+                        <fa-icon [icon]="faCheck"></fa-icon>
+                    </button>
+                    
+                    <button type="button" (click)="next(form)" class="btn ml-2 btn-step btn-step-next mt-2" [disabled]="form.invalid || !cnpjValid" [title]="form.invalid ? 'Preencha os campos corretamente para continuar' : 'Próximo passo'">
                         <span class="btn-step-text">Próximo</span>
                         <fa-icon [icon]="faArrowRight"></fa-icon>
                     </button>

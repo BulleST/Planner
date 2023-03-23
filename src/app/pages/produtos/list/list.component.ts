@@ -1,13 +1,11 @@
-import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
-import { MaskApplierService } from 'ngx-mask';
-import { ToastrService } from 'ngx-toastr';
+import { lastValueFrom } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
+import { Account } from 'src/app/models/account.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { Produto, produtoColumns } from 'src/app/models/produto.model';
-import { ClienteService } from 'src/app/services/cliente.service';
+import { AccountService } from 'src/app/services/account.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { Table } from 'src/app/utils/table';
@@ -19,29 +17,24 @@ import { Table } from 'src/app/utils/table';
 })
 export class ListComponent implements OnInit {
     faHandHoldingDollar = faHandHoldingDollar;
-    objeto: Empresa = new Empresa;
-    produtoColumns = produtoColumns;
+    empresaSelected = new Empresa;
+    columns = produtoColumns;
     list: Produto[] = [];
     tableLinks: MenuTableLink[] = [];
+    account?: Account;
 
     constructor(
         private empresaService: EmpresaService,
-        private produtoService: ProdutoService,
-        private currency: CurrencyPipe,
+        public produtoService: ProdutoService,
         private table: Table,
-
+        private accountService: AccountService,
     ) {
-        this.empresaService.empresaObject.subscribe(res => {
-            this.objeto = res;
-        });
-        
+        this.accountService.account.subscribe(res => this.account = res);
         this.produtoService.list.subscribe(res => this.list = res);
-        this.produtoService.getList().subscribe();
-
-        this.tableLinks = [
-            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
-        ];
-
+        this.empresaService.empresa.subscribe(async res => {
+            this.empresaSelected = res;
+            await lastValueFrom(this.produtoService.getList());
+        });
         this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
@@ -54,6 +47,10 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit(): void {
+    }
+    
+    create = (produtoService: ProdutoService = this.produtoService): void => {
+        produtoService.setObject(new Produto);
     }
 
 }

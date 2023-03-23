@@ -15,28 +15,27 @@ import { TableModule } from 'primeng/table';
 import { DeactivatedComponent } from './deactivated/deactivated.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
-
 @NgModule({
-  declarations: [
-    UsuariosComponent,
-    CreateComponent,
-    ListComponent,
-    EditComponent,
-    DeleteComponent,
-    DeactivatedComponent,
-    ResetPasswordComponent
-  ],
-  imports: [
-    CommonModule,
-    UsuariosRoutingModule,
-    FormsModule,
-    ToastrModule,
-    SharedModule,
-    FontAwesomeModule,
-    TableModule,
-  ],
-  exports: [
-    CreateComponent
-  ]
+    declarations: [
+        UsuariosComponent,
+        CreateComponent,
+        ListComponent,
+        EditComponent,
+        DeleteComponent,
+        DeactivatedComponent,
+        ResetPasswordComponent
+    ],
+    imports: [
+        CommonModule,
+        UsuariosRoutingModule,
+        FormsModule,
+        ToastrModule,
+        SharedModule,
+        FontAwesomeModule,
+        TableModule,
+    ],
+    exports: [
+        CreateComponent
+    ]
 })
 export class UsuariosModule { }

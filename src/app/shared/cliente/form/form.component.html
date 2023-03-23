@@ -1,7 +1,7 @@
 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
     <div class="d-flex flex-wrap row">
         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-            <div class="card card-body">
+            <div class="">
                 <div class="form-row">
                     <div class="form-group col-lg-5 col-md-5 col-sm-12 col-12">
                         <label for="nome">Nome Completo: <span class="text-danger">*</span></label>
@@ -210,95 +210,95 @@
             </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-            <div class="card card-body">
-            <div class="p-datatable-wrapper">
-                <table class="table table-editable table-responsive w-100 d-md-table d-sm-table ">
-                    <thead class="primary">
-                        <tr>
-                            <th></th>
-                            <th>Aposentadoria</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="bg-light px-3 text-right" style="white-space: nowrap;">
-                                <small><b>Idade</b></small>
-                            </td>
-                            <td>
-                                <input type="text"
-                                       class="form-control form-control-number"
-                                       id="idadeAposentadoria"
-                                       name="idadeAposentadoria"
-                                       #idadeAposentadoria="ngModel"
-                                       [(ngModel)]="objeto.idadeAposentadoria"
-                                       mask="0*"
-                                       suffix=" anos"
-                                       [allowNegativeNumbers]="false"
-                                       placeholder="0"
-                                       (keyup.arrowup)="objeto.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
-                                       (keyup.arrowdown)="objeto.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
-                                       [ngbPopover]="campoObrigatorio"
-                                       popoverClass="popover-danger"
-                                       [disablePopover]="idadeAposentadoria.errors == null"
-                                       triggers="mouseenter:mouseleave"
-                                       required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="bg-light px-3 text-right" style="white-space: nowrap;">
-                                <small><b>Renda Mensal</b></small>
-                            </td>
-                            <td>
-                                <input type="text"
-                                       class="form-control form-control-number"
-                                       id="rendaMensalAposentadoria"
-                                       name="rendaMensalAposentadoria"
-                                       #rendaMensalAposentadoria="ngModel"
-                                       [(ngModel)]="objeto.rendaMensalAposentadoria"
-                                       mask="separator.5"
-                                       thousandSeparator="."
-                                       decimalMarker=","
-                                       [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
-                                       [allowNegativeNumbers]="false"
-                                       placeholder="R$ 00,00"
-                                       (keyup.arrowup)="objeto.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
-                                       (keyup.arrowdown)="objeto.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
-                                       [ngbPopover]="campoObrigatorio"
-                                       popoverClass="popover-danger"
-                                       [disablePopover]="rendaMensalAposentadoria.errors == null"
-                                       triggers="mouseenter:mouseleave"
-                                       required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="bg-light px-3 text-right" style="white-space: nowrap;">
-                                <small><b>Rentabilidade</b></small>
-                            </td>
-                            <td>
-                                <input type="text"
-                                       class="form-control form-control-number"
-                                       id="rentabilidadeAposentadoria"
-                                       name="rentabilidadeAposentadoria"
-                                       #rentabilidadeAposentadoria="ngModel"
-                                       [(ngModel)]="objeto.rentabilidadeAposentadoria"
-                                       mask="separator.5"
-                                       thousandSeparator="."
-                                       decimalMarker=","
-                                       [allowNegativeNumbers]="true"
-                                       placeholder="00,00%"
-                                       suffix="%"
-                                       (keyup.arrowup)="objeto.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
-                                       (keyup.arrowdown)="objeto.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
-                                       [ngbPopover]="campoObrigatorio"
-                                       popoverClass="popover-danger"
-                                       [disablePopover]="rentabilidadeAposentadoria.errors == null"
-                                       triggers="mouseenter:mouseleave"
-                                       required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <div class="mt-3">
+                <div class="p-datatable-wrapper">
+                    <table class="table table-editable table-responsive w-100 d-md-table d-sm-table ">
+                        <thead class="primary">
+                            <tr>
+                                <th></th>
+                                <th>Aposentadoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="bg-light px-3 text-right" style="white-space: nowrap;">
+                                    <small><b>Idade</b></small>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           class="form-control form-control-number"
+                                           id="idadeAposentadoria"
+                                           name="idadeAposentadoria"
+                                           #idadeAposentadoria="ngModel"
+                                           [(ngModel)]="objeto.idadeAposentadoria"
+                                           mask="0*"
+                                           suffix=" anos"
+                                           [allowNegativeNumbers]="false"
+                                           placeholder="0"
+                                           (keyup.arrowup)="objeto.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
+                                           (keyup.arrowdown)="objeto.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="idadeAposentadoria.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-light px-3 text-right" style="white-space: nowrap;">
+                                    <small><b>Renda Mensal</b></small>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           class="form-control form-control-number"
+                                           id="rendaMensalAposentadoria"
+                                           name="rendaMensalAposentadoria"
+                                           #rendaMensalAposentadoria="ngModel"
+                                           [(ngModel)]="objeto.rendaMensalAposentadoria"
+                                           mask="separator.5"
+                                           thousandSeparator="."
+                                           decimalMarker=","
+                                           [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
+                                           [allowNegativeNumbers]="false"
+                                           placeholder="R$ 00,00"
+                                           (keyup.arrowup)="objeto.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
+                                           (keyup.arrowdown)="objeto.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="rendaMensalAposentadoria.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-light px-3 text-right" style="white-space: nowrap;">
+                                    <small><b>Rentabilidade</b></small>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           class="form-control form-control-number"
+                                           id="rentabilidadeAposentadoria"
+                                           name="rentabilidadeAposentadoria"
+                                           #rentabilidadeAposentadoria="ngModel"
+                                           [(ngModel)]="objeto.rentabilidadeAposentadoria"
+                                           mask="separator.5"
+                                           thousandSeparator="."
+                                           decimalMarker=","
+                                           [allowNegativeNumbers]="true"
+                                           placeholder="00,00%"
+                                           suffix="%"
+                                           (keyup.arrowup)="objeto.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
+                                           (keyup.arrowdown)="objeto.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
+                                           [ngbPopover]="campoObrigatorio"
+                                           popoverClass="popover-danger"
+                                           [disablePopover]="rentabilidadeAposentadoria.errors == null"
+                                           triggers="mouseenter:mouseleave"
+                                           required>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

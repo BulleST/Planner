@@ -39,13 +39,13 @@ export class HeaderComponent implements OnInit {
         this.accountService.account.subscribe(async res => {
             this.userLogado = res;
             if (res) {
+                this.perfil = Role[res.perfilAcesso_Id]
                 let array = res?.name.split(' ')
                 if (array.length == 1) {
                     this.nomeAbreviado = array[0];
                 } else {
                     this.nomeAbreviado = array[0] + ' ' + array[array.length - 1];
                 }
-                this.perfil = Role[res.perfilAcesso_Id]
             }
         })
     }

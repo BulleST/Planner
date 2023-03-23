@@ -11,6 +11,9 @@ import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
 import { CarteiraSetup } from '../models/carteiraSetup.model';
 import { CarteiraRiscoRel } from '../models/carteira-risco-rel.model';
+import { Role } from '../models/account-perfil.model';
+import { Account } from '../models/account.model';
+import { AccountService } from './account.service';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +23,7 @@ export class CarteiraSetupService {
     list = new BehaviorSubject<CarteiraSetup[]>([]);
     objeto = new BehaviorSubject<CarteiraSetup>(new CarteiraSetup);
     empresa = new Empresa;
+    account: Account = new Account;
 
     constructor(
         private table: Table,
@@ -27,10 +31,10 @@ export class CarteiraSetupService {
         private toastr: ToastrService,
         private crypto: Crypto,
         private empresaService: EmpresaService,
+        private accountService: AccountService,
     ) {
-        this.empresaService.empresaObject.subscribe(res => {
-            this.empresa = res;
-        });
+        this.empresaService.empresa.subscribe(res => this.empresa = res);
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
 
     getObject(): BehaviorSubject<CarteiraSetup> {
@@ -81,7 +85,7 @@ export class CarteiraSetupService {
             item.registroNaoSalvo = true;
 
             this.empresa.carteiraSetup.push(item);
-            this.empresaService.setObject(this.empresa)
+            this.empresaService.setObject(this.empresa, 'add_To_Empresa_List')
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -116,7 +120,7 @@ export class CarteiraSetupService {
             var list = this.empresa.carteiraSetup ?? [];
             list.splice(index, 1, item);
             this.empresa.carteiraSetup = list;
-            this.empresaService.setObject(this.empresa);
+            this.empresaService.setObject(this.empresa, 'edit_To_Empresa_List');
 
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
@@ -133,7 +137,7 @@ export class CarteiraSetupService {
             return false;
         }
         this.empresa.carteiraSetup.splice(index, 1);
-        this.empresaService.setObject(this.empresa);
+        this.empresaService.setObject(this.empresa, 'delete_To_Empresa_List');
 
         this.toastr.success('Operação concluída');
         this.table.resetSelection();
@@ -149,8 +153,9 @@ export class CarteiraSetupService {
         }
     }
 
-    getList(empresa_Id: number = 1) {
-        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/all/${empresa_Id}`).pipe(
+    getList(empresaId?: number) {
+        empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
+        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/all/${empresaId}`).pipe(
             map(list => {
                 list = list.map(x => {
                     x.ativo = x.dataDesativado != undefined ? false : true;
@@ -173,7 +178,8 @@ export class CarteiraSetupService {
     }
 
     create(request: CarteiraSetup) {
-        return this.http.post<CarteiraSetup>(`${this.url}/carteiraSetup/`, request);
+        var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
+        return this.http.post<CarteiraSetup>(`${this.url}/carteiraSetup/${empresaId}`, request);
     }
 
     edit(request: CarteiraSetup) {

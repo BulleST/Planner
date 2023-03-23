@@ -10,6 +10,9 @@ import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { DropdownService } from './dropdown.service';
 import { Table } from '../utils/table';
+import { Account } from '../models/account.model';
+import { AccountService } from './account.service';
+import { Role } from '../models/account-perfil.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,20 +22,20 @@ export class ClienteService {
     url = environment.url;
     objeto = new BehaviorSubject<Cliente>(new Cliente);
     empresa = new Empresa;
+    account: Account = new Account;
 
     constructor(
         private http: HttpClient,
         private crypto: Crypto,
         private empresaService: EmpresaService,
         private dropdownService: DropdownService,
+        private accountService: AccountService,
         private toastr: ToastrService,
         private table: Table,
     ) {
-        this.empresaService.empresaObject.subscribe(res => {
-            this.empresa = res;
-        });
+        this.empresaService.empresa.subscribe(res => this.empresa = res);
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
-
 
     getObject() {
         var e = localStorage.getItem('cliente')
@@ -78,7 +81,7 @@ export class ClienteService {
 
             list.push(item);
             this.empresa.cliente = list;
-            this.empresaService.setObject(this.empresa);
+            this.empresaService.setObject(this.empresa, 'add_To_Empresa_List');
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -114,7 +117,7 @@ export class ClienteService {
 
                 list.splice(index, 1, item);
                 this.empresa.cliente = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setObject(this.empresa, 'edit_To_Empresa_List');
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -133,7 +136,7 @@ export class ClienteService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.cliente = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setObject(this.empresa, 'delete_To_Empresa_List');
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -146,11 +149,14 @@ export class ClienteService {
         return false;
     }
 
-
-
-    getList(empresa_id: number = 1) {
-        return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresa_id}`)
+    getList(empresaId?: number) {
+        empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
+        return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresaId}`)
             .pipe(map(list => {
+                list = list.map(x => {
+                    x.ativo = !x.dataDesativado;
+                    return x;
+                });
                 this.list.next(list);
                 return list;
             }));
@@ -161,7 +167,8 @@ export class ClienteService {
     }
 
     create(request: Cliente) {
-        return this.http.post<Cliente>(`${this.url}/cliente/`, request);
+        var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
+        return this.http.post<Cliente>(`${this.url}/cliente/${empresaId}`, request);
     }
 
     edit(request: Cliente) {
@@ -171,5 +178,8 @@ export class ClienteService {
     delete(id: number) {
         return this.http.delete<Cliente>(`${this.url}/cliente/${id}`);
     }
-
+    
+    deactivated(id: number, active: boolean) {
+        return this.http.patch<void>(`${this.url}/cliente/${id}/${active}`, {});
+    }
 }

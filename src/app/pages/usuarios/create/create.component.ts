@@ -3,7 +3,9 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { lastValueFrom } from 'rxjs';
 import { Usuario } from 'src/app/models/usuario.model';
+import { EmpresaService } from 'src/app/services/empresa.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -26,6 +28,7 @@ export class CreateComponent implements OnInit {
         private toastr: ToastrService,
         private modal: ModalOpen,
         private userService: UsuarioService,
+        private empresaService: EmpresaService,
         private crypto: Crypto
     ) {
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
@@ -68,12 +71,15 @@ export class CreateComponent implements OnInit {
             this.loading = false;
         }
         else { // Enviar para a API
-            if (this.url.includes('empresas/editar')) {
-            }
             this.userService.create(this.objeto).subscribe({
-                next: (res) => {
+                next: async (res) => {
                     this.modal.voltar();
-                    this.userService.getList(this.objeto.empresa_Id).subscribe();
+                    var users = await lastValueFrom(this.userService.getList());
+                    if (this.url.includes('empresas/editar')) {
+                        var empresa = this.empresaService.object;
+                        empresa.account = users;
+                        this.empresaService.setObject(empresa, 'edit usuario');
+                    }
                 },
                 error: (error) => {
                     this.loading = false;

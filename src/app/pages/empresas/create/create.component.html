@@ -1,7 +1,4 @@
 <section class="page">
-    <!-- <a class="d-block link text-dark mx-3 mb-2" routerLink="/empresas">
-        <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
-    </a> -->
     <div class="page__header">
         <span class="title-icon">
             <fa-icon [icon]="faCity"></fa-icon>
@@ -13,30 +10,7 @@
     </div>
     <div class="page__body px-3">
         <form #form="ngForm">
-            <div class="d-flex step-container">
-                <!-- <p-steps
-                         [model]="items"
-                         [readonly]="false"
-                         [(activeIndex)]="index"></p-steps> -->
-
-                <div class="aside-navigation">
-                    <a class="aside-navigation__link" 
-                    *ngFor="let item of items" 
-                    [routerLink]="[item.routerLink]"
-                    routerLinkActive="active"
-                    >
-                        <span class="aside-navigation__link-icon">
-                            <fa-icon *ngIf="item.faIcon" [icon]="item.faIcon"></fa-icon>
-                            <i *ngIf="item.iconClass" class="{{item.iconClass}}"></i>
-                        </span>
-                        <span class="aside-navigation__link-label">{{item.label}}</span>
-                        
-                    </a>
-                </div>
-                <div class="step-content">
-                    <router-outlet></router-outlet>
-                </div>
-            </div>
+            <app-menu-items></app-menu-items>
         </form>
     </div>
 </section>

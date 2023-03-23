@@ -43,7 +43,7 @@ export class DeleteComponent implements OnInit {
         });
         
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.carteiraSetup.find(x => x.id == this.objeto.id) as CarteiraSetup;
+            this.objeto = this.empresaService.object.carteiraSetup.find(x => x.id == this.objeto.id) as CarteiraSetup;
         } 
     }
 

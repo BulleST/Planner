@@ -10,6 +10,9 @@ import { DropdownService } from './dropdown.service';
 import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
+import { AccountService } from './account.service';
+import { Account } from '../models/account.model';
+import { Role } from '../models/account-perfil.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +22,7 @@ export class UsuarioService {
     list = new BehaviorSubject<Usuario[]>([]);
     objeto = new BehaviorSubject<Usuario | undefined>(undefined);
     empresa = new Empresa;
+    account: Account = new Account;
 
     constructor(
         private table: Table,
@@ -26,11 +30,11 @@ export class UsuarioService {
         private toastr: ToastrService,
         private crypto: Crypto,
         private dropdownService: DropdownService,
-        private empresaService: EmpresaService
+        private empresaService: EmpresaService,
+        private accountService: AccountService
     ) {
-        this.empresaService.empresaObject.subscribe(res => {
-            this.empresa = res;
-        });
+        this.empresaService.empresa.subscribe(res => this.empresa = res);
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
 
     getObject() {
@@ -46,7 +50,6 @@ export class UsuarioService {
         this.objeto.next(value);
     }
 
-
     add_To_Empresa_List(item: Usuario) {
         if (this.empresa) {
             var list = this.empresa.account ?? [];
@@ -59,7 +62,7 @@ export class UsuarioService {
 
             let existe = this.empresa.account.find(x => x.email == item.email)
             if (existe) {
-                this.toastr.error('E-mail já foram cadastrados!!');
+                this.toastr.error('Esse e-mail já foi cadastrado!!');
                 return false;
             }
 
@@ -70,7 +73,7 @@ export class UsuarioService {
             
             list.push(item);
             this.empresa.account = list;
-            this.empresaService.setObject(this.empresa);
+            this.empresaService.setObject(this.empresa, 'add_To_Empresa_List');
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -99,7 +102,7 @@ export class UsuarioService {
 
                 list.splice(index, 1, item);
                 this.empresa.account = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setObject(this.empresa, 'edit_To_Empresa_List');
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -118,7 +121,7 @@ export class UsuarioService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.account = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setObject(this.empresa, 'delete_To_Empresa_List');
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -131,14 +134,16 @@ export class UsuarioService {
         return false;
     }
 
-    getList(empresa_Id: number = 1) {
-        return this.http.get<Usuario[]>(`${this.url}/usuario/all/${empresa_Id}`)
+    getList(empresaId?: number) {
+        empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
+        return this.http.get<Usuario[]>(`${this.url}/usuario/all/${empresaId}`)
             .pipe(map(list => {
                 list = list.map(x => {
                     x.ativo = !x.dataDesativado;
                     return x;
                 });
                 this.list.next(list);
+                return list;
             }));
     }
 
@@ -147,7 +152,8 @@ export class UsuarioService {
     }
 
     create(request: Usuario) {
-        return this.http.post(`${this.url}/usuario/`, request);
+        var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
+        return this.http.post(`${this.url}/usuario/${empresaId}`, request);
     }
 
     edit(request: Usuario) {

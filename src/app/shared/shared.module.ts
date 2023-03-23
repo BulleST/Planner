@@ -16,7 +16,6 @@ import { ToastrModule } from "ngx-toastr";
 import { NgxMaskModule } from "ngx-mask";
 
 import { FormUsuarioComponent } from "./usuarios/form/form.component";
-import { FormPercentualRiscoComponent } from "./percentual-risco/form/form.component";
 import { FormCarteiraSetupComponent } from "./carteira-setup/form/form.component";
 import { FormProdutoComponent } from './produtos/form/form.component';
 import { ListSharedComponent } from "./list/list.component";
@@ -29,7 +28,6 @@ import { DeactivatedComponent } from "./deactivated/deactivated.component";
         FormUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
-        FormPercentualRiscoComponent,
         FormClienteComponent,
         ListSharedComponent,
         EmpresaSelectComponent,
@@ -56,7 +54,6 @@ import { DeactivatedComponent } from "./deactivated/deactivated.component";
         FormUsuarioComponent,
         FormProdutoComponent,
         FormCarteiraSetupComponent,
-        FormPercentualRiscoComponent,
         FormClienteComponent,
         ListSharedComponent,
         EmpresaSelectComponent,

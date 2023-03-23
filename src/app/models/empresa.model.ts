@@ -1,3 +1,4 @@
+import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { CarteiraSetup, CarteiraSetupRequest } from "./carteiraSetup.model";
 import { Cliente, ClienteRequest } from "./cliente.model";
@@ -15,6 +16,8 @@ export class Empresa {
     produto: Produto[] = [];
     carteiraSetup: CarteiraSetup[] = [];
     percentualRisco: PercentualRisco[] = [];
+    dataDesativado?: Date;
+    ativo?: boolean;
 }
 
 export class EmpresaRequest {
@@ -27,6 +30,8 @@ export class EmpresaRequest {
     produto: ProdutoRequest[] = [];
     carteiraSetup: CarteiraSetupRequest[] = [];
     percentualRisco: PercentualRiscoRequest[] = [];
+    dataDesativado?: Date;
+    ativo?: boolean;
 }
 
 export var empresaColumns: Column[] = [
@@ -35,27 +40,49 @@ export var empresaColumns: Column[] = [
         header: 'Id', 
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
-        maskType: MaskType.undefined
+        maskType: MaskType.undefined,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
     },
     { 
         field: 'nome', 
         header: 'Razão Social', 
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
-        maskType: MaskType.undefined
+        maskType: MaskType.undefined,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
     },
     { 
         field: 'cnpj', 
         header: 'CNPJ', 
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
-        maskType: MaskType.cnpj
+        maskType: MaskType.cnpj,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
     },
     { 
         field: 'email', 
         header: 'E-mail', 
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
-        maskType: MaskType.undefined
+        maskType: MaskType.undefined,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+    },
+    {
+        field: 'ativo',
+        header: 'Ativo',
+        maskType: MaskType.boolean,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+        booleanValues: {
+            'true': 'ativo',
+            'false': 'inativo',
+        }
     },
   ]

@@ -21,12 +21,19 @@ export class LoginComponent implements OnInit {
         private router: Router
     ) { 
         this.loadingHelper.loading.subscribe(res => this.loading = res);
+        this.accountService.isLogged().subscribe({
+            next: (res) => {
+                this.router.navigate(['']);
+            },
+            error: (res) => {
+                console.error(res)
+                // this.accountService.setAccount(undefined);
+
+            }
+        })
     }
 
     ngOnInit(): void {
-        this.login.email = 'calmeida.no@gmail.com'
-        this.login.password = 'cadomeew10'
-        // this.logar()
     }
 
     logar() {

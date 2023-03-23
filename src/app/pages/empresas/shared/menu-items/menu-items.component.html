@@ -1,0 +1,35 @@
+<div class="d-flex flex-wrap step-container">
+    <div class="aside-navigation aside-navigation-{{screen}} " [class.open]="!menu.collapsed" >
+        <p-panel #menu
+                 [toggleable]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)"
+                 [collapsed]="false"
+                 [showHeader]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)"
+                 [toggler]="'header'"
+                 headerTemplate="header"
+                 contentTemplate="content"
+                 expandIcon="none"
+                 collapseIcon="none">
+            <ng-template pTemplate="header" #header *ngIf="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)">
+                <div class="aside-navigation-header">
+                    <button (click)="menu.toggle($event); " class="btn btn-primary" label="Show">
+                        <i class="pi pi-bars" *ngIf="menu.collapsed"></i>
+                        <i class="pi pi-times" *ngIf="!menu.collapsed"></i>
+                    </button>
+                </div>
+            </ng-template>
+            <ng-template #content pTemplate="content">
+                <div class="aside-navigation-content">
+                    <a class="aside-navigation__link" *ngFor="let item of items" [routerLink]="[item.routerLink]" routerLinkActive="active">
+                        <span class="aside-navigation__link-icon">
+                            <i class="{{item.iconClass}}"></i>
+                        </span>
+                        <span class="aside-navigation__link-label">{{item.label}}</span>
+                    </a>
+                </div>
+            </ng-template>
+        </p-panel>
+    </div>
+    <div class="step-content step-content-{{screen}}" [class.step-content-margin]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)">
+        <router-outlet></router-outlet>
+    </div>
+</div>

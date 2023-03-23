@@ -1,7 +1,12 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { lastValueFrom } from 'rxjs';
 import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimento.model';
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
+import { Planejamento } from 'src/app/models/planejamento.model';
+import { TipoAtivo } from 'src/app/models/tipoAtivo.model';
+import { TipoLiquidez } from 'src/app/models/tipoLiquidez.model';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
+import { DropdownService } from 'src/app/services/dropdown.service';
 
 @Component({
     selector: 'app-grafico-comparativo',
@@ -11,8 +16,7 @@ import { TipoRisco } from 'src/app/models/tipoRisco.model';
 export class GraficoComparativoComponent implements OnInit, OnChanges {
 
     @Input() open: boolean = true;
-    @Input() investimentos: PlanejamentoInvestimento[] = [];
-    @Input() produtos: PlanejamentoProduto[] = [];
+    @Input() planner: Planejamento = new Planejamento;
 
 
     chartAtivoData_Investimento: any;
@@ -41,27 +45,38 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
 
     chartOptions: any;
 
-    constructor() { 
+    ativos: TipoAtivo[] = [];
+    riscos: TipoRisco[] = [];
+    liquidez: TipoLiquidez[] = [];
+
+    colors: string[] = [
+        '#36a2eb', // blue
+        '#ff6384', // pink
+        '#ff9f40', // orange
+        '#9966ff', // purple
+        '#ffcd56', // yellow
+        '#c9cbcf', // grey 
+        '#4bc0c0', // blue green
+    ];
+
+    produtoTotal = 0;
+    investimentoTotal = 0;
+
+    constructor(
+        private dropdown: DropdownService,
+    ) { 
+        lastValueFrom(this.dropdown.getAtivo()).then(res => this.ativos = res)
+        lastValueFrom(this.dropdown.getLiquidez()).then(res => this.liquidez = res)
+        lastValueFrom(this.dropdown.getRisco()).then(res => this.riscos = res)
+
         this.chartOptions = {
             plugins: {
-                // title: {
-                //     display: true,
-                //     text: '',
-                //     font: {
-                //         size: 14
-                //     },
-                //     color: '#3f3c3c'
-                // },
-                // subtitle: {
-                //     text: '',
-                //     font: {
-                //         size: 12
-                //     },
-                //     color: '#3f3c3c'
-                // },
                 legend: {
-                    position: 'bottom'
-                    // display: false
+                    position: 'bottom',
+                    display: false,
+                },
+                colors: {
+                  enabled: false
                 }
             },
             animations: {
@@ -77,18 +92,19 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this.setChartRisco_Investimento();
-        this.setChartLiquidez_Investimento();
-        this.setChartAtivo_Investimento();
-        this.setChartRisco_Produto();
-        this.setChartLiquidez_Produto();
-        this.setChartAtivo_Produto();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['open']) {
             this.open = changes['open'].currentValue;
-            // this.open = true;
+        }
+
+        if (changes['planner']) {
+            this.planner = changes['planner'].currentValue;
+
+            this.produtoTotal = this.planner.planejamentoProduto.map(x => x.sugerido).reduce((x,y) => x+y)
+            this.investimentoTotal = this.planner.planejamentoInvestimento.map(x => x.montanteAtual).reduce((x,y) => x+y)
+            
             this.setChartRisco_Investimento();
             this.setChartLiquidez_Investimento();
             this.setChartAtivo_Investimento();
@@ -96,9 +112,6 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
             this.setChartLiquidez_Produto();
             this.setChartAtivo_Produto();
         }
-
-        if (changes['investimentos'])
-            this.investimentos = changes['investimentos'].currentValue;
 
     }
 
@@ -108,158 +121,257 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
         }, 300);
     }
 
-    setChartRisco_Investimento() {
-        let riscos: TipoRisco[] = [];
-        this.investimentos.map((i: PlanejamentoInvestimento, index: number )=> {
-            var indexRisco = riscos.findIndex(x => x.id == i.investimento.tipoRisco_Id);
-            if (index != -1) {
-                
-            } else {
-                riscos.push(i.investimento.tipoRisco);
-            }
-            return i
-        })
-        this.chartRiscoOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));
-        this.chartRiscoData_Investimento =  {
-            labels: [
-              'Red',
-              'Blue',
-              'Yellow'
-            ],
-            datasets: [{
-              label: 'My First Dataset',
-              data: [300, 50, 100],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-              ],
-              hoverOffset: 4
-            }]
-          };
-    }
-    setChartLiquidez_Investimento() {
-        this.chartLiquidezOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));
-        // this.chartLiquidezOptions_Investimento.plugins.title.text = '';
-        // this.chartLiquidezOptions_Investimento.plugins.title.position = 'left'
-    
-        this.chartLiquidezData_Investimento =  {
-            labels: [
-              'Red',
-              'Blue',
-              'Yellow'
-            ],
-            datasets: [{
-              label: ['My First Dataset'],
-              data: [300, 50, 100],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-              ],
-              hoverOffset: 4
-            }]
-          };
-    }
-    setChartAtivo_Investimento() {
-        this.chartAtivoOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));
-        // this.chartAtivoOptions_Investimento.plugins.title.text = '';
-        // this.chartAtivoOptions_Investimento.plugins.title.position = 'left'
-    
-        this.chartAtivoData_Investimento =  {
-            labels: [
-              'Red',
-              'Blue',
-              'Yellow'
-            ],
-            datasets: [{
-              label: ['My First Dataset'],
-              data: [300, 50, 100],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-              ],
-              hoverOffset: 4
-            }]
-          };
-    }
 
     setChartRisco_Produto() {
-        console.log(this)
-        let riscos: TipoRisco[] = [];
-        this.produtos.map((i: PlanejamentoProduto, index: number )=> {
-            var indexRisco = riscos.findIndex(x => x.id == i.produto.tipoRisco_Id);
-            if (index != -1) {
-                
-            } else {
-                riscos.push(i.produto.tipoRisco);
-            }
-            return i
-        })
         this.chartRiscoOptions_Produto = JSON.parse(JSON.stringify(this.chartOptions));
+        this.chartRiscoOptions_Produto.plugins.tooltip = {
+            callbacks: {
+                afterBody: (ctx) => {
+                    var oi = ctx[0].element.$context.raw
+                    return 'R$ ' + oi.sugerido;
+                },
+            }
+        };
+        this.chartRiscoOptions_Produto.parsing = { key: 'percentual' };
+        var value: any[] = [];
+        var obj;
+        this.planner.planejamentoProduto.forEach(x => {
+            var index = value.findIndex(y => x.produto.tipoRisco_Id == y.tipoRisco_Id);
+            if (index == -1) {
+                obj = {
+                    tipoRisco_Id: x.produto.tipoRisco_Id,
+                    tipoRisco: x.produto.tipoRisco,
+                    sugerido: x.sugerido,
+                    label: x.produto.tipoRisco.nome
+                };
+            } else {
+                obj = value[index]; 
+                obj.sugerido += x.sugerido;
+            }
+            
+            obj.percentual = (obj.sugerido / this.produtoTotal) * 100
+            value.splice(index, (index == -1 ? 0 : 1), obj);
+        });
+
         this.chartRiscoData_Produto =  {
-            labels: [
-              'Red',
-              'Blue',
-              'Yellow'
-            ],
+            labels: value.map(x => x.tipoRisco.nome),
             datasets: [{
-              label: 'My First Dataset',
-              data: [300, 50, 100],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-              ],
+              label: value.map(x => x.tipoRisco.nome),
+              data: value,
+              backgroundColor: this.colors,
               hoverOffset: 4
             }]
-          };
+        };
     }
     setChartLiquidez_Produto() {
         this.chartLiquidezOptions_Produto = JSON.parse(JSON.stringify(this.chartOptions));
-        // this.chartLiquidezOptions_Produto.plugins.title.text = '';
-        // this.chartLiquidezOptions_Produto.plugins.title.position = 'left'
-    
+        this.chartLiquidezOptions_Produto.plugins.tooltip = {
+            callbacks: {
+                afterBody: (ctx) => {
+                    var oi = ctx[0].element.$context.raw
+                    return 'R$ ' + oi.sugerido;
+                },
+            }
+        };
+        this.chartLiquidezOptions_Produto.parsing = { key: 'percentual' };
+        var value: any[] = [];
+        var obj;
+        this.planner.planejamentoProduto.forEach(x => {
+            var index = value.findIndex(y => x.produto.tipoLiquidez_Id == y.tipoLiquidez_Id);
+            if (index == -1) {
+                obj = {
+                    tipoLiquidez_Id: x.produto.tipoLiquidez_Id,
+                    tipoLiquidez: x.produto.tipoLiquidez,
+                    sugerido: x.sugerido,
+                    label: x.produto.tipoLiquidez.nome
+                };
+            } else {
+                obj = value[index]; 
+                obj.sugerido += x.sugerido;
+            }
+            
+            obj.percentual = (obj.sugerido / this.produtoTotal) * 100
+            value.splice(index, (index == -1 ? 0 : 1), obj);
+        });
+
         this.chartLiquidezData_Produto =  {
-            labels: [
-              'Red',
-              'Blue',
-              'Yellow'
-            ],
+            labels: value.map(x => x.tipoLiquidez.nome),
             datasets: [{
-              label: ['My First Dataset'],
-              data: [300, 50, 100],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-              ],
+              label: value.map(x => x.tipoLiquidez.nome),
+              data: value,
+              backgroundColor: this.colors,
               hoverOffset: 4
             }]
-          };
+        };
     }
     setChartAtivo_Produto() {
         this.chartAtivoOptions_Produto = JSON.parse(JSON.stringify(this.chartOptions));
-        // this.chartAtivoOptions_Produto.plugins.title.text = '';
-        // this.chartAtivoOptions_Produto.plugins.title.position = 'left'
-    
+        this.chartAtivoOptions_Produto.plugins.tooltip = {
+            callbacks: {
+                afterBody: (ctx) => {
+                    var oi = ctx[0].element.$context.raw
+                    return 'R$ ' + oi.sugerido;
+                },
+            }
+        };
+        this.chartAtivoOptions_Produto.parsing = { key: 'percentual' };
+        var value: any[] = [];
+        var obj;
+        this.planner.planejamentoProduto.forEach(x => {
+            var index = value.findIndex(y => x.produto.tipoAtivo_Id == y.tipoAtivo_Id);
+            if (index == -1) {
+                obj = {
+                    tipoAtivo_Id: x.produto.tipoAtivo_Id,
+                    tipoAtivo: x.produto.tipoAtivo,
+                    sugerido: x.sugerido,
+                    label: x.produto.tipoAtivo.nome
+                };
+            } else {
+                obj = value[index]; 
+                obj.sugerido += x.sugerido;
+            }
+            
+            obj.percentual = (obj.sugerido / this.produtoTotal) * 100
+            value.splice(index, (index == -1 ? 0 : 1), obj);
+        });
+
         this.chartAtivoData_Produto =  {
-            labels: [
-              'Red',
-              'Blue',
-              'Yellow'
-            ],
+            labels: value.map(x => x.tipoAtivo.nome),
             datasets: [{
-              label: ['My First Dataset'],
-              data: [300, 50, 100],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-              ],
+              label: value.map(x => x.tipoAtivo.nome),
+              data: value,
+              backgroundColor: this.colors,
               hoverOffset: 4
             }]
-          };
+        };
     }
+
+
+
+    setChartRisco_Investimento() {
+        this.chartRiscoOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));
+        this.chartRiscoOptions_Investimento.plugins.tooltip = {
+            callbacks: {
+                afterBody: (ctx) => {
+                    var item = ctx[0].element.$context.raw
+                    return 'R$ ' + item.montanteAtual;
+                },
+            }
+        };
+        this.chartRiscoOptions_Investimento.parsing = { key: 'percentual' };
+        var value: any[] = [];
+        var obj;
+        
+        this.planner.planejamentoInvestimento.forEach(x => {
+            var index = value.findIndex(y => x.investimento.tipoRisco_Id == y.tipoRisco_Id);
+            if (index == -1) {
+                obj = {
+                    tipoRisco_Id: x.investimento.tipoRisco_Id,
+                    tipoRisco: x.investimento.tipoRisco,
+                    montanteAtual: x.montanteAtual,
+                    label: x.investimento.tipoRisco.nome
+                };
+            } else {
+                obj = value[index]; 
+                obj.montanteAtual += x.montanteAtual;
+            }
+            
+            obj.percentual = (obj.montanteAtual / this.investimentoTotal) * 100
+            value.splice(index, (index == -1 ? 0 : 1), obj);
+        });
+
+        this.chartRiscoData_Investimento =  {
+            labels: value.map(x => x.tipoRisco.nome),
+            datasets: [{
+              label: value.map(x => x.tipoRisco.nome),
+              data: value,
+              backgroundColor: this.colors,
+              hoverOffset: 4
+            }]
+        };
+    }
+    setChartLiquidez_Investimento() {
+        this.chartLiquidezOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));
+        this.chartLiquidezOptions_Investimento.plugins.tooltip = {
+            callbacks: {
+                afterBody: (ctx) => {
+                    var item = ctx[0].element.$context.raw
+                    return 'R$ ' + item.montanteAtual;
+                },
+            }
+        };
+        this.chartLiquidezOptions_Investimento.parsing = { key: 'percentual' };
+        var value: any[] = [];
+        var obj;
+        this.planner.planejamentoInvestimento.forEach(x => {
+            var index = value.findIndex(y => x.investimento.tipoLiquidez_Id == y.tipoLiquidez_Id);
+            if (index == -1) {
+                obj = {
+                    tipoLiquidez_Id: x.investimento.tipoLiquidez_Id,
+                    tipoLiquidez: x.investimento.tipoLiquidez,
+                    montanteAtual: x.montanteAtual,
+                    label: x.investimento.tipoLiquidez.nome
+                };
+            } else {
+                obj = value[index]; 
+                obj.montanteAtual += x.montanteAtual;
+            }
+            
+            obj.percentual = (obj.montanteAtual / this.investimentoTotal) * 100
+            value.splice(index, (index == -1 ? 0 : 1), obj);
+        });
+
+        this.chartLiquidezData_Investimento =  {
+            labels: value.map(x => x.tipoLiquidez.nome),
+            datasets: [{
+              label: value.map(x => x.tipoLiquidez.nome),
+              data: value,
+              backgroundColor: this.colors,
+              hoverOffset: 4
+            }]
+        };
+    }
+    setChartAtivo_Investimento() {
+        this.chartAtivoOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));
+        this.chartAtivoOptions_Investimento.plugins.tooltip = {
+            callbacks: {
+                afterBody: (ctx) => {
+                    var item = ctx[0].element.$context.raw
+                    return 'R$ ' + item.montanteAtual;
+                },
+            }
+        };
+        this.chartAtivoOptions_Investimento.parsing = { key: 'percentual' };
+        var value: any[] = [];
+        var obj;
+        this.planner.planejamentoInvestimento.forEach(x => {
+            var index = value.findIndex(y => x.investimento.tipoAtivo_Id == y.tipoAtivo_Id);
+            if (index == -1) {
+                obj = {
+                    tipoAtivo_Id: x.investimento.tipoAtivo_Id,
+                    tipoAtivo: x.investimento.tipoAtivo,
+                    montanteAtual: x.montanteAtual,
+                    label: x.investimento.tipoAtivo.nome
+                };
+            } else {
+                obj = value[index]; 
+                obj.montanteAtual += x.montanteAtual;
+            }
+            
+            obj.percentual = (obj.montanteAtual / this.investimentoTotal) * 100
+            value.splice(index, (index == -1 ? 0 : 1), obj);
+        });
+
+        this.chartAtivoData_Investimento =  {
+            labels: value.map(x => x.tipoAtivo.nome),
+            datasets: [{
+              label: value.map(x => x.tipoAtivo.nome),
+              data: value,
+              backgroundColor: this.colors,
+              hoverOffset: 4
+            }]
+        };
+    }
+
+
 }

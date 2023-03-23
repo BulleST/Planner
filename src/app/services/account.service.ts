@@ -8,6 +8,7 @@ import { Crypto } from '../utils/crypto';
 import { Loading } from '../utils/loading';
 import { map, catchError, tap } from 'rxjs/operators';
 import { EmpresaService } from './empresa.service';
+import { Role } from '../models/account-perfil.model';
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +29,7 @@ export class AccountService {
     ) {
         this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
         this.account = this.accountSubject.asObservable();
+
     }
 
     setAccount(value?: Account) {
@@ -50,12 +52,15 @@ export class AccountService {
 
     login(model: Login) {
         return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
-            tap((res) => {
+            tap((account) => {
                 this.loadingHelper.loading.next(false);
-                this.setAccount(res);
+                this.setAccount(account);
+                if (account.perfilAcesso_Id != Role.Admin) {
+                    this.empresaService.setObject(account.empresa, 'login')
+                }
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
                 this.router.navigateByUrl(returnUrl);
-                return of(res);
+                return of(account);
             }),
             catchError((err => {
                 console.error(err)
@@ -72,6 +77,7 @@ export class AccountService {
             .subscribe({
                 next: res => {
                     this.setAccount(undefined)
+                    localStorage.clear();
                     this.router.navigate(['account', 'login']);
                     localStorage.clear();
                 },
@@ -86,7 +92,10 @@ export class AccountService {
     refreshToken() {
         return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
             .pipe(map((account) => {
-                this.setAccount(account)
+                this.setAccount(account);
+                if (account.perfilAcesso_Id != Role.Admin) {
+                    this.empresaService.setObject(account.empresa, 'refreshToken')
+                }
                 return account;
             }));
     }
@@ -106,6 +115,10 @@ export class AccountService {
 
     verifyEmail(token: string) {
         return this.http.post(`${this.url}/accounts/verify-email`, { token: token });
+    }
+
+    isLogged() {
+        return this.http.post(`${this.url}/accounts/is-logged`, {}, { withCredentials: true })
     }
 
 }

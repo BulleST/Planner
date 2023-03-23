@@ -1,35 +1,31 @@
 <section class="page">
-    <!-- <a class="d-block link text-dark mx-3 mb-2" routerLink="/empresas">
-        <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar
-    </a> -->
-    <div class="page__header">
+    <div class="page__header py-1">
         <span class="title-icon">
             <fa-icon [icon]="faCity"></fa-icon>
         </span>
         <div class="mr-auto">
-            <h3 class="page__header-title">Empresa</h3>
+            <h3 class="page__header-title">{{objeto.nome}}</h3>
             <p class="page__header-subtitle"><small>Editar registros</small></p>
+        </div>
+        <div class="ml-auto mb-0 col-xl-3 col-lg-4 col-md-5 col-sm-8 col-12 px-0" *ngIf="account && account.perfilAcesso_Id == 1">
+            <div class="py-2 d-block d-md-none col-12"></div>
+            <div class="form-group">
+                <label for="empresa_Id">Selecione a Empresa</label>
+                <select class="form-control"
+                        name="empresa_Id"
+                        id="empresa_Id"
+                        #empresa_Id="ngModel"
+                        [(ngModel)]="objeto.id"
+                        (change)="empresaChange($event)">
+                    <option [ngValue]="item.id" *ngFor="let item of empresas">{{item.nome}}</option>
+                </select>
+            </div>
+            <!-- <app-empresa-select *ngIf="account && account.perfilAcesso_Id == 1"></app-empresa-select> -->
         </div>
     </div>
     <div class="page__body px-3">
-        
         <form #form="ngForm">
-            <div class="d-flex step-container">
-                <p-steps
-                         [model]="items"
-                         [readonly]="false"
-                         [(activeIndex)]="index"></p-steps>
-                <div class="step-content">
-                    <router-outlet></router-outlet>
-                </div>
-            </div>
+            <app-menu-items></app-menu-items>
         </form>
     </div>
 </section>
-
-<ng-template #setaUpDown>
-    <div class="py-3 px-4"> Acione a seta para cima ou para baixo no teclado para mudar o valor </div>
-</ng-template>
-<ng-template #campoObrigatorio>
-    <div class="py-3 px-4"> Este campo é obrigatório </div>
-</ng-template>

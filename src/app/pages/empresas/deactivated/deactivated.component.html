@@ -1,0 +1,8 @@
+<div class="modal" [class.active]="modalOpen">
+    <div class="modal__bg" (click)="voltar()"></div>
+    <div class="modal__inner" style="max-width: 600px;">
+        <div class="modal__content">         
+            <app-shared-deactivated [objeto]="objeto" [service]="empresaService"></app-shared-deactivated>
+        </div>
+    </div>
+</div>

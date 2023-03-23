@@ -1,0 +1,21 @@
+
+Front
+
+Habilitar/Desabilitar entidade (Produto, Carteira, Usuário, Cliente) na edição
+Bug quando verificar email quando já estiver logado
+Revisar ainda os acessos do Backoffice e do Admin
+Revisar o acesso dos usuarios a sessao minha-empresa e empresas
+Revisar o cadastro de entidades (user, carteira setup, produto, etc) pela rota de empresas
+Finalizar Insert e Update de Planner
+
+
+Back
+
+Remover declarações desnecessárias de variaveis no construtor das controler e services
+Impedir Usuario de Role inferior cadastrar/editar/excluir/desabilitar Usuario de Role superior
+GET empresa demorando demaaisss (ver o que pode ser feito)
+Finalizar Insert e Update de Planner
+
+
+Ajustar nomenclatura dos metodos na services (padronizar)
+Ajustar rotas para ficar padrão (getAll - All)

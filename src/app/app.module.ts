@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
 import { CurrencyPipe, DatePipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,39 +16,21 @@ import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
-import { ActionsComponent } from './parts/actions/actions.component';
-import { HeaderComponent } from './parts/header/header.component';
-import { FooterComponent } from './parts/footer/footer.component';
-import { InitialComponent } from './parts/initial/initial.component';
-import { MyAccountComponent } from './parts/my-account/my-account.component';
 import { LoadingComponent } from './parts/loading/loading.component';
 import { AlertComponent } from './parts/alert/alert.component';
-import { ResetPasswordComponent } from './parts/reset-password/reset-password.component';
 import { SharedModule } from './shared/shared.module';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RequestInterceptor } from './helpers/request.interceptor';
-import { NavigationComponent } from './parts/navigation/navigation.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
-import { MinhaEmpresaComponent } from './parts/minha-empresa/minha-empresa.component';
-import { appInitializer } from './helpers/app.initializer';
-import { AccountService } from './services/account.service';
 
 registerLocaleData(localePt);
 
 @NgModule({
     declarations: [
         AppComponent,
-        ActionsComponent,
-        HeaderComponent,
-        FooterComponent,
-        InitialComponent,
-        MyAccountComponent,
-        ResetPasswordComponent,
         LoadingComponent,
         AlertComponent,
-        NavigationComponent,
-        MinhaEmpresaComponent,
     ],
     imports: [
         BrowserModule,
@@ -63,9 +45,9 @@ registerLocaleData(localePt);
         DropdownModule,
         NgbPopoverModule,
         ToastrModule.forRoot({ preventDuplicates: true, timeOut: 8000, }),
+        NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
         TableModule,
         ChartModule,
-        NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
     ],
     providers: [
         CurrencyPipe,
@@ -73,7 +55,6 @@ registerLocaleData(localePt);
         DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
-        { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     ],
@@ -111,23 +92,9 @@ export class AppModule {
             matchAny: 'Filtrar qualquer um',
             addRule: 'Adicionar filtro',
             removeRule: 'Remover filtro',
-            // accept: '',
-            // reject: '',
-            // choose: '',
-            // upload: '',
-            // cancel: '',
-            // dayNames: [],
-            // dayNamesShort: [],
-            // dayNamesMin: [],
-            // monthNames: [],
-            // monthNamesShort: [],
-            // dateFormat: '',
-            // today: '',
-            // weekHeader: '',
             weak: 'Fraca',
             medium: 'Média',
             strong: 'Forte',
-            // passwordPrompt: '',
             emptyMessage: 'Nenhum resultado encontrado',
             emptyFilterMessage: 'Nenhum resultado encontrado',
         })

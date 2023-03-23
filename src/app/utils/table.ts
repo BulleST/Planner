@@ -1,4 +1,4 @@
-import { HostListener, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as $ from 'jquery';
 import { ToastrService } from 'ngx-toastr';
@@ -7,7 +7,6 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MaskApplierService } from 'ngx-mask';
 import { Column, FilterType, MaskType } from '../helpers/column.interface';
 import { MenuTableLink } from '../helpers/menu-links.interface';
-import { FilterMatchMode } from 'primeng/api';
 
 @Injectable({
     providedIn: 'root'
@@ -115,6 +114,7 @@ export class Table {
         
         // console.log(col.field, row)
         for (const prop of nestedProperties) {
+            // console.log(col.field, value[prop] ?? value)
             value = value ? value[prop] ?? undefined : undefined;
         }
         if (col.maskType && value != undefined && value.toString().trim() != '') {

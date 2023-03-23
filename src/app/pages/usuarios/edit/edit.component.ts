@@ -46,7 +46,7 @@ export class EditComponent implements OnInit {
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.account.find(x => x.id == this.objeto.id) as Usuario;
+            this.objeto = this.empresaService.object.account.find(x => x.id == this.objeto.id) as Usuario;
         }
         else {
             this.userService.get(this.objeto.id).subscribe({
@@ -83,11 +83,14 @@ export class EditComponent implements OnInit {
             this.loading = false;
         }
         else { // Enviar para a API
-            if (this.url.includes('empresas/editar')) {
-            }
             this.userService.edit(this.objeto).subscribe({
                 next: async (res) => {
-                    await lastValueFrom(this.userService.getList(this.objeto.empresa_Id));
+                    var users = await lastValueFrom(this.userService.getList());
+                    if (this.url.includes('empresas/editar')) {
+                        var empresa = this.empresaService.object;
+                        empresa.account = users;
+                        this.empresaService.setObject(empresa, 'edit usuario');
+                    }
                     this.modal.voltar();
                 },
                 error: (error) => {

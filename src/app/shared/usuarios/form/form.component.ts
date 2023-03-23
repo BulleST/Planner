@@ -6,9 +6,6 @@ import { Subscriber } from 'rxjs';
 import { PerfilAcesso } from 'src/app/models/account-perfil.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
-import { EmpresaService } from 'src/app/services/empresa.service';
-import { Crypto } from 'src/app/utils/crypto';
-import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
     selector: 'app-form-usuario',

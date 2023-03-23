@@ -107,6 +107,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.planner = res;
             this.mudouCarteiraSetup = this.planner.id != 0;
             this.calculaPercentualProduto();
+            this.setChartPatrimonioIdade();
         });
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['cliente_id'];
@@ -121,7 +122,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                         this.planner = res;
                         this.carteiraSetupInalterada = res.carteiraSetup;
                         this.mudouCarteiraSetup = false;
-                        this.setChartPatrimonioIdade();
                     },
                     error: err => {
                         this.voltar();
@@ -133,8 +133,11 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         });
 
         this.isMobile.get().subscribe(res => this.mobile = res);
+
+        var empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
+
         this.setup.list.subscribe(res => this.carteirasSetup = res);
-        this.setup.getList().subscribe({
+        this.setup.getList(empresa_Id).subscribe({
             next: res => {
                 this.carteirasSetup = res
                 this.loadingCarteiraSetup = false;
@@ -246,22 +249,22 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.setChartWidth('chart-patrimonio-idade');
         this.planner.planejamentoGrafico.sort((x, y) => x.idade - y.idade)
         this.chartPatrimonioIdadeData = {
-            // labels: this.planner.planejamentoGrafico.map(x => x.idade),
-            labels: Array.from({length: 18}, (_, i) => i * 5), // int[]
+            labels: this.planner.planejamentoGrafico.map(x => x.idade),
+            // labels: Array.from({length: 18}, (_, i) => i * 5), // int[]
             datasets: [
                 {
                     type: 'line',
                     label: 'Planejado',
-                    data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
-                    // data: this.planner.planejamentoGrafico.map(x => x.valorPlanejado),
+                    // data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
+                    data: this.planner.planejamentoGrafico.map(x => x.valorPlanejado),
                     backgroundColor: '#242424',
                     borderColor: '#2424247a'
                 },
                 {
                     type: 'bar',
                     label: 'Realidade Atual',
-                    data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
-                    // data: this.planner.planejamentoGrafico.map(x => x.valorAtual),
+                    // data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
+                    data: this.planner.planejamentoGrafico.map(x => x.valorAtual),
                     backgroundColor: '#2d7a95',
                 },
             ]
@@ -375,22 +378,20 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     }
 
     async adicionarProdutoCarteira(form: NgForm) {
-        // if (this.planner.carteiraSetup) {
-        //     this.planner.planejamentoProduto = this.planner.carteiraSetup.carteiraProdutoRel.map(x => {
+        // // Mandando o produto na model
+        // if (this.planner.carteiraSetup_Id) {
+        //     this.planner.planejamentoProduto =  this.planner.carteiraSetup.carteiraProdutoRel
+        //     .map(x => {
         //         let planP: PlanejamentoProduto = new PlanejamentoProduto;
         //         planP.planejamento_Id = this.planner.id;
-        //         planP.produtoTributacaoRel = x.produtoTributacaoRel;
-        //         planP.produtoTributacaoRel_Id = x.produtoTributacaoRel_Id;
+        //         planP.produto_Id = x.produto_Id;
         //         return planP;
         //     });
-        //     this.planner.planejamentoProduto.sort((x, y) => x.produtoTributacaoRel?.produto_Id - y.produtoTributacaoRel?.produto_Id);
+        //     this.planner.planejamentoProduto.sort((x, y) => x.produto_Id - y.produto_Id);
         // } else {
         //     this.planner.planejamentoProduto = [];
         // } 
 
-        this.planner.planejamentoProduto = [];
-        this.planner.usuario_Id = this.accountService.accountValue?.id ?? 0;
-        this.planner.cliente.empresa_Id = 1;
         if (!this.planner.cliente.empresa) {
             this.planner.cliente.empresa = new Empresa;
         }
@@ -496,7 +497,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     }
 
     send(form: NgForm) {
-        this.planner.usuario_Id = 1;
+        this.planner.account_Id = 1;
         this.planner.cliente.empresa_Id = 1;
         if (!this.planner.cliente.empresa) {
             this.planner.cliente.empresa = new Empresa;

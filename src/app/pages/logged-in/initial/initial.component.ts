@@ -20,7 +20,7 @@ export class InitialComponent implements OnInit {
         private modoEscuro: ModoEscuro,
         private modal: ModalOpen,
         private table: Table,
-        private header: Header
+        private header: Header,
     ) {
         this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
         this.modal.getOpen().subscribe(res => this.modalOpen = res);

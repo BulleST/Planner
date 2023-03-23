@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
@@ -9,9 +8,7 @@ import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimen
 import { Planejamento } from 'src/app/models/planejamento.model';
 import { InvestimentoService } from 'src/app/services/investimento.service';
 import { PlannerService } from 'src/app/services/planner.service';
-import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
-import { Crypto } from 'src/app/utils/crypto';
 import { arrowDown, arrowUp } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
 

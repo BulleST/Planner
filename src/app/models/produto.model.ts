@@ -2,11 +2,9 @@ import { jsonIgnore } from "json-ignore";
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { Empresa } from "./empresa.model";
-// import { ProdutoTributacaoRel, ProdutoTributacaoRelRequest } from "./produto-tributacao-rel.model";
 import { TipoAtivo } from "./tipoAtivo.model";
 import { TipoLiquidez } from "./tipoLiquidez.model";
 import { TipoRisco } from "./tipoRisco.model";
-// import { Tributacao } from "./tributacao.model";
 
 export class Produto {
     id: number = undefined as unknown as number;

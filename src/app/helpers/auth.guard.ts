@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { AccountService } from '../services/account.service';
 
 @Injectable({
@@ -15,17 +15,29 @@ export class AuthGuard implements CanActivate {
     ) {
 
     }
-
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        if (!this.accountService.accountValue) {
-            this.toastr.error('Acesso não autorizado. Faça login.');
-            this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
-            this.accountService.setAccount(undefined)
-            return false;
-        }
-        return true;
-    }
 
+        return new Observable<boolean>(obs => {
+            lastValueFrom(this.accountService.refreshToken())
+            .then(res => {
+                if (!this.accountService.accountValue) {
+                    this.toastr.error('Acesso não autorizado. Faça login.');
+                    this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
+                    this.accountService.setAccount(undefined)
+                    obs.next(false);
+                } else {
+                    obs.next(true);
+                }
+            })
+            .catch(err => {
+                this.toastr.error('Acesso não autorizado. Faça login.');
+                this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
+                this.accountService.setAccount(undefined)
+                obs.next(false);
+            });
+        });
+
+    }
 }

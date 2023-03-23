@@ -1,67 +1,45 @@
 import { Component, OnInit } from '@angular/core';
-import { faCity, faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { MaskApplierService } from 'ngx-mask';
+import { faCity } from '@fortawesome/free-solid-svg-icons';
 import { Empresa, empresaColumns } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
-import * as $ from 'jquery';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css']
+    selector: 'app-list',
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  faFilter = faFilter;
-  faEllipsisV = faEllipsisV;
-  faCity = faCity;
-  faTimes = faTimes;
+    faCity = faCity;
 
-  list: Empresa[] = [];
-  selected?: Empresa;
-  selectedItems: Empresa[] = [];
-  loading = true;
-  columns = empresaColumns;
-  filters: string[] = [];
-  tableLinks: MenuTableLink[] = [];
-  
-  constructor(
-    private table: Table,
-    private empresaService: EmpresaService,
-    public crypto: Crypto,
-    private mask: MaskApplierService,
-  ) {
-    this.filters = this.columns.map(x => x.field);
-    this.table.loading.subscribe(res => this.loading = res);
-    this.table.selected.subscribe(res => this.selected = res);
-    this.table.selectedItems.subscribe(res => this.selectedItems = res);
-    this.empresaService.getList().subscribe({
-        next: (res) => {
-            this.list = res;
-            this.loading = false;
-        }
-    });
+    list: Empresa[] = [];
+    tableLinks: MenuTableLink[] = [];
+    columns = empresaColumns;
 
-    this.tableLinks = [
-        { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
-        { label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] },
-    ];
-  }
+    constructor(
+        private table: Table,
+        private empresaService: EmpresaService,
+        public crypto: Crypto,
+    ) {
 
-  ngOnInit(): void {
-  }
+        this.table.selected.subscribe(res => {
+            if (res) {
+                this.tableLinks = [
+                    { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
+                    { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [(res.ativo ? 'desabilitar' : 'habilitar')], paramsFieldName: ['id'] },
+                ];
+                this.tableLinks = this.table.encryptParams(this.tableLinks);
+            }
+        });
+        this.empresaService.list.subscribe(res => this.list = res);
+        this.empresaService.getList().subscribe();
+    }
 
-  onRowSelect(event: any) {
-    this.table.onRowSelect(event);
-  }
-
-  onRowUnselect(event: any) {
-    this.table.onRowUnselect(event)
-  }
-
-  onAllRowToggle(event: any) {
-    this.table.onAllRowToggle(event);
-  }
+    ngOnInit(): void {
+    }
+    create = (empresaService: EmpresaService = this.empresaService): void => {
+        empresaService.setObject(new Empresa, 'create');
+    }
 }

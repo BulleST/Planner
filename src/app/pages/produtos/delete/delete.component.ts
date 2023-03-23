@@ -44,8 +44,8 @@ export class DeleteComponent implements OnInit {
             }
         });
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.produto.find(x => x.id == this.objeto.id) as Produto;
-            let podeExcluir = this.empresaService.empresaObject.value.carteiraSetup
+            this.objeto = this.empresaService.object.produto.find(x => x.id == this.objeto.id) as Produto;
+            let podeExcluir = this.empresaService.object.carteiraSetup
                 .map(x => x.carteiraProdutoRel)
                 .flat()
                 // .find(x => x.produtoTributacaoRel.produto.id == this.objeto.id);

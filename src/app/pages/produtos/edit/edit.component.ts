@@ -45,7 +45,7 @@ export class EditComponent implements OnInit {
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.produto.find(x => x.id == this.objeto.id) as Produto;
+            this.objeto = this.empresaService.object.produto.find(x => x.id == this.objeto.id) as Produto;
         } else {
             this.produtoService.get(this.objeto.id).subscribe({
                 next: res => {

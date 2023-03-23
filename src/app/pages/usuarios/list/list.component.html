@@ -5,19 +5,23 @@
         </span>
         <div class="mr-auto">
             <h3 class="page__header-title">Usuários</h3>
-            <p class="page__header-subtitle"><small>Usuários cadastrados em <strong>Empresa X</strong></small></p>
+            <p class="page__header-subtitle"><small>Usuários cadastrados em <strong>{{empresaSelected.nome}}</strong></small></p>
+        </div>
+        <div class="ml-auto mb-0 col-xl-3 col-lg-4 col-md-5 col-sm-8 col-12 px-0">
+            <app-empresa-select *ngIf="account && account.perfilAcesso_Id == 1"></app-empresa-select>
         </div>
     </div>
     <div class="page__body">
         <app-list-shared
             [createLink]="['cadastrar']"
+            [onCreate]="create"
+            [canCreate]="true"
             [list]="list"
             [filterLink]="false"
             [filterTable]="true"
             [paginator]="true"
             [sortTable]="true"
-            [menuTable]="true"
-            [canCreate]="true"
+            [menuTable]="canMenu()"
             [columns]="columns"
             [tableLinks]="tableLinks"
             [selectable]="true"

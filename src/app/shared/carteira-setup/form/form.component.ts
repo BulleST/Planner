@@ -84,16 +84,11 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         });
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/cadastrar')) {
-            this.empresaService.empresaObject.subscribe(res => {
-                // this.carteirasSetup = res.carteiraSetup;
+            this.empresaService.empresa.subscribe(res => {
+                console.log(res.produto)
                 this.produtos = res.produto;
             });
         } else {
-            // this.setupService.getList().subscribe({
-            //     next: (res) => {
-            //         this.carteirasSetup = res;
-            //     }
-            // });
             this.produtoService.getList().subscribe({
                 next: (res) => {
                     this.produtos = res;
@@ -119,14 +114,9 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         if (changes['erro'])
             this.erro = changes['erro'].currentValue;
 
-        // if (changes['carteirasSetup']) {
-        //     this.carteirasSetup = changes['carteirasSetup'].currentValue;
-        // }
-
     }
 
     ngAfterViewInit(): void {
-        // this.setChartProduto('ngAfterViewInit');
         var windowWidth = window.innerWidth;
         var container = $('.chart-container').width() ?? 0;
         var viewport = 100 / windowWidth;
@@ -154,7 +144,7 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     async tipoRiscoChange() {
         let produtos: Produto[] = [];
         if (this.url.includes('empresas/cadastrar')) {
-            produtos = this.empresaService.empresaObject.value.produto;
+            produtos = this.empresaService.object.produto;
         } else {
             produtos = await lastValueFrom(this.produtoService.getList());
         }

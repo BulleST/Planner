@@ -46,11 +46,6 @@ export class DeactivatedComponent implements OnInit {
                 this.voltar();
             }
         });
-
-
-        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.account.find(x => x.id == this.objeto.id) as Usuario;
-        }
     }
 
     ngOnInit(): void {

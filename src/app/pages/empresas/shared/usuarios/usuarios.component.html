@@ -9,17 +9,20 @@
         </div>
     </div>
     <div class="card-body">
-        <app-list-shared [createLink]="['cadastrar']"
-                         [list]="objeto.account"
-                         [filterTable]="true"
-                         [paginator]="true"
-                         [sortTable]="true"
-                         [menuTable]="true"
-                         [canCreate]="true"
-                         [tableLinks]="tableLinks"
-                         [columns]="userColumns"
-                         [selectable]="true"
-                        ></app-list-shared>
+        <app-list-shared
+            [createLink]="['cadastrar']"
+            [onCreate]="create"
+            [canCreate]="true"
+            [list]="objeto.account"
+            [filterLink]="false"
+            [filterTable]="true"
+            [paginator]="true"
+            [sortTable]="true"
+            [menuTable]="canMenu()"
+            [columns]="columns"
+            [tableLinks]="tableLinks"
+            [selectable]="true"
+            ></app-list-shared>
         <div class="d-flex justify-content-between px-2 mt-auto">
             <button class="btn btn-step btn-step-prev mt-2" title="Anteiror" (click)="previous()">
                 <fa-icon [icon]="faArrowLeft"></fa-icon>

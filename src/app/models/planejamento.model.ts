@@ -1,3 +1,4 @@
+import { Account } from "./account.model";
 import { CarteiraSetup } from "./carteiraSetup.model";
 import { Cliente } from "./cliente.model";
 import { FluxosPontuais } from "./fluxosPontuais.model";
@@ -11,7 +12,8 @@ export class Planejamento {
     id: number = 0;
     cliente_Id: number = 0;
     cliente: Cliente = new Cliente;
-    usuario_Id: number = 0;
+    account_Id: number = 0;
+    account: Account = new Account;
     carteiraSetup_Id: number = undefined as unknown as number;
     carteiraSetup: CarteiraSetup = undefined as unknown as CarteiraSetup;
     data: Date  = '' as unknown as Date;

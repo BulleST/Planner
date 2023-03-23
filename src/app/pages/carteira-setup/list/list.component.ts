@@ -1,15 +1,13 @@
-import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Column } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
-import { CarteiraProdutoRel, setupRelColumns } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup, setupColumns } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
-import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Table } from 'src/app/utils/table';
+import { lastValueFrom } from 'rxjs';
+import { Account } from 'src/app/models/account.model';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-list',
@@ -17,45 +15,27 @@ import { Table } from 'src/app/utils/table';
     styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-
-    faFilter = faFilter;
-    faEllipsisV = faEllipsisV;
-    faTimes = faTimes;
     objeto: Empresa = new Empresa;
-    setupColumns = setupColumns;
+    columns = setupColumns;
     list: CarteiraSetup[] = [];
     tableLinks: MenuTableLink[] = [];
-    loading = false;
-    selected?: any;
-    selectedItems: any[] = [];
-    filters: string[] = [];
-    activityValues: number[] = [0, 100];
+    empresaSelected = new Empresa;
+    account?: Account;
 
     constructor(
-        private setupRelService: CarteiraProdutoRelService,
-        private setupService: CarteiraSetupService,
+        public setupService: CarteiraSetupService,
+        private empresaService: EmpresaService,
         private table: Table,
+        private accountService: AccountService,
     ) {
-
-        this.setupService.list.subscribe(res => {
-            this.list = res;
-            this.list.map(x => {
-                x.carteiraRiscoRel = x.carteiraRiscoRel ?? [];
-                return x;
-            })
-        })
-        this.setupService.getList().subscribe();
-
-        this.tableLinks = [
-            { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
-        ];
-
-        this.table.loading.subscribe(res => this.loading = res);
+        this.setupService.list.subscribe(res => this.list = res);
+        this.accountService.account.subscribe(res => this.account = res);
+        this.empresaService.empresa.subscribe(async res => {
+            this.empresaSelected = res;
+            await lastValueFrom(this.setupService.getList());
+        });
         this.table.selected.subscribe(res => {
-            this.selected = res;
-
-    
-            if (this.selected) {
+            if (res) {
                 this.tableLinks = [
                     { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
                     { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] },
@@ -63,28 +43,12 @@ export class ListComponent implements OnInit {
                this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
-        this.table.selectedItems.subscribe(res => this.selectedItems = res);
-        this.filters = this.setupColumns.map(x => x.field);
     }
 
     ngOnInit(): void {
     }
-
-    onRowSelect(event: any) {
-        this.table.onRowSelect(event);
+    create = (setupService: CarteiraSetupService = this.setupService): void => {
+        setupService.setObject(new CarteiraSetup);
     }
-
-    onRowUnselect(event: any) {
-        this.table.onRowUnselect(event)
-    }
-
-    onAllRowToggle(event: any) {
-        this.table.onAllRowToggle(event);
-    }
-
-    getCellData(row: any, col: Column): any {
-        return this.table.getCellData(row, col);
-    }
-
 
 }

@@ -1,0 +1,12 @@
+.aside-navigation {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: wrap;
+    flex: 0 1 20%;
+    min-width: 170px;
+    width: 20%;
+    background-color: var(--primary);
+    background-color: #f5f5f5;
+    border: 1px #dfdfdf solid;
+    transform: translateX(1px);
+}

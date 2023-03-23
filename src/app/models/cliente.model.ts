@@ -7,8 +7,9 @@ import { PerfilInvestidor } from "./perfilInvestidor.model";
 
 export class Cliente {
     id: number = 0;
-    empresa: Empresa = new Empresa;
+    empresa?: Empresa = new Empresa;
     empresa_Id: number = undefined as unknown as number;
+    usuario_Id: number = undefined as unknown as number;
     perfilInvestidor?: PerfilInvestidor;
     perfilInvestidor_Id: number = undefined as unknown as number;
     nome: string = '';
@@ -24,11 +25,14 @@ export class Cliente {
     email: string = '';
     receita: number = '' as unknown as number;
     despesa: number = '' as unknown as number;
-    
+
     idadeAposentadoria: number = '' as unknown as number;
     rendaMensalAposentadoria: number = '' as unknown as number;
     rentabilidadeAposentadoria: number = '' as unknown as number;
     
+    dataDesativado?: Date;
+    ativo?: boolean;
+
     @jsonIgnore()
     registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
 }
@@ -59,55 +63,70 @@ export class ClienteRequest {
 
 export var clienteColumns: Column[] = [
     {
-        field: 'id', 
-        header: 'Id', 
+        field: 'id',
+        header: 'Id',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     }, {
-        field: 'nome', 
-        header: 'Nome', 
+        field: 'nome',
+        header: 'Nome',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
+    },
+    {
+        field: 'ativo',
+        header: 'Ativo',
+        maskType: MaskType.boolean,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+        booleanValues: {
+            'true': 'ativo',
+            'false': 'inativo',
+        }
     }, {
-        field: 'cpf', 
-        header: 'CPF', 
+        field: 'cpf',
+        header: 'CPF',
         maskType: MaskType.cpf,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-    },{
-        field: 'dataNascimento', 
-        header: 'Data de Nascimento', 
+    }, {
+        field: 'dataNascimento',
+        header: 'Data de Nascimento',
         maskType: MaskType.date,
-        filterType: FilterType.date, 
+        filterType: FilterType.date,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
         filterShowMatchMode: true,
         filterMatchMode: FilterMatchMode.DATE_IS,
     }, {
-        field: 'idade', 
-        header: 'Idade', 
+        field: 'idade',
+        header: 'Idade',
         maskType: MaskType.undefined,
-        filterType: FilterType.numeric, 
+        filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
         filterShowMatchMode: true,
         filterMatchMode: FilterMatchMode.CONTAINS,
-    }, {
-        field: 'perfilInvestidor.descricao', 
-        header: 'Perfil Investidor', 
+    },
+    {
+        field: 'perfilInvestidor.descricao',
+        header: 'Perfil Investidor',
         maskType: MaskType.undefined,
-        filterType: FilterType.text, 
+        filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,

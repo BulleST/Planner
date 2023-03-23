@@ -32,7 +32,7 @@ export class DropdownService {
         private http: HttpClient,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.empresaObject.subscribe(res => {
+        this.empresaService.empresa.subscribe(res => {
             this.empresa = res;
         })
     }

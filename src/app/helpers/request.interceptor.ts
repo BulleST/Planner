@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpResponseBase, HttpHeaderResponse } from '@angular/common/http';
-import { from, Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
@@ -30,11 +30,12 @@ export class RequestInterceptor implements HttpInterceptor {
         'estadoCivil/getAll',
         'accounts/revoke-token',
         'accounts/authenticate',
+        'accounts/refresh-token',
         'accounts/verify-email',
         'accounts/register',
         'accounts/get-login',
-        'accounts/refresh-token',
         'accounts/authenticate',
+        'accounts/is-logged',
     ]
     excludeUrlsLoading = [
         'tributacao/getAll',
@@ -50,7 +51,7 @@ export class RequestInterceptor implements HttpInterceptor {
         var notLoading = this.excludeUrlsLoading.filter(x => request.url.includes(x));
         var notToastr = this.excludeUrlsToastr.filter(x => request.url.includes(x));
         if (notLoading.length == 0) {
-          this.table.loading.next(true);
+            this.table.loading.next(true);
         }
 
         this.table.resetSelection();
@@ -58,10 +59,10 @@ export class RequestInterceptor implements HttpInterceptor {
             tap((data: any) => {
                 if (data.type == 0) {
                     // request in progress
-                } 
+                }
                 else {
                     this.table.loading.next(false);
-                    if ([200, 204, 201].includes(data.status) 
+                    if ([200, 204, 201].includes(data.status)
                         && ['POST', 'PUT', 'DELETE'].includes(request.method)) {
                         if (notToastr.length == 0) {
                             if (request.method == 'POST') {
@@ -81,20 +82,24 @@ export class RequestInterceptor implements HttpInterceptor {
             catchError(err => {
                 console.error(err);
                 this.table.loading.next(false);
-                if (err.status == 401) {
-                    this.router.navigate(['account', 'login']);
+                if (!request.url.includes('accounts/is-logged')) {
+                    if (err.status == 401) {
+                        this.router.navigate(['account', 'login']);
                         this.toastr.error('Faça login')
                         this.toastr.error('Acesso não autorizado.');
-                } 
-                else if (err.status == 403) {
+                        localStorage.clear();
+
+                    }
+                    else if (err.status == 403) {
                         this.toastr.error('Permissão negada.');
-                }
-                else {
-                    this.toastr.error('Ocorreu um erro no processamento da requisição.');
-                    if (err.statusText.includes('Unkown Error')) {
-                        this.toastr.error("Não foi possível localizar a causa do erro.");
-                    } else {
-                        this.toastr.error(err.error.message ?? err.message);
+                    }
+                    else {
+                        this.toastr.error('Ocorreu um erro no processamento da requisição.');
+                        if (err.statusText.includes('Unkown Error')) {
+                            this.toastr.error("Não foi possível localizar a causa do erro.");
+                        } else {
+                            this.toastr.error(err.error.message ?? err.message);
+                        }
                     }
                 }
                 return throwError(err);

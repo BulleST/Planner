@@ -6,8 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
-import { ProdutoService } from 'src/app/services/produto.service';
-import { CarteiraProdutoRelService } from 'src/app/services/setup-rel.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -44,7 +42,7 @@ export class EditComponent implements OnInit {
         });
         
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.carteiraSetup.find(x => x.id == this.objeto.id) as CarteiraSetup;
+            this.objeto = this.empresaService.object.carteiraSetup.find(x => x.id == this.objeto.id) as CarteiraSetup;
         } else {
             this.setupService.get(this.objeto.id).subscribe({
                 next: res => {

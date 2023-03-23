@@ -15,15 +15,11 @@ const routes: Routes = [
             {
                 path: 'habilitar/:setup_id',
                 component: DeactivatedComponent,
-                // canActivate: [DeactivatedGuard],
-                // data: { ativo: true },
                 title: 'Planner - Habilitar carteira'
             },
             {
                 path: 'desabilitar/:setup_id',
                 component: DeactivatedComponent,
-                // canActivate: [DeactivatedGuard],
-                // data: { ativo: false },
                 title: 'Planner - Desabilitar carteira'
             },
         ]

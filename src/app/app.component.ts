@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { EmpresaService } from './services/empresa.service';
 import { IsMobile } from './utils/mobile';
+import { ModalOpen } from './utils/modal-open';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,10 @@ export class AppComponent implements OnInit {
 
     constructor(
         private isMobile: IsMobile,
-        private empresaService: EmpresaService
+        private modal: ModalOpen,
     ) {
         this.isMobile.set();
-        // this.empresaService.getList().subscribe();
+        this.modal.setOpen(false);
     }
     ngOnInit(): void {
         

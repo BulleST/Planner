@@ -25,7 +25,6 @@ export class DeactivatedComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: ModalOpen,
-        private empresaService: EmpresaService,
         public produtoService: ProdutoService,
         private crypto: Crypto,
     ) {
@@ -46,11 +45,6 @@ export class DeactivatedComponent implements OnInit {
                 this.voltar();
             }
         });
-
-
-        if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.produto.find(x => x.id == this.objeto.id) as Produto;
-        }
     }
 
     ngOnInit(): void {

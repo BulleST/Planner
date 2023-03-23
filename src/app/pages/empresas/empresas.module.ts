@@ -10,16 +10,18 @@ import { NgxMaskModule } from 'ngx-mask';
 import { StepsModule } from 'primeng/steps';
 import { CardModule } from 'primeng/card';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { MenuModule } from 'primeng/menu';
 
 import { EmpresasComponent } from './empresas.component';
 import { ListComponent } from './list/list.component';
 import { DeleteComponent } from './delete/delete.component';
 import { CreateComponent } from './create/create.component';
 
-
 import { EditComponent } from './edit/edit.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EmpresaSharedModule } from './shared/empresa-shared.module';
+import { DeactivatedComponent } from './deactivated/deactivated.component';
+import { ButtonModule } from 'primeng/button';
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { EmpresaSharedModule } from './shared/empresa-shared.module';
         DeleteComponent,
         CreateComponent,
         EditComponent,
+        DeactivatedComponent,
     ],
     imports: [
         CommonModule,
@@ -42,7 +45,9 @@ import { EmpresaSharedModule } from './shared/empresa-shared.module';
         StepsModule,
         CardModule,
         SharedModule,
-        EmpresaSharedModule
+        EmpresaSharedModule,
+        MenuModule,
+        ButtonModule,
     ],
     bootstrap: [EmpresasComponent]
 })

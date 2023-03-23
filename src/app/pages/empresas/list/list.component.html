@@ -10,13 +10,14 @@
     </div>
     <div class="page__body">
             <app-list-shared [createLink]="['cadastrar']"
+                [onCreate]="create"
+                [canCreate]="true"
                 [list]="list"
                 [paginator]="true"
                 [filterLink]="false"
                 [filterTable]="true"
                 [sortTable]="true"
                 [menuTable]="true"
-                [canCreate]="true"
                 [columns]="columns"
                 [selectable]="true"
                 [tableLinks]="tableLinks"

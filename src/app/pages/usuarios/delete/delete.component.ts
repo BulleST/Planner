@@ -44,7 +44,7 @@ export class DeleteComponent implements OnInit {
         });
         
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
-            this.objeto = this.empresaService.empresaObject.value.account.find(x => x.id == this.objeto.id) as Usuario;
+            this.objeto = this.empresaService.object.account.find(x => x.id == this.objeto.id) as Usuario;
         } 
     }
 
@@ -68,13 +68,15 @@ export class DeleteComponent implements OnInit {
             }
             this.loading = false;
         }
-        else { // Enviar para a API
-            if (this.url.includes('empresas/editar')) {
-            }
-
+        else {
             this.userService.delete(this.objeto.id).subscribe({
                 next: async res => {
-                    await lastValueFrom(this.userService.getList(this.objeto.empresa_Id))
+                    var users = await lastValueFrom(this.userService.getList());
+                    if (this.url.includes('empresas/editar')) {
+                        var empresa = this.empresaService.object;
+                        empresa.account = users;
+                        this.empresaService.setObject(empresa, 'edit usuario');
+                    }
                     this.voltar();
                     this.userService.setObject(new Usuario);
                 },

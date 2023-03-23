@@ -10,13 +10,15 @@
     </div>
     <div class="card-body">
         <app-list-shared [createLink]="['cadastrar']"
+            [onCreate]="create"
+            [canCreate]="true"
             [list]="objeto.produto"
             [filterTable]="true"
             [paginator]="true"
             [sortTable]="true"
             [menuTable]="true"
             [canCreate]="true"
-            [columns]="produtoColumns"
+            [columns]="columns"
             [tableLinks]="tableLinks"
             [selectable]="true"
         ></app-list-shared>

@@ -23,6 +23,7 @@ import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.
 import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
 import { GraficoComparativoComponent } from './planner/grafico-comparativo/grafico-comparativo.component';
+import { DeactivatedComponent } from './deactivated/deactivated.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { GraficoComparativoComponent } from './planner/grafico-comparativo/grafi
     CreateComponent,
     EditComponent,
     GraficoComparativoComponent,
+    DeactivatedComponent
   ],
   imports: [
     CommonModule,

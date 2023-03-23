@@ -10,6 +10,9 @@ import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from './empresa.service';
 import { Table } from '../utils/table';
 import { Produto, ProdutoRequest } from '../models/produto.model';
+import { Account } from '../models/account.model';
+import { AccountService } from './account.service';
+import { Role } from '../models/account-perfil.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +22,8 @@ export class ProdutoService {
     list = new BehaviorSubject<Produto[]>([]);
     objeto = new BehaviorSubject<Produto | undefined>(undefined);
     carteiraSetup = new BehaviorSubject<Produto[]>([]);
-    empresa? = new Empresa;
+    empresa = new Empresa;
+    account: Account = new Account;
 
     constructor(
         private router: Router,
@@ -28,12 +32,11 @@ export class ProdutoService {
         private toastr: ToastrService,
         private crypto: Crypto,
         private dropdownService: DropdownService,
-        private empresaService: EmpresaService
+        private empresaService: EmpresaService,
+        private accountService: AccountService,
     ) {
-        this.empresaService.empresaObject.subscribe(res => {
-            this.empresa = res;
-        });
-
+        this.empresaService.empresa.subscribe(res => this.empresa = res);
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
 
     getObject() {
@@ -73,10 +76,6 @@ export class ProdutoService {
                 return false;
             }
             item.tipoLiquidez = tipoLiquidez;
-            // if (item.produtoTributacaoRel.length == 0) {
-            //     this.toastr.error('Selecione pelo menos uma tributação');
-            //     return false;
-            // }
 
             list.sort((x, y) => x.id - y.id)
             var lastId = list.length == 0 ? 0 : list[list.length - 1].id;
@@ -84,12 +83,9 @@ export class ProdutoService {
             item.registroNaoSalvo = true;
 
             let a = Object.assign({}, item)
-            // a.produtoTributacaoRel.map(x => {
-            //     x.produto.produtoTributacaoRel = [];
-            // });
             list.push(a);
             this.empresa.produto = list;
-            this.empresaService.setObject(this.empresa);
+            this.empresaService.setObject(this.empresa, 'add_To_Empresa_List');
             this.toastr.success('Operação concluída');
             this.table.resetSelection();
             return true;
@@ -110,14 +106,12 @@ export class ProdutoService {
                     return false;
                 }
                 item.tipoAtivo = tipoAtivo;
-
                 let tipoRisco = this.dropdownService.tipoRisco.value.find(x => x.id == item.tipoRisco_Id);
                 if (!tipoRisco) {
                     this.toastr.error('Selecione um tipo de risco válido!!');
                     return false;
                 }
                 item.tipoRisco = tipoRisco;
-
                 let tipoLiquidez = this.dropdownService.tipoLiquidez.value.find(x => x.id == item.tipoLiquidez_Id);
                 if (!tipoLiquidez) {
                     this.toastr.error('Selecione um tipo de liquidez válido!!');
@@ -125,18 +119,10 @@ export class ProdutoService {
                 }
                 item.tipoLiquidez = tipoLiquidez;
 
-                // if (item.produtoTributacaoRel.length == 0) {
-                //     this.toastr.error('Selecione pelo menos uma tributação');
-                //     return false;
-                // }
-
                 let produto = Object.assign({}, item)
-                // produto.produtoTributacaoRel.map(x => {
-                //     x.produto.produtoTributacaoRel = [];
-                // });
                 list.splice(index, 1, produto);
                 this.empresa.produto = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setObject(this.empresa, 'edit_To_Empresa_List');
                 this.toastr.success('Operação concluída');
                 return true;
             } else {
@@ -155,7 +141,7 @@ export class ProdutoService {
             if (index != -1) {
                 list.splice(index, 1);
                 this.empresa.produto = list;
-                this.empresaService.setObject(this.empresa);
+                this.empresaService.setObject(this.empresa, 'delete_To_Empresa_List');
                 this.toastr.success('Operação concluída');
                 this.table.resetSelection();
                 return true;
@@ -168,10 +154,9 @@ export class ProdutoService {
         return false;
     }
 
-
-
-    getList(empresa_Id: number = 1) {
-        return this.http.get<Produto[]>(`${this.url}/produto/all/${empresa_Id}`).pipe(
+    getList(empresaId?: number) {
+        empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
+        return this.http.get<Produto[]>(`${this.url}/produto/all/${empresaId}`).pipe(
             map(list => {
                 list = list.map(x => {
                     x.ativo = !x.dataDesativado;
@@ -188,7 +173,8 @@ export class ProdutoService {
     }
 
     create(request: ProdutoRequest) {
-        return this.http.post<Produto>(`${this.url}/produto/`, request);
+        var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
+        return this.http.post<Produto>(`${this.url}/produto/${empresaId}`, request);
     }
 
     edit(request: ProdutoRequest) {

@@ -65,10 +65,6 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
     constructor(
         private dropdown: DropdownService,
     ) { 
-        lastValueFrom(this.dropdown.getAtivo()).then(res => this.ativos = res)
-        lastValueFrom(this.dropdown.getLiquidez()).then(res => this.liquidez = res)
-        lastValueFrom(this.dropdown.getRisco()).then(res => this.riscos = res)
-
         this.chartOptions = {
             plugins: {
                 legend: {

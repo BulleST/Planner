@@ -1162,7 +1162,8 @@
                                                        (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, false)"
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
-                                                       [required]="true">
+                                                       [required]="true"
+                                                       (change)="calculaPercentual()">
                                             </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)">
@@ -1173,8 +1174,10 @@
                                     </ng-template>
                                     <ng-template pTemplate="footer">
                                         <tr>
+                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                                <small><b>Total</b></small>
+                                            </td>
                                             <td></td>
-                                            <td class="text-end pe-2">Total</td>
                                             <td>
                                                 <input type="text"
                                                        class="form-control"
@@ -1192,8 +1195,34 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>
+                                                <input type="text"
+                                                    class="form-control"
+                                                    id="sugeridoTotalProduto"
+                                                    name="sugeridoTotalProduto"
+                                                    #_sugeridoTotalProduto="ngModel"
+                                                    [(ngModel)]="sugeridoTotalProduto"
+                                                    mask="separator.5"
+                                                    thousandSeparator="."
+                                                    decimalMarker=","
+                                                    prefix="R$ "
+                                                    [allowNegativeNumbers]="true"
+                                                    [readonly]="true">
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                    class="form-control"
+                                                    id="planoAcaoTotalProduto"
+                                                    name="planoAcaoTotalProduto"
+                                                    #_planoAcaoTotalProduto="ngModel"
+                                                    [(ngModel)]="planoAcaoTotalProduto"
+                                                    mask="separator.5"
+                                                    thousandSeparator="."
+                                                    decimalMarker=","
+                                                    prefix="R$ "
+                                                    [allowNegativeNumbers]="true"
+                                                    [readonly]="true">
+                                            </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>

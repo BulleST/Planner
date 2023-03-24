@@ -80,6 +80,8 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     produtoHover?: Produto;
 
     percentualTotalProduto = 0;
+    planoAcaoTotalProduto = 0;
+    sugeridoTotalProduto = 0;
 
     // se o usuario alterou a carteira setup, não pode adicionar um produto 
     // fora da carteira selecionada antes de salvar e calcular os valores
@@ -106,7 +108,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.plannerService.getObject().subscribe(res => {
             this.planner = res;
             this.mudouCarteiraSetup = this.planner.id != 0;
-            this.calculaPercentualProduto();
+            this.calculaPercentual();
             this.setChartPatrimonioIdade();
         });
         this.activatedRoute.params.subscribe(item => {
@@ -199,18 +201,20 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         }
     }
 
-    calculaPercentualProduto() {
+    calculaPercentual() {
         if (this.planner.planejamentoProduto.length > 0) {
-            let percentuais = this.planner.planejamentoProduto.map(x => x.percentual).filter(x => x.toString().trim() != '' && x != 0)
-            if(percentuais.length > 0) {
-                this.percentualTotalProduto = percentuais.reduce((x, y) => x + y)
-            } else {
-                this.percentualTotalProduto = 0;
-            }
+            this.planoAcaoTotalProduto = (this.planner.planejamentoProduto.map(x => x.planoAcao) ?? []).reduce((x, y) => x + y)
+            this.sugeridoTotalProduto = (this.planner.planejamentoProduto.map(x => x.sugerido) ?? []).reduce((x, y) => x + y)
+            this.planner.planejamentoProduto = this.planner.planejamentoProduto.map(x => {
+                x.percentual = (x.planoAcao * 100) / this.sugeridoTotalProduto;
+                return x 
+            });
+
+            this.percentualTotalProduto = this.planner.planejamentoProduto.map(x => x.percentual).reduce((x, y) => x + y);
         } else {
+            this.planoAcaoTotalProduto = 0;
             this.percentualTotalProduto = 0;
         }
-        return this.percentualTotalProduto;
     }
 
     calculaIdade() {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Table } from '../utils/table';
@@ -17,7 +17,8 @@ export class RequestInterceptor implements HttpInterceptor {
         private router: Router,
         private toastr: ToastrService,
         private table: Table,
-        private alert: AlertService
+        private alert: AlertService,
+        private activatedRoute: ActivatedRoute,
     ) { }
 
     excludeUrlsToastr = [
@@ -84,7 +85,7 @@ export class RequestInterceptor implements HttpInterceptor {
                 this.table.loading.next(false);
                 if (!request.url.includes('accounts/is-logged')) {
                     if (err.status == 401) {
-                        this.router.navigate(['account', 'login']);
+                        this.router.navigate(['account', 'login'], { queryParams: { returnUrl: window.location.pathname } })
                         this.toastr.error('Faça login')
                         this.toastr.error('Acesso não autorizado.');
                         localStorage.clear();

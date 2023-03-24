@@ -18,26 +18,14 @@ export class AuthGuard implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-        return new Observable<boolean>(obs => {
-            lastValueFrom(this.accountService.refreshToken())
-            .then(res => {
-                if (!this.accountService.accountValue) {
-                    this.toastr.error('Acesso não autorizado. Faça login.');
-                    this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
-                    this.accountService.setAccount(undefined)
-                    obs.next(false);
-                } else {
-                    obs.next(true);
-                }
-            })
-            .catch(err => {
-                this.toastr.error('Acesso não autorizado. Faça login.');
-                this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
-                this.accountService.setAccount(undefined)
-                obs.next(false);
-            });
-        });
-
+        const account = this.accountService.accountValue;
+        if (!account) {
+            this.toastr.error('Acesso não autorizado. Faça login.');
+            this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
+            this.accountService.setAccount(undefined)
+            return false;
+        } else {
+            return true;
+        }
     }
 }

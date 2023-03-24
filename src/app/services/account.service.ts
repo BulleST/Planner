@@ -9,6 +9,7 @@ import { Loading } from '../utils/loading';
 import { map, catchError, tap } from 'rxjs/operators';
 import { EmpresaService } from './empresa.service';
 import { Role } from '../models/account-perfil.model';
+import { Buffer } from 'buffer';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +19,6 @@ export class AccountService {
 
     accountSubject: BehaviorSubject<Account | undefined>;
     public account: Observable<Account | undefined>;
-
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -41,7 +41,7 @@ export class AccountService {
         localStorage.setItem('account', encrypted ?? '');
     }
 
-    public get accountValue(): Account | undefined {
+    public get accountValue() {
         var account = localStorage.getItem('account') as string;
         if (this.accountSubject.value == undefined && account != undefined && account.trim() != '') {
             var accountObj = this.crypto.decrypt(account) as Account;
@@ -53,13 +53,14 @@ export class AccountService {
     login(model: Login) {
         return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
             tap((account) => {
-                this.loadingHelper.loading.next(false);
-                this.setAccount(account);
                 if (account.perfilAcesso_Id != Role.Admin) {
                     this.empresaService.setObject(account.empresa, 'login')
                 }
+                this.setAccount(account);
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
                 this.router.navigateByUrl(returnUrl);
+                this.startRefreshTokenTimer();
+                this.loadingHelper.loading.next(false);
                 return of(account);
             }),
             catchError((err => {
@@ -76,15 +77,13 @@ export class AccountService {
         this.http.post<any>(`${this.url}/accounts/revoke-token`, {}, { withCredentials: true } /**/)
             .subscribe({
                 next: res => {
-                    this.setAccount(undefined)
-                    localStorage.clear();
+                    this.stopRefreshTokenTimer();
+                    this.setAccount(undefined);
                     this.router.navigate(['account', 'login']);
                     localStorage.clear();
                 },
                 error: error => {
                     return throwError(() => new Error(error));
-                    localStorage.clear();
-
                 }
             });
     }
@@ -96,6 +95,7 @@ export class AccountService {
                 if (account.perfilAcesso_Id != Role.Admin) {
                     this.empresaService.setObject(account.empresa, 'refreshToken')
                 }
+                this.startRefreshTokenTimer();
                 return account;
             }));
     }
@@ -119,6 +119,33 @@ export class AccountService {
 
     isLogged() {
         return this.http.post(`${this.url}/accounts/is-logged`, {}, { withCredentials: true })
+    }
+
+
+    private refreshTokenTimeout;
+
+    private startRefreshTokenTimer() {
+        if (this.accountValue) {
+            // parse json object from base64 encoded jwt token
+            // var buffer = Buffer.from(this.accountValue.jwtToken.split('.')[1], 'base64')
+            // console.log(buffer);
+            // console.log(atob(this.accountValue.jwtToken.split('.')[1]));
+
+
+            /** atop is not depreciated
+             * ignore de typescrypt warning
+             */
+            const jwtToken = JSON.parse(atob(this.accountValue.jwtToken.split('.')[1]));
+    
+            // set a timeout to refresh the token a minute before it expires
+            const expires = new Date(jwtToken.exp * 1000);
+            const timeout = expires.getTime() - Date.now() - (60 * 1000);
+            this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+        }
+    }
+
+    private stopRefreshTokenTimer() {
+        clearTimeout(this.refreshTokenTimeout);
     }
 
 }

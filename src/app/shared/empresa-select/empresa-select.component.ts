@@ -46,7 +46,6 @@ export class EmpresaSelectComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log('oninit')
     }
 
     empresaChange() {

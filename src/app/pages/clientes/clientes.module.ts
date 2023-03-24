@@ -16,7 +16,6 @@ import { ProdutoFormComponent } from './planner/produto-form/produto-form.compon
 import { RemoverProdutoComponent } from './planner/produto-remover/remover-produto.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { ClientesRoutingModule } from './clientes.routing';
-import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { ChartModule } from 'primeng/chart';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.component';
@@ -46,7 +45,6 @@ import { EditComponent } from './edit/edit.component';
     TableModule,
     NgbPopoverModule,
     DropdownModule,
-    SlickCarouselModule,
     ChartModule,
     SharedModule
   ],

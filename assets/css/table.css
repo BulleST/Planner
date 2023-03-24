@@ -74,10 +74,10 @@ th {
 td.td-actions {
     position: sticky;
     right: -1px;
-    z-index: 1;
     background-color: #fff;
     padding: 0;
     width: 20px;
+    z-index: 0;
 }
 
 .selected .td-actions {

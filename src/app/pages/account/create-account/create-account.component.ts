@@ -11,7 +11,7 @@ import { AlertService } from 'src/app/parts/alert/alert.service';
 @Component({
     selector: 'app-create-account',
     templateUrl: './create-account.component.html',
-    styleUrls: ['./../account.component.css']
+    styleUrls: ['./../account.component.css', './create-account.component.css']
 })
 export class CreateAccountComponent implements OnInit {
     faChevronCircleLeft = faChevronCircleLeft;

@@ -53,9 +53,7 @@ export class AccountService {
     login(model: Login) {
         return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
             tap((account) => {
-                if (account.perfilAcesso_Id != Role.Admin) {
-                    this.empresaService.setObject(account.empresa, 'login')
-                }
+                this.empresaService.setObject(account.empresa, 'login')
                 this.setAccount(account);
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
                 this.router.navigateByUrl(returnUrl);
@@ -116,11 +114,6 @@ export class AccountService {
     verifyEmail(token: string) {
         return this.http.post(`${this.url}/accounts/verify-email`, { token: token });
     }
-
-    isLogged() {
-        return this.http.post(`${this.url}/accounts/is-logged`, {}, { withCredentials: true })
-    }
-
 
     private refreshTokenTimeout;
 

@@ -32,7 +32,8 @@ export class ListComponent implements OnInit {
         this.accountService.account.subscribe(res => this.account = res);
         this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;
-            await lastValueFrom(this.setupService.getList());
+            if (res.id != 0) 
+                await lastValueFrom(this.setupService.getList());
         });
         this.table.selected.subscribe(res => {
             if (res) {

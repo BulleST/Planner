@@ -34,7 +34,7 @@ export class EmpresaService {
     }
 
     setObject(value: Empresa, where: string) {
-        // console.log(where, value)
+        console.log(where, value)
         localStorage.setItem('empresa', this.crypto.encrypt(value) ?? '')
         this.empresaObject.next(value);
     }

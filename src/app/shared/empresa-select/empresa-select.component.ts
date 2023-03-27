@@ -30,17 +30,12 @@ export class EmpresaSelectComponent implements OnInit {
         this.empresaService.empresa.subscribe(res => {
             this.empresaSelected = res;
             this.empresaSelectedId = res.id;
-        })
-
+        });
+        lastValueFrom(this.empresaService.getList()).then(res => this.empresas = res);
         this.accountService.account.subscribe(async res => {
             this.account = res;
             if (res && res.role && (this.empresaSelected == undefined || this.empresaSelectedId == 0)) {
-                if (res.role == Role.Admin) {
-                    this.empresas = await lastValueFrom(this.empresaService.getList());
-                    if (this.empresaSelected.id == 0) {
-                        this.empresaService.setObject(res.empresa ?? new Empresa, 'empresaSelected 1');
-                    }
-                } 
+                this.empresaService.setObject(res.empresa ?? new Empresa, 'app-empresa-selected');
             }
         })
     }

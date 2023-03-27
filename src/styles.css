@@ -1133,9 +1133,9 @@ color: #fff;
 
 .form-control[readonly],
 .form-control.ng-touched.ng-invalid[readonly] {
-    opacity: 0.9 !important;
+    /* opacity: 0.9 !important;
     background-color: #e5e5e5 !important;
-    border-color: #787272 !important;
+    border-color: #787272 !important; */
     cursor: default;
 }
 

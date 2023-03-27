@@ -73,7 +73,7 @@ export class DropdownService {
     }
 
     getCarteiraSetup() {
-        return this.http.get<CarteiraSetup[]>(`${this.url}/CarteiraSetup/getAll`).pipe(map(res => {
+        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/getAll`).pipe(map(res => {
             this.carteiraSetup.next(res);
             return res;
         }));

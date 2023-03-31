@@ -98,8 +98,10 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
         if (changes['planner']) {
             this.planner = changes['planner'].currentValue;
 
-            this.produtoTotal = this.planner.planejamentoProduto.map(x => x.sugerido).reduce((x,y) => x+y)
-            this.investimentoTotal = this.planner.planejamentoInvestimento.map(x => x.montanteAtual).reduce((x,y) => x+y)
+            if (this.planner.planejamentoProduto.length > 0)
+                this.produtoTotal = this.planner.planejamentoProduto.map(x => x.sugerido).reduce((x,y) => x+y)
+            if (this.planner.planejamentoInvestimento.length > 0)
+                this.investimentoTotal = this.planner.planejamentoInvestimento.map(x => x.montanteAtual).reduce((x,y) => x+y)
             
             this.setChartRisco_Investimento();
             this.setChartLiquidez_Investimento();
@@ -241,8 +243,6 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
             }]
         };
     }
-
-
 
     setChartRisco_Investimento() {
         this.chartRiscoOptions_Investimento = JSON.parse(JSON.stringify(this.chartOptions));

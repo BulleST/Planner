@@ -32,5 +32,4 @@ export class InitialComponent implements OnInit {
 
     }
 
-
 }

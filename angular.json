@@ -55,7 +55,8 @@
                             "node_modules/ngx-toastr/toastr.css",
                             "src/styles.css",
                             "src/assets/css/table.css",
-                            "src/assets/css/steps.css"
+                            "src/assets/css/steps.css",
+                            "src/assets/css/form.css"
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",

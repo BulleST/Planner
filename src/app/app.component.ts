@@ -19,8 +19,8 @@ export class AppComponent implements OnInit {
         this.modal.setOpen(false);
     }
     ngOnInit(): void {
-        
     }
+    
     @HostListener('window:resize', ['$event'])
     set() {
        this.isMobile.set();

@@ -12,6 +12,7 @@
     </div>
     <div class="modal__body mt-0">
         <form #form="ngForm" (ngSubmit)="send(form)" disabled class="needs-validation home editable">
+            {{form.errors | json }}
             <div class="form-row mb-2">
                 <div class="col-lg-8 col-md-8 col-sm-12">
                     <!-- Dados Cadastrais -->
@@ -35,8 +36,8 @@
                                            [disablePopover]="nome.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
-                                           tabindex="1">
+                                           (change)="saveData()">
+                                           
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                     <label for="perfilInvestidor">Perfil de Investidor: <span class="text-danger">*</span></label>
@@ -52,7 +53,7 @@
                                             triggers="mouseenter:mouseleave"
                                             required
                                             (ngModelChange)="perfilInvestidorChange();"
-                                            tabindex="2">
+                                            >
                                         <option [ngValue]="undefined">Selecione</option>
                                         <option [ngValue]="item.id" *ngFor="let item of perfilInvestidor">{{ item.descricao }} </option>
                                     </select>
@@ -72,8 +73,8 @@
                                             [disablePopover]="_estadoCivil.errors == null"
                                             triggers="mouseenter:mouseleave"
                                             required
-                                            (ngModelChange)="saveData()"
-                                            tabindex="3">
+                                            (ngModelChange)="saveData()">
+                                            
                                         <option [ngValue]="undefined">Selecione</option>
                                         <option [ngValue]="item.id" *ngFor="let item of estadoCivil">{{item.descricao}}</option>
                                     </select>
@@ -96,8 +97,8 @@
                                            [disablePopover]="cpf.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
-                                           tabindex="4">
+                                           (change)="saveData()">
+                                           
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6">
                                     <label for="rg">RG: <span class="text-danger">*</span>
@@ -115,8 +116,8 @@
                                            [disablePopover]="rg.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
-                                           tabindex="5">
+                                           (change)="saveData()">
+                                           
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-6">
                                     <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span>
@@ -133,8 +134,8 @@
                                            [disablePopover]="dataNascimento.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
-                                           tabindex="6">
+                                           (change)="saveData()">
+                                           
                                 </div>
                                 <div class="form-group col-lg-2 col-md-2 col-sm-6 col-6">
                                     <label for="idade">Idade: <span class="text-danger">*</span>
@@ -154,8 +155,8 @@
                                            mask="0*"
                                            suffix=" anos"
                                            required
-                                           (change)="saveData()"
-                                           tabindex="7">
+                                           (change)="saveData()">
+                                           
                                 </div>
                             </div>
                             <div class="form-row">
@@ -175,8 +176,8 @@
                                            [disablePopover]="email.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
-                                           tabindex="8">
+                                           (change)="saveData()">
+                                           
                                 </div>
                             </div>
                             <!-- <div class="form-row">
@@ -272,8 +273,8 @@
                                                (keyup.arrowup)="planner.cliente.receita = arrowUp(receita.value)"
                                                (keyup.arrowdown)="planner.cliente.receita = arrowDown(receita.value, true)"
                                                required
-                                               (change)="saveData()"
-                                               tabindex="9">
+                                               (change)="saveData()">
+                                               
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="despesa">Despesas: <span class="text-danger">*</span></label>
@@ -295,7 +296,7 @@
                                                (keyup.arrowdown)="planner.cliente.despesa = arrowDown(despesa.value, true)"
                                                required
                                                (change)="saveData()"
-                                               tabindex="10">
+                                               >
                                     </div>
                                 </div>
                             </div>
@@ -327,7 +328,7 @@
                                                (keyup.arrowdown)="planner.taxaSelic = arrowDown(taxaSelic.value, true)"
                                                required
                                                (change)="saveData()"
-                                               tabindex="11">
+                                               >
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="taxaIpca">Taxa IPCA: <span class="text-danger">*</span></label>
@@ -349,7 +350,7 @@
                                                (keyup.arrowdown)="planner.taxaIpca = arrowDown(taxaIpca.value, true)"
                                                required
                                                (change)="saveData()"
-                                               tabindex="12">
+                                               >
                                     </div>
                                 </div>
                             </div>
@@ -466,7 +467,7 @@
                                               triggers="mouseenter:mouseleave"
                                               (change)="saveData()"
                                               required
-                                              tabindex="13">
+                                              >
                                         </textarea>
                                 </div>
                             </div>
@@ -940,7 +941,8 @@
                                                        (keyup.arrowdown)="item.custosTaxas = arrowDown(custosTaxas.value, false)"
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
-                                                       required>
+                                                       required
+                                                       (change)="saveData()">
                                             </td>
                                             <td class="">
                                                 <input type="text"
@@ -957,7 +959,8 @@
                                                        (keyup.arrowup)="item.rentabilidade = arrowUp(rentabilidade.value)"
                                                        (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
                                                        [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave">
+                                                       triggers="mouseenter:mouseleave"
+                                                       (change)="saveData()">
                                             </td>
                                             <td class="px-2" style="white-space: nowrap">
                                                 <input type="text"
@@ -973,7 +976,8 @@
                                                        (keyup.arrowup)="item.rentabilidadeLiquida = arrowUp(rentabilidadeLiquida.value)"
                                                        (keyup.arrowdown)="item.rentabilidadeLiquida = arrowDown(rentabilidadeLiquida.value, true)"
                                                        [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave">
+                                                       triggers="mouseenter:mouseleave"
+                                                       (change)="saveData()">
                                                 <!-- {{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}% -->
                                             </td>
                                             <td class="">
@@ -991,7 +995,8 @@
                                                        (keyup.arrowdown)="item.montanteAtual = arrowDown(montanteAtual.value, true)"
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
-                                                       required>
+                                                       required
+                                                       (change)="saveData()">
                                             </td>
                                             <td class="px-2" style="white-space: nowrap">
                                                 <input type="text"
@@ -1007,7 +1012,8 @@
                                                        (keyup.arrowup)="item.sugerido = arrowUp(sugerido.value)"
                                                        (keyup.arrowdown)="item.sugerido = arrowDown(sugerido.value, true)"
                                                        [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave">
+                                                       triggers="mouseenter:mouseleave"
+                                                       (change)="saveData()">
                                             </td>
                                             <td class="px-2" style="white-space: nowrap"> <input type="text"
                                                        class="form-control form-control-number"
@@ -1022,7 +1028,9 @@
                                                        (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
                                                        (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, true)"
                                                        [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"></td>
+                                                       triggers="mouseenter:mouseleave"
+                                                       (change)="saveData()"
+                                                       ></td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerInvestimento(item)">
                                                     <fa-icon [icon]="faTrash"></fa-icon>
@@ -1122,7 +1130,8 @@
                                                        (keyup.arrowdown)="item.custosTaxas = arrowDown(custosTaxas.value, false)"
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
-                                                       required>
+                                                       required
+                                                       (change)="saveData()">
                                             </td>
                                             <td class="px-2" style="white-space: nowrap"> {{ item.percentual | mask : 'separator' : ',' }}% </td>
                                             <td>
@@ -1141,7 +1150,8 @@
                                                        (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
-                                                       [required]="true">
+                                                       [required]="true"
+                                                       (change)="saveData()">
                                             </td>
                                             <td class="px-2" style="white-space: nowrap">{{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}%</td>
                                             <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : ',' }} </td>
@@ -1163,7 +1173,7 @@
                                                        [ngbPopover]="setaUpDown"
                                                        triggers="mouseenter:mouseleave"
                                                        [required]="true"
-                                                       (change)="calculaPercentual()">
+                                                       (change)="calculaPercentual(); saveData()">
                                             </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)">
@@ -1173,7 +1183,7 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="footer">
-                                        <tr>
+                                        <tr *ngIf="planner.planejamentoProduto.length > 0">
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
@@ -1565,7 +1575,7 @@
                     <p class="text-red" *ngFor="let err of erro">{{err}}</p>
                     <p *ngIf="erro.length == 0" class="text-red">Preencha todos os campos corretamente para salvar</p>
                 </div>
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
             </div>
         </form>

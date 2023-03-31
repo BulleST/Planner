@@ -18,12 +18,6 @@
 .table-editable .form-control {
     min-width: 110px;
 }
-.form-control[readonly], 
-.form-control.ng-touched.ng-invalid[readonly],
-[novalidate] .form-control.ng-touched, [novalidate] .form-control.ng-touched.ng-valid, [novalidate] .form-control.ng-touched.ng-invalid, [novalidate].form-control.ng-touched, [novalidate].form-control.ng-touched.ng-valid, [novalidate].form-control.ng-touched.ng-invalid, .novalidate.form-control.ng-touched, .novalidate.form-control.ng-touched.ng-valid, .novalidate.form-control.ng-touched.ng-invalid {
-    background-color: #fff;
-    border: 1px solid #ced4da;
-}
 
 input#solucao_riscoAssumido_Atual, input#solucao_montante_Atual {
     background-color: #104456;

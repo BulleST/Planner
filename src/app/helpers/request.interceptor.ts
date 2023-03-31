@@ -47,10 +47,12 @@ export class RequestInterceptor implements HttpInterceptor {
         'perfilInvestidor/getAll',
         'estadoCivil/getAll',
         'accounts/verify-email',
+        'accounts/refresh-token',
     ]
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var notLoading = this.excludeUrlsLoading.filter(x => request.url.includes(x));
         var notToastr = this.excludeUrlsToastr.filter(x => request.url.includes(x));
+
         if (notLoading.length == 0) {
             this.table.loading.next(true);
         }
@@ -86,9 +88,11 @@ export class RequestInterceptor implements HttpInterceptor {
                 if (!request.url.includes('accounts/is-logged')) {
                     if (err.status == 401) {
                         this.router.navigate(['account', 'login'], { queryParams: { returnUrl: window.location.pathname } })
-                        this.toastr.error('Faça login')
-                        this.toastr.error('Acesso não autorizado.');
                         localStorage.clear();
+                        if (notToastr.length == 0) {
+                            this.toastr.error('Faça login')
+                            this.toastr.error('Acesso não autorizado.');
+                        }
 
                     }
                     else if (err.status == 403) {

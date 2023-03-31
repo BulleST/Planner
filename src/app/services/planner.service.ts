@@ -41,11 +41,14 @@ export class PlannerService {
         }
         return this.objeto;
     }
+
     setObject(value: Planejamento) {
-        value.planejamentoAgregandoValor = value.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : value.planejamentoAgregandoValor 
+        console.log(value)
+        value.planejamentoAgregandoValor = value.planejamentoAgregandoValor ?? new PlanejamentoAgregandoValor; 
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
         this.objeto.next(value);
     }
+
     getList() {
         var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
         return this.http.get<Planejamento[]>(`${this.url}/planejamento/all/${empresaId}`)

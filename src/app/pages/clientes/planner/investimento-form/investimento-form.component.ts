@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Investimento } from 'src/app/models/investimento.model';
 import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimento.model';
@@ -47,19 +48,22 @@ export class InvestimentoFormComponent implements OnInit {
         });
             
         this.setupService.list.subscribe(res => this.carteirasSetup = res);
-        this.setupService.getList().subscribe(res => {
+        lastValueFrom(this.setupService.getList())
+        .then(res => {
             this.carteirasSetup = res
-            this.loadingCarteiraSetup = false;
-        });
-        this.investimentoService.getAll().subscribe({
-            next: res => {
-                this.investimentos = res;
-                this.loadingInvestimentos = false;
-            },
-            error: err => {
-                this.loadingInvestimentos = false;
-            }
         })
+        .finally(() => {
+            this.loadingCarteiraSetup = false;
+        })
+
+        lastValueFrom(this.investimentoService.getAll())
+        .then(res => {
+            this.investimentos = res
+        })
+        .finally(() => {
+            this.loadingInvestimentos = false;
+        })
+
         this.modal.getOpen().subscribe(res => {
             this.modalOpen = res;
         });

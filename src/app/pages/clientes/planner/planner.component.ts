@@ -94,16 +94,12 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     constructor(
         private modal: ModalOpen,
         private plannerService: PlannerService,
-        private clienteService: ClienteService,
         private isMobile: IsMobile,
         private toastr: ToastrService,
         private activatedRoute: ActivatedRoute,
         private dropdown: DropdownService,
         private setup: CarteiraSetupService,
-        private produtoService: ProdutoService,
         private crypto: Crypto,
-        private router: Router,
-        private accountService: AccountService,
     ) {
         this.plannerService.getObject().subscribe(res => {
             this.planner = res;
@@ -111,6 +107,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.calculaPercentual();
             this.setChartPatrimonioIdade();
         });
+
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['cliente_id'];
             if (this.isEditPage) {
@@ -472,6 +469,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     }
 
     saveData(){
+        console.log(this.planner)
         this.plannerService.setObject(this.planner);
     }
 

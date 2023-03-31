@@ -78,6 +78,7 @@ export class DropdownService {
             return res;
         }));
     }
+    
     getEstadoCivil() {
         return this.http.get<EstadoCivil[]>(`${this.url}/estadoCivil/getAll`).pipe(map(res => {
             this.estadoCivil.next(res);

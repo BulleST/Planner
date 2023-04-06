@@ -1,0 +1,14 @@
+
+<div class="home__container">
+    <div class="home__container-header mb-2">
+        <h6>Patrimônio por Idade</h6>
+    </div>
+    <div class="form-row chart-container" id="chart-patrimonio-idade">
+        <p-chart #chartPatrimonioIdade 
+            [data]="chartPatrimonioIdadeData" 
+            [options]="chartPatrimonioIdadeOptions" 
+            [width]="chartSize['chart-patrimonio-idade']['width']" 
+            [height]="chartSize['chart-patrimonio-idade']['height']"
+        ></p-chart>
+    </div>
+</div>

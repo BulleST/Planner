@@ -12,7 +12,6 @@
     </div>
     <div class="modal__body mt-0">
         <form #form="ngForm" (ngSubmit)="send(form)" disabled class="needs-validation home editable">
-            {{form.errors | json }}
             <div class="form-row mb-2">
                 <div class="col-lg-8 col-md-8 col-sm-12">
                     <!-- Dados Cadastrais -->
@@ -1067,13 +1066,29 @@
                                                     [(ngModel)]="planner.carteiraSetup_Id"
                                                     optionLabel="nome"
                                                     optionValue="id"
+                                                    optionDisabled="dataDesativado"
                                                     [filter]="true"
                                                     filterBy="nome"
                                                     [showClear]="true"
                                                     placeholder="Selecione para adicionar"
                                                     (ngModelChange)="carteiraSetupChange(_carteirasSetup)"
                                                     [required]="true">
+                                            <ng-template let-item pTemplate="item">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <span>{{item.nome}}</span>
+                                                    <span class="flag flag-red" 
+                                                        *ngIf="item.dataDesativado"
+                                                        [ngbPopover]="ativo">
+                                                        Inativo
+                                                    </span>
+                                                <ng-template #ativo>
+                                                    <div class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </div>
+                                                </ng-template>
+                                                </div>
+                                            </ng-template>
                                         </p-dropdown>
+
+
                                     </div>
                                     <button type="button"
                                             triggers="mouseenter:mouseleave"
@@ -1554,15 +1569,8 @@
                         </div>
                     </div>
                     <!-- Patrimônio por Idade -->
-                    <div class="form-row mb-2">
-                        <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Patrimônio por Idade</h6>
-                            </div>
-                            <div class="form-row chart-container" id="chart-patrimonio-idade">
-                                <p-chart #chartPatrimonioIdade [data]="chartPatrimonioIdadeData" [options]="chartPatrimonioIdadeOptions" [width]="chartSize['chart-patrimonio-idade']['width']" [height]="chartSize['chart-patrimonio-idade']['height']"></p-chart>
-                            </div>
-                        </div>
+                    <div class="form-row mb-2" *ngIf="planner.planejamentoGrafico.length > 0">
+                        <app-patrimonio-por-idade style="width: 100%" [planner]="planner"></app-patrimonio-por-idade>
                     </div>
                     <!-- Comparativo Investimento x Produto -->
                     <div class="form-row mb-2" *ngIf="planner.planejamentoProduto.length > 0 || planner.planejamentoInvestimento.length > 0">

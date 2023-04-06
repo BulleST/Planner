@@ -62,6 +62,14 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
     produtoTotal = 0;
     investimentoTotal = 0;
 
+    showInvestimentoRisco = false;
+    showInvestimentoLiquidez = false;
+    showInvestimentoAtivo = false;
+
+    showProdutoRisco = false;
+    showProdutoLiquidez = false;
+    showProdutoAtivo = false;
+
     constructor(
         private dropdown: DropdownService,
     ) { 
@@ -133,6 +141,10 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
         this.chartRiscoOptions_Produto.parsing = { key: 'percentual' };
         var value: any[] = [];
         var obj;
+        
+        this.showProdutoRisco = value && value.length > 0;
+
+        
         this.planner.planejamentoProduto.forEach(x => {
             var index = value.findIndex(y => x.produto.tipoRisco_Id == y.tipoRisco_Id);
             if (index == -1) {
@@ -174,6 +186,9 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
         this.chartLiquidezOptions_Produto.parsing = { key: 'percentual' };
         var value: any[] = [];
         var obj;
+        
+        this.showProdutoLiquidez = value && value.length > 0;
+        
         this.planner.planejamentoProduto.forEach(x => {
             var index = value.findIndex(y => x.produto.tipoLiquidez_Id == y.tipoLiquidez_Id);
             if (index == -1) {
@@ -215,6 +230,10 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
         this.chartAtivoOptions_Produto.parsing = { key: 'percentual' };
         var value: any[] = [];
         var obj;
+        
+        this.showProdutoAtivo = value && value.length > 0;
+
+        
         this.planner.planejamentoProduto.forEach(x => {
             var index = value.findIndex(y => x.produto.tipoAtivo_Id == y.tipoAtivo_Id);
             if (index == -1) {
@@ -258,6 +277,8 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
         var value: any[] = [];
         var obj;
         
+        this.showInvestimentoRisco = value && value.length > 0;
+
         this.planner.planejamentoInvestimento.forEach(x => {
             var index = value.findIndex(y => x.investimento.tipoRisco_Id == y.tipoRisco_Id);
             if (index == -1) {
@@ -299,6 +320,9 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
         this.chartLiquidezOptions_Investimento.parsing = { key: 'percentual' };
         var value: any[] = [];
         var obj;
+
+        this.showInvestimentoLiquidez = value && value.length > 0;
+
         this.planner.planejamentoInvestimento.forEach(x => {
             var index = value.findIndex(y => x.investimento.tipoLiquidez_Id == y.tipoLiquidez_Id);
             if (index == -1) {
@@ -338,8 +362,12 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
             }
         };
         this.chartAtivoOptions_Investimento.parsing = { key: 'percentual' };
+        
         var value: any[] = [];
         var obj;
+
+        this.showInvestimentoAtivo = value && value.length > 0;
+
         this.planner.planejamentoInvestimento.forEach(x => {
             var index = value.findIndex(y => x.investimento.tipoAtivo_Id == y.tipoAtivo_Id);
             if (index == -1) {

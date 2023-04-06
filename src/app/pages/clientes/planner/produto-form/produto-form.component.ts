@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
@@ -21,7 +21,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './produto-form.component.html',
     styleUrls: ['./produto-form.component.css']
 })
-export class ProdutoFormComponent implements OnInit {
+export class ProdutoFormComponent implements OnInit, OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -98,6 +98,11 @@ export class ProdutoFormComponent implements OnInit {
             this.modal.setOpen(true);
         }, 200);
     }
+
+    ngOnDestroy(): void {
+        this.modal.setOpen(false);
+    }
+
 
     voltar() {
         this.modal.voltar();

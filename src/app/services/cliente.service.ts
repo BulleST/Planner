@@ -33,6 +33,7 @@ export class ClienteService {
         private toastr: ToastrService,
         private table: Table,
     ) {
+        this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
         this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }

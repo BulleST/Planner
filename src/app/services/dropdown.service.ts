@@ -72,12 +72,6 @@ export class DropdownService {
         }));
     }
 
-    getCarteiraSetup() {
-        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/getAll`).pipe(map(res => {
-            this.carteiraSetup.next(res);
-            return res;
-        }));
-    }
     
     getEstadoCivil() {
         return this.http.get<EstadoCivil[]>(`${this.url}/estadoCivil/getAll`).pipe(map(res => {

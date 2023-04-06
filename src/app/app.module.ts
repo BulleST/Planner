@@ -25,6 +25,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
 import { appInitializer } from './helpers/app.initializer';
 import { AccountService } from './services/account.service';
+import { RouterStateSnapshot } from '@angular/router';
 
 registerLocaleData(localePt);
 

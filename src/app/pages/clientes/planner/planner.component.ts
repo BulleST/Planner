@@ -30,7 +30,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './planner.component.html',
     styleUrls: ['./planner.component.css']
 })
-export class PlannerComponent implements OnInit, AfterViewInit {
+export class PlannerComponent implements OnInit {
     faTimes = faTimes;
     faWallet = faWallet;
     faChevronLeft = faChevronLeft;
@@ -57,20 +57,6 @@ export class PlannerComponent implements OnInit, AfterViewInit {
     loadingPerfilInvestidor = true;
 
     isEditPage: boolean = false;
-    chartSize: object = {
-        'chart-capital-segurado': {
-            'width': '0',
-            'height': '0',
-        },
-        'chart-patrimonio-idade': {
-            'width': '0',
-            'height': '0',
-        },
-    };
-
-    chartPatrimonioIdadeData: any;
-    chartPatrimonioIdadeOptions: any;
-    @ViewChild('chartPatrimonioIdade') private chartPatrimonioIdade;
 
     chartCapitalSeguradoData: any;
     chartCapitalSeguradoOptions: any;
@@ -105,12 +91,13 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.planner = res;
             this.mudouCarteiraSetup = this.planner.id != 0;
             this.calculaPercentual();
-            this.setChartPatrimonioIdade();
         });
+
 
         this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['cliente_id'];
             if (this.isEditPage) {
+                this.loading = true;
                 this.clienteIdEncrypted = item['cliente_id']
                 this.planner.cliente_Id = this.crypto.decrypt(item['cliente_id'])
                 this.plannerService.getByClienteId(this.planner.cliente_Id).subscribe({
@@ -120,9 +107,11 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
                         this.carteiraSetupInalterada = res.carteiraSetup;
+                        this.loading = false;
                         this.mudouCarteiraSetup = false;
                     },
                     error: err => {
+                        this.loading = false;
                         this.voltar();
                         // this.toastr.warning('Esse cliente não tem planejamento.')
                         // this.toastr.warning('Cadastre um novo planejamento para esse cliente.')
@@ -165,22 +154,11 @@ export class PlannerComponent implements OnInit, AfterViewInit {
                 this.loadingPerfilInvestidor = false;
             }
         });
-        this.setChartPatrimonioIdade();
-        this.setChartCapitalSegurado();
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
-    ngAfterViewInit(): void {
-        this.setChartPatrimonioIdade();
-        this.setChartCapitalSegurado();
-    }
 
-    @HostListener('window:resize', ['$event'])
-    onResize(event: any) {
-        this.setChartWidth('chart-capital-segurado');
-        this.setChartWidth('chart-patrimonio-idade');
-    }
 
     voltar() {
         this.modal.voltar();
@@ -204,7 +182,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.sugeridoTotalProduto = (this.planner.planejamentoProduto.map(x => x.sugerido) ?? []).reduce((x, y) => x + y)
             this.planner.planejamentoProduto = this.planner.planejamentoProduto.map(x => {
                 x.percentual = (x.planoAcao * 100) / this.sugeridoTotalProduto;
-                return x 
+                return x
             });
 
             this.percentualTotalProduto = this.planner.planejamentoProduto.map(x => x.percentual).reduce((x, y) => x + y);
@@ -246,153 +224,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         this.saveData();
     }
 
-    setChartPatrimonioIdade() {
-        this.setChartWidth('chart-patrimonio-idade');
-        this.planner.planejamentoGrafico.sort((x, y) => x.idade - y.idade)
-        this.chartPatrimonioIdadeData = {
-            labels: this.planner.planejamentoGrafico.map(x => x.idade),
-            // labels: Array.from({length: 18}, (_, i) => i * 5), // int[]
-            datasets: [
-                {
-                    type: 'line',
-                    label: 'Planejado',
-                    // data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
-                    data: this.planner.planejamentoGrafico.map(x => x.valorPlanejado),
-                    backgroundColor: '#242424',
-                    borderColor: '#2424247a'
-                },
-                {
-                    type: 'bar',
-                    label: 'Realidade Atual',
-                    // data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
-                    data: this.planner.planejamentoGrafico.map(x => x.valorAtual),
-                    backgroundColor: '#2d7a95',
-                },
-            ]
-        }
-
-        this.chartPatrimonioIdadeOptions = {
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Planejado x Realidade Atual',
-                    font: {
-                        size: 20
-                    },
-                    color: Colors.primary
-                },
-                subtitle: {
-                    display: false,
-                    text: 'Planejado x Realidade Atual',
-                    font: {
-                        size: 22
-                    },
-                    color: Colors.grey
-                },
-                legend: {
-                    position: 'top'
-                }
-            },
-            scales: {
-                xAxes: {
-                    min: 0,
-                    max: 100,
-                    suggestedMax: 100,
-                    display: true,
-                    title: {
-                        text: 'Idade',
-                        display: true,
-                        align: 'start',
-                        font: {
-                            weight: 'bold'
-                        }
-                    }
-                },
-                yAxes: {
-                    title: {
-                        text: 'Valor',
-                        display: true,
-                        align: 'start',
-                        font: {
-                            weight: 'bold'
-                        }
-                    }
-
-                }  
-            },
-        };
-    }
-
-    setChartCapitalSegurado() {
-        this.setChartWidth('chart-capital-segurado');
-
-        this.chartCapitalSeguradoData = {
-            labels: ['', '', '', '', '', '', ''],
-            datasets: [
-                {
-                    type: 'line',
-                    label: 'Renda Interrompida 0 anos antes',
-                    data: [39, 52, 36, 47, 14, 55, 74],
-                    backgroundColor: colors
-                },
-                {
-                    type: 'bar',
-                    label: 'Capital Segurado',
-                    data: [74, 65, 87, 19, 25, 25, 25],
-                    backgroundColor: colors
-                },
-                {
-                    type: 'bar',
-                    label: 'Planejado',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    backgroundColor: colors
-                }
-            ]
-        }
-
-        this.chartCapitalSeguradoOptions = {
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Capital Segurado x Evolução Patrimonial',
-                    font: {
-                        size: 20
-                    },
-                    color: Colors.primary,
-                },
-                legend: {
-                    position: 'top'
-                }
-            },
-        };
-    }
-
-    setChartWidth(containerId: string) {
-        let windowWidth = window.innerWidth;
-        let windowHeight = window.innerHeight;
-        let containerWidth = $('#' + containerId).width() ?? 0;
-        let containerHeight = $('#' + containerId).height() ?? 0;
-        let viewportWidth = 100 / windowWidth;
-        let viewportHeight = 100 / windowHeight;
-        this.chartSize[containerId]['width'] = (viewportWidth * containerWidth).toString() + 'vw';
-        this.chartSize[containerId]['height'] = (viewportHeight * containerHeight).toString() + 'vh';
-    }
-
     async adicionarProdutoCarteira(form: NgForm) {
-        // // Mandando o produto na model
-        // if (this.planner.carteiraSetup_Id) {
-        //     this.planner.planejamentoProduto =  this.planner.carteiraSetup.carteiraProdutoRel
-        //     .map(x => {
-        //         let planP: PlanejamentoProduto = new PlanejamentoProduto;
-        //         planP.planejamento_Id = this.planner.id;
-        //         planP.produto_Id = x.produto_Id;
-        //         return planP;
-        //     });
-        //     this.planner.planejamentoProduto.sort((x, y) => x.produto_Id - y.produto_Id);
-        // } else {
-        //     this.planner.planejamentoProduto = [];
-        // } 
-
         if (!this.planner.cliente.empresa) {
             this.planner.cliente.empresa = new Empresa;
         }
@@ -405,7 +237,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
             this.toastr.error('Campos inválidos!');
             this.loading = false;
             return;
-        } 
+        }
         this.plannerService.create(this.planner).subscribe({
             next: res => {
                 this.loading = false;
@@ -468,7 +300,7 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         return arrowDown(value, allowNegative)
     }
 
-    saveData(){
+    saveData() {
         console.log(this.planner)
         this.plannerService.setObject(this.planner);
     }
@@ -478,13 +310,13 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         if (form.invalid) {
             this.erro.push('Campos inválidos!');
             this.toastr.error('Campos inválidos!');
-            
+
             return false;
-        } 
+        }
         if (this.loading == true) {
             return false;
         }
-        
+
         if (this.planner.planejamentoInvestimento.length == 0) {
             this.erro.push('Insira um ou mais investimentos no planner.');
             this.toastr.error('Insira um ou mais investimentos no planner.');
@@ -493,8 +325,8 @@ export class PlannerComponent implements OnInit, AfterViewInit {
         if (this.planner.planejamentoProduto.length == 0) {
             this.erro.push('Insira um ou mais produtos no planner.');
             this.toastr.error('Insira um ou mais produtos no planner.');
-        } 
-        
+        }
+
         return true;
     }
 

@@ -79,6 +79,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.empresaService.setObject(new Empresa, 'ngOnDestroy');
+        this.modal.setOpen(false);
     }
 
     voltar() {

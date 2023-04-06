@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -18,7 +18,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
   templateUrl: './investimento-form.component.html',
   styleUrls: ['./investimento-form.component.css']
 })
-export class InvestimentoFormComponent implements OnInit {
+export class InvestimentoFormComponent implements OnInit, OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -75,6 +75,11 @@ export class InvestimentoFormComponent implements OnInit {
         }, 200);
     }
 
+    ngOnDestroy(): void {
+        this.modal.setOpen(false);
+    }
+
+
     voltar() {
         this.modal.voltar();
     }
@@ -92,6 +97,7 @@ export class InvestimentoFormComponent implements OnInit {
         
         this.objeto.investimento = this.investimento;
         this.objeto.investimento_Id = this.investimento.id;
+        this.objeto.planejamento_Id = this.planner.id;
         let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimento_Id == this.objeto.investimento_Id)
         if(jaExiste) {
             this.erro.push('Esse investimento já está inserido.')

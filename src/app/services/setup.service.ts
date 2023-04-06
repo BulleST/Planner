@@ -33,6 +33,7 @@ export class CarteiraSetupService {
         private empresaService: EmpresaService,
         private accountService: AccountService,
     ) {
+        this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
         this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
@@ -153,9 +154,11 @@ export class CarteiraSetupService {
         }
     }
 
-    getList(empresaId?: number) {
+
+    getList(empresaId?: number, ativo?: any) {
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
-        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/all/${empresaId}`).pipe(
+        ativo = ativo != undefined ? ativo : '';
+        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/all/${empresaId}/${ativo}`).pipe(
             map(list => {
                 list = list.map(x => {
                     x.ativo = x.dataDesativado != undefined ? false : true;

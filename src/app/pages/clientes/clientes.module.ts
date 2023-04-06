@@ -11,9 +11,7 @@ import { ListComponent } from './list/list.component';
 import { PlannerComponent } from './planner/planner.component';
 import { DeleteComponent } from './delete/delete.component';
 import { InvestimentoFormComponent } from './planner/investimento-form/investimento-form.component';
-import { RemoverInvestimentoComponent } from './planner/investimento-remover/remover-investimento.component';
 import { ProdutoFormComponent } from './planner/produto-form/produto-form.component';
-import { RemoverProdutoComponent } from './planner/produto-remover/remover-produto.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { ClientesRoutingModule } from './clientes.routing';
 import { ChartModule } from 'primeng/chart';
@@ -23,6 +21,7 @@ import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
 import { GraficoComparativoComponent } from './planner/grafico-comparativo/grafico-comparativo.component';
 import { DeactivatedComponent } from './deactivated/deactivated.component';
+import { PatrimonioPorIdadeComponent } from './planner/patrimonio-por-idade/patrimonio-por-idade.component';
 
 @NgModule({
   declarations: [
@@ -30,14 +29,13 @@ import { DeactivatedComponent } from './deactivated/deactivated.component';
     ListComponent,
     DeleteComponent,
     InvestimentoFormComponent,
-    RemoverInvestimentoComponent,
     ProdutoFormComponent,
-    RemoverProdutoComponent,
     DeletePlannerComponent,
     CreateComponent,
     EditComponent,
     GraficoComparativoComponent,
-    DeactivatedComponent
+    DeactivatedComponent,
+    PatrimonioPorIdadeComponent
   ],
   imports: [
     CommonModule,

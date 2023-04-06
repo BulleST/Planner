@@ -1,1 +1,1 @@
-Message = "The UPDATE statement conflicted with the FOREIGN KEY constraint \"FK_Cliente_Empresa\". The conflict occurred in database \"plannerdb\", table \"dbo.Empresa\", column 'Id'.\r\nThe statement has been terminated."
+Message = "The MERGE statement conflicted with the FOREIGN KEY constraint \"FK_PlanejamentoInvestimento_Investimento\". The conflict occurred in database \"plannerdb\", table \"dbo.Investimento\", column 'Id'."

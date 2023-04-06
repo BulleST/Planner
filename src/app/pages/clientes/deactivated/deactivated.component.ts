@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
@@ -15,7 +15,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './deactivated.component.html',
     styleUrls: ['./deactivated.component.css']
 })
-export class DeactivatedComponent implements OnInit {
+export class DeactivatedComponent implements OnInit, OnDestroy {
 
     faTimes = faTimes;
     modalOpen = false;
@@ -53,6 +53,11 @@ export class DeactivatedComponent implements OnInit {
 
     ngOnInit(): void {
     }
+
+    ngOnDestroy(): void {
+        this.modal.setOpen(false);
+    }
+
 
     voltar() {
         this.modal.voltar();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './delete.component.html',
     styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent implements OnInit {
+export class DeleteComponent implements OnInit, OnDestroy {
     faTimes = faTimes;
     modalOpen = false;
     erro: any[] = [];
@@ -53,6 +53,11 @@ export class DeleteComponent implements OnInit {
             this.modal.setOpen(true);
         }, 200);
     }
+
+    ngOnDestroy(): void {
+        this.modal.setOpen(false);
+    }
+
 
     voltar() {
         this.modal.voltar();

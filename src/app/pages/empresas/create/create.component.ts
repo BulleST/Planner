@@ -59,6 +59,7 @@ export class CreateComponent implements OnInit, OnDestroy {
             
     ngOnDestroy(): void {
         this.empresaService.setObject(new Empresa, 'ngOnDestroy')
+        this.modal.setOpen(false);
     }
 
     voltar() {

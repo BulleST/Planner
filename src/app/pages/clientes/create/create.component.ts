@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -12,7 +12,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.css']
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -49,6 +49,10 @@ export class CreateComponent implements OnInit {
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
+    }
+
+    ngOnDestroy(): void {
+        this.modal.setOpen(false);
     }
 
     resetForm() {

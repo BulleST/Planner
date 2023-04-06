@@ -1863,3 +1863,11 @@ body {
 .modal__content:not(.modal .modal__content) {
     padding-top: 20px;
 }
+
+.p-dropdown-panel .p-dropdown-items p-dropdownitem:nth-child(even) .p-dropdown-item{
+    background: #e7e7e7;
+}
+
+.p-dropdown-panel .p-dropdown-items p-dropdownitem:nth-child(odd) .p-dropdown-item {
+    background: white;
+}

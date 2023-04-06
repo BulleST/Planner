@@ -27,8 +27,9 @@ export class PlannerService {
         private accountService: AccountService,
         private empresaService: EmpresaService
     ) { 
-        this.accountService.account.subscribe(res => this.account = res ?? new Account);
+        this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
 
     getObject(): BehaviorSubject<Planejamento> {

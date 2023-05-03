@@ -33,7 +33,7 @@ export class MenuItemsComponent implements OnInit {
                 iconClass: 'pi pi-id-card',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    this.table.selectedItems.next([]);
+                    // this.table.selectedItems.next([]);
                 },
             },
             {
@@ -42,7 +42,7 @@ export class MenuItemsComponent implements OnInit {
                 iconClass: 'pi pi-users',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    this.table.selectedItems.next([]);
+                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
             },
@@ -52,7 +52,7 @@ export class MenuItemsComponent implements OnInit {
                 iconClass: 'pi pi-user',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    this.table.selectedItems.next([]);
+                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
             },
@@ -63,7 +63,7 @@ export class MenuItemsComponent implements OnInit {
                 // // faIcon: faHandHoldingDollar,
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    this.table.selectedItems.next([]);
+                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
 
@@ -74,7 +74,7 @@ export class MenuItemsComponent implements OnInit {
                 routerLink: 'setup',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    this.table.selectedItems.next([]);
+                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
             },

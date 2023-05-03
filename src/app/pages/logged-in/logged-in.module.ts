@@ -13,6 +13,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { NgxMaskModule } from 'ngx-mask';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Router } from '@angular/router';
 
 @NgModule({
     declarations: [
@@ -32,7 +33,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ],
     bootstrap: [InitialComponent],
     providers: [
-        { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
+        { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService, Router] },
     ]
 
 })

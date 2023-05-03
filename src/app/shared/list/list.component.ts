@@ -32,7 +32,7 @@ export class ListSharedComponent implements OnInit, OnChanges {
     @Input() tableLinks: MenuTableLink[] = [];
     @Input() onCreate: any;
     selected?: any;
-    selectedItems: any[] = [];
+    // selectedItems: any[] = [];
     filters: string[] = [];
     routeRow: string[] = [];
 
@@ -43,10 +43,8 @@ export class ListSharedComponent implements OnInit, OnChanges {
         this.filters = this.columns.map(x => x.field);
         this.table.loading.subscribe(res => this.loading = res);
         if (this.selectable) {
-            this.table.selected.subscribe(res => {
-                this.selected = res;
-            });
-            this.table.selectedItems.subscribe(res => this.selectedItems = res);
+            this.table.selected.subscribe(res => this.selected = res);
+            // this.table.selectedItems.subscribe(res => this.selectedItems = res);
         }
 
     }
@@ -71,8 +69,10 @@ export class ListSharedComponent implements OnInit, OnChanges {
             this.sortTable = changes['sortTable'].currentValue;
         if (changes['menuTable'])
             this.menuTable = changes['menuTable'].currentValue;
-        if (changes['columns']) 
+        if (changes['columns']) {
             this.columns = changes['columns'].currentValue;
+            this.filters = this.columns.map(x => x.field)
+        }
         if (changes['canCreate'])
             this.canCreate = changes['canCreate'].currentValue;
         if (changes['onCreate']) 
@@ -90,9 +90,9 @@ export class ListSharedComponent implements OnInit, OnChanges {
         this.table.onRowUnselect(event)
     }
 
-    onAllRowToggle(event: any) {
-        this.table.onAllRowToggle(event);
-    }
+    // onAllRowToggle(event: any) {
+    //     this.table.onAllRowToggle(event);
+    // }
 
     getCellData(row: any, col: Column): any {
         return this.table.getCellData(row, col);

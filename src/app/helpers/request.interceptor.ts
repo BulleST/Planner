@@ -35,8 +35,6 @@ export class RequestInterceptor implements HttpInterceptor {
         'accounts/verify-email',
         'accounts/register',
         'accounts/get-login',
-        'accounts/authenticate',
-        'accounts/is-logged',
     ]
     excludeUrlsLoading = [
         'tributacao/getAll',
@@ -85,30 +83,27 @@ export class RequestInterceptor implements HttpInterceptor {
             catchError(err => {
                 console.error(err);
                 this.table.loading.next(false);
-                if (!request.url.includes('accounts/is-logged')) {
-                    if (err.status == 401) {
-                        
-                        var returnUrl = window.location.pathname;
-                        returnUrl = returnUrl.includes('account/login') ? '' : returnUrl; 
-                        console.log(returnUrl)
-                        this.router.navigate(['account', 'login'], { queryParams: { returnUrl }})
+                if (err.status == 401) {
+                    var returnUrl = window.location.pathname;
+                    returnUrl = returnUrl.includes('account/login') ? '' : returnUrl;
+                    // if (!window.location.href.includes('account/') && !window.location.href.includes('termos-de-uso')) {
+                        this.router.navigate(['account', 'login'], { queryParams: { returnUrl } })
                         localStorage.clear();
-                        if (notToastr.length == 0) {
-                            this.toastr.error('Faça login')
-                            this.toastr.error('Acesso não autorizado.');
-                        }
-
+                    // }
+                    if (notToastr.length == 0) {
+                        this.toastr.error('Faça login')
+                        this.toastr.error('Acesso não autorizado.');
                     }
-                    else if (err.status == 403) {
-                        this.toastr.error('Permissão negada.');
-                    }
-                    else {
-                        this.toastr.error('Ocorreu um erro no processamento da requisição.');
-                        if (err.statusText.includes('Unkown Error')) {
-                            this.toastr.error("Não foi possível localizar a causa do erro.");
-                        } else {
-                            this.toastr.error(err.error.message ?? err.message);
-                        }
+                }
+                else if (err.status == 403) {
+                    this.toastr.error('Permissão negada.');
+                }
+                else {
+                    this.toastr.error('Ocorreu um erro no processamento da requisição.');
+                    if (err.statusText.includes('Unkown Error')) {
+                        this.toastr.error("Não foi possível localizar a causa do erro.");
+                    } else {
+                        this.toastr.error(err.error.message ?? err.message);
                     }
                 }
                 return throwError(err);

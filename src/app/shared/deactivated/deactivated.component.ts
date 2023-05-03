@@ -46,6 +46,7 @@ export class DeactivatedComponent implements OnInit, OnChanges {
     }
 
     send() {
+        console.log('oi')
         this.loading = true;
         this.erro = [];
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
@@ -56,27 +57,26 @@ export class DeactivatedComponent implements OnInit, OnChanges {
         }
         else {
             // Enviar para a API
-            this.service.deactivated(this.objeto.id, !!this.objeto.dataDesativado).subscribe({
-                next: async res => {
-                    var list = await lastValueFrom(this.service.getList());
-                    if (this.url.includes('empresas/editar')) {
-                        var empresa = this.empresaService.object;
-                        if (this.url.includes('usuarios'))
-                            empresa.account = list as Usuario[];
-                        else if(this.url.includes('clientes'))
-                            empresa.cliente = list as Cliente[];
-                        else if(this.url.includes('produtos'))
-                            empresa.produto = list as Produto[];
-                        else if(this.url.includes('setup'))
-                            empresa.carteiraSetup = list as CarteiraSetup[];
-                        this.empresaService.setObject(empresa, 'edit usuario');
-                    }
-                    this.voltar();
-                    this.service.setObject({});
-                },
-                error: err => {
-                    this.loading = false;
+            lastValueFrom(this.service.deactivated(this.objeto.id, !!this.objeto.dataDesativado))
+            .then( async res => {
+                var list = await lastValueFrom(this.service.getList());
+                if (this.url.includes('empresas/editar')) {
+                    var empresa = this.empresaService.object;
+                    if (this.url.includes('usuarios'))
+                        empresa.account = list as Usuario[];
+                    else if(this.url.includes('clientes'))
+                        empresa.cliente = list as Cliente[];
+                    else if(this.url.includes('produtos'))
+                        empresa.produto = list as Produto[];
+                    else if(this.url.includes('setup'))
+                        empresa.carteiraSetup = list as CarteiraSetup[];
+                    this.empresaService.setObject(empresa, 'edit usuario');
                 }
+                this.voltar();
+                this.service.setObject({});
+            })
+            .finally(() => {
+                this.loading = false;
             })
         }
     }

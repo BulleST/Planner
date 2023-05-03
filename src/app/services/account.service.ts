@@ -53,11 +53,9 @@ export class AccountService {
     login(model: Login) {
         return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
             tap((account) => {
-                console.log(account)
                 this.empresaService.setObject(account.empresa, 'login')
                 this.setAccount(account);
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
-                console.log(returnUrl)
                 this.router.navigateByUrl(returnUrl);
                 this.startRefreshTokenTimer();
                 this.loadingHelper.loading.next(false);
@@ -92,10 +90,10 @@ export class AccountService {
         return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
             .pipe(map((account) => {
                 this.setAccount(account);
+                this.startRefreshTokenTimer();
                 if (account.perfilAcesso_Id != Role.Admin) {
                     this.empresaService.setObject(account.empresa, 'refreshToken')
                 }
-                this.startRefreshTokenTimer();
                 return account;
             }));
     }
@@ -121,12 +119,6 @@ export class AccountService {
 
     private startRefreshTokenTimer() {
         if (this.accountValue) {
-            // parse json object from base64 encoded jwt token
-            // var buffer = Buffer.from(this.accountValue.jwtToken.split('.')[1], 'base64')
-            // console.log(buffer);
-            // console.log(atob(this.accountValue.jwtToken.split('.')[1]));
-
-
             /** atop is not depreciated
              * ignore de typescrypt warning
              */

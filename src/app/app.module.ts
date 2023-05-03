@@ -25,7 +25,8 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
 import { appInitializer } from './helpers/app.initializer';
 import { AccountService } from './services/account.service';
-import { RouterStateSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot } from '@angular/router';
+import { TermosDeUsoComponent } from './pages/termos-de-uso/termos-de-uso.component';
 
 registerLocaleData(localePt);
 
@@ -34,6 +35,7 @@ registerLocaleData(localePt);
         AppComponent,
         LoadingComponent,
         AlertComponent,
+        TermosDeUsoComponent,
     ],
     imports: [
         BrowserModule,
@@ -60,7 +62,6 @@ registerLocaleData(localePt);
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
 
     ],
     bootstrap: [AppComponent]

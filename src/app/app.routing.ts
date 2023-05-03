@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './helpers/auth.guard';
+import { TermosDeUsoComponent } from './pages/termos-de-uso/termos-de-uso.component';
 
 const account = () => import('./pages/account/account.module').then(res => res.AccountModule);
 const loggedIn = () => import('./pages/logged-in/logged-in.module').then(res => res.LoggedInModule);
 
 const routes: Routes = [
     { path: '', loadChildren: loggedIn, canActivate: [AuthGuard] },
+    { path: 'termos-de-uso', component: TermosDeUsoComponent },
     { path: 'account', loadChildren: account },
     // { path: '**', redirectTo: '', pathMatch: 'full' },
 

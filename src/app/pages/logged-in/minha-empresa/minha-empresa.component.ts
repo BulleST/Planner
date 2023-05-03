@@ -18,7 +18,6 @@ export class MinhaEmpresaComponent implements OnInit {
         private empresaService: EmpresaService
     ) { 
         this.empresa = this.accountService.accountValue?.empresa ?? new Empresa;
-        
         this.empresaService.get(this.empresa.id).subscribe(res => {
             this.empresa = res;
             this.cnpj = this.empresa.cnpj.toString().padStart(14, '0')

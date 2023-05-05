@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { MenuItem } from "primeng/api";
+import { Subscription } from "rxjs";
 import { Empresa } from "src/app/models/empresa.model";
 import { EmpresaService } from "src/app/services/empresa.service";
 import { IsMobile, ScreenWidth } from "src/app/utils/mobile";
@@ -11,21 +12,23 @@ import { Table } from "src/app/utils/table";
     templateUrl: './menu-items.component.html',
     styleUrls: ['./menu-items.component.css']
   })
-export class MenuItemsComponent implements OnInit {
+export class MenuItemsComponent implements OnDestroy {
     items: MenuItem[] = [];
     objeto = new Empresa
     erro: string[] = [];
     screen: ScreenWidth = ScreenWidth.lg;
     ScreenWidth = ScreenWidth;
+    subscription: Subscription[] = [];
+
     constructor(
         private table: Table,
         private toastr: ToastrService,
         private isMobile: IsMobile,
         private empresaService: EmpresaService,
     ) {
-        this.isMobile.get().subscribe(res => {
-            this.screen = res;
-        })
+        var get = this.isMobile.get().subscribe(res => this.screen = res);
+        this.subscription.push(get);
+
         this.items = [
             {
                 label: 'Dados Cadastrais',
@@ -33,7 +36,6 @@ export class MenuItemsComponent implements OnInit {
                 iconClass: 'pi pi-id-card',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    // this.table.selectedItems.next([]);
                 },
             },
             {
@@ -42,7 +44,6 @@ export class MenuItemsComponent implements OnInit {
                 iconClass: 'pi pi-users',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
             },
@@ -52,7 +53,6 @@ export class MenuItemsComponent implements OnInit {
                 iconClass: 'pi pi-user',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
             },
@@ -60,13 +60,10 @@ export class MenuItemsComponent implements OnInit {
                 label: 'Produtos',
                 routerLink: 'produtos',
                 iconClass: 'fa-solid fa-p',
-                // // faIcon: faHandHoldingDollar,
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
-
             },
             {
                 label: 'Carteira Setup',
@@ -74,30 +71,29 @@ export class MenuItemsComponent implements OnInit {
                 routerLink: 'setup',
                 command: (event: any) => {
                     this.table.selected.next(undefined);
-                    // this.table.selectedItems.next([]);
                     this.validateDadosCadastrais();
                 }
             },
         ];
-       this.empresaService.empresa.subscribe(res => this.objeto = res);
+        var empresa = this.empresaService.empresa.subscribe(res => this.objeto = res);
+       this.subscription.push(empresa);
     }
 
-    ngOnInit(): void {
-        
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     validateDadosCadastrais() {
         let valid = true;
-        this.erro = []; 
-        if (parseInt(this.objeto.cnpj.toString()) == 0) {
+        this.erro = [];
+
+        if (parseInt(this.objeto.cnpj.toString()) == 0) 
             valid = false;
-        }
-        else if (!this.objeto.nome.trim() || !this.objeto.email.trim()) {
+        else if (!this.objeto.nome.trim() || !this.objeto.email.trim())
             valid = false;
-        }
-        else {
+        else 
             valid = true;
-        }
+      
         if (!valid) {
             this.toastr.error('Dados cadastrais inválidos.');
             this.erro.push('Dados cadastrais inválidos');

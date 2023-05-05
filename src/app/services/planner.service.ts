@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Crypto } from '../utils/crypto';
 import { Empresa } from '../models/empresa.model';
@@ -10,6 +10,7 @@ import { PlanejamentoAgregandoValor } from '../models/planejamento-agregandoValo
 import { AccountService } from './account.service';
 import { Account } from '../models/account.model';
 import { Role } from '../models/account-perfil.model';
+import { Table } from '../utils/table';
 
 @Injectable({
     providedIn: 'root'
@@ -25,7 +26,8 @@ export class PlannerService {
         private http: HttpClient,
         private crypto: Crypto,
         private accountService: AccountService,
-        private empresaService: EmpresaService
+        private empresaService: EmpresaService,
+        private table: Table,
     ) { 
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
@@ -44,18 +46,27 @@ export class PlannerService {
     }
 
     setObject(value: Planejamento) {
-        console.log(value)
         value.planejamentoAgregandoValor = value.planejamentoAgregandoValor ?? new PlanejamentoAgregandoValor; 
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
         this.objeto.next(value);
     }
 
     getList() {
+        this.table.loading.next(true);
         var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
         return this.http.get<Planejamento[]>(`${this.url}/planejamento/all/${empresaId}`)
-        .pipe(map(list => {
-            this.list.next(list);
-            return list;
+        .pipe(tap({
+            next: list => {
+                list = list.map(x => {
+                    x.cliente.ativo = !x.cliente.dataDesativado;
+                    return x;
+                });
+                this.list.next(list);
+                return of(list);
+            },
+            complete: () => {
+                this.table.loading.next(false)
+            }
         }));
     }
     getByClienteId(cliente_id: number) {
@@ -73,7 +84,7 @@ export class PlannerService {
         var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
         request.cliente.empresa_Id = empresaId;
         request.account_Id = this.account.id;
-        request.cliente.usuario_Id = this.account.id;
+        request.cliente.account_Id = this.account.id;
         return this.http.post<Planejamento>(`${this.url}/planejamento/`, request).pipe(map(item => {
             item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
             return item;

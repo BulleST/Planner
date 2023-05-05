@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { Cliente } from 'src/app/models/cliente.model';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -14,13 +14,14 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './delete.component.html',
     styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent implements OnInit, OnDestroy {
+export class DeleteComponent implements OnDestroy {
     faTimes = faTimes;
     modalOpen = false;
     erro: any[] = [];
     loading = false;
     objeto: Cliente = new Cliente;
     url = '';
+    subscription: Subscription[] = [];
 
     constructor(
         private router: Router,
@@ -31,24 +32,22 @@ export class DeleteComponent implements OnInit, OnDestroy {
         private empresaService: EmpresaService,
         private crypto: Crypto,
     ) {
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        this.activatedRoute.params.subscribe(res => {
+        var params = this.activatedRoute.params.subscribe(res => {
             if (res['cliente_id']) {
                 this.objeto.id = this.crypto.decrypt(res['cliente_id']);
             } else {
                 this.voltar();
             }
         });
+        this.subscription.push(params)
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
             this.objeto = this.empresaService.object.cliente.find(x => x.id == this.objeto.id) as Cliente;
-        } 
-    }
-
-    ngOnInit(): void {
+        }
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
@@ -56,6 +55,7 @@ export class DeleteComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.modal.setOpen(false);
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
 
@@ -77,16 +77,15 @@ export class DeleteComponent implements OnInit, OnDestroy {
             if (this.url.includes('empresas/editar')) {
             }
 
-            this.clienteService.delete(this.objeto.id).subscribe({
-                next: async res => {
-                    await lastValueFrom(this.clienteService.getList())
+            lastValueFrom(this.clienteService.delete(this.objeto.id))
+                .then(res => {
+                    lastValueFrom(this.clienteService.getList())
                     this.voltar();
                     this.clienteService.setObject(new Cliente);
-                },
-                error: err => {
-                    this.loading = false;
-                }
-            });
+                })
+                .catch()
+                .finally(() => this.loading = false);
+
         }
 
     }

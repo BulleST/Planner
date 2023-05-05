@@ -35,7 +35,7 @@
     display: flex;
     justify-content: center;
     width: auto;
-    right: 20px;
+    margin-right: calc(0.5vw + 10px);
     max-width: 100%;
 }
 
@@ -108,7 +108,7 @@
     position: absolute;
     top: 0%;
     left: auto;
-    right: 0vw;
+    right: calc(0.5vw + 10px);
     transform: translate(0, -100%);
     width: 200px;
     background-color: white;

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { Produto } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
@@ -13,7 +13,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './deactivated.component.html',
     styleUrls: ['./deactivated.component.css']
 })
-export class DeactivatedComponent implements OnInit {
+export class DeactivatedComponent implements OnDestroy {
 
     faTimes = faTimes;
     modalOpen = false;
@@ -21,6 +21,7 @@ export class DeactivatedComponent implements OnInit {
     loading = false;
     url = '';
     objeto: Produto = new Produto;
+    subscription: Subscription[] = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -28,12 +29,12 @@ export class DeactivatedComponent implements OnInit {
         public produtoService: ProdutoService,
         private crypto: Crypto,
     ) {
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+      
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        activatedRoute.params.subscribe(async p => {
+        var params = activatedRoute.params.subscribe(async p => {
             if (p['produto_id']) {
                 this.objeto.id = this.crypto.decrypt(p['produto_id']);
                 this.objeto = await lastValueFrom(this.produtoService.get(this.objeto.id));
@@ -45,9 +46,11 @@ export class DeactivatedComponent implements OnInit {
                 this.voltar();
             }
         });
+        this.subscription.push(params);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     voltar() {

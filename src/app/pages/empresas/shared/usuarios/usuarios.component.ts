@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faArrowLeft, faArrowRight, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
@@ -16,7 +17,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './usuarios.component.html',
     styleUrls: ['./usuarios.component.css']
 })
-export class UsuariosComponent implements OnInit {
+export class UsuariosComponent implements OnDestroy {
     faUser = faUsers;
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
@@ -25,6 +26,8 @@ export class UsuariosComponent implements OnInit {
     columns = userColumns;
     tableLinks: MenuTableLink[] = [];
     account = new Account;
+    subscription: Subscription[] = [];
+
     constructor(
         private empresaService: EmpresaService,
         private accountService: AccountService,
@@ -33,43 +36,46 @@ export class UsuariosComponent implements OnInit {
         private table: Table,
         private activatedRoute: ActivatedRoute,
     ) {
-        this.accountService.account.subscribe(res => this.account = res ?? new Account);
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res;
-        });
+        var account = this.accountService.account.subscribe(res => this.account = res ?? new Account);
+        this.subscription.push(account);
+
+        var empresa = this.empresaService.empresa.subscribe(res => this.objeto = res);
+        this.subscription.push(empresa);
 
         var url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (!url.includes('empresas/editar')) {
+        if (!url.includes('empresas/editar'))
             this.columns = this.columns.filter(x => x.field != 'ativo');
-        }
-        
-        
-        this.table.selected.subscribe(res => {
+
+        var selected = this.table.selected.subscribe(res => {
             this.tableLinks = [];
             if (res) { // se tiver linha selecionada
-                this.tableLinks.push({ label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] });
+                this.tableLinks.push({ label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] });
                 if (!res.registroNaoSalvo) {
-                    this.tableLinks.push({ label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] });
-                    this.tableLinks.push({ label: 'Resetar senha', routePath: [ 'reset-password'], paramsFieldName: ['id'] });
+                    this.tableLinks.push({ label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [(res.ativo ? 'desabilitar' : 'habilitar')], paramsFieldName: ['id'] });
+                    this.tableLinks.push({ label: 'Resetar senha', routePath: ['reset-password'], paramsFieldName: ['id'] });
                 } else {
-                    this.tableLinks.push({ label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] })
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] })
                 }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
+        this.subscription.push(selected);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => {
+            item.unsubscribe()
+        });
     }
 
     next() {
         this.router.navigate(['..', 'clientes'], { relativeTo: this.activatedRoute })
     }
-    
+
     previous() {
         this.router.navigate(['..', 'dados-cadastrais'], { relativeTo: this.activatedRoute })
     }
-    
+
     create = (userService: UsuarioService = this.userService): void => {
         userService.setObject(new Usuario);
     }

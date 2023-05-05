@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskModule } from 'ngx-mask';
 import { ToastrModule } from 'ngx-toastr';
@@ -22,6 +22,7 @@ import { EditComponent } from './edit/edit.component';
 import { GraficoComparativoComponent } from './planner/grafico-comparativo/grafico-comparativo.component';
 import { DeactivatedComponent } from './deactivated/deactivated.component';
 import { PatrimonioPorIdadeComponent } from './planner/patrimonio-por-idade/patrimonio-por-idade.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,9 @@ import { PatrimonioPorIdadeComponent } from './planner/patrimonio-por-idade/patr
     NgbPopoverModule,
     DropdownModule,
     ChartModule,
-    SharedModule
+    SharedModule,
+    InputTextModule,
+    ReactiveFormsModule
   ],
   bootstrap: [ListComponent]
 })

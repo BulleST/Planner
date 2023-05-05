@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Subscriber } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { PerfilAcesso } from 'src/app/models/account-perfil.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
@@ -12,7 +12,7 @@ import { DropdownService } from 'src/app/services/dropdown.service';
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.css']
 })
-export class FormUsuarioComponent implements OnInit {
+export class FormUsuarioComponent implements OnDestroy {
     @Input() objeto: Usuario = new Usuario;
     @Input() loading = false;
     @Input() erro: any[] = [];
@@ -21,21 +21,25 @@ export class FormUsuarioComponent implements OnInit {
 
     perfil: PerfilAcesso[] = [];
     loadingPerfil = true;
+    subscription: Subscription[] = [];
+
 
     constructor(
         private dropdownService: DropdownService,
     ) {
 
-        this.dropdownService.getPerfilAcesso().subscribe(res => {
-            this.perfil = res;
-            this.loadingPerfil = false;
-        });
-        this.dropdownService.perfilAcesso.subscribe(res => this.perfil = res);
+        lastValueFrom(this.dropdownService.getPerfilAcesso())
+            .then(res => this.perfil = res)
+            .catch()
+            .finally(() => this.loadingPerfil = false);
+
+        var perfilAcesso = this.dropdownService.perfilAcesso.subscribe(res => this.perfil = res);
+        this.subscription.push(perfilAcesso);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
-
 
     send(form: NgForm) {
         this.sendData.emit(form);

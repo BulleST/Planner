@@ -1,19 +1,21 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
 import { faChartSimple, faEdit, faPlus, faTable, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { Cliente } from 'src/app/models/cliente.model';
 import { EstadoCivil } from 'src/app/models/estadoCivil.model';
 import { PerfilInvestidor } from 'src/app/models/perfilInvestidor.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { arrowDown, arrowUp } from 'src/app/utils/format';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-form-cliente',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.css']
 })
-export class FormClienteComponent implements OnInit {
+export class FormClienteComponent {
 
     @Input() objeto: Cliente = new Cliente;
     @Input() loading = false;
@@ -31,39 +33,60 @@ export class FormClienteComponent implements OnInit {
 
     estadoCivil: EstadoCivil[] = [];
     loadingEstadoCivil: boolean = true;
+    
+    @ViewChild('dataNascimento') dataNascimento?: NgModel;
+    dataNascimentoMin = '';
+    dataNascimentoMax = '';
 
     constructor(
         private toastr: ToastrService,
         private dropdown: DropdownService,
     ) {
-        this.dropdown.getPerfilInvestidor().subscribe({
-            next: res => {
-                this.perfilInvestidor = res;
-                this.loadingPerfilInvestidor = false;
-            },
-            error: err => {
-                this.loadingPerfilInvestidor = false;
-            }
-        })
-        this.dropdown.getEstadoCivil().subscribe({
-            next: res => {
-                this.estadoCivil = res;
-                this.loadingEstadoCivil = false;
-            },
-            error: err => {
-                this.loadingEstadoCivil = false;
-            }
-        })
 
-    }
+        lastValueFrom(this.dropdown.getPerfilInvestidor())
+            .then(res => this.perfilInvestidor = res)
+            .finally(() => this.loadingPerfilInvestidor = false);
 
-    ngOnInit(): void {
+        lastValueFrom(this.dropdown.getEstadoCivil())
+            .then(res => this.estadoCivil = res)
+            .catch()
+            .finally(() => this.loadingEstadoCivil = false);
+            
+        var dataNascimentoMax = new Date();
+        dataNascimentoMax.setFullYear(dataNascimentoMax.getFullYear() + 100);
+        this.dataNascimentoMax = dataNascimentoMax.toJSON().substring(0, 10);
+        
+        var dataNascimentoMin = new Date();
+        dataNascimentoMin.setFullYear(dataNascimentoMin.getFullYear() - 100);
+        this.dataNascimentoMin = dataNascimentoMin.toJSON().substring(0, 10);
+
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        let index = 0;
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
+            this.objeto = {
+                "id": 0,
+                "empresa_Id": 3,
+                "account_Id": undefined as unknown as number,
+                "perfilInvestidor_Id": 2,
+                "nome": "Teste aaa",
+                "idade": 22,
+                "altura": "" as unknown as number,
+                "peso": "" as unknown as number,
+                "imc": "" as unknown as number,
+                "estadoCivil_Id": 2,
+                "dataNascimento": "2000-11-11" as unknown as Date,
+                "cpf": 11111111111,
+                "rg": 111111111,
+                "email": "teste@teste.com",
+                "receita": 11111111111111,
+                "despesa": 11111111111111,
+                "idadeAposentadoria": 0,
+                "rendaMensalAposentadoria": 0,
+                "rentabilidadeAposentadoria": 0,
+                "registroNaoSalvo": false
+            }
         }
 
         if (changes['loading'])
@@ -71,7 +94,6 @@ export class FormClienteComponent implements OnInit {
 
         if (changes['erro'])
             this.erro = changes['erro'].currentValue;
-
 
     }
 
@@ -82,6 +104,9 @@ export class FormClienteComponent implements OnInit {
             return;
         }
         this.erro = [];
+        this.objeto.idadeAposentadoria = parseInt(this.objeto.idadeAposentadoria.toString());
+        this.objeto.cpf = parseInt(this.objeto.cpf.toString());
+        this.objeto.rg = parseInt(this.objeto.rg.toString());
         this.sendData.emit(this.objeto);
     }
 
@@ -102,9 +127,23 @@ export class FormClienteComponent implements OnInit {
         return arrowDown(value, allowNegative)
     }
 
-
-
-
+    validateDataNascimento() {
+        var data = new Date(this.objeto.dataNascimento);
+        var dataNascimentoMin = new Date(this.dataNascimentoMin);
+        var dataNascimentoMax = new Date(this.dataNascimentoMax);
+        if (this.dataNascimento) {
+            if (data > dataNascimentoMax) {
+                this.dataNascimento.control.setErrors({
+                    max: true
+                })
+            }
+            else if (data < dataNascimentoMin) {
+                this.dataNascimento.control.setErrors({
+                    min: true
+                })
+            }
+        }
+    }
 }
 
 

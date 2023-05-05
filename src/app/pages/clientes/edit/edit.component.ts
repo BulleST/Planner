@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { Cliente } from 'src/app/models/cliente.model';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
+import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -14,7 +15,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './edit.component.html',
     styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit, OnDestroy {
+export class EditComponent implements OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -22,6 +23,7 @@ export class EditComponent implements OnInit, OnDestroy {
     erro: any[] = [];
     loading = false;
     url = '';
+    subscription: Subscription[] = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -32,9 +34,9 @@ export class EditComponent implements OnInit, OnDestroy {
         private empresaService: EmpresaService,
     ) {
 
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
         activatedRoute.params.subscribe(p => {
             if (p['cliente_id']) {
@@ -48,18 +50,12 @@ export class EditComponent implements OnInit, OnDestroy {
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
             this.objeto = this.empresaService.object.cliente.find(x => x.id == this.objeto.id) as Cliente;
         } else {
-            this.clienteService.get(this.objeto.id).subscribe({
-                next: res => {
-                    this.objeto = res;
-                },
-                error: err => {
-                    this.voltar();
-                },
-            })
+            lastValueFrom(this.clienteService.get(this.objeto.id))
+                .then(res => this.objeto = res)
+                .catch(res => this.voltar())
+                .finally(() => this.loading = false);
         }
-    }
-
-    ngOnInit(): void {
+        
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
@@ -92,16 +88,15 @@ export class EditComponent implements OnInit, OnDestroy {
         else { // Enviar para a API
             if (this.url.includes('empresas/editar')) {
             }
-            this.clienteService.edit(model).subscribe({
-                next: async (res) => {
-                    await lastValueFrom(this.clienteService.getList());
+            lastValueFrom(this.clienteService.edit(model))
+                .then((res) => {
+                    lastValueFrom(this.clienteService.getList());
                     this.modal.voltar();
-                },
-                error: (error) => {
-                    this.loading = false;
-                },
-                complete: () => { }
-            });
+                })
+                .catch(res => {
+                    this.erro.push(getError(res));
+                })
+                .finally(() => this.loading = false);
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Produto, ProdutoRequest } from 'src/app/models/produto.model';
@@ -6,20 +6,19 @@ import { TipoAtivo } from 'src/app/models/tipoAtivo.model';
 import { TipoLiquidez } from 'src/app/models/tipoLiquidez.model';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
+import { Subscription, lastValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-form-produto',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.css']
 })
-export class FormProdutoComponent implements OnInit {
+export class FormProdutoComponent implements OnDestroy {
     @Input() objeto: Produto = new Produto;
     @Input() loading = false;
     @Input() erro: any[] = [];
     @Output() sendData: EventEmitter<ProdutoRequest> = new EventEmitter<ProdutoRequest>();
 
-    // _tributacao: Tributacao[] = [];
-    // _produtoTributacaoRel: ProdutoTributacaoRel[] = [];
     _tipoAtivo: TipoAtivo[] = [];
     _tipoRisco: TipoRisco[] = [];
     _tipoLiquidez: TipoLiquidez[] = [];
@@ -27,55 +26,40 @@ export class FormProdutoComponent implements OnInit {
     loadingAtivo = true;
     loadingRisco = true;
     loadingLiquidez = true;
+    subscription: Subscription[] = [];
 
 
     constructor(
         private toastr: ToastrService,
         private dropdownService: DropdownService
     ) {
-        this.dropdownService.tipoLiquidez.subscribe(res => this._tipoLiquidez = res);
-        this.dropdownService.getLiquidez().subscribe({
-            next: (res) => {
-                this._tipoLiquidez = res
-                this.loadingLiquidez = false;
-            },
-            error: (err) => {
-                console.error(err)
-                this.loadingLiquidez = false;
-            },
-            complete: () => this.loadingLiquidez = false
-        });
+        
+        var tipoLiquidez = this.dropdownService.tipoLiquidez.subscribe(res => this._tipoLiquidez = res);
+        this.subscription.push(tipoLiquidez);
+        lastValueFrom(this.dropdownService.getLiquidez())
+            .then((res) => this._tipoLiquidez = res)
+            .finally(() => this.loadingLiquidez = false);
 
-        this.dropdownService.tipoRisco.subscribe(res => this._tipoRisco = res);
-        this.dropdownService.getRisco().subscribe({
-            next: (res) => {
-                this._tipoRisco = res
-                this.loadingRisco = false
-            },
-            error: (err) => {
-                console.error(err)
-                this.loadingRisco = false;
-            },
-            complete: () => this.loadingRisco = false
-        });
 
-        this.dropdownService.tipoAtivo.subscribe(res => this._tipoAtivo = res);
-        this.dropdownService.getAtivo().subscribe({
-            next: (res) => {
-                this._tipoAtivo = res
-                this.loadingAtivo = false
-            },
-            error: (err) => {
-                console.error(err)
-                this.loadingAtivo = false;
-            },
-            complete: () => this.loadingAtivo = false
-        });
+        var tipoRisco = this.dropdownService.tipoRisco.subscribe(res => this._tipoRisco = res);
+        this.subscription.push(tipoRisco);
+        lastValueFrom(this.dropdownService.getRisco())
+            .then((res) => this._tipoRisco = res)
+            .catch()
+            .finally(() => this.loadingRisco = false);
 
+
+        var tipoAtivo = this.dropdownService.tipoAtivo.subscribe(res => this._tipoAtivo = res);
+        this.subscription.push(tipoAtivo);
+        lastValueFrom(this.dropdownService.getAtivo())
+            .then(res => this._tipoAtivo = res)
+            .finally(() => this.loadingAtivo = false);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
+
     send(form: NgForm) {
         if (form.invalid) {
             this.toastr.error('Campos inválidos');
@@ -87,9 +71,9 @@ export class FormProdutoComponent implements OnInit {
         let model: ProdutoRequest = {
             id: this.objeto.id,
             empresa_Id: this.objeto.empresa_Id,
-            tipoAtivo_Id: this.objeto.tipoAtivo_Id, 
-            tipoRisco_Id: this.objeto.tipoRisco_Id, 
-            tipoLiquidez_Id: this.objeto.tipoLiquidez_Id, 
+            tipoAtivo_Id: this.objeto.tipoAtivo_Id,
+            tipoRisco_Id: this.objeto.tipoRisco_Id,
+            tipoLiquidez_Id: this.objeto.tipoLiquidez_Id,
             descricao: this.objeto.descricao.trim(),
         }
 

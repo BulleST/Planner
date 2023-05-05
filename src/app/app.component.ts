@@ -9,7 +9,7 @@ import { ModalOpen } from './utils/modal-open';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent  {
 
     constructor(
         private isMobile: IsMobile,
@@ -18,9 +18,6 @@ export class AppComponent implements OnInit {
         this.isMobile.set();
         this.modal.setOpen(false);
     }
-    ngOnInit(): void {
-    }
-    
     @HostListener('window:resize', ['$event'])
     set() {
        this.isMobile.set();

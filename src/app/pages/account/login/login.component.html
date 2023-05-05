@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <p class="text-danger col-12 px-2 mb-2" *ngIf="err">{{err}}</p>
+                        <p class="text-danger col-12 px-2 mb-2" *ngIf="err">{{err | json}}</p>
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                             <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading">Login</button>
                         </div>

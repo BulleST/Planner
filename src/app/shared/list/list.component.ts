@@ -1,6 +1,7 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Role } from 'src/app/models/account-perfil.model';
@@ -11,7 +12,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListSharedComponent implements OnInit, OnChanges {
+export class ListSharedComponent implements OnDestroy, OnChanges {
     maskType = MaskType;
     faFilter = faFilter;
     faTimes = faTimes;
@@ -36,20 +37,24 @@ export class ListSharedComponent implements OnInit, OnChanges {
     filters: string[] = [];
     routeRow: string[] = [];
 
+    subscription: Subscription[] = [];
+
     constructor(
         private table: Table,
         private router: Router
     ) {
         this.filters = this.columns.map(x => x.field);
-        this.table.loading.subscribe(res => this.loading = res);
+        var loading = this.table.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
         if (this.selectable) {
-            this.table.selected.subscribe(res => this.selected = res);
+            var selected = this.table.selected.subscribe(res => this.selected = res);
+            this.subscription.push(selected);
             // this.table.selectedItems.subscribe(res => this.selectedItems = res);
         }
-
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -89,10 +94,6 @@ export class ListSharedComponent implements OnInit, OnChanges {
     onRowUnselect(event: any) {
         this.table.onRowUnselect(event)
     }
-
-    // onAllRowToggle(event: any) {
-    //     this.table.onAllRowToggle(event);
-    // }
 
     getCellData(row: any, col: Column): any {
         return this.table.getCellData(row, col);

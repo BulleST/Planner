@@ -22,6 +22,7 @@ export class AlertComponent implements OnInit {
         private router: Router,
         private alertService: AlertService
     ) { }
+    
     ngOnInit() {
         // subscribe to new alert notifications
         this.alertSubscription = this.alertService.onAlert(this.id)

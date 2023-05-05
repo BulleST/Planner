@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { Produto } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
@@ -14,7 +14,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './delete.component.html',
     styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent implements OnInit {
+export class DeleteComponent implements OnDestroy {
 
     faTimes = faTimes;
     modalOpen = false;
@@ -22,6 +22,7 @@ export class DeleteComponent implements OnInit {
     loading = false;
     url = '';
     objeto: Produto = new Produto;
+    subscription: Subscription[] = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -31,18 +32,18 @@ export class DeleteComponent implements OnInit {
         private produtoService: ProdutoService,
         private crypto: Crypto,
     ) {
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        this.activatedRoute.params.subscribe(res => {
-            if (res['produto_id']) {
+        var params = this.activatedRoute.params.subscribe(res => {
+            if (res['produto_id']) 
                 this.objeto.id = this.crypto.decrypt(res['produto_id']);
-            } else {
+            else 
                 this.voltar();
-            }
         });
+        this.subscription.push(params);
+
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
             this.objeto = this.empresaService.object.produto.find(x => x.id == this.objeto.id) as Produto;
             let podeExcluir = this.empresaService.object.carteiraSetup
@@ -54,15 +55,14 @@ export class DeleteComponent implements OnInit {
                 this.voltar();
                 this.toastr.error('Você não pode excluir esse produto, pois ele está associado a um setup.')
             }
-
-
-        } 
-    }
-
-    ngOnInit(): void {
+        }
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     voltar() {
@@ -83,17 +83,13 @@ export class DeleteComponent implements OnInit {
             if (this.url.includes('empresas/editar')) {
             }
 
-            this.produtoService.delete(this.objeto.id).subscribe({
-                next: async res => {
-                    await lastValueFrom(this.produtoService.getList())
+            lastValueFrom(this.produtoService.delete(this.objeto.id))
+                .then(res => {
+                    lastValueFrom(this.produtoService.getList())
                     this.voltar();
                     this.produtoService.setObject(new Produto);
-                },
-                error: err => {
-                    this.loading = false;
-                }
-            });
+                })
+                .finally(() => this.loading = false);
         }
-
     }
 }

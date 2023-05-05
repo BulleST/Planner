@@ -1,5 +1,6 @@
-<div *ngIf="list.length == 0 && !loading" class="p-2">
-    <p>Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Clique aqui para adicionar</a></p>
+<div class="p-2" *ngIf="!list.length || loading">
+    <p *ngIf="!list.length && !loading">Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Clique aqui para adicionar</a></p>
+    <p *ngIf="loading"> Carregando... </p>
 </div>
 <div class="content" *ngIf="list.length > 0">
     <p-table
@@ -26,9 +27,6 @@
                     <p *ngIf="!loading">
                         <small> {{ list.length }} resultado(s) </small>
                     </p>
-                    <!-- <p *ngIf="selectedItems.length > 0">
-                        <small> ({{selectedItems.length}}) linhas selecionadas </small>
-                    </p> -->
                 </div>
                 <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0  mb-sm-0 mb-2">
                     <div class="mx-1 col-sm-2 col-12 px-0 ">
@@ -44,9 +42,6 @@
         </ng-template>  
         <ng-template pTemplate="header" let-columns *ngIf="list.length > 0">
             <tr class="grey">
-                <th>
-                    <!-- <p-tableHeaderCheckbox *ngIf="list.length > 0 && selectable"></p-tableHeaderCheckbox> -->
-                </th>
                 <th [pSortableColumn]="item.field" *ngFor="let item of columns">
                     <div class="d-flex align-items-center justify-content-between">
                         <span class="mr-auto" [innerHTML]="item.header"></span>
@@ -63,10 +58,7 @@
                 [class.selectable]="selectable && eval(menuTable, item) " 
                 [pSelectableRow]="selectable && eval(menuTable, item) ? item : null" 
                 [pSelectableRowIndex]="selectable && eval(menuTable, item) ? rowIndex : null">
-                <td [attr.data-id]="item.id">
-                    <!-- <p-tableCheckbox [value]="item" *ngIf="selectable && eval(menuTable, item)"></p-tableCheckbox> -->
-                </td>
-                <td *ngFor="let col of columns">
+                <td *ngFor="let col of columns; index as i"  [class.ps-4]="i == 0">
                     <p *ngIf="col.maskType == maskType.boolean; else comun">
                             <span class="flag" 
                                 [class.flag-green]="item.ativo" 
@@ -102,8 +94,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-                <td></td>
-                <td [attr.colspan]="columns.length" *ngIf="list.length == 0 && !loading"> Nenhum registro encontrado </td>
+                <td [attr.colspan]="columns.length" *ngIf="list.length == 0 && !loading" class="ps-2"> Nenhum registro encontrado </td>
                 <td [attr.colspan]="columns.length" *ngIf="loading"> Carregando... </td>
                 <td></td>
             </tr>

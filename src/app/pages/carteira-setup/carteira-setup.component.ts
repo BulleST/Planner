@@ -5,11 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './carteira-setup.component.html',
   styleUrls: ['./carteira-setup.component.css']
 })
-export class CarteiraSetupComponent implements OnInit {
+export class CarteiraSetupComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

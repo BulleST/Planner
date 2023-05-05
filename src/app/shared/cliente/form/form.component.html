@@ -110,11 +110,15 @@
                                popoverClass="popover-danger"
                                [ngbPopover]="campoObrigatorio"
                                triggers="mouseenter:mouseleave"
-                               (ngModelChange)="calculaIdade()"
+                               (ngModelChange)="calculaIdade(); validateDataNascimento();"
+                               [min]="dataNascimentoMin"
+                               [max]="dataNascimentoMax"
                                required>
                         <div *ngIf="dataNascimento.touched && dataNascimento.errors">
                             <p class="text-danger" *ngIf="dataNascimento.errors['required']">Este campo é obrigatório.</p>
                             <p class="text-danger" *ngIf="dataNascimento.errors['date']">Data inválida.</p>
+                            <p class="text-danger" *ngIf="dataNascimento.errors['min']"><small>Data mínima é {{dataNascimentoMin}}</small></p>
+                            <p class="text-danger" *ngIf="dataNascimento.errors['max']"><small>Data máxima é {{dataNascimentoMax}}</small></p>
                         </div>
                     </div>
                     <div class="form-group col-lg-2 col-md-2 col-sm-6 col-12">
@@ -304,7 +308,7 @@
     </div>
     <div class="d-flex p-0 mt-1">
         <div *ngIf="erro || form.invalid" class="m-0">
-            <p class="text-red" *ngFor="let err of erro">{{err}}</p>
+            <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
             <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
         </div>
         <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">

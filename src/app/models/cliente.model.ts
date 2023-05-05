@@ -9,7 +9,7 @@ export class Cliente {
     id: number = 0;
     empresa?: Empresa = new Empresa;
     empresa_Id: number = undefined as unknown as number;
-    usuario_Id: number = undefined as unknown as number;
+    account_Id?: number;
     perfilInvestidor?: PerfilInvestidor;
     perfilInvestidor_Id: number = undefined as unknown as number;
     nome: string = '';
@@ -82,19 +82,6 @@ export var clienteColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'ativo',
-        header: 'Ativo',
-        maskType: MaskType.boolean,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-        booleanValues: {
-            'true': 'ativo',
-            'false': 'inativo',
-        }
-    }, {
         field: 'cpf',
         header: 'CPF',
         maskType: MaskType.cpf,
@@ -132,4 +119,18 @@ export var clienteColumns: Column[] = [
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
+    {
+        field: 'ativo',
+        header: 'Ativo',
+        maskType: MaskType.boolean,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+        booleanValues: {
+            'true': 'ativo',
+            'false': 'inativo',
+        }
+    }, 
 ]

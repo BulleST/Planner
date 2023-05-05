@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faEllipsisV, faFilter, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Cliente, clienteColumns } from 'src/app/models/cliente.model';
@@ -15,7 +16,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './clientes.component.html',
     styleUrls: ['./clientes.component.css']
 })
-export class ClientesComponent implements OnInit {
+export class ClientesComponent implements OnDestroy {
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
     faEllipsisV = faEllipsisV;
@@ -27,6 +28,7 @@ export class ClientesComponent implements OnInit {
     columns = clienteColumns;
     objeto: Empresa = new Empresa;
     tableLinks: MenuTableLink[] = [];
+    subscription: Subscription[] = [];
 
     constructor(
         private empresaService: EmpresaService,
@@ -35,30 +37,31 @@ export class ClientesComponent implements OnInit {
         private router: Router,
         private table: Table,
     ) {
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res;
-        });
+        var empresa = this.empresaService.empresa.subscribe(res => this.objeto = res);
+        this.subscription.push(empresa);
 
         var url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (!url.includes('empresas/editar')) {
             this.columns = this.columns.filter(x => x.field != 'ativo');
         }
-        
-        this.table.selected.subscribe(res => {
+
+        var selected = this.table.selected.subscribe(res => {
             this.tableLinks = [];
             if (res) { // se tiver linha selecionada
-                this.tableLinks.push({ label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] });
+                this.tableLinks.push({ label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] });
                 if (!res.registroNaoSalvo) {
-                    this.tableLinks.push({ label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] });
+                    this.tableLinks.push({ label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [(res.ativo ? 'desabilitar' : 'habilitar')], paramsFieldName: ['id'] });
                 } else {
-                    this.tableLinks.push({ label: 'Excluir', routePath: [ 'excluir'], paramsFieldName: ['id'] })
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] })
                 }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
+        this.subscription.push(selected);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     next() {

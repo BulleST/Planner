@@ -5,7 +5,6 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Account, Login, Register, ResetPassword } from '../models/account.model';
 import { Crypto } from '../utils/crypto';
-import { Loading } from '../utils/loading';
 import { map, catchError, tap } from 'rxjs/operators';
 import { EmpresaService } from './empresa.service';
 import { Role } from '../models/account-perfil.model';
@@ -23,7 +22,6 @@ export class AccountService {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private http: HttpClient,
-        private loadingHelper: Loading,
         private crypto: Crypto,
         private empresaService: EmpresaService,
     ) {
@@ -58,13 +56,11 @@ export class AccountService {
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
                 this.router.navigateByUrl(returnUrl);
                 this.startRefreshTokenTimer();
-                this.loadingHelper.loading.next(false);
                 return of(account);
             }),
             catchError((err => {
                 console.error(err)
                 this.setAccount(undefined);
-                this.loadingHelper.loading.next(false);
                 // return throwError(() => new Error(err));
                 return throwError(err);
             }))

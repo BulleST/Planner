@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { Account } from 'src/app/models/account.model';
+import { LoadingService } from 'src/app/parts/loading/loading';
 import { AccountService } from 'src/app/services/account.service';
-import { Loading } from 'src/app/utils/loading';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -13,38 +14,37 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './my-account.component.html',
     styleUrls: ['./my-account.component.css']
 })
-export class MyAccountComponent implements OnInit {
+export class MyAccountComponent implements OnDestroy {
     modalOpen = false;
     faKey = faKey;
     objeto?: Account;
-
     loading = false;
     mensagemErro = '';
     erro: string[] = [];
-    
-
+    subscription: Subscription[] = [];
 
     constructor(
         private router: Router,
         private modal: ModalOpen,
         private toastr: ToastrService,
-        private _loading: Loading,
+        private loadingUtils: LoadingService,
         private accountService: AccountService,
 
     ) {
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
-        this.accountService.account.subscribe(res => this.objeto = res);
-    }
+        var account = this.accountService.account.subscribe(res => this.objeto = res);
+        this.subscription.push(account);
 
-    ngOnInit(): void {
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
     }
-
+    
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
 
     voltar() {
         this.modal.setOpen(false);
@@ -56,7 +56,7 @@ export class MyAccountComponent implements OnInit {
     create(form: NgForm) {
         this.erro = [];
         this.loading = true;
-        this._loading.loading.next(true);
+        this.loadingUtils.loading.next(true);
         if (form.invalid) {
             this.erro.push('Formulário inválido');
             this.toastr.error('Formulário inválido');
@@ -65,7 +65,7 @@ export class MyAccountComponent implements OnInit {
 
         setTimeout(() => {
             this.loading = false;
-            this._loading.loading.next(false);
+            this.loadingUtils.loading.next(false);
         }, 300);
     }
 }

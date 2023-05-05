@@ -1,46 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { AccountService } from 'src/app/services/account.service';
+import { DropdownService } from 'src/app/services/dropdown.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
     selector: 'app-empresa-select',
     templateUrl: './empresa-select.component.html',
     styleUrls: ['./empresa-select.component.css'],
-    
+
 })
-export class EmpresaSelectComponent implements OnInit {
+export class EmpresaSelectComponent implements OnDestroy {
     empresaSelected = new Empresa;
     empresaSelectedId = 0;
     empresas: Empresa[] = [];
     loading = false;
     account?: Account;
     Role = Role;
+    subscription: Subscription[] = [];
 
     constructor(
         private empresaService: EmpresaService,
         private accountService: AccountService,
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
+        private dropdownService: DropdownService,
     ) {
-        this.empresaService.empresa.subscribe(res => {
+        var empresa = this.empresaService.empresa.subscribe(res => {
             this.empresaSelected = res;
             this.empresaSelectedId = res.id;
         });
-        lastValueFrom(this.empresaService.getList()).then(res => this.empresas = res);
-        this.accountService.account.subscribe(async res => {
+        this.subscription.push(empresa);
+
+        lastValueFrom(this.dropdownService.getEmpresas())
+            .then(res => this.empresas = res);
+
+        var account = this.accountService.account.subscribe(async res => {
             this.account = res;
-            if (res && res.role && (this.empresaSelected == undefined || this.empresaSelectedId == 0)) {
+            if (res && res.role && (this.empresaSelected == undefined || this.empresaSelectedId == 0)) 
                 this.empresaService.setObject(res.empresa ?? new Empresa, 'app-empresa-selected');
-            }
         })
+        this.subscription.push(account);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     empresaChange() {

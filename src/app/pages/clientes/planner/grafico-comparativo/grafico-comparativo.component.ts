@@ -13,7 +13,7 @@ import { DropdownService } from 'src/app/services/dropdown.service';
     templateUrl: './grafico-comparativo.component.html',
     styleUrls: ['./grafico-comparativo.component.css']
 })
-export class GraficoComparativoComponent implements OnInit, OnChanges {
+export class GraficoComparativoComponent implements OnChanges {
 
     @Input() open: boolean = true;
     @Input() planner: Planejamento = new Planejamento;
@@ -93,9 +93,6 @@ export class GraficoComparativoComponent implements OnInit, OnChanges {
               }
             }
         };
-    }
-
-    ngOnInit(): void {
     }
 
     ngOnChanges(changes: SimpleChanges): void {

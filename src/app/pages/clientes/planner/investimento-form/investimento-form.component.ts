@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Investimento } from 'src/app/models/investimento.model';
 import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimento.model';
@@ -14,11 +14,11 @@ import { arrowDown, arrowUp } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
-  selector: 'app-investimento-form',
-  templateUrl: './investimento-form.component.html',
-  styleUrls: ['./investimento-form.component.css']
+    selector: 'app-investimento-form',
+    templateUrl: './investimento-form.component.html',
+    styleUrls: ['./investimento-form.component.css']
 })
-export class InvestimentoFormComponent implements OnInit, OnDestroy {
+export class InvestimentoFormComponent implements OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -35,6 +35,7 @@ export class InvestimentoFormComponent implements OnInit, OnDestroy {
     investimentos: Investimento[] = [];
     loadingInvestimentos = true;
     aliquota = '';
+    subscription: Subscription[] = [];
 
     constructor(
         private modal: ModalOpen,
@@ -42,41 +43,33 @@ export class InvestimentoFormComponent implements OnInit, OnDestroy {
         private setupService: CarteiraSetupService,
         private investimentoService: InvestimentoService,
         private toastr: ToastrService,
-        ) {
-        this.plannerService.getObject().subscribe(planner => {
-            this.planner = planner;
-        });
-            
-        this.setupService.list.subscribe(res => this.carteirasSetup = res);
+    ) {
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
+
+        var getObject = this.plannerService.getObject().subscribe(planner => this.planner = planner);
+        this.subscription.push(getObject);
+
+        var list = this.setupService.list.subscribe(res => this.carteirasSetup = res);
+        this.subscription.push(list);
+
         lastValueFrom(this.setupService.getList())
-        .then(res => {
-            this.carteirasSetup = res
-        })
-        .finally(() => {
-            this.loadingCarteiraSetup = false;
-        })
+            .then(res => this.carteirasSetup = res)
+            .finally(() => this.loadingCarteiraSetup = false);
 
         lastValueFrom(this.investimentoService.getAll())
-        .then(res => {
-            this.investimentos = res
-        })
-        .finally(() => {
-            this.loadingInvestimentos = false;
-        })
+            .then(res => this.investimentos = res)
+            .finally(() => this.loadingInvestimentos = false);
 
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
-    }
-
-    ngOnInit(): void {
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
+
     }
 
     ngOnDestroy(): void {
         this.modal.setOpen(false);
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
 
@@ -94,12 +87,12 @@ export class InvestimentoFormComponent implements OnInit, OnDestroy {
     send(model: NgForm) {
         this.loading = true;
         this.erro = [];
-        
+
         this.objeto.investimento = this.investimento;
         this.objeto.investimento_Id = this.investimento.id;
         this.objeto.planejamento_Id = this.planner.id;
         let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimento_Id == this.objeto.investimento_Id)
-        if(jaExiste) {
+        if (jaExiste) {
             this.erro.push('Esse investimento já está inserido.')
             this.toastr.error('Esse investimento já está inserido.')
         } else {

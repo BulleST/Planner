@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faChartSimple, faEdit, faPlus, faTable, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,7 @@ import { Crypto } from 'src/app/utils/crypto';
 import { TipoRisco } from 'src/app/models/tipoRisco.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { ProdutoService } from 'src/app/services/produto.service';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { colors } from 'src/app/utils/colors.enum';
 
 @Component({
@@ -22,12 +22,13 @@ import { colors } from 'src/app/utils/colors.enum';
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.css']
 })
-export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewInit {
+export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
 
     @Input() objeto: CarteiraSetup = new CarteiraSetup;
     @Input() loading = false;
     @Input() erro: any[] = [];
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
+    @Input() clearData: boolean = false;
     
     produtos: Produto[] = [];
     // carteirasSetup: CarteiraSetup[] = [];
@@ -59,6 +60,8 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     chartWidth: string = '100%';
     chartHeight: string = '70px';
     @ViewChild('chartProdutos') private chartProdutos;
+    subscription: Subscription[] = [];
+
     
     constructor(
         private toastr: ToastrService,
@@ -71,34 +74,30 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
         private crypto: Crypto,
     ) {
 
-        this.activatedRoute.params.subscribe(item => {
-            this.isEditPage = !!item['setup_id'];
-        });
+        var params = this.activatedRoute.params.subscribe(item => this.isEditPage = !!item['setup_id']);
+        this.subscription.push(params);
 
-        this.dropdown.tipoRisco.subscribe(res => this.tipoRiscos = res);
-        this.dropdown.getRisco().subscribe({
-            next: (res) => {
-                this.selectedRisco = res[0];
-                this.tipoRiscoChange();
-            }
-        });
+        var tipoRisco = this.dropdown.tipoRisco.subscribe(res => this.tipoRiscos = res);
+        this.subscription.push(tipoRisco);
+        lastValueFrom(this.dropdown.getRisco())
+        .then((res) => {
+            this.selectedRisco = res[0];
+            this.tipoRiscoChange();
+        }).finally(() => this.loading = false);
+
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/cadastrar')) {
-            this.empresaService.empresa.subscribe(res => {
-                console.log(res.produto)
-                this.produtos = res.produto;
-            });
+            var empresa = this.empresaService.empresa.subscribe(res => this.produtos = res.produto);
+            this.subscription.push(empresa);
         } else {
-            this.produtoService.getList().subscribe({
-                next: (res) => {
-                    this.produtos = res;
-                }
-            });
+            lastValueFrom(this.produtoService.getList()).then((res) => this.produtos = res)
         }
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
+
 
     ngOnChanges(changes: SimpleChanges): void {
         let index = 0;
@@ -113,6 +112,14 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
 
         if (changes['erro'])
             this.erro = changes['erro'].currentValue;
+
+        if (changes['clearData']) {
+            this.clearData = changes['clearData'].currentValue;
+            if (this.clearData) {
+                delete this.produto;
+                this.percentual = '' as unknown as number;
+            }
+        }
 
     }
 
@@ -263,17 +270,16 @@ export class FormCarteiraSetupComponent implements OnInit, OnChanges, AfterViewI
     }
 
     adicionarProduto() {
-        if (this.produto == undefined) {
+        if (!this.produto) {
             this.toastr.error('Selecione um produto para adicionar');
         } 
         else {
-            
             let carteiraProdutoRel: CarteiraProdutoRel = {
                 id: 0,
                 percentual: this.percentual,
                 carteiraSetup_Id: 0,
                 produto: this.produto,
-                produto_Id: this.produto?.id,
+                produto_Id: this.produto.id,
             }
             var index = this.objeto.carteiraProdutoRel.findIndex(x => x.produto_Id == this.produto?.id);
             var jaExiste = this.objeto.carteiraProdutoRel.find(x => x.produto_Id == this.produto?.id);

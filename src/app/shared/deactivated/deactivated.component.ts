@@ -14,13 +14,14 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './deactivated.component.html',
     styleUrls: ['./deactivated.component.css']
 })
-export class DeactivatedComponent implements OnInit, OnChanges {
+export class DeactivatedComponent implements OnChanges {
     faTimes = faTimes;
     @Input() objeto: any = {};
     @Input() service: any;
     erro: any[] = [];
     loading = false;
     url = '';
+
     constructor(
         private modal: ModalOpen,
         private empresaService: EmpresaService,
@@ -29,8 +30,6 @@ export class DeactivatedComponent implements OnInit, OnChanges {
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
     }
 
-    ngOnInit(): void {
-    }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
@@ -46,7 +45,6 @@ export class DeactivatedComponent implements OnInit, OnChanges {
     }
 
     send() {
-        console.log('oi')
         this.loading = true;
         this.erro = [];
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
@@ -58,26 +56,24 @@ export class DeactivatedComponent implements OnInit, OnChanges {
         else {
             // Enviar para a API
             lastValueFrom(this.service.deactivated(this.objeto.id, !!this.objeto.dataDesativado))
-            .then( async res => {
-                var list = await lastValueFrom(this.service.getList());
-                if (this.url.includes('empresas/editar')) {
-                    var empresa = this.empresaService.object;
-                    if (this.url.includes('usuarios'))
-                        empresa.account = list as Usuario[];
-                    else if(this.url.includes('clientes'))
-                        empresa.cliente = list as Cliente[];
-                    else if(this.url.includes('produtos'))
-                        empresa.produto = list as Produto[];
-                    else if(this.url.includes('setup'))
-                        empresa.carteiraSetup = list as CarteiraSetup[];
-                    this.empresaService.setObject(empresa, 'edit usuario');
-                }
-                this.voltar();
-                this.service.setObject({});
-            })
-            .finally(() => {
-                this.loading = false;
-            })
+                .then(async res => {
+                    var list = await lastValueFrom(this.service.getList());
+                    if (this.url.includes('empresas/editar')) {
+                        var empresa = this.empresaService.object;
+                        if (this.url.includes('usuarios'))
+                            empresa.account = list as Usuario[];
+                        else if (this.url.includes('clientes'))
+                            empresa.cliente = list as Cliente[];
+                        else if (this.url.includes('produtos'))
+                            empresa.produto = list as Produto[];
+                        else if (this.url.includes('setup'))
+                            empresa.carteiraSetup = list as CarteiraSetup[];
+                        this.empresaService.setObject(empresa, 'edit usuario');
+                    }
+                    this.voltar();
+                    this.service.setObject({});
+                })
+                .finally(() => this.loading = false)
         }
     }
 }

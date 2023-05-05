@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
 import { CurrencyPipe, DatePipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { BrowserModule } from '@angular/platform-browser';
@@ -23,10 +23,6 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RequestInterceptor } from './helpers/request.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
-import { appInitializer } from './helpers/app.initializer';
-import { AccountService } from './services/account.service';
-import { Router, RouterStateSnapshot } from '@angular/router';
-import { TermosDeUsoComponent } from './pages/termos-de-uso/termos-de-uso.component';
 
 registerLocaleData(localePt);
 
@@ -35,7 +31,6 @@ registerLocaleData(localePt);
         AppComponent,
         LoadingComponent,
         AlertComponent,
-        TermosDeUsoComponent,
     ],
     imports: [
         BrowserModule,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { lastValueFrom } from 'rxjs';
 import { ResetPassword } from 'src/app/models/account.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { AccountService } from 'src/app/services/account.service';
@@ -10,7 +11,7 @@ import { AccountService } from 'src/app/services/account.service';
     templateUrl: './reset-password.component.html',
     styleUrls: ['./../account.component.css']
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent {
     faChevronCircleLeft = faChevronCircleLeft;
     objeto: ResetPassword = new ResetPassword;
     loading = false;
@@ -28,22 +29,18 @@ export class ResetPasswordComponent implements OnInit {
         }
     }
 
-    ngOnInit(): void {
-    }
-
     send() {
-        this.accountService.resetPassword(this.objeto)
-        .subscribe({
-            next: (res) => {
-                this.loading = false;
+        lastValueFrom(this.accountService.resetPassword(this.objeto))
+            .then((res) => {
                 this.erro = '';
                 this.alertService.success(res['message']);
-            },
-            error: (res) => {
+            })
+            .catch((res) => {
                 console.error(res)
                 this.erro = res.error.message;
+            })
+            .finally(() => {
                 this.loading = false;
-            }
-        });
+            });
     }
 }

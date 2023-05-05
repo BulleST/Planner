@@ -1,49 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 import { Login } from 'src/app/models/account.model';
+import { LoadingService } from 'src/app/parts/loading/loading';
 import { AccountService } from 'src/app/services/account.service';
-import { Loading } from 'src/app/utils/loading';
+import { getError } from 'src/app/utils/error';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./../account.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent{
     login = new Login;
     loading: boolean = false;
     err = '';
 
     constructor(
         private accountService: AccountService,
-        private loadingHelper: Loading,
+        private loadingHelper: LoadingService,
         private router: Router
     ) { 
         this.loadingHelper.loading.subscribe(res => this.loading = res);
-        // this.accountService.isLogged().subscribe({
-        //     next: (res) => {
-        //         this.router.navigate(['']);
-        //     },
-        //     error: (res) => {
-        //         console.error(res)
-        //         // this.accountService.setAccount(undefined);
-
-        //     }
-        // })
-    }
-
-    ngOnInit(): void {
     }
 
     logar() {
         this.loadingHelper.loading.next(true);
-        this.accountService.login(this.login).subscribe({
-            next: res => {
-            }, 
-            error: err => {
-                this.err = err.error.message
-            }
+        lastValueFrom(this.accountService.login(this.login))
+        .then(res => { })
+        .catch(res => {
+            this.err = getError(res)
         });
     }
 

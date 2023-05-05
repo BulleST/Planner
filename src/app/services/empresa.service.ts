@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
 import { Empresa } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
 import { environment } from 'src/environments/environment';
@@ -39,16 +39,21 @@ export class EmpresaService {
     }
 
     getList() {
+        this.table.loading.next(true);
         return this.http.get<Empresa[]>(`${this.url}/empresa/`)
-        .pipe(map(list => {
-            list = list.map(x => {
-                x.ativo = !x.dataDesativado;
-                return x;
-            });
-            this.list.next(list);
-            this.table.loading.next(false); //Colocando aqui pq no interceptor não funciona 
-            return list;
-        }));;
+        .pipe(tap({
+            next: list => {
+                list = list.map(x => {
+                    x.ativo = !x.dataDesativado;
+                    return x;
+                });
+                this.list.next(list);
+                return of(list);
+            },
+            complete: () => {
+                this.table.loading.next(false)
+            }
+        }));
     }
 
     get(id: number) {

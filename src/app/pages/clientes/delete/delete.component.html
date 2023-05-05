@@ -13,7 +13,7 @@
             </div>
             <div class="modal__body mt-0">
                 <ul *ngIf="erro" class="m-0 col-lg-12 mt-1">
-                    <li class="text-red" *ngFor="let err of erro">{{err}}</li>
+                    <li class="text-red" *ngFor="let err of erro">{{err | json}}</li>
                 </ul>
                 <div class="d-flex justify-content-center flex-wrap p-0 mt-1">
                     <button class="btn btn-grey  mr-1" (click)="voltar()"> Voltar</button>

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
@@ -16,7 +16,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnDestroy {
     faUsers = faUsers;
     Role = Role;
     columns = userColumns;
@@ -25,6 +25,7 @@ export class ListComponent implements OnInit {
     account = new Account;
     menuTable = true;
     empresaSelected = new Empresa;
+    subscription: Subscription[] = [];
 
     constructor(
         private userService: UsuarioService,
@@ -32,22 +33,22 @@ export class ListComponent implements OnInit {
         private table: Table,
         private accountService: AccountService
     ) { 
-        this.accountService.account.subscribe(res => this.account = res ?? new Account);
-        this.userService.list.subscribe(res => this.list = res);
-
-        this.empresaService.empresa.subscribe(async res => {
+        var account = this.accountService.account.subscribe(res => this.account = res ?? new Account);
+        var list = this.userService.list.subscribe(res => this.list = res);
+        
+        var empresa = this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;
             if (res.id != 0) 
-                await lastValueFrom(this.userService.getList());
+            await lastValueFrom(this.userService.getList());
         });
-
-        this.table.selected.subscribe(res => {
+        
+        var selected = this.table.selected.subscribe(res => {
             if (res) { // se tiver linha selecionada
                 /**
                  * O usuario master pode alterar 
                  * qualquer outro usuário exceto o admin
                  * O usuário backoffice não tem acesso a essa sessão
-                 */
+                */
                 if (this.account.perfilAcesso_Id == Role.Admin || (this.account.perfilAcesso_Id == Role.Master && res.perfilAcesso_Id != Role.Admin)) {
                     this.tableLinks = [
                         { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
@@ -58,10 +59,17 @@ export class ListComponent implements OnInit {
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
+
+        this.subscription.push(account);
+        this.subscription.push(list);
+        this.subscription.push(empresa);
+        this.subscription.push(selected);
     }
-    ngOnInit(): void {
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
-    
+
     create = (userService: UsuarioService = this.userService): void => {
         userService.setObject(new Usuario);
     }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Empresa } from 'src/app/models/empresa.model';
 import { Produto, produtoColumns } from 'src/app/models/produto.model';
@@ -13,14 +14,14 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './produtos.component.html',
     styleUrls: ['./produtos.component.css']
   })
-export class ProdutosComponent implements OnInit {
+export class ProdutosComponent implements OnDestroy {
     faHandHoldingDollar = faHandHoldingDollar;
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
-    
     objeto: Empresa = new Empresa;
     columns = produtoColumns;
     tableLinks: MenuTableLink[] = [];
+    subscription: Subscription[] = [];
     
     constructor(
         private empresaService: EmpresaService,
@@ -29,16 +30,15 @@ export class ProdutosComponent implements OnInit {
         private produtoService: ProdutoService,
         private table: Table,
     ) {
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res;
-        });
-        
+        var empresa = this.empresaService.empresa.subscribe(res => this.objeto = res);
+        this.subscription.push(empresa);   
+    
         var url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (!url.includes('empresas/editar')) {
             this.columns = this.columns.filter(x => x.field != 'ativo');
         }
         
-        this.table.selected.subscribe(res => {
+        var selected = this.table.selected.subscribe(res => {
             this.tableLinks = [];
             if (res) { // se tiver linha selecionada
                 this.tableLinks.push({ label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] });
@@ -50,9 +50,11 @@ export class ProdutosComponent implements OnInit {
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
+        this.subscription.push(selected);   
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     next() {

@@ -1,21 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ModoEscuro } from 'src/app/utils/modo-escuro';
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+    selector: 'app-footer',
+    templateUrl: './footer.component.html',
+    styleUrls: ['./footer.component.css']
 })
-export class FooterComponent implements OnInit {
-  modoEscuroAtivado = false;
+export class FooterComponent implements OnDestroy {
+    modoEscuroAtivado = false;
+    subscription: Subscription[] = [];
 
-  constructor(
-    private modoEscuro: ModoEscuro
-  ) {
-    this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
-  }
+    constructor(
+        private modoEscuro: ModoEscuro
+    ) {
+        var getAtivado = this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
+        this.subscription.push(getAtivado);
+    }
 
-  ngOnInit(): void {
-  }
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
+
+
 
 }

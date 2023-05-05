@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Account } from 'src/app/models/account.model';
 import { Empresa } from 'src/app/models/empresa.model';
@@ -15,13 +15,14 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnDestroy {
     faHandHoldingDollar = faHandHoldingDollar;
     empresaSelected = new Empresa;
     columns = produtoColumns;
     list: Produto[] = [];
     tableLinks: MenuTableLink[] = [];
     account?: Account;
+    subscription: Subscription[] = [];
 
     constructor(
         private empresaService: EmpresaService,
@@ -29,27 +30,34 @@ export class ListComponent implements OnInit {
         private table: Table,
         private accountService: AccountService,
     ) {
-        this.accountService.account.subscribe(res => this.account = res);
-        this.produtoService.list.subscribe(res => this.list = res);
-        this.empresaService.empresa.subscribe(async res => {
+        var account = this.accountService.account.subscribe(res => this.account = res);
+        var list = this.produtoService.list.subscribe(res => this.list = res);
+        var empresa = this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;
-            if (res.id != 0) 
+            if (res.id != 0)
                 await lastValueFrom(this.produtoService.getList());
         });
-        this.table.selected.subscribe(res => {
+        var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
-                    { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
-                    { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] },
+                    { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
+                    { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [(res.ativo ? 'desabilitar' : 'habilitar')], paramsFieldName: ['id'] },
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
+
+
+        this.subscription.push(account);
+        this.subscription.push(list);
+        this.subscription.push(empresa);
+        this.subscription.push(selected);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
-    
+
     create = (produtoService: ProdutoService = this.produtoService): void => {
         produtoService.setObject(new Produto);
     }

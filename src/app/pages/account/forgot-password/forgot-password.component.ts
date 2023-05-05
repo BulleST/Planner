@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { lastValueFrom } from 'rxjs';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { AccountService } from 'src/app/services/account.service';
+import { getError } from 'src/app/utils/error';
 
 @Component({
     selector: 'app-forgot-password',
     templateUrl: './forgot-password.component.html',
     styleUrls: ['./../account.component.css']
 })
-export class ForgotPasswordComponent implements OnInit {
+export class ForgotPasswordComponent {
 
     faChevron = faChevronCircleLeft;
     loading = false;
@@ -25,23 +27,18 @@ export class ForgotPasswordComponent implements OnInit {
         private alertService: AlertService,
         ) { }
 
-    ngOnInit(): void {
-    }
 
 
     send() {
-        this.accountService.forgotPassword(this.object.email)
-        .subscribe({
-            next: (res) => {
-                this.loading = false;
-                this.erro = '';
-                this.alertService.success(res['message']);
-            },
-            error: (res) => {
-                console.error(res)
-                this.erro = res.error.message;
-                this.loading = false;
-            }
+        lastValueFrom(this.accountService.forgotPassword(this.object.email))
+        .then(res => {
+            this.loading = false;
+            this.erro = '';
+            this.alertService.success(res['message']);
+        })
+        .catch(res => {
+            this.erro = getError(res);
+            this.loading = false;
         });
     }
 

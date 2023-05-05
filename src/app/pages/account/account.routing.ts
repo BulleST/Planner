@@ -5,18 +5,24 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { LoginComponent } from './login/login.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { TermosDeUsoComponent } from './termos-de-uso/termos-de-uso.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'prefix', },
-  { path: 'login', component: LoginComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
-  { path: 'register', component: CreateAccountComponent },
-  { path: 'verify-email', component: VerifyEmailComponent },
+    { path: '', redirectTo: 'login', pathMatch: 'prefix', },
+    { path: 'login', component: LoginComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
+    {
+        path: 'register', component: CreateAccountComponent, children: [
+            { path: 'termos-de-uso', component: TermosDeUsoComponent },
+        ]
+    },
+    { path: 'verify-email', component: VerifyEmailComponent },
+
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class AccountRoutingModule { }

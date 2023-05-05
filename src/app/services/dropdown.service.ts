@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map } from "rxjs";
+import { BehaviorSubject, map, of, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { CarteiraSetup } from "../models/carteiraSetup.model";
 import { Empresa } from "../models/empresa.model";
@@ -11,13 +11,13 @@ import { TipoLiquidez } from "../models/tipoLiquidez.model";
 import { TipoRisco } from "../models/tipoRisco.model";
 import { PerfilAcesso } from "../models/account-perfil.model";
 import { EmpresaService } from "./empresa.service";
+import { off } from "process";
 
 @Injectable({
     providedIn: 'root'
 })
 export class DropdownService {
     url = environment.url;
-
     tipoAtivo = new BehaviorSubject<TipoAtivo[]>([]);
     tipoRisco = new BehaviorSubject<TipoRisco[]>([]);
     tipoLiquidez = new BehaviorSubject<TipoLiquidez[]>([]);
@@ -25,9 +25,8 @@ export class DropdownService {
     perfilInvestidor = new BehaviorSubject<PerfilInvestidor[]>([]);
     carteiraSetup = new BehaviorSubject<CarteiraSetup[]>([]);
     estadoCivil = new BehaviorSubject<EstadoCivil[]>([]);
-
     empresa: Empresa = new Empresa;
-    
+    empresasList = new BehaviorSubject<Empresa[]>([]);
     constructor(
         private http: HttpClient,
         private empresaService: EmpresaService
@@ -35,6 +34,19 @@ export class DropdownService {
         this.empresaService.empresa.subscribe(res => {
             this.empresa = res;
         })
+    }
+    getEmpresas() {
+        return this.http.get<Empresa[]>(`${this.url}/empresa/`)
+        .pipe(tap({
+            next: list => {
+                list = list.map(x => {
+                    x.ativo = !x.dataDesativado;
+                    return x;
+                });
+                this.empresasList.next(list);
+                return of(list);
+            }
+        }));
     }
 
     getAtivo() {

@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { NgForm, NgModel } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormControl, NgForm, NgModel } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { faArrowRight, faChartPie, faChevronLeft, faPlus, faTimes, faTrash, faTrashAlt, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EstadoCivil } from 'src/app/models/estadoCivil.model';
@@ -13,24 +14,22 @@ import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimen
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
 import { Produto } from 'src/app/models/produto.model';
-import { AccountService } from 'src/app/services/account.service';
-import { ClienteService } from 'src/app/services/cliente.service';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { PlannerService } from 'src/app/services/planner.service';
-import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
-import { colors, Colors } from 'src/app/utils/colors.enum';
 import { Crypto } from 'src/app/utils/crypto';
 import { arrowDown, arrowUp } from 'src/app/utils/format';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { ModalOpen } from 'src/app/utils/modal-open';
+import { lastValueFrom } from 'rxjs';
+import { Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-planner',
     templateUrl: './planner.component.html',
     styleUrls: ['./planner.component.css']
 })
-export class PlannerComponent implements OnInit {
+export class PlannerComponent implements OnDestroy {
     faTimes = faTimes;
     faWallet = faWallet;
     faChevronLeft = faChevronLeft;
@@ -41,7 +40,6 @@ export class PlannerComponent implements OnInit {
     faChartPie = faChartPie;
 
     modalOpen = false;
-
     planner: Planejamento = new Planejamento;
     erro: any[] = [];
     loading = false;
@@ -76,6 +74,13 @@ export class PlannerComponent implements OnInit {
     mudouCarteiraSetup = false;
 
     clienteIdEncrypted = '';
+    subscription: Subscription[] = [];
+
+    dataNascimentoMin = '';
+    dataNascimentoMax = '';
+    // dataNascimento = new FormControl('', Validators.required);
+
+    @ViewChild('dataNascimento') dataNascimento?: NgModel
 
     constructor(
         private modal: ModalOpen,
@@ -87,78 +92,92 @@ export class PlannerComponent implements OnInit {
         private setup: CarteiraSetupService,
         private crypto: Crypto,
     ) {
-        this.plannerService.getObject().subscribe(res => {
+
+        var dataNascimentoMax = new Date();
+        dataNascimentoMax.setFullYear(dataNascimentoMax.getFullYear() + 100);
+        this.dataNascimentoMax = dataNascimentoMax.toJSON().substring(0, 10);
+        
+        var dataNascimentoMin = new Date();
+        dataNascimentoMin.setFullYear(dataNascimentoMin.getFullYear() - 100);
+        this.dataNascimentoMin = dataNascimentoMin.toJSON().substring(0, 10);
+
+        var get = this.isMobile.get().subscribe(res => this.mobile = res);
+        var getObject = this.plannerService.getObject().subscribe(res => {
             this.planner = res;
             this.mudouCarteiraSetup = this.planner.id != 0;
             this.calculaPercentual();
         });
 
-
-        this.activatedRoute.params.subscribe(item => {
+        var params = this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['cliente_id'];
             if (this.isEditPage) {
                 this.loading = true;
                 this.clienteIdEncrypted = item['cliente_id']
                 this.planner.cliente_Id = this.crypto.decrypt(item['cliente_id'])
-                this.plannerService.getByClienteId(this.planner.cliente_Id).subscribe({
-                    next: res => {
+                lastValueFrom(this.plannerService.getByClienteId(this.planner.cliente_Id))
+                    .then(res => {
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
                         this.carteiraSetupInalterada = res.carteiraSetup;
-                        this.loading = false;
-                        this.mudouCarteiraSetup = false;
-                    },
-                    error: err => {
-                        this.loading = false;
-                        this.voltar();
-                        // this.toastr.warning('Esse cliente não tem planejamento.')
-                        // this.toastr.warning('Cadastre um novo planejamento para esse cliente.')
-                    }
-                });
+                            this.mudouCarteiraSetup = false;
+                            this.validateDataNascimento();
+                    })
+                    .catch(res => {
+                        this.voltar()
+                    })
+                    .finally(() => this.loading = false);
+
             }
         });
-
-        this.isMobile.get().subscribe(res => this.mobile = res);
 
         var empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
+        var list = this.setup.list.subscribe(res => this.carteirasSetup = res);
+        lastValueFrom(this.setup.getList(empresa_Id))
+            .then(res => this.carteirasSetup = res)
+            .finally(() => this.loadingCarteiraSetup = false);
 
-        this.setup.list.subscribe(res => this.carteirasSetup = res);
-        this.setup.getList(empresa_Id).subscribe({
-            next: res => {
-                this.carteirasSetup = res
-                this.loadingCarteiraSetup = false;
-            },
-            error: err => {
-                this.loadingCarteiraSetup = false;
-            }
-        });
-        this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
-        this.dropdown.getEstadoCivil().subscribe({
-            next: res => {
-                this.estadoCivil = res;
-                this.loadingEstadoCivil = false;
-            },
-            error: err => {
-                this.loadingEstadoCivil = false;
-            }
-        });
-        this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
-        this.dropdown.getPerfilInvestidor().subscribe({
-            next: res => {
-                this.perfilInvestidor = res;
-                this.loadingPerfilInvestidor = false;
-            },
-            error: err => {
-                this.loadingPerfilInvestidor = false;
-            }
-        });
+        var estadoCivil = this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
+        lastValueFrom(this.dropdown.getEstadoCivil())
+            .then(res => this.estadoCivil = res)
+            .finally(() => this.loadingEstadoCivil = false);
+
+        var perfilInvestidor = this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
+        lastValueFrom(this.dropdown.getPerfilInvestidor())
+            .then(res => this.perfilInvestidor = res)
+            .finally(() => this.loadingPerfilInvestidor = false);
+
+        this.subscription.push(get);
+        this.subscription.push(getObject);
+        this.subscription.push(params);
+        this.subscription.push(list);
+        this.subscription.push(estadoCivil);
+        this.subscription.push(perfilInvestidor);
     }
 
-    ngOnInit(): void { }
+    validateDataNascimento() {
+        var data = new Date(this.planner.cliente.dataNascimento)
+        var dataNascimentoMin = new Date(this.dataNascimentoMin)
+        var dataNascimentoMax = new Date(this.dataNascimentoMax)
+        if (this.dataNascimento) {
+            if (data > dataNascimentoMax) {
+                this.dataNascimento.control.setErrors({
+                    max: true
+                })
+            }
+            else if (data < dataNascimentoMin) {
+                this.dataNascimento.control.setErrors({
+                    min: true
+                })
+    
+            }
+        }
+    }
 
-
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
 
     voltar() {
         this.modal.voltar();
@@ -238,16 +257,13 @@ export class PlannerComponent implements OnInit {
             this.loading = false;
             return;
         }
-        this.plannerService.create(this.planner).subscribe({
-            next: res => {
-                this.loading = false;
+        lastValueFrom(this.plannerService.create(this.planner))
+            .then(res => {
                 this.plannerService.setObject(res);
                 this.mudouCarteiraSetup = true;
-            },
-            error: err => {
-                this.loading = false;
-            }
-        });
+            })
+            .finally(() => this.loading = false);
+
     }
 
     adicionarFLuxoPontual() {
@@ -301,7 +317,6 @@ export class PlannerComponent implements OnInit {
     }
 
     saveData() {
-        console.log(this.planner)
         this.plannerService.setObject(this.planner);
     }
 
@@ -342,14 +357,8 @@ export class PlannerComponent implements OnInit {
         if (!valid) {
             return;
         }
-        this.plannerService.edit(this.planner).subscribe({
-            next: res => {
-                this.loading = false;
-                this.plannerService.setObject(res);
-            },
-            error: err => {
-                this.loading = false;
-            }
-        });
+        lastValueFrom(this.plannerService.edit(this.planner))
+            .then(res => this.plannerService.setObject(res))
+            .finally(() => this.loading = false);
     }
 }

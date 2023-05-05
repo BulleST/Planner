@@ -1,11 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faChevronLeft, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
+import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -13,7 +15,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.css']
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnDestroy {
     faTimes = faTimes;
     faWallet = faWallet;
     faChevronLeft = faChevronLeft;
@@ -22,6 +24,8 @@ export class CreateComponent implements OnInit {
     erro: any[] = [];
     loading = false;
     url = '';
+    subscription: Subscription[] = [];
+    clearData = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -32,26 +36,30 @@ export class CreateComponent implements OnInit {
     ) {
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/editar')) {
-            activatedRoute.parent?.parent?.params.subscribe(p => {
+            var params = activatedRoute.parent?.parent?.params.subscribe(p => {
                 if (p['empresa_id']) {
                     this.objeto.empresa_Id = this.crypto.decrypt(p['empresa_id']);
                 } else {
                     this.voltar();
                 }
             });
+            if (params)
+                this.subscription.push(params)
         }
     }
 
-    ngOnInit(): void {
-    }
-    
     voltar() {
         this.modal.voltar();
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     resetForm() {
         this.objeto = new CarteiraSetup
         this.setupService.setObject(new CarteiraSetup);
+        this.clearData = true;
     }
 
     send(form: NgForm) {
@@ -68,15 +76,16 @@ export class CreateComponent implements OnInit {
         else { // Enviar para a API
             if (this.url.includes('empresas/editar')) {
             }
-            this.setupService.create(this.objeto).subscribe({
-                next: (res) => {
+
+            lastValueFrom(this.setupService.create(this.objeto))
+            .then((res) => {
                     this.modal.voltar();
-                    this.setupService.getList().subscribe();
-                },
-                error: (error) => {
-                    this.loading = false;
-                },
-            });
+                    lastValueFrom(this.setupService.getList());
+                })
+            .catch(res => {
+                    this.erro.push(getError(res));
+                })
+            .finally(() => this.loading = false);
         }
     }
 }

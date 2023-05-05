@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
@@ -21,7 +21,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './produto-form.component.html',
     styleUrls: ['./produto-form.component.css']
 })
-export class ProdutoFormComponent implements OnInit, OnDestroy {
+export class ProdutoFormComponent implements OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -41,68 +41,50 @@ export class ProdutoFormComponent implements OnInit, OnDestroy {
     planner: Planejamento = new Planejamento;
     
     aliquota = '';
+    subscription: Subscription[] = [];
 
     constructor(
         private modal: ModalOpen,
         private plannerService: PlannerService,
-        private alertService: AlertService,
         private produtoService: ProdutoService,
-        private setup: CarteiraSetupService,
+        private setupService: CarteiraSetupService,
         private dropdown: DropdownService,
     ) {
 
-        this.plannerService.getObject().subscribe(async planner => {
-            this.planner = planner;
-        });
-        this.setup.list.subscribe(res => this.carteirasSetup = res);
-        this.setup.getList().subscribe({
-            next: res => {
-                this.carteirasSetup = res
-                this.loadingCarteiraSetup = false;
-            },
-            error: err => {
-                this.loadingCarteiraSetup = false;
-            }
-        });
+       
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+        var getObject = this.plannerService.getObject().subscribe(planner => this.planner = planner);
+        this.subscription.push(getObject);
+        var list = this.setupService.list.subscribe(res => this.carteirasSetup = res);
+        this.subscription.push(list);
+        lastValueFrom(this.setupService.getList())
+            .then(res => this.carteirasSetup = res)
+            .finally(() => this.loadingCarteiraSetup = false);
+       
+        var tipoRisco = this.dropdown.tipoRisco.subscribe(res => this.tipoRiscos = res);
+        this.subscription.push(tipoRisco);
+        lastValueFrom(this.dropdown.getRisco())
+            .then(res => this.tipoRiscos = res)
+            .finally(() => this.loadingRiscos = false);
 
-        this.dropdown.getRisco().subscribe({
-            next: (res) => {
-                this.tipoRiscos = res;
-                this.loadingRiscos = false;
-            }, 
-            error: (err ) => {
-                this.loadingRiscos = false;
-            }
-        })
+        var list = this.produtoService.list.subscribe(res => this.setProdutos());
+        this.subscription.push(list);
+        lastValueFrom(this.produtoService.getList())
+            .then(res => this.setProdutos())
+            .finally(() => this.loadingProdutos = false);
 
-        this.produtoService.list.subscribe(res => {
-            this.setProdutos();
-        })
-        this.produtoService.getList().subscribe({
-            next: (res) => {
-                this.setProdutos();
-                this.loadingProdutos = false
-            },
-            error: (erro) => {
-                this.loadingProdutos = false
-            }
-        })
-    }
-
-    ngOnInit(): void {
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
+
     }
 
     ngOnDestroy(): void {
         this.modal.setOpen(false);
+        this.subscription.forEach(item => item.unsubscribe());
     }
-
 
     voltar() {
         this.modal.voltar();
@@ -115,45 +97,19 @@ export class ProdutoFormComponent implements OnInit, OnDestroy {
             this.produtos = this.produtoService.list.value
             .filter(x => x.tipoRisco_Id == this.selectedRisco?.id)
         } 
-        // this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
-        // this.objeto.produtoTributacaoRel_Id = 0;
         this.produto = undefined;
         this.aliquota = '';
         this.loadingProdutos = false;
     }
 
     produtoChange() {
-        // this.objeto.produtoTributacaoRel_Id = 0;
-        // this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
         this.aliquota = '';
     }
-
-
-    // tributacaoChange(produtoTributacaoRel: ProdutoTributacaoRel) {
-    //     let rels = this.planner.planejamentoProduto.map(x => x.produtoTributacaoRel)
-    //     .find(x => x.produto_Id == produtoTributacaoRel.produto_Id && x.tributacao_Id == produtoTributacaoRel.tributacao_Id)
-
-    //     if (rels) {
-    //         this.objeto.produtoTributacaoRel_Id = 0;
-    //         this.objeto.produtoTributacaoRel = undefined as unknown as ProdutoTributacaoRel;
-    //         this.aliquota = '';
-    //         this.produto = undefined;
-    //         this.alertService.error('Você não pode inserir essa tributação e produto, pois já estão cadastrados.', { keepAfterRouteChange: false, })
-    //     } else {
-    //         this.objeto.produtoTributacaoRel_Id = produtoTributacaoRel?.id ?? 0;
-    //         let produto: Produto = Object.assign({}, this.produto)
-    //         produto.produtoTributacaoRel = [];
-    //         this.objeto.produtoTributacaoRel.produto = produto;
-    //         this.aliquota = this.objeto.produtoTributacaoRel?.tributacao?.aliquota.toString() ?? '';
-    //     }
-
-
-    // }
-
 
     arrowUp(value: number) {
         return arrowUp(value)
     }
+
     arrowDown(value: number, allowNegative: boolean = false) {
         return arrowDown(value, allowNegative)
     }
@@ -161,11 +117,9 @@ export class ProdutoFormComponent implements OnInit, OnDestroy {
     send(model: NgForm) {
         this.loading = true;
         this.erro = [];
-
         this.planner.planejamentoProduto.push(this.objeto);
         this.plannerService.setObject(this.planner);
         this.voltar();
-
         this.loading = false;
     }
 

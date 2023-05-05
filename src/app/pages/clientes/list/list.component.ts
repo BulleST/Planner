@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { faCity } from '@fortawesome/free-solid-svg-icons';
 import { FilterMatchMode } from 'primeng/api';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { FilterDisplay, FilterType, MaskType } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Account } from 'src/app/models/account.model';
@@ -20,13 +20,14 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnDestroy {
     faCity = faCity;
     list: Cliente[] = [];
     columns = clienteColumns;
     tableLinks: MenuTableLink[] = [];
     empresaSelected = new Empresa;
     account?: Account;
+    subscription: Subscription[] = [];
 
     constructor(
         private table: Table,
@@ -36,15 +37,16 @@ export class ListComponent implements OnInit {
         private accountService: AccountService,
         private empresaService: EmpresaService,
     ) {
-        this.accountService.account.subscribe(res => this.account = res);
-        this.clienteService.list.subscribe(res => this.list = res);
-        this.empresaService.empresa.subscribe(async res => {
+        var list = this.clienteService.list.subscribe(res => this.list = res);
+        var account = this.accountService.account.subscribe(res => this.account = res);
+        var empresa = this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;
-            if (res.id != 0) 
+            if (res.id != 0) {
                 await lastValueFrom(this.clienteService.getList());
+            }
         });
         
-        this.table.selected.subscribe(res => {
+        var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
                     { label: 'Ver planner', routePath: ['planner'], paramsFieldName: ['id'] }, 
@@ -54,9 +56,14 @@ export class ListComponent implements OnInit {
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
+        this.subscription.push(list);        
+        this.subscription.push(account);        
+        this.subscription.push(empresa);        
+        this.subscription.push(selected);            
 
 
         if ([1,2].includes(this.accountService.accountValue?.perfilAcesso_Id ?? 0)) {
+            this.columns = Object.assign([], clienteColumns);  
             this.columns.splice(2, 0, {
                 field: 'account.email', 
                 header: 'Cadastrado por', 
@@ -70,7 +77,8 @@ export class ListComponent implements OnInit {
         }
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     create = (plannerService: PlannerService = this.plannerService): void => {

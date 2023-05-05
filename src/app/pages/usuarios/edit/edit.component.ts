@@ -1,14 +1,14 @@
-import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
+import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -16,13 +16,14 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './edit.component.html',
     styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnDestroy {
     faTimes = faTimes;
     modalOpen = false;
     objeto: Usuario = new Usuario;
     erro: any[] = [];
     loading = false;
     url = '';
+    subscription: Subscription[] = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -32,39 +33,38 @@ export class EditComponent implements OnInit {
         private userService: UsuarioService,
         private crypto: Crypto,
     ) {
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+       
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
-        activatedRoute.params.subscribe(p => {
+        var params = activatedRoute.params.subscribe(p => {
             if (p['usuario_id']) {
                 this.objeto.id = this.crypto.decrypt(p['usuario_id']);
             } else {
                 this.voltar();
             }
         });
+        this.subscription.push(params);
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/cadastrar') || this.objeto.registroNaoSalvo) {
             this.objeto = this.empresaService.object.account.find(x => x.id == this.objeto.id) as Usuario;
         }
         else {
-            this.userService.get(this.objeto.id).subscribe({
-                next: res => {
-                    this.objeto = res;
-                },
-                error: err => {
-                    this.voltar();
-                },
-            })
+            lastValueFrom(this.userService.get(this.objeto.id))
+            .then(res => this.objeto = res)
+            .catch(res => this.voltar())
+            .finally(() => this.loading = false);
+          
         }
-
-    }
-
-    ngOnInit(): void {
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
+
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     voltar() {
@@ -83,8 +83,8 @@ export class EditComponent implements OnInit {
             this.loading = false;
         }
         else { // Enviar para a API
-            this.userService.edit(this.objeto).subscribe({
-                next: async (res) => {
+            lastValueFrom(this.userService.edit(this.objeto))
+            .then(async (res) => {
                     var users = await lastValueFrom(this.userService.getList());
                     if (this.url.includes('empresas/editar')) {
                         var empresa = this.empresaService.object;
@@ -92,12 +92,13 @@ export class EditComponent implements OnInit {
                         this.empresaService.setObject(empresa, 'edit usuario');
                     }
                     this.modal.voltar();
-                },
-                error: (error) => {
-                    this.loading = false;
-                },
-                complete: () => { }
-            });
+                })
+                .catch(res => {
+                    console.error(res)
+                    this.erro.push(getError(res));
+                })
+            .finally(() => this.loading = false);
+           
         }
     }
 }

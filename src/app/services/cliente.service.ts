@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, of, tap } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
 import { environment } from 'src/environments/environment';
 import { Crypto } from '../utils/crypto';
@@ -151,15 +151,21 @@ export class ClienteService {
     }
 
     getList(empresaId?: number) {
+        this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
         return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresaId}`)
-            .pipe(map(list => {
-                list = list.map(x => {
-                    x.ativo = !x.dataDesativado;
-                    return x;
-                });
-                this.list.next(list);
-                return list;
+            .pipe(tap({
+                next: list => {
+                    list = list.map(x => {
+                        x.ativo = !x.dataDesativado;
+                        return x;
+                    });
+                    this.list.next(list);
+                    return of(list);
+                },
+                complete: () => {
+                    this.table.loading.next(false)
+                }
             }));
     }
 
@@ -179,7 +185,7 @@ export class ClienteService {
     delete(id: number) {
         return this.http.delete<Cliente>(`${this.url}/cliente/${id}`);
     }
-    
+
     deactivated(id: number, active: boolean) {
         return this.http.patch<void>(`${this.url}/cliente/${id}/${active}`, {});
     }

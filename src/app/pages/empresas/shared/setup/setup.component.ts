@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faCheck, faEllipsisV, faFilter, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
-import { PerfilAcesso } from 'src/app/models/account-perfil.model';
 import { CarteiraSetup, setupColumns } from 'src/app/models/carteiraSetup.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -13,13 +12,14 @@ import { Crypto } from 'src/app/utils/crypto';
 import { ModalOpen } from 'src/app/utils/modal-open';
 import { Table } from 'src/app/utils/table';
 import { MenuItems } from '../menu-items/menu-items';
+import { getError } from 'src/app/utils/error';
 
 @Component({
     selector: 'app-setup-create',
     templateUrl: './setup.component.html',
     styleUrls: ['./setup.component.css']
 })
-export class SetupComponent implements OnInit {
+export class SetupComponent implements OnDestroy {
     faWallet = faWallet;
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
@@ -34,6 +34,7 @@ export class SetupComponent implements OnInit {
     isEditPage = false;
     url = '';
     loading = false;
+    subscription: Subscription[] = [];
 
     constructor(
         private empresaService: EmpresaService,
@@ -55,11 +56,12 @@ export class SetupComponent implements OnInit {
             this.columns = this.columns.filter(x => x.field != 'ativo');
         }
 
-        this.empresaService.empresa.subscribe(res => {
-            this.objeto = res;
-        });
-        this.table.loading.subscribe(res => this.loading = res);
-        this.table.selected.subscribe(res => {
+        var empresa = this.empresaService.empresa.subscribe(res => this.objeto = res);
+        this.subscription.push(empresa);   
+
+        var loading = this.table.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);   
+        var selected = this.table.selected.subscribe(res => {
             this.tableLinks = [];
             if (res) { // se tiver linha selecionada
                 this.tableLinks.push({ label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] });
@@ -71,9 +73,11 @@ export class SetupComponent implements OnInit {
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
+        this.subscription.push(selected);
     }
 
-    ngOnInit(): void {
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
     }
 
     next() {
@@ -86,14 +90,6 @@ export class SetupComponent implements OnInit {
             return;
         }
         let obj = Object.assign({}, JSON.parse(JSON.stringify(this.objeto))) as Empresa; 
-
-        // Atribuindo apenas os produtos que não estão
-        // em uma carteira setup para não ser salvo duplicado
-        // let produtosCarteiraSetup = obj.carteiraSetup.flatMap(x => x.carteiraProdutoRel).map(x => x.produtoTributacaoRel.produto)
-        // let produtosCarteiraSetup = obj.carteiraSetup.flatMap(x => x.carteiraProdutoRel).map(x => x.produto)
-        // let produtosCarteiraSetupId = produtosCarteiraSetup.map(x => x.id);
-        // let produtos = obj.produto.filter(x => !produtosCarteiraSetupId.includes(x.id))
-        
         obj.produto = obj.produto.map(x => {
             delete x.empresa;
             if (x.registroNaoSalvo) {
@@ -131,30 +127,22 @@ export class SetupComponent implements OnInit {
         });
 
         if (this.url.includes('empresas/cadastrar')) {
-            this.empresaService.create(obj).subscribe({
-                next: async res => {
-                    await lastValueFrom(this.empresaService.getList());
-                    this.modal.voltar();
-                    this.table.loading.next(false);
-                }, 
-                error: err => {
-                    this.table.loading.next(false);
-                    this.menuItems.erro.push(err.error.message)
-                }
-            });
+            lastValueFrom(this.empresaService.create(obj))
+            .then(res => {
+                lastValueFrom(this.empresaService.getList());
+                this.modal.voltar();
+            })
+            .catch(res => this.menuItems.erro.push(getError(res)))
+            .finally(() => this.table.loading.next(false));
         }
         else if (this.url.includes('empresas/editar')) { // Enviar para a API
-            this.empresaService.edit(obj).subscribe({
-                next: async res => {
-                    await lastValueFrom(this.empresaService.getList());
-                    this.modal.voltar();
-                    this.table.loading.next(false);
-                }, 
-                error: err => {
-                    this.table.loading.next(false);
-                    this.menuItems.erro.push(err.error.message)
-                }
-            });
+            lastValueFrom(this.empresaService.edit(obj))
+            .then(res => {
+                lastValueFrom(this.empresaService.getList());
+                this.modal.voltar();
+            })
+            .catch(res => this.menuItems.erro.push(getError(res)))
+            .finally(() => this.table.loading.next(false));
         }
     }
     

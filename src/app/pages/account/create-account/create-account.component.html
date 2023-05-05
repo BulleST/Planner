@@ -150,8 +150,9 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <p class="text-danger text-center col-12 my-3">Ao clicar em "cadastrar" você concorda com os 
-                            <a class="link" routerLink="/termos-de-uso" >termos de uso</a> 
+                        <p class="text-danger text-center col-12 mt-3" *ngIf="erro">{{erro}}</p>
+                        <p class="text-center col-12 mb-3">Ao clicar em "cadastrar" você concorda com os 
+                            <a class="link" routerLink="./termos-de-uso" >termos de uso</a> 
                             do planner.</p>
                         <div class="form-group form-floating col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
                             <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading">Cadastrar</button>
@@ -162,3 +163,5 @@
         </div>
     </div>
 </section>
+
+<router-outlet></router-outlet>

@@ -13,7 +13,6 @@ export function appInitializer(
                 var returnUrl = window.location.search;
                 var array = returnUrl.split('?returnUrl=');
                 returnUrl = array[array.length - 1]
-                console.log(returnUrl);
                 if (returnUrl.trim()) {
                     router.navigateByUrl(decodeURIComponent(returnUrl))
                 } else {
@@ -21,7 +20,7 @@ export function appInitializer(
                 }
             }
         })
-        .catch(err => {
+        .catch(res => {
 
         })
         .finally(() => {

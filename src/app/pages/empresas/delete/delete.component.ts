@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -13,12 +14,13 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './delete.component.html',
     styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent implements OnInit {
+export class DeleteComponent implements OnDestroy {
     faTimes = faTimes;
     modalOpen = false;
     objeto: Empresa = new Empresa;
     erro: any[] = [];
     loading = false;
+    subscription: Subscription[] = [];
 
     constructor(
         private router: Router,
@@ -28,27 +30,24 @@ export class DeleteComponent implements OnInit {
         private empresaService: EmpresaService,
         private crypto: Crypto
     ) {
-        this.modal.getOpen().subscribe(res => {
-            this.modalOpen = res;
-        });
+        
+        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.subscription.push(getOpen);
 
-        this.activatedRoute.params.subscribe(res => {
-            if (res['id']) {
+        var params = this.activatedRoute.params.subscribe(res => {
+            if (res['id'])
                 this.objeto.id = this.crypto.decrypt(res['id']);
-                // this.empresaService.get(this.objeto.id).subscribe({
-                // 	next: (res:string|Empresa) => {
-
-                // 	}
-                // })
-            }
         })
-    }
-
-    ngOnInit(): void {
+        this.subscription.push(params);
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
     }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
+
 
     voltar() {
         this.modal.setOpen(false);

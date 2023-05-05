@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, of, tap } from 'rxjs';
 import { Crypto } from '../utils/crypto';
 import { Usuario } from '../models/usuario.model';
 import { environment } from 'src/environments/environment';
@@ -136,16 +136,22 @@ export class UsuarioService {
     }
 
     getList(empresaId?: number) {
+        this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
         return this.http.get<Usuario[]>(`${this.url}/usuario/all/${empresaId}`)
-            .pipe(map(list => {
+        .pipe(tap({
+            next: list => {
                 list = list.map(x => {
                     x.ativo = !x.dataDesativado;
                     return x;
                 });
                 this.list.next(list);
-                return list;
-            }));
+                return of(list);
+            },
+            complete: () => {
+                this.table.loading.next(false)
+            }
+        }));
     }
 
     get(id: number) {

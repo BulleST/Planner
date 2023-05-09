@@ -164,51 +164,31 @@
                 <div class="form-row">
                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                         <label for="receita">Receita: <span class="text-danger">*</span></label>
-                        <input type="text"
-                               class="form-control"
-                               id="receita"
-                               name="receita"
-                               #receita="ngModel"
-                               [(ngModel)]="objeto.receita"
-                               mask="separator"
-                               thousandSeparator="."
-                               decimalMarker=","
-                               prefix="R$ "
-                               [ngbPopover]="campoObrigatorio"
-                               popoverClass="popover-danger"
-                               [disablePopover]="receita.errors == null"
-                               triggers="mouseenter:mouseleave"
-                               (keyup.arrowup)="objeto.receita = arrowUp(receita.value)"
-                               (keyup.arrowdown)="objeto.receita = arrowDown(receita.value, true)"
-                               required>
-                        <div *ngIf="receita.touched && receita.errors">
-                            <p class="text-danger" *ngIf="receita.errors['required']">Este campo é obrigatório.</p>
-                            <p class="text-danger" *ngIf="receita.errors['mask']">Valor inválido.</p>
-                        </div>
+                        <app-input-number [valueInput]="objeto.receita"
+                            (valueChanges)="objeto.receita = $event"
+                            [inputId]="'receita'"
+                            [mask]="'separator'"
+                            [thousandSeparator]="'.'"
+                            [decimalMarker]="','"
+                            [prefix]="'R$'"
+                            [min]="1"
+                            [max]="100000000"
+                            [required]="true"
+                        ></app-input-number>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                         <label for="despesa">Despesas: <span class="text-danger">*</span></label>
-                        <input type="text"
-                               class="form-control"
-                               id="despesa"
-                               name="despesa"
-                               #despesa="ngModel"
-                               [(ngModel)]="objeto.despesa"
-                               mask="separator"
-                               thousandSeparator="."
-                               decimalMarker=","
-                               prefix="R$ "
-                               [ngbPopover]="campoObrigatorio"
-                               popoverClass="popover-danger"
-                               [disablePopover]="despesa.errors == null"
-                               triggers="mouseenter:mouseleave"
-                               (keyup.arrowup)="objeto.despesa = arrowUp(despesa.value)"
-                               (keyup.arrowdown)="objeto.despesa = arrowDown(despesa.value, true)"
-                               required>
-                        <div *ngIf="despesa.touched && despesa.errors">
-                            <p class="text-danger" *ngIf="despesa.errors['required']">Este campo é obrigatório.</p>
-                            <p class="text-danger" *ngIf="despesa.errors['mask']">Valor inválido.</p>
-                        </div>
+                        <app-input-number [valueInput]="objeto.despesa"
+                                            (valueChanges)="objeto.despesa = $event"
+                                            [inputId]="'despesa'"
+                                            [mask]="'separator'"
+                                            [thousandSeparator]="'.'"
+                                            [decimalMarker]="','"
+                                            [prefix]="'R$'"
+                                            [min]="1"
+                                            [max]="100000000"
+                                            [required]="true"
+                        ></app-input-number>
                     </div>
                 </div>
             </div>
@@ -229,23 +209,16 @@
                                     <small><b>Idade</b></small>
                                 </td>
                                 <td>
-                                    <input type="text"
-                                           class="form-control form-control-number"
-                                           id="idadeAposentadoria"
-                                           name="idadeAposentadoria"
-                                           #idadeAposentadoria="ngModel"
-                                           [(ngModel)]="objeto.idadeAposentadoria"
-                                           mask="0*"
-                                           suffix=" anos"
-                                           [allowNegativeNumbers]="false"
-                                           placeholder="0"
-                                           (keyup.arrowup)="objeto.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
-                                           (keyup.arrowdown)="objeto.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
-                                           [ngbPopover]="campoObrigatorio"
-                                           popoverClass="popover-danger"
-                                           [disablePopover]="idadeAposentadoria.errors == null"
-                                           triggers="mouseenter:mouseleave"
-                                           required>
+                                    <app-input-number [valueInput]="objeto.idadeAposentadoria"
+                                        (valueChanges)="objeto.idadeAposentadoria = $event"
+                                        [inputId]="'idadeAposentadoria'"
+                                        [mask]="'0*'"
+                                        [suffix]="' anos'"
+                                        [min]="20"
+                                        [max]="100000000"
+                                        [required]="true"
+                                        [showErrorMessage]="false"
+                                    ></app-input-number>
                                 </td>
                             </tr>
                             <tr>
@@ -253,25 +226,19 @@
                                     <small><b>Renda Mensal</b></small>
                                 </td>
                                 <td>
-                                    <input type="text"
-                                           class="form-control form-control-number"
-                                           id="rendaMensalAposentadoria"
-                                           name="rendaMensalAposentadoria"
-                                           #rendaMensalAposentadoria="ngModel"
-                                           [(ngModel)]="objeto.rendaMensalAposentadoria"
-                                           mask="separator.5"
-                                           thousandSeparator="."
-                                           decimalMarker=","
-                                           [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
-                                           [allowNegativeNumbers]="false"
-                                           placeholder="R$ 00,00"
-                                           (keyup.arrowup)="objeto.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
-                                           (keyup.arrowdown)="objeto.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
-                                           [ngbPopover]="campoObrigatorio"
-                                           popoverClass="popover-danger"
-                                           [disablePopover]="rendaMensalAposentadoria.errors == null"
-                                           triggers="mouseenter:mouseleave"
-                                           required>
+                                    <app-input-number [valueInput]="objeto.rendaMensalAposentadoria"
+                                        (valueChanges)="objeto.rendaMensalAposentadoria = $event"
+                                        [inputId]="'rendaMensalAposentadoria'"
+                                        [mask]="'separator.5'"
+                                        [thousandSeparator]="'.'"
+                                        [decimalMarker]="','"
+                                        [prefix]="'R$'"
+                                        [min]="1"
+                                        [max]="100000000"
+                                        [required]="true"
+                                        [placeholder]="'R$ 00,00'"
+                                        [showErrorMessage]="false"
+                                    ></app-input-number>
                                 </td>
                             </tr>
                             <tr>
@@ -279,25 +246,18 @@
                                     <small><b>Rentabilidade</b></small>
                                 </td>
                                 <td>
-                                    <input type="text"
-                                           class="form-control form-control-number"
-                                           id="rentabilidadeAposentadoria"
-                                           name="rentabilidadeAposentadoria"
-                                           #rentabilidadeAposentadoria="ngModel"
-                                           [(ngModel)]="objeto.rentabilidadeAposentadoria"
-                                           mask="separator.5"
-                                           thousandSeparator="."
-                                           decimalMarker=","
-                                           [allowNegativeNumbers]="true"
-                                           placeholder="00,00%"
-                                           suffix="%"
-                                           (keyup.arrowup)="objeto.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
-                                           (keyup.arrowdown)="objeto.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
-                                           [ngbPopover]="campoObrigatorio"
-                                           popoverClass="popover-danger"
-                                           [disablePopover]="rentabilidadeAposentadoria.errors == null"
-                                           triggers="mouseenter:mouseleave"
-                                           required>
+                                    <app-input-number [valueInput]="objeto.rentabilidadeAposentadoria"
+                                        (valueChanges)="objeto.rentabilidadeAposentadoria = $event"
+                                        [inputId]="'rentabilidadeAposentadoria'"
+                                        [mask]="'separator.5'"
+                                        [suffix]="'%'"
+                                        [max]="100000000"
+                                        [required]="true"
+                                        [showErrorMessage]="false"
+                                        [allowNegativeNumbers]="true"
+                                        [placeholder]="'0,00%'"
+                                        [showErrorMessage]="false"
+                                    ></app-input-number>
                                 </td>
                             </tr>
                         </tbody>

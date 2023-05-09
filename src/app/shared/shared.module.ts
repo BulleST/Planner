@@ -22,6 +22,7 @@ import { ListSharedComponent } from "./list/list.component";
 import { FormClienteComponent } from './cliente/form/form.component';
 import { EmpresaSelectComponent } from './empresa-select/empresa-select.component';
 import { DeactivatedComponent } from "./deactivated/deactivated.component";
+import { InputNumberComponent } from './input-number/input-number.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { DeactivatedComponent } from "./deactivated/deactivated.component";
         FormClienteComponent,
         ListSharedComponent,
         EmpresaSelectComponent,
-        DeactivatedComponent
+        DeactivatedComponent,
+        InputNumberComponent,
     ],
     imports: [
         CommonModule,
@@ -58,6 +60,7 @@ import { DeactivatedComponent } from "./deactivated/deactivated.component";
         ListSharedComponent,
         EmpresaSelectComponent,
         DeactivatedComponent,
+        InputNumberComponent
     ],
 })
 export class SharedModule {

@@ -206,7 +206,13 @@
                                                (keyup.arrowup)="planner.cliente.receita = arrowUp(receita.value)"
                                                (keyup.arrowdown)="planner.cliente.receita = arrowDown(receita.value, true)"
                                                required
-                                               (change)="saveData()">
+                                               (change)="saveData()"
+                                               [min]="1"
+                                               [max]="100000000">
+                                               <div *ngIf="receita.touched && receita.errors">
+                                                   <p class="text-danger" *ngIf="receita.errors['min']">Valor mínimo é 1.</p>
+                                                   <p class="text-danger" *ngIf="receita.errors['max']">Valor máximo é 100.000.000.</p>
+                                               </div>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="despesa">Despesas: <span class="text-danger">*</span></label>
@@ -227,7 +233,13 @@
                                                (keyup.arrowup)="planner.cliente.despesa = arrowUp(despesa.value)"
                                                (keyup.arrowdown)="planner.cliente.despesa = arrowDown(despesa.value, true)"
                                                required
+                                               [min]="1"
+                                               [max]="100000000"
                                                (change)="saveData()">
+                                            <div *ngIf="despesa.touched && despesa.errors">
+                                                <p class="text-danger" *ngIf="despesa.errors['min']">Valor mínimo é 1.</p>
+                                                <p class="text-danger" *ngIf="despesa.errors['max']">Valor máximo é 100.000.000.</p>
+                                            </div>
                                     </div>
                                 </div>
                             </div>

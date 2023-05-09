@@ -1,0 +1,36 @@
+<input type="text"
+       class="form-control form-control-number"
+       [id]="inputId"
+       [name]="inputId"
+       #input="ngModel"
+       [(ngModel)]="valueInput"
+       [mask]="mask ? mask : ''"
+       [thousandSeparator]="thousandSeparator ? thousandSeparator : ''"
+       [decimalMarker]="decimalMarker"
+       [suffix]="suffix ? suffix : ''"
+       [prefix]="prefix ? prefix + ' ': ''"
+       [allowNegativeNumbers]="allowNegativeNumbers ?? false"
+       [ngbPopover]="required ? campoObrigatorio : undefined"
+       popoverClass="popover-danger"
+       [disablePopover]="input.errors == null"
+       triggers="mouseenter:mouseleave"
+       (keyup.arrowup)="arrowControls ? valueInput = arrowUp(input.value) : undefined"
+       (keyup.arrowdown)="arrowControls ? valueInput = arrowDown(input.value) : undefined"
+       (keyup.shift.arrowup)="arrowControls ? valueInput = arrowUp(input.value, 10) : undefined"
+       (keyup.shift.arrowdown)="arrowControls ? valueInput = arrowDown(input.value, 10) : undefined"
+       (keyup.control.arrowup)="arrowControls ? valueInput = arrowUp(input.value, 100) : undefined"
+       (keyup.control.arrowdown)="arrowControls ? valueInput = arrowDown(input.value, 100) : undefined"
+       [min]="min"
+       [max]="max"
+       [required]="required"
+       (change)="validateNumber(input)"
+       [placeholder]="placeholder">
+<div *ngIf="input.touched && input.errors && showErrorMessage">
+    <p class="text-danger" *ngIf="input.errors['required']">Este campo é obrigatório.</p>
+    <p class="text-danger" *ngIf="input.errors['mask']">Valor inválido.</p>
+    <p class="text-danger" *ngIf="input.errors['min']">Valor mínimo é 1.</p>
+    <p class="text-danger" *ngIf="input.errors['max']">Valor máximo é 100.000.000.</p>
+</div>
+<ng-template #campoObrigatorio>
+    <div class="py-3 px-4"> Este campo é obrigatório </div>
+</ng-template>

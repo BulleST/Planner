@@ -119,6 +119,7 @@ export class FormClienteComponent {
             this.objeto.idade = '' as unknown as number;
         }
     }
+
     arrowUp(value: number) {
         return arrowUp(value)
     }
@@ -143,6 +144,27 @@ export class FormClienteComponent {
                 })
             }
         }
+    }
+
+    validateNumber(input: NgModel) {
+        var min = 0;
+        var max = 100000000;
+        var value = input.value;
+        
+        console.log(input, value);
+
+        if (value > max) {
+            input.control.setErrors(({
+                max: true,
+            }))
+        }
+        
+        if (value > min) {
+            input.control.setErrors(({
+                min: true,
+            }))
+        }
+        return input;
     }
 }
 

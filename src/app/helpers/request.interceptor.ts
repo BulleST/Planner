@@ -46,7 +46,9 @@ export class RequestInterceptor implements HttpInterceptor {
         'estadoCivil/getAll',
         'accounts/verify-email',
         'accounts/refresh-token',
+        '/empresa/',
     ]
+
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var notLoading = this.excludeUrlsLoading.filter(x => request.url.includes(x));
         var notToastr = this.excludeUrlsToastr.filter(x => request.url.includes(x));

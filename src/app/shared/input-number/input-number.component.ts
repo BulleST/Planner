@@ -1,5 +1,5 @@
 import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgModel, ValidationErrors } from '@angular/forms';
 
 @Component({
     selector: 'app-input-number',
@@ -23,9 +23,8 @@ export class InputNumberComponent implements OnChanges {
     @Input() allowNegativeNumbers?: boolean = false;
     @Input() placeholder = '';
 
-    @Output() valueChanges: EventEmitter<number> = new EventEmitter();
-
-    @ViewChild('input') input?: NgModel;
+    @Output() valueChanges: EventEmitter<number> = new EventEmitter<number>();
+    @ViewChild('input') input: NgModel;
 
     constructor() { }
 
@@ -44,44 +43,54 @@ export class InputNumberComponent implements OnChanges {
         if (changes['showErrorMessage']) this.showErrorMessage = changes['showErrorMessage'].currentValue;
         if (changes['placeholder']) this.placeholder = changes['placeholder'].currentValue;
         if (changes['allowNegativeNumbers']) this.allowNegativeNumbers = changes['allowNegativeNumbers'].currentValue;
-
-        setTimeout(() => {
-            this.validateNumber(this.input);
-        }, 500);
     }
 
-    validateNumber(input?: NgModel) {
-        if (input) {
-            console.log('tchau')
-            var min = this.min;
-            var max = this.max;
-            var value = input.model;
-            input.control.setErrors({
-                max: max && (value > max),
-                min: min && (value < min),
-            });
-        }
-        return input
+    validate() {
+        console.log('this.max != undefined && (this.valueInput > this.max)', this.max != undefined && (this.valueInput > this.max));
+        console.log('this.min != undefined && (this.valueInput < this.min)', this.min != undefined && (this.valueInput < this.min));
+        
+
+        console.log('max:', this.max, 'min:', this.min, 'value:', this.valueInput )
+
+
+        if (this.max != undefined && (this.valueInput > this.max)) {
+            this.input.control.setErrors({max: true});
+        } 
+        else if (this.min != undefined && (this.valueInput < this.min)) {
+            this.input.control.setErrors({min: true});
+        } 
+        console.log(this.input.name, this.input.errors)
     }
 
-    arrowUp(value: number, skip = 1, min = 0, max = 100000000, allowNegative = this.allowNegativeNumbers) {
-        return arrowUp({
+    inputChanged() {
+        console.log('valueInput', this.valueInput)
+        this.valueChanges.emit(this.valueInput);
+    }
+
+    arrowUp(value: number, skip = 1, min = 0, max = 100000000, allowNegativeNumbers = this.allowNegativeNumbers) {
+        var value = arrowUp({
             value: value,
             skip: skip,
             min: min,
             max: max,
-            allowNegative: allowNegative ?? false
+            allowNegativeNumbers: allowNegativeNumbers ?? false
         });
+        this.valueInput = value;
+        setTimeout(() => this.validate(), 500);
+        return value;
     }
 
-    arrowDown(value: number, skip = 1, min = 0, max = 100000000, allowNegative = this.allowNegativeNumbers) {
-        return arrowDown({
+    arrowDown(value: number, skip = 1, min = 0, max = 100000000, allowNegativeNumbers = this.allowNegativeNumbers) {
+        var value = arrowDown({
             value: value,
             skip: skip,
             min: min,
             max: max,
-            allowNegative: allowNegative ?? false
+            allowNegativeNumbers: allowNegativeNumbers ?? false
         });
+        this.valueInput = value;
+        setTimeout(() => this.validate(), 500);
+        return value;
     }
 }
 
@@ -94,14 +103,14 @@ function arrowUp(model: FormatNumber) {
 }
 
 function arrowDown(model: FormatNumber) {
-    model.value -= model.skip;
-    if (model.min != null && model.min != undefined && model.value > model.min) {
-        model.value = model.min;
-    } else if (!model.allowNegative && model.value < 1) {
-        model.value = 0;
+    var value = model.value - model.skip;
+    if (!model.allowNegativeNumbers && value < 1) {
+        value = 0;
     }
-
-    return model.value;
+    else if (model.min != null && model.min != undefined && value < model.min) {
+        value = model.min;
+    }
+    return value;
 }
 
 class FormatNumber {
@@ -109,5 +118,5 @@ class FormatNumber {
     min: number = 0;
     max: number = 0;
     skip: number = 0;
-    allowNegative: boolean = true;
+    allowNegativeNumbers: boolean = true;
 }

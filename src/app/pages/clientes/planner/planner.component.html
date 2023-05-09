@@ -429,24 +429,17 @@
                                             <small><b>Idade</b></small>
                                         </td>
                                         <td>
-                                            <input type="text"
-                                                   class="form-control form-control-number"
-                                                   id="idadeAposentadoria"
-                                                   name="idadeAposentadoria"
-                                                   #idadeAposentadoria="ngModel"
-                                                   [(ngModel)]="planner.cliente.idadeAposentadoria"
-                                                   mask="0*"
-                                                   suffix=" anos"
-                                                   [allowNegativeNumbers]="false"
-                                                   placeholder="0"
-                                                   (keyup.arrowup)="planner.cliente.idadeAposentadoria = arrowUp(idadeAposentadoria.value)"
-                                                   (keyup.arrowdown)="planner.cliente.idadeAposentadoria = arrowDown(idadeAposentadoria.value)"
-                                                   [ngbPopover]="campoObrigatorio"
-                                                   popoverClass="popover-danger"
-                                                   [disablePopover]="idadeAposentadoria.errors == null"
-                                                   triggers="mouseenter:mouseleave"
-                                                   required
-                                                   (change)="saveData()">
+                                            <app-input-number [valueInput]="planner.cliente.idadeAposentadoria"
+                                                (valueChanges)="planner.cliente.idadeAposentadoria = $event; saveData();"
+                                                [inputId]="'idadeAposentadoria'"
+                                                [mask]="'0*'"
+                                                [suffix]="' anos'"
+                                                [min]="20"
+                                                [max]="100"
+                                                [required]="true"
+                                                [showErrorMessage]="false"
+                                                [allowNegativeNumbers]="false"
+                                            ></app-input-number>
                                         </td>
                                     </tr>
                                     <tr>
@@ -454,26 +447,19 @@
                                             <small><b>Renda Mensal</b></small>
                                         </td>
                                         <td>
-                                            <input type="text"
-                                                   class="form-control form-control-number"
-                                                   id="rendaMensalAposentadoria"
-                                                   name="rendaMensalAposentadoria"
-                                                   #rendaMensalAposentadoria="ngModel"
-                                                   [(ngModel)]="planner.cliente.rendaMensalAposentadoria"
-                                                   mask="separator.5"
-                                                   thousandSeparator="."
-                                                   decimalMarker=","
-                                                   [prefix]="rendaMensalAposentadoria.value != '' ? 'R$ ' : ''"
-                                                   [allowNegativeNumbers]="false"
-                                                   placeholder="R$ 00,00"
-                                                   (keyup.arrowup)="planner.cliente.rendaMensalAposentadoria = arrowUp(rendaMensalAposentadoria.value)"
-                                                   (keyup.arrowdown)="planner.cliente.rendaMensalAposentadoria = arrowDown(rendaMensalAposentadoria.value)"
-                                                   [ngbPopover]="campoObrigatorio"
-                                                   popoverClass="popover-danger"
-                                                   [disablePopover]="rendaMensalAposentadoria.errors == null"
-                                                   triggers="mouseenter:mouseleave"
-                                                   required
-                                                   (change)="saveData()">
+                                            <app-input-number [valueInput]="planner.cliente.rendaMensalAposentadoria"
+                                                (valueChanges)="planner.cliente.rendaMensalAposentadoria = $event; saveData();"
+                                                [inputId]="'rendaMensalAposentadoria'"
+                                                [mask]="'separator.5'"
+                                                [thousandSeparator]="'.'"
+                                                [decimalMarker]="','"
+                                                [prefix]="'R$'"
+                                                [min]="1"
+                                                [max]="100000000"
+                                                [required]="true"
+                                                [placeholder]="'R$ 00,00'"
+                                                [showErrorMessage]="false"
+                                            ></app-input-number>
                                         </td>
                                     </tr>
                                     <tr>
@@ -481,26 +467,18 @@
                                             <small><b>Rentabilidade</b></small>
                                         </td>
                                         <td>
-                                            <input type="text"
-                                                   class="form-control form-control-number"
-                                                   id="rentabilidadeAposentadoria"
-                                                   name="rentabilidadeAposentadoria"
-                                                   #rentabilidadeAposentadoria="ngModel"
-                                                   [(ngModel)]="planner.cliente.rentabilidadeAposentadoria"
-                                                   mask="separator.5"
-                                                   thousandSeparator="."
-                                                   decimalMarker=","
-                                                   [allowNegativeNumbers]="true"
-                                                   placeholder="00,00%"
-                                                   suffix="%"
-                                                   (keyup.arrowup)="planner.cliente.rentabilidadeAposentadoria = arrowUp(rentabilidadeAposentadoria.value)"
-                                                   (keyup.arrowdown)="planner.cliente.rentabilidadeAposentadoria = arrowDown(rentabilidadeAposentadoria.value)"
-                                                   [ngbPopover]="campoObrigatorio"
-                                                   popoverClass="popover-danger"
-                                                   [disablePopover]="rentabilidadeAposentadoria.errors == null"
-                                                   triggers="mouseenter:mouseleave"
-                                                   required
-                                                   (change)="saveData()">
+                                            <app-input-number [valueInput]="planner.cliente.rentabilidadeAposentadoria"
+                                                (valueChanges)="planner.cliente.rentabilidadeAposentadoria = $event; saveData();"
+                                                [inputId]="'rentabilidadeAposentadoria'"
+                                                [mask]="'separator.5'"
+                                                [suffix]="'%'"
+                                                [max]="100000000"
+                                                [required]="true"
+                                                [showErrorMessage]="false"
+                                                [allowNegativeNumbers]="true"
+                                                [placeholder]="'0,00%'"
+                                                [showErrorMessage]="false"
+                                            ></app-input-number>
                                         </td>
                                     </tr>
                                 </tbody>

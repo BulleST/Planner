@@ -970,7 +970,7 @@
                                             class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                             (click)="adicionarProdutoCarteira(form)"
                                             *ngIf="(planner.carteiraSetup_Id != 0 && mudouCarteiraSetup) || planner.planejamentoProduto.length == 0"
-                                            [disabled]="form.invalid || loading"> Salvar </button>
+                                            [disabled]="form.invalid || loading || percentualTotalProduto != 100"> Salvar </button>
                                     <a class="link ml-3"
                                        [routerLink]="['produto']"
                                        *ngIf="planner.planejamentoInvestimento.length > 0
@@ -1458,7 +1458,7 @@
                     <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
                     <p *ngIf="erro.length == 0" class="text-red">Preencha todos os campos corretamente para salvar</p>
                 </div>
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading || form.invalid">
+                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading || form.invalid || percentualTotalProduto != 100">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
             </div>
         </form>

@@ -1871,3 +1871,8 @@ body {
 .p-dropdown-panel .p-dropdown-items p-dropdownitem:nth-child(odd) .p-dropdown-item {
     background: white;
 }
+
+
+.p-dropdown-item:hover {
+    background-color: #bfccf4!important;
+}

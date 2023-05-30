@@ -8,14 +8,16 @@
                     <div class="form-row">
                         <div class="form-group col-sm-12">
                             <label for="carteiraSetup" class="h6">Nome: <span class="text-danger">*</span></label>
-                            <div>
-                                <input type="text"
-                                    class="form-control my-1"
-                                    name="nome"
-                                    id="nome"
-                                    #nome="ngModel"
-                                    [(ngModel)]="objeto.nome"
-                                    placeholder="Digite para cadastrar nova carteira">
+                            <input type="text"
+                                   class="form-control my-1"
+                                   name="nome"
+                                   id="nome"
+                                   #nome="ngModel"
+                                   [(ngModel)]="objeto.nome"
+                                   placeholder="Digite para cadastrar nova carteira"
+                                   [required]="true">
+                            <div *ngIf="nome.touched && nome.errors">
+                                <p class="text-danger error" *ngIf="nome.errors['required']">Esse campo é obrigatório</p>
                             </div>
                         </div>
                     </div>
@@ -42,33 +44,30 @@
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                             <label for="produto">Produto: <span class="text-danger">*</span></label>
                             <p-dropdown
-                            class="form-control novalidate"
-                            id="produto"
-                            name="produto"
-                            #_produto="ngModel"
-                            [options]="produtos"
-                            [(ngModel)]="produto"
-                            optionLabel="descricao"
-                            optionDisabled="dataDesativado"
-                            [filter]="true"
-                            filterBy="descricao, tipoRisco.nome"
-                            [showClear]="true"
-                            placeholder="Selecione para adicionar">
-                    <ng-template let-item pTemplate="item">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span>{{item.descricao}}</span>
-                            <span class="flag flag-red" 
-                                *ngIf="item.dataDesativado"
-                                [ngbPopover]="ativo">
-                                Inativo
-                            </span>
-                        <ng-template #ativo>
-                            <div class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </div>
-                        </ng-template>
-                        </div>
-                    </ng-template>
-                </p-dropdown>
-
+                                        class="form-control novalidate"
+                                        id="produto"
+                                        name="produto"
+                                        #_produto="ngModel"
+                                        [options]="produtos"
+                                        [(ngModel)]="produto"
+                                        optionLabel="descricao"
+                                        optionDisabled="dataDesativado"
+                                        [filter]="true"
+                                        filterBy="descricao, tipoRisco.nome"
+                                        [showClear]="true"
+                                        placeholder="Selecione para adicionar">
+                                <ng-template let-item pTemplate="item">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>{{item.descricao}}</span>
+                                        <span class="flag flag-red"
+                                              *ngIf="item.dataDesativado"
+                                              [ngbPopover]="ativo"> Inativo </span>
+                                        <ng-template #ativo>
+                                            <div class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
                             <div class="mt-1 px-1">
                                 <p class="text-danger" *ngIf="selectedRisco == undefined">Selecione um risco para continuar.</p>
                                 <p class="text-danger" *ngIf=" selectedRisco != undefined && produtos.length == 0">Nenhum produto para {{selectedRisco.nome}}.</p>
@@ -112,10 +111,10 @@
                     </div>
                     <div>
                         <p-chart type="verticalBar"
-                                #chartProdutos
-                                [options]="optionsProduto"
-                                [data]="dataProduto"
-                                [height]="chartHeight"></p-chart>
+                                 #chartProdutos
+                                 [options]="optionsProduto"
+                                 [data]="dataProduto"
+                                 [height]="chartHeight"></p-chart>
                     </div>
                 </div>
                 <div class="card card-body mb-2" *ngIf="objeto.carteiraProdutoRel.length > 0">
@@ -142,18 +141,18 @@
                                         <td>{{item.produto.descricao}}</td>
                                         <td style="width: 80px;">
                                             <input type="text"
-                                                class="form-control"
-                                                id="percentual-{{i}}"
-                                                name="percentual-{{i}}"
-                                                mask="separator"
-                                                thousandSeparator="."
-                                                decimalMarker=","
-                                                suffix="%"
-                                                #_percentual="ngModel"
-                                                [max]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel"
-                                                [placeholder]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
-                                                [(ngModel)]="item.percentual"
-                                                (change)=" setChartProduto('');calcularPercentuais();">
+                                                   class="form-control"
+                                                   id="percentual-{{item.produto.tipoRisco.nome}}-{{i}}"
+                                                   name="percentual-{{item.produto.tipoRisco.nome}}-{{i}}"
+                                                   mask="separator"
+                                                   thousandSeparator="."
+                                                   decimalMarker=","
+                                                   suffix="%"
+                                                   #_percentual="ngModel"
+                                                   [max]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel"
+                                                   [placeholder]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
+                                                   [(ngModel)]="item.percentual"
+                                                   (change)="setChartProduto('');calcularPercentuais();">
                                         </td>
                                         <td class="td-action">
                                             <button type="button" class="btn-trash ml-auto d-block px-2 text-dark" (click)="removeProduto(item)">

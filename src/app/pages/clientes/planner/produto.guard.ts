@@ -20,7 +20,7 @@ export class ProdutoGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        let planner = this.plannerService.getObject().value;
+        let planner = this.plannerService.objeto.value;
         if (!planner.carteiraSetup) {
             this.modal.voltar();
             this.alert.warn('Escolha um setup para adicionar um produto!');

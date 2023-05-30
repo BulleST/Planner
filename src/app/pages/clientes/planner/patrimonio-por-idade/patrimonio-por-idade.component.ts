@@ -33,7 +33,7 @@ export class PatrimonioPorIdadeComponent implements OnChanges, OnDestroy {
     constructor(
         private plannerService: PlannerService,
     ) {
-        var getObject = this.plannerService.getObject().subscribe(res => {
+        var getObject = this.plannerService.objeto.subscribe(res => {
             this.planner = res;
             this.setChartPatrimonioIdade();
         });

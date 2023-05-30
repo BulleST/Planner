@@ -81,8 +81,6 @@ export class RequestInterceptor implements HttpInterceptor {
                 error: res => {
                     console.error('error', res);
                     var msg  = getError(res);
-                   
-                    console.log(msg)
 
                     if (res.status == 401) {
                         var returnUrl = window.location.pathname;
@@ -98,7 +96,6 @@ export class RequestInterceptor implements HttpInterceptor {
                         this.toastr.error('Permissão negada.');
                     }
                     else {
-                        this.toastr.error('Ocorreu um erro no processamento da requisição.');
                         this.toastr.error(msg);
                     }
 

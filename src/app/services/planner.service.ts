@@ -28,7 +28,7 @@ export class PlannerService {
         private accountService: AccountService,
         private empresaService: EmpresaService,
         private table: Table,
-    ) { 
+    ) {
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
         this.accountService.account.subscribe(res => this.account = res ?? new Account);
@@ -42,11 +42,13 @@ export class PlannerService {
             let obj = this.crypto.decrypt(e);
             this.objeto.next(obj);
         }
+        console.log('getObject', this.objeto.value)
         return this.objeto;
     }
 
     setObject(value: Planejamento) {
-        value.planejamentoAgregandoValor = value.planejamentoAgregandoValor ?? new PlanejamentoAgregandoValor; 
+        console.log('setObject', value)
+        value.planejamentoAgregandoValor = value.planejamentoAgregandoValor ?? new PlanejamentoAgregandoValor;
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
         this.objeto.next(value);
     }
@@ -55,46 +57,50 @@ export class PlannerService {
         this.table.loading.next(true);
         var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
         return this.http.get<Planejamento[]>(`${this.url}/planejamento/all/${empresaId}`)
-        .pipe(tap({
-            next: list => {
-                list = list.map(x => {
-                    x.cliente.ativo = !x.cliente.dataDesativado;
-                    return x;
-                });
-                this.list.next(list);
-                return of(list);
-            },
-            complete: () => {
-                this.table.loading.next(false)
-            }
-        }));
+            .pipe(tap({
+                next: list => {
+                    list = list.map(x => {
+                        x.cliente.ativo = !x.cliente.dataDesativado;
+                        return x;
+                    });
+                    this.list.next(list);
+                    return of(list);
+                },
+                complete: () => {
+                    this.table.loading.next(false)
+                }
+            }));
     }
+
     getByClienteId(cliente_id: number) {
-        return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(item => {
-            item.principaisObjetivos = item.principaisObjetivos ? item.principaisObjetivos : [];
-            item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
-            this.setObject(item);
-            return item;
+        return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(planner => {
+            console.log('getByClienteId res', planner)
+            planner.principaisObjetivos = planner.principaisObjetivos ? planner.principaisObjetivos : [];
+            planner.planejamentoAgregandoValor = planner.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : planner.planejamentoAgregandoValor
+            this.setObject(planner);
+            return planner;
         }));
     }
-    send(request: Planejamento) {
-        return this.http.post<Planejamento>(`${this.url}/planejamento/`, request);
-    }
+
     create(request: Planejamento) {
         var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
         request.cliente.empresa_Id = empresaId;
         request.account_Id = this.account.id;
         request.cliente.account_Id = this.account.id;
-        return this.http.post<Planejamento>(`${this.url}/planejamento/`, request).pipe(map(item => {
-            item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
-            return item;
-        }));
+        return this.http.post<Planejamento>(`${this.url}/planejamento/`, request)
+            .pipe(map(res => {
+                res.planejamentoAgregandoValor = res.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : res.planejamentoAgregandoValor
+                this.setObject(res);
+                return res;
+            }));
     }
     edit(request: Planejamento) {
-        return this.http.put<Planejamento>(`${this.url}/planejamento/`, request).pipe(map(item => {
-            item.planejamentoAgregandoValor = item.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : item.planejamentoAgregandoValor 
-            return item;
-        }));
+        return this.http.put<Planejamento>(`${this.url}/planejamento/`, request)
+            .pipe(map(res => {
+                res.planejamentoAgregandoValor = res.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : res.planejamentoAgregandoValor
+                this.setObject(res);
+                return res;
+            }));
     }
     delete(id: number) {
         return this.http.delete<void>(`${this.url}/planejamento/${id}`);

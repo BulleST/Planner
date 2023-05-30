@@ -165,16 +165,18 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     calcularPercentuais() {
+        console.group('calcularPercentuais');
         this.tipoRiscos = this.tipoRiscos.map(x => {
-            let produtosRel = this.objeto.carteiraProdutoRel
-            .filter(p => p.produto.tipoRisco_Id == x.id);
-            if (produtosRel.length > 0) {
-                x.percentualDisponivel = 100 - produtosRel.map(x => x.percentual).reduce((x,y) => x+y)
-            } else {
-                x.percentualDisponivel = 100
-            }
+            console.log('tipoRiscos: ', x);
+            let produtosRel = this.objeto.carteiraProdutoRel.filter(p => p.produto.tipoRisco_Id == x.id);
+            console.log('produtosRel: ', produtosRel);
+            var soma = produtosRel.length > 0 ? produtosRel.map(x => x.percentual).reduce((x,y) => x+y) : 0;
+            console.log('soma: ', soma);
+            x.percentualDisponivel = 100 - soma;
+            console.log('percentualDisponivel: ', x.percentualDisponivel);
             return x;
         });
+        console.groupEnd();
     }
 
     getRisco(tipoRisco_Id: number) {
@@ -270,6 +272,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     adicionarProduto() {
+        console.group('adicionarProduto');
         if (!this.produto) {
             this.toastr.error('Selecione um produto para adicionar');
         } 
@@ -281,6 +284,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                 produto: this.produto,
                 produto_Id: this.produto.id,
             }
+            console.log('carteiraProdutoRel: ', carteiraProdutoRel)
             var index = this.objeto.carteiraProdutoRel.findIndex(x => x.produto_Id == this.produto?.id);
             var jaExiste = this.objeto.carteiraProdutoRel.find(x => x.produto_Id == this.produto?.id);
             if (jaExiste && index != -1) { // Se já existir, remove e adiciona um novo
@@ -298,6 +302,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             this.percentual = '' as unknown as number;
 
         }
+        console.groupEnd();
     }
 
     removeProduto(item: CarteiraProdutoRel) {

@@ -55,8 +55,8 @@ export class ProdutoFormComponent implements OnDestroy {
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
-        var getObject = this.plannerService.getObject().subscribe(planner => this.planner = planner);
-        this.subscription.push(getObject);
+        var objeto = this.plannerService.objeto.subscribe(planner => this.planner = planner);
+        this.subscription.push(objeto);
         var list = this.setupService.list.subscribe(res => this.carteirasSetup = res);
         this.subscription.push(list);
         lastValueFrom(this.setupService.getList())

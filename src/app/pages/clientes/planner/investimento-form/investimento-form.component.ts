@@ -47,7 +47,7 @@ export class InvestimentoFormComponent implements OnDestroy {
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
-        var getObject = this.plannerService.getObject().subscribe(planner => this.planner = planner);
+        var getObject = this.plannerService.objeto.subscribe(planner => this.planner = planner);
         this.subscription.push(getObject);
 
         var list = this.setupService.list.subscribe(res => this.carteirasSetup = res);

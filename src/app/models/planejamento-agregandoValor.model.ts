@@ -2,7 +2,7 @@ export class PlanejamentoAgregandoValor {
     id: number = 0;
     planejamento_Id: number = 0;
     riscoAssumido?: number;
-    montante?: number;
+    montante: number = 0;
    
     rentabilidade_Atual?: number;
     rentabilidade_Sugerida?: number;

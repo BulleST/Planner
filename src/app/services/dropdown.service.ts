@@ -17,6 +17,7 @@ import { off } from "process";
     providedIn: 'root'
 })
 export class DropdownService {
+    
     url = environment.url;
     tipoAtivo = new BehaviorSubject<TipoAtivo[]>([]);
     tipoRisco = new BehaviorSubject<TipoRisco[]>([]);
@@ -27,14 +28,14 @@ export class DropdownService {
     estadoCivil = new BehaviorSubject<EstadoCivil[]>([]);
     empresa: Empresa = new Empresa;
     empresasList = new BehaviorSubject<Empresa[]>([]);
+
     constructor(
         private http: HttpClient,
         private empresaService: EmpresaService
     ) {
-        this.empresaService.empresa.subscribe(res => {
-            this.empresa = res;
-        })
+        this.empresaService.empresa.subscribe(res => this.empresa = res);
     }
+
     getEmpresas() {
         return this.http.get<Empresa[]>(`${this.url}/empresa/`)
         .pipe(tap({
@@ -83,7 +84,6 @@ export class DropdownService {
             return res;
         }));
     }
-
     
     getEstadoCivil() {
         return this.http.get<EstadoCivil[]>(`${this.url}/estadoCivil/getAll`).pipe(map(res => {

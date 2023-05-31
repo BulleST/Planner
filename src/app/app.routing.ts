@@ -8,8 +8,7 @@ const loggedIn = () => import('./pages/logged-in/logged-in.module').then(res => 
 const routes: Routes = [
     { path: '', loadChildren: loggedIn, canActivate: [AuthGuard] },
     { path: 'account', loadChildren: account },
-    // { path: '**', redirectTo: '', pathMatch: 'full' },
-
+    { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({

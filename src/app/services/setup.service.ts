@@ -154,7 +154,6 @@ export class CarteiraSetupService {
         }
     }
 
-
     getList(empresaId?: number, ativo?: any) {
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
         ativo = ativo != undefined ? ativo : '';
@@ -169,7 +168,6 @@ export class CarteiraSetupService {
             })
         );
     }
-
 
     get(id: number) {
         return this.http.get<CarteiraSetup>(`${this.url}/carteiraSetup/${id}`)
@@ -189,12 +187,12 @@ export class CarteiraSetupService {
         return this.http.put<CarteiraSetup>(`${this.url}/carteiraSetup/`, request);
     }
 
-    deactivated(id: number, active: boolean) {
-        return this.http.patch<void>(`${this.url}/carteiraSetup/${id}/${active}`, {});
-    }
-
     delete(id: number) {
         return this.http.delete<void>(`${this.url}/carteiraSetup/${id}`);
+    }
+
+    deactivated(id: number, active: boolean) {
+        return this.http.patch<void>(`${this.url}/carteiraSetup/${id}/${active}`, {});
     }
 
 }

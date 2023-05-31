@@ -105,13 +105,12 @@
 }
 
 .header__userLogado-submenu {
-    position: absolute;
-    top: 0%;
+    position: fixed;
+    top: 50px;
     left: auto;
-    right: calc(0.5vw + 10px);
-    transform: translate(0, -100%);
+    right: calc(.5vw + 10px);
+    transform: translateY(-100%);
     width: 200px;
-    background-color: white;
     border: 1px #d2d2d2 solid;
     border-top: 0;
     border-radius: 0 0 3px 3px;
@@ -123,7 +122,7 @@
     z-index: -1;
     visibility: hidden;
     transition: .3s;
-    background-color: #ffffff;
+    background-color: #fff;
 }
 
 .header__userLogado-submenu.header__userLogado-submenu--open {
@@ -131,7 +130,7 @@
     opacity: 1;
     visibility: visible;
     transition: .3s;
-    top: 100%;
+    /* top: 100%; */
 }
 
 p.header__userLogado-submenu-link {

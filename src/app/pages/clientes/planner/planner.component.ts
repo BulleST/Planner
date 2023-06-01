@@ -63,9 +63,9 @@ export class PlannerComponent implements OnDestroy {
 
     produtoHover?: Produto;
 
-    percentualTotalProduto = 0;
-    planoAcaoTotalProduto = 0;
-    sugeridoTotalProduto = 0;
+    somaPercentualProduto = 0;
+    somaPlanoAcaoProduto = 0;
+    somaSugeridoProduto = 0;
 
     // se o usuario alterou a carteira setup, não pode adicionar um produto 
     // fora da carteira selecionada antes de salvar e calcular os valores
@@ -111,19 +111,15 @@ export class PlannerComponent implements OnDestroy {
                 this.planner.cliente_Id = this.crypto.decrypt(item['cliente_id'])
                 lastValueFrom(this.plannerService.getByClienteId(this.planner.cliente_Id))
                     .then(res => {
-                        console.log('planner get res', res);
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
                         this.carteiraSetupInalterada = res.carteiraSetup;
-                        this.mudouCarteiraSetup = true;
                         this.validateDataNascimento();
                         
                         var getObject = this.plannerService.objeto.subscribe(res => {
-                            console.log('planner if objeto res', res);
                             this.planner = res;
-                            this.mudouCarteiraSetup = this.planner.id != 0;
                             this.calculaPercentual();
                         });
                         this.subscription.push(getObject);
@@ -137,9 +133,7 @@ export class PlannerComponent implements OnDestroy {
             } else {
                 this.plannerService.getObject();
                 var getObject = this.plannerService.objeto.subscribe(res => {
-                    console.log('planner objeto res', res);
                     this.planner = res;
-                    this.mudouCarteiraSetup = this.planner.id != 0;
                     this.calculaPercentual();
                 })
                 this.subscription.push(getObject);
@@ -170,7 +164,6 @@ export class PlannerComponent implements OnDestroy {
     }
 
     validateDataNascimento() {
-        console.log('validateDataNascimento')
         var data = new Date(this.planner.cliente.dataNascimento)
         var dataNascimentoMin = new Date(this.dataNascimentoMin)
         var dataNascimentoMax = new Date(this.dataNascimentoMax)
@@ -190,7 +183,6 @@ export class PlannerComponent implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log('ngOnDestroy')
         this.subscription.forEach(item => item.unsubscribe());
     }
 
@@ -199,12 +191,10 @@ export class PlannerComponent implements OnDestroy {
     }
 
     resetForm() {
-        console.log('resetForm')
         this.plannerService.setObject(new Planejamento);
     }
 
     calcularICM() {
-        console.log('calcularICM')
         if (!this.planner.cliente.altura || !this.planner.cliente.peso) {
             this.planner.cliente.imc = '' as unknown as number;
         } else {
@@ -213,27 +203,34 @@ export class PlannerComponent implements OnDestroy {
     }
 
     calculaPercentual() {
-        console.log('calculaPercentual')
         if (this.planner.planejamentoProduto.length > 0 && this.planner.planejamentoAgregandoValor != undefined) {
-            
             var montanteTotal = this.planner.planejamentoAgregandoValor.montante ?? 1;
             
+            var somaPercentual = 0;
+            var somaPlanoAcao = 0;
+            var somaSugerido = 0;
+
             this.planner.planejamentoProduto = this.planner.planejamentoProduto.map(x => {
-                x.percentual = (x.planoAcao * 100) / montanteTotal;
+                const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+                var percentual = x.planoAcao / montanteTotal
+                x.percentual = round(percentual, 4) * 100;
+                somaPercentual += percentual;
+                somaPlanoAcao += x.planoAcao;
+                somaSugerido += x.sugerido;
                 return x
             });
             
-            this.percentualTotalProduto = (this.planner.planejamentoProduto.map(x => x.percentual) ?? []).reduce((x, y) => x + y);
-            this.planoAcaoTotalProduto  = (this.planner.planejamentoProduto.map(x => x.planoAcao)  ?? []).reduce((x, y) => x + y)
-            this.sugeridoTotalProduto   = (this.planner.planejamentoProduto.map(x => x.sugerido)   ?? []).reduce((x, y) => x + y)
+            this.somaPercentualProduto = somaPercentual * 100;
+            this.somaPlanoAcaoProduto = somaPlanoAcao;
+            this.somaSugeridoProduto = somaSugerido;
+
         } else {
-            this.planoAcaoTotalProduto = 0;
-            this.percentualTotalProduto = 0;
+            this.somaPlanoAcaoProduto = 0;
+            this.somaPercentualProduto = 0;
         }
     }
 
     calculaIdade() {
-        console.log('calculaIdade')
         if (this.planner.cliente.dataNascimento && this.planner.cliente.dataNascimento.toString().trim() != '') {
             var ageDifMs = Date.now() - new Date(new Date(this.planner.cliente.dataNascimento).toUTCString()).getTime();;
             var ageDate = new Date(ageDifMs); // miliseconds from epoch
@@ -244,7 +241,6 @@ export class PlannerComponent implements OnDestroy {
     }
 
     carteiraSetupChange(model: NgModel) {
-        console.log('carteiraSetupChange')
         if (model.value) {
             let carteiraSetup = this.carteirasSetup.find(x => x.id == model.value) as CarteiraSetup;
             this.planner.carteiraSetup = carteiraSetup;
@@ -261,7 +257,6 @@ export class PlannerComponent implements OnDestroy {
     }
 
     perfilInvestidorChange() {
-        console.log('perfilInvestidorChange')
         this.planner.cliente.perfilInvestidor = this.perfilInvestidor
             .find(x => x.id == this.planner.cliente.perfilInvestidor_Id) as PerfilInvestidor;
         this.saveData();
@@ -319,7 +314,6 @@ export class PlannerComponent implements OnDestroy {
     }
 
     saveData() {
-        console.log('saveData')
         this.plannerService.setObject(this.planner);
     }
 
@@ -348,7 +342,6 @@ export class PlannerComponent implements OnDestroy {
         return true;
     }
     adicionarProdutoCarteira(form: NgForm) {
-        console.log('adicionarProdutoCarteira')
         if (!this.planner.cliente.empresa) {
             this.planner.cliente.empresa = new Empresa;
         }
@@ -366,13 +359,16 @@ export class PlannerComponent implements OnDestroy {
             .then(res => {
                 this.plannerService.setObject(res);
                 this.mudouCarteiraSetup = true;
+                console.log(res.carteiraSetup)
+                if (res.carteiraSetup) {
+                    this.carteiraSetupInalterada = res.carteiraSetup
+                }
             })
             .finally(() => this.loading = false);
 
     }
 
     send(form: NgForm) {
-        console.log('send')
         this.planner.account_Id = 1;
         this.planner.cliente.empresa_Id = 1;
         if (!this.planner.cliente.empresa) {

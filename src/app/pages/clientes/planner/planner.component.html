@@ -970,7 +970,7 @@
                                             class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                             (click)="adicionarProdutoCarteira(form)"
                                             *ngIf="(planner.carteiraSetup_Id != 0 && mudouCarteiraSetup) || planner.planejamentoProduto.length == 0"
-                                            [disabled]="form.invalid || loading || percentualTotalProduto != 100"> Salvar </button>
+                                            [disabled]="form.invalid || loading"> Carregar produtos </button>
                                     <a class="link ml-3"
                                        [routerLink]="['produto']"
                                        *ngIf="planner.planejamentoInvestimento.length > 0
@@ -1007,8 +1007,8 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control form-control-number"
-                                                       id="investimento-custosTaxas-{{index}}"
-                                                       name="investimento-custosTaxas-{{index}}"
+                                                       id="produto-custosTaxas-{{index}}"
+                                                       name="produto-custosTaxas-{{index}}"
                                                        #custosTaxas="ngModel"
                                                        [(ngModel)]="item.custosTaxas"
                                                        mask="separator.5"
@@ -1023,7 +1023,20 @@
                                                        required
                                                        (change)="saveData()">
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap"> {{ item.percentual | mask : 'separator' : ',' }}% </td>
+                                            <td class="px-2" style="white-space: nowrap"> 
+                                                <input type="text"
+                                                       class="form-control form-control-number"
+                                                       id="produto-percentual-{{index}}"
+                                                       name="produto-percentual-{{index}}"
+                                                       #percentual="ngModel"
+                                                       [(ngModel)]="item.percentual"
+                                                       mask="separator.2"
+                                                       thousandSeparator="."
+                                                       decimalMarker=","
+                                                       suffix="%"
+                                                       [allowNegativeNumbers]="false"
+                                                       readonly>
+                                            </td>
                                             <td>
                                                 <input type="text"
                                                        class="form-control form-control-number"
@@ -1043,9 +1056,9 @@
                                                        [required]="true"
                                                        (change)="saveData()">
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap">{{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}%</td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : ',' }} </td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.sugerido | mask : 'separator' : ',' }} </td>
+                                            <td class="px-2" style="white-space: nowrap">{{ item.rentabilidadeLiquida | mask : 'separator' : '.' }}%</td>
+                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : '.' }} </td>
+                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.sugerido | mask : 'separator' : '.' }} </td>
                                             <td class="px-2" style="white-space: nowrap">
                                                 <input type="text"
                                                        class="form-control form-control-number"
@@ -1081,10 +1094,10 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control"
-                                                       id="percentualTotalProduto"
-                                                       name="percentualTotalProduto"
-                                                       #_percentualTotalProduto="ngModel"
-                                                       [(ngModel)]="percentualTotalProduto"
+                                                       id="somaPercentualProduto"
+                                                       name="somaPercentualProduto"
+                                                       #_somaPercentualProduto="ngModel"
+                                                       [(ngModel)]="somaPercentualProduto"
                                                        mask="separator.5"
                                                        thousandSeparator="."
                                                        decimalMarker=","
@@ -1098,10 +1111,10 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control"
-                                                       id="sugeridoTotalProduto"
-                                                       name="sugeridoTotalProduto"
-                                                       #_sugeridoTotalProduto="ngModel"
-                                                       [(ngModel)]="sugeridoTotalProduto"
+                                                       id="somaSugeridoProduto"
+                                                       name="somaSugeridoProduto"
+                                                       #_somaSugeridoProduto="ngModel"
+                                                       [(ngModel)]="somaSugeridoProduto"
                                                        mask="separator.5"
                                                        thousandSeparator="."
                                                        decimalMarker=","
@@ -1112,10 +1125,10 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control"
-                                                       id="planoAcaoTotalProduto"
-                                                       name="planoAcaoTotalProduto"
-                                                       #_planoAcaoTotalProduto="ngModel"
-                                                       [(ngModel)]="planoAcaoTotalProduto"
+                                                       id="somaPlanoAcaoProduto"
+                                                       name="somaPlanoAcaoProduto"
+                                                       #_somaPlanoAcaoProduto="ngModel"
+                                                       [(ngModel)]="somaPlanoAcaoProduto"
                                                        mask="separator.5"
                                                        thousandSeparator="."
                                                        decimalMarker=","
@@ -1458,7 +1471,7 @@
                     <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
                     <p *ngIf="erro.length == 0" class="text-red">Preencha todos os campos corretamente para salvar</p>
                 </div>
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading || form.invalid || percentualTotalProduto != 100">
+                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading || form.invalid || somaPercentualProduto != 100">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
             </div>
         </form>

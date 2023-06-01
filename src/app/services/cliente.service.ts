@@ -14,9 +14,7 @@ import { Account } from '../models/account.model';
 import { AccountService } from './account.service';
 import { Role } from '../models/account-perfil.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ClienteService {
     list = new BehaviorSubject<Cliente[]>([]);
     url = environment.url;

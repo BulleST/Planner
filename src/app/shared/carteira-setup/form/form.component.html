@@ -112,7 +112,7 @@
                     <div>
                         <p-chart type="verticalBar"
                                  #chartProdutos
-                                 [options]="optionsProduto"
+                                 [options]="optionsChartProduto"
                                  [data]="dataProduto"
                                  [height]="chartHeight"></p-chart>
                     </div>
@@ -137,10 +137,13 @@
                                         [class.selected]="item.produto.tipoRisco_Id == selectedRisco.id">
                                         <td></td>
                                         <td>{{item.id }}</td>
-                                        <td>{{item.produto.tipoRisco.nome}}</td>
+                                        <td>
+                                            <span *ngIf="item.produto.tipoRisco">{{item.produto.tipoRisco.nome}}</span>
+                                            <span *ngIf="!item.produto.tipoRisco">-</span>
+                                        </td>
                                         <td>{{item.produto.descricao}}</td>
-                                        <td style="width: 80px;">
-                                            <input type="text"
+                                        <td style="width: 80px; height: 43px;">
+                                            <input type="text" *ngIf="item.produto.id != 61"
                                                    class="form-control"
                                                    id="percentual-{{item.produto.tipoRisco.nome}}-{{i}}"
                                                    name="percentual-{{item.produto.tipoRisco.nome}}-{{i}}"
@@ -153,9 +156,10 @@
                                                    [placeholder]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
                                                    [(ngModel)]="item.percentual"
                                                    (change)="setChartProduto('');calcularPercentuais();">
+                                            <span *ngIf="item.produto.id == 61">-</span>
                                         </td>
                                         <td class="td-action">
-                                            <button type="button" class="btn-trash ml-auto d-block px-2 text-dark" (click)="removeProduto(item)">
+                                            <button type="button" class="btn-trash ml-auto d-block px-2 text-dark" (click)="removeProduto(item)" *ngIf="item.produto.id != 61">
                                                 <fa-icon [icon]="faTrashAlt" class="d-md-none d-block"></fa-icon>
                                                 <span class="d-md-block d-none btn btn-dark">Excluir</span>
                                             </button>

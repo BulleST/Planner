@@ -20,10 +20,16 @@ export class EmpresaService {
     constructor(
         private http: HttpClient,
         private crypto: Crypto,
-        private table: Table
+        private table: Table,
+        private accountService: AccountService,
     ) {
 		this.empresaObject = new BehaviorSubject<Empresa>(new Empresa);
 		this.empresa = this.empresaObject.asObservable();
+        this.accountService.account.subscribe(res => {
+            if (res?.email == 'noemi.admin@gmail.com') {
+                this.url = environment.urlLocal;
+            }
+        });
     }
     public get object()  {
         var e = localStorage.getItem('empresa') as string;

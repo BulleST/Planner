@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { Investimento } from '../models/investimento.model';
 import { environment } from 'src/environments/environment';
+import { AccountService } from './account.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,13 @@ export class InvestimentoService {
         private router: Router,
         private http: HttpClient,
         private toastr: ToastrService,
+        private accountService: AccountService,
     ) { 
+        this.accountService.account.subscribe(res => {
+            if (res?.email == 'noemi.admin@gmail.com') {
+                this.url = environment.urlLocal;
+            }
+        });
     }
 
     getAll() {

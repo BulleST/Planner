@@ -38,12 +38,16 @@ export class ListComponent implements OnDestroy {
                 await lastValueFrom(this.produtoService.getList());
         });
         var selected = this.table.selected.subscribe(res => {
-            if (res) {
+            if (res && res.descricao != 'Conta Corrente') { // Conta corrente não pode ser editada, desabilitada ou excluida
                 this.tableLinks = [
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
                     { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [(res.ativo ? 'desabilitar' : 'habilitar')], paramsFieldName: ['id'] },
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
+            } else if (res && res.descricao != 'Conta Corrente') {
+                this.table.onRowUnselect(res)
+            } else{
+                this.tableLinks = [];
             }
         });
 

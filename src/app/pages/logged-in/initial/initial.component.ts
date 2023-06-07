@@ -25,7 +25,10 @@ export class InitialComponent implements OnDestroy {
         private header: Header,
     ) {
         var getAtivado = this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        var getOpen = this.modal.getOpen().subscribe(res =>{
+            this.modalOpen = res
+            console.log('modalOpen', res)
+        });
         var open = this.header.open.subscribe(res => this.navigationOpen = res);
         var loading = this.table.loading.subscribe(res => this.loading = res);
         this.subscription.push(getAtivado);

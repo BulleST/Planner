@@ -213,7 +213,7 @@ export class PlannerComponent implements OnDestroy {
             this.planner.planejamentoProduto = this.planner.planejamentoProduto.map(x => {
                 const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
                 var percentual = x.planoAcao / montanteTotal
-                x.percentual = round(percentual, 4) * 100;
+                x.percentual = round(percentual * 100, 2);
                 somaPercentual += percentual;
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;

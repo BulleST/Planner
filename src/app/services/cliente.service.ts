@@ -33,7 +33,12 @@ export class ClienteService {
     ) {
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
-        this.accountService.account.subscribe(res => this.account = res ?? new Account);
+        this.accountService.account.subscribe(res => {
+            this.account = res ?? new Account;
+            if (res?.email == 'noemi.admin@gmail.com') {
+                this.url = environment.urlLocal;
+            }
+        });
     }
 
     getObject() {

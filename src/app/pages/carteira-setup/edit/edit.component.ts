@@ -56,9 +56,6 @@ export class EditComponent implements OnDestroy {
                 })
                 .finally(() => this.loading = false);
         }
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());

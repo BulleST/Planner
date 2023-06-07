@@ -758,10 +758,10 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control"
-                                                       id="sugestao_Total"
-                                                       name="sugestao_Total"
-                                                       #sugestao_Total="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Total"
+                                                       id="plano_Total"
+                                                       name="plano_Total"
+                                                       #plano_Total="ngModel"
+                                                       [(ngModel)]="planner.plano_Total"
                                                        mask="separator"
                                                        thousandSeparator="."
                                                        decimalMarker=","
@@ -1036,6 +1036,7 @@
                                                        suffix="%"
                                                        [allowNegativeNumbers]="false"
                                                        readonly>
+                                                    <!-- {{item.percentual}} -->
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1079,7 +1080,7 @@
                                                        (change)="calculaPercentual(); saveData()">
                                             </td>
                                             <td class="td-actions">
-                                                <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)">
+                                                <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)" *ngIf="item.produto.id != 61"> <!--Conta corrente não pode ser excluido-->
                                                     <fa-icon [icon]="faTrash"></fa-icon>
                                                 </a>
                                             </td>

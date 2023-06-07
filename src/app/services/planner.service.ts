@@ -31,7 +31,12 @@ export class PlannerService {
     ) {
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
-        this.accountService.account.subscribe(res => this.account = res ?? new Account);
+        this.accountService.account.subscribe(res => {
+            this.account = res ?? new Account;
+            if (res?.email == 'noemi.admin@gmail.com') {
+                this.url = environment.urlLocal;
+            }
+        });
     }
 
     getObject(): BehaviorSubject<Planejamento> {
@@ -47,7 +52,6 @@ export class PlannerService {
     }
 
     setObject(value: Planejamento) {
-        console.log('setObject', value)
         value.planejamentoAgregandoValor = value.planejamentoAgregandoValor ?? new PlanejamentoAgregandoValor;
         localStorage.setItem('planejamento', this.crypto.encrypt(value) ?? '');
         this.objeto.next(value);

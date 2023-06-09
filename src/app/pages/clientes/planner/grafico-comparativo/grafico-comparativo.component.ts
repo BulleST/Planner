@@ -146,10 +146,10 @@ export class GraficoComparativoComponent implements OnChanges {
             var index = value.findIndex(y => x.produto.tipoRisco_Id == y.tipoRisco_Id);
             if (index == -1) {
                 obj = {
-                    tipoRisco_Id: x.produto.tipoRisco_Id,
-                    tipoRisco: x.produto.tipoRisco,
+                    tipoRisco_Id: x.produto.tipoRisco ? x.produto.tipoRisco_Id : 0,
+                    tipoRisco: x.produto.tipoRisco ? x.produto.tipoRisco : undefined,
                     sugerido: x.sugerido,
-                    label: x.produto.tipoRisco.nome
+                    label: x.produto.tipoRisco ? x.produto.tipoRisco.nome : '-'
                 };
             } else {
                 obj = value[index]; 
@@ -161,9 +161,9 @@ export class GraficoComparativoComponent implements OnChanges {
         });
 
         this.chartRiscoData_Produto =  {
-            labels: value.map(x => x.tipoRisco.nome),
+            labels: value.map(x => x.tipoRisco ? x.tipoRisco.nome : '-'),
             datasets: [{
-              label: value.map(x => x.tipoRisco.nome),
+              label: value.map(x => x.tipoRisco ? x.tipoRisco.nome : '-'),
               data: value,
               backgroundColor: this.colors,
               hoverOffset: 4
@@ -190,10 +190,10 @@ export class GraficoComparativoComponent implements OnChanges {
             var index = value.findIndex(y => x.produto.tipoLiquidez_Id == y.tipoLiquidez_Id);
             if (index == -1) {
                 obj = {
-                    tipoLiquidez_Id: x.produto.tipoLiquidez_Id,
-                    tipoLiquidez: x.produto.tipoLiquidez,
+                    tipoLiquidez_Id:  x.produto.tipoLiquidez ? x.produto.tipoLiquidez_Id : 0,
+                    tipoLiquidez:  x.produto.tipoLiquidez ? x.produto.tipoLiquidez : undefined,
                     sugerido: x.sugerido,
-                    label: x.produto.tipoLiquidez.nome
+                    label:  x.produto.tipoLiquidez ? x.produto.tipoLiquidez.nome : '-'
                 };
             } else {
                 obj = value[index]; 
@@ -205,9 +205,9 @@ export class GraficoComparativoComponent implements OnChanges {
         });
 
         this.chartLiquidezData_Produto =  {
-            labels: value.map(x => x.tipoLiquidez.nome),
+            labels: value.map(x => x.tipoLiquidez ? x.tipoLiquidez.nome : '-'),
             datasets: [{
-              label: value.map(x => x.tipoLiquidez.nome),
+              label: value.map(x => x.tipoLiquidez ? x.tipoLiquidez.nome : '-'),
               data: value,
               backgroundColor: this.colors,
               hoverOffset: 4
@@ -235,10 +235,10 @@ export class GraficoComparativoComponent implements OnChanges {
             var index = value.findIndex(y => x.produto.tipoAtivo_Id == y.tipoAtivo_Id);
             if (index == -1) {
                 obj = {
-                    tipoAtivo_Id: x.produto.tipoAtivo_Id,
-                    tipoAtivo: x.produto.tipoAtivo,
+                    tipoAtivo_Id: x.produto.tipoAtivo ?x.produto.tipoAtivo_Id : 0,
+                    tipoAtivo: x.produto.tipoAtivo ?x.produto.tipoAtivo : undefined,
                     sugerido: x.sugerido,
-                    label: x.produto.tipoAtivo.nome
+                    label: x.produto.tipoAtivo ?x.produto.tipoAtivo.nome : '-'
                 };
             } else {
                 obj = value[index]; 
@@ -250,9 +250,9 @@ export class GraficoComparativoComponent implements OnChanges {
         });
 
         this.chartAtivoData_Produto =  {
-            labels: value.map(x => x.tipoAtivo.nome),
+            labels: value.map(x =>  x.tipoAtivo ? x.tipoAtivo.nome : '-'),
             datasets: [{
-              label: value.map(x => x.tipoAtivo.nome),
+              label: value.map(x =>  x.tipoAtivo ? x.tipoAtivo.nome : '-'),
               data: value,
               backgroundColor: this.colors,
               hoverOffset: 4
@@ -280,10 +280,10 @@ export class GraficoComparativoComponent implements OnChanges {
             var index = value.findIndex(y => x.investimento.tipoRisco_Id == y.tipoRisco_Id);
             if (index == -1) {
                 obj = {
-                    tipoRisco_Id: x.investimento.tipoRisco_Id,
-                    tipoRisco: x.investimento.tipoRisco,
+                    tipoRisco_Id: x.investimento.tipoRisco ? x.investimento.tipoRisco_Id : 0,
+                    tipoRisco: x.investimento.tipoRisco ? x.investimento.tipoRisco : undefined,
                     montanteAtual: x.montanteAtual,
-                    label: x.investimento.tipoRisco.nome
+                    label: x.investimento.tipoRisco ? x.investimento.tipoRisco.nome : '-'
                 };
             } else {
                 obj = value[index]; 
@@ -295,9 +295,9 @@ export class GraficoComparativoComponent implements OnChanges {
         });
 
         this.chartRiscoData_Investimento =  {
-            labels: value.map(x => x.tipoRisco.nome),
+            labels: value.map(x => x.tipoRisco ? x.tipoRisco.nome : '-'),
             datasets: [{
-              label: value.map(x => x.tipoRisco.nome),
+              label: value.map(x => x.tipoRisco ? x.tipoRisco.nome : '-'),
               data: value,
               backgroundColor: this.colors,
               hoverOffset: 4
@@ -324,10 +324,10 @@ export class GraficoComparativoComponent implements OnChanges {
             var index = value.findIndex(y => x.investimento.tipoLiquidez_Id == y.tipoLiquidez_Id);
             if (index == -1) {
                 obj = {
-                    tipoLiquidez_Id: x.investimento.tipoLiquidez_Id,
-                    tipoLiquidez: x.investimento.tipoLiquidez,
+                    tipoLiquidez_Id: x.investimento.tipoLiquidez ? x.investimento.tipoLiquidez_Id : 0,
+                    tipoLiquidez: x.investimento.tipoLiquidez ? x.investimento.tipoLiquidez : undefined,
                     montanteAtual: x.montanteAtual,
-                    label: x.investimento.tipoLiquidez.nome
+                    label: x.investimento.tipoLiquidez ? x.investimento.tipoLiquidez.nome : '-'
                 };
             } else {
                 obj = value[index]; 
@@ -339,9 +339,9 @@ export class GraficoComparativoComponent implements OnChanges {
         });
 
         this.chartLiquidezData_Investimento =  {
-            labels: value.map(x => x.tipoLiquidez.nome),
+            labels: value.map(x => x.tipoLiquidez ? x.tipoLiquidez.nome : '-    '),
             datasets: [{
-              label: value.map(x => x.tipoLiquidez.nome),
+              label: value.map(x => x.tipoLiquidez ? x.tipoLiquidez.nome : '-    '),
               data: value,
               backgroundColor: this.colors,
               hoverOffset: 4

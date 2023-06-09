@@ -23,6 +23,7 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RequestInterceptor } from './helpers/request.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { EmpresaSharedModule } from './pages/empresas/shared/empresa-shared.module';
+import { AccountService } from './services/account.service';
 
 registerLocaleData(localePt);
 
@@ -53,6 +54,7 @@ registerLocaleData(localePt);
         CurrencyPipe,
         MaskPipe,
         DatePipe,
+        AccountService,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
         { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },

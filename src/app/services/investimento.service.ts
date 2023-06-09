@@ -21,7 +21,7 @@ export class InvestimentoService {
         private accountService: AccountService,
     ) { 
         this.accountService.account.subscribe(res => {
-            if (res?.email == 'noemi.admin@gmail.com') {
+            if (res && res?.email == 'noemi.admin@gmail.com') {
                 this.url = environment.urlLocal;
             }
         });

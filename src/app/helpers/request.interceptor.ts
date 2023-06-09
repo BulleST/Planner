@@ -111,6 +111,7 @@ export class RequestInterceptor implements HttpInterceptor {
                     ${ok} in ${elapsed} ms.`;
                 // console.log(msg);
 
+                this.table.loading.next(false)
                 this.loadingUtils.loading.next(false);
             }),
         );

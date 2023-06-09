@@ -18,6 +18,7 @@ export class AccountService {
 
     accountSubject: BehaviorSubject<Account | undefined>;
     public account: Observable<Account | undefined>;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -27,7 +28,6 @@ export class AccountService {
     ) {
         this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
         this.account = this.accountSubject.asObservable();
-
     }
 
     setAccount(value?: Account) {

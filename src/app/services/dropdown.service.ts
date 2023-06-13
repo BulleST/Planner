@@ -11,8 +11,6 @@ import { TipoLiquidez } from "../models/tipoLiquidez.model";
 import { TipoRisco } from "../models/tipoRisco.model";
 import { PerfilAcesso } from "../models/account-perfil.model";
 import { EmpresaService } from "./empresa.service";
-import { off } from "process";
-import { AccountService } from "./account.service";
 
 @Injectable({
     providedIn: 'root'
@@ -33,14 +31,8 @@ export class DropdownService {
     constructor(
         private http: HttpClient,
         private empresaService: EmpresaService,
-        private accountService: AccountService,
     ) {
         this.empresaService.empresa.subscribe(res => this.empresa = res);
-        this.accountService.account.subscribe(res => {
-            if (res && res?.email == 'noemi.admin@gmail.com') {
-                this.url = environment.urlLocal;
-            }
-        });
     }
 
     getEmpresas() {

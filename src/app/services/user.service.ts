@@ -35,12 +35,7 @@ export class UsuarioService {
     ) {
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
-        this.accountService.account.subscribe(res => {
-            this.account = res ?? new Account;
-            if (res && res?.email == 'noemi.admin@gmail.com') {
-                this.url = environment.urlLocal;
-            }
-        });
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
 
     getObject() {

@@ -31,17 +31,11 @@ export class ClienteService {
         private toastr: ToastrService,
         private table: Table,
     ) {
-        console.log('cliente service')
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
-        this.accountService.account.subscribe(res => {
-            this.account = res ?? new Account;
-            if (res && res?.email == 'noemi.admin@gmail.com') {
-                this.url = environment.urlLocal;
-            }
-        });
+        this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
-
+    
     getObject() {
         var e = localStorage.getItem('cliente')
         if (e) {
@@ -49,13 +43,13 @@ export class ClienteService {
         }
         return this.objeto;
     }
-
+    
     setObject(value: Cliente) {
         localStorage.setItem('cliente', this.crypto.encrypt(value) ?? '');
         this.objeto.next(value);
     }
-
-
+    
+    
     add_To_Empresa_List(item: Cliente) {
         if (this.empresa) {
             var list = this.empresa.cliente ?? [];
@@ -65,7 +59,7 @@ export class ClienteService {
                 return false;
             }
             item.perfilInvestidor = perfilInvestidor;
-
+            
             let estadoCivil = this.dropdownService.estadoCivil.value.find(x => x.id == item.estadoCivil_Id);
             if (!estadoCivil) {
                 this.toastr.error('Selecione um estado civil válido!!');
@@ -78,7 +72,7 @@ export class ClienteService {
                 this.toastr.error('CPF ou RG já foram cadastrados!!');
                 return false;
             }
-
+            
             list.sort((x, y) => x.id - y.id)
             var lastId = list.length == 0 ? 0 : list[list.length - 1].id;
             item.id = ++lastId;
@@ -94,7 +88,7 @@ export class ClienteService {
         this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
-
+    
     edit_To_Empresa_List(item: Cliente) {
         if (this.empresa) {
             var list = this.empresa.cliente ?? [];
@@ -106,14 +100,14 @@ export class ClienteService {
                     return false;
                 }
                 item.perfilInvestidor = perfilInvestidor;
-
+                
                 let estadoCivil = this.dropdownService.estadoCivil.value.find(x => x.id == item.estadoCivil_Id);
                 if (!estadoCivil) {
                     this.toastr.error('Selecione um estado civil válido!!');
                     return false;
                 }
                 item.estadoCivil = estadoCivil;
-
+                
                 let existe = this.empresa.cliente.find(x => (x.cpf == item.cpf || x.rg == item.rg) && x.id != item.id)
                 if (existe) {
                     this.toastr.error('CPF ou RG já foram cadastrados!!');
@@ -133,7 +127,7 @@ export class ClienteService {
         this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
-
+    
     delete_To_Empresa_List(id: number) {
         if (this.empresa) {
             var list = this.empresa.cliente ?? [];
@@ -153,8 +147,9 @@ export class ClienteService {
         this.toastr.error('Nenhuma empresa selecionada.');
         return false;
     }
-
+    
     getList(empresaId?: number) {
+        console.log('url', this.url)
         this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
         return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresaId}`)

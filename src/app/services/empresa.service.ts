@@ -21,7 +21,6 @@ export class EmpresaService {
         private http: HttpClient,
         private crypto: Crypto,
         private table: Table,
-        private accountService: AccountService,
     ) {
 		this.empresaObject = new BehaviorSubject<Empresa>(new Empresa);
 		this.empresa = this.empresaObject.asObservable();

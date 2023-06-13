@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   urlLocal: 'https://localhost:44308',
-  url: 'https://plannerweb.azurewebsites.net'
+  url: 'https://localhost:44308'
+//   url: 'https://plannerweb.azurewebsites.net'
 };
 
 /*

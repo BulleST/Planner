@@ -10,28 +10,20 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { UserEditableAuth } from './user-editable.guard';
 
 const routes: Routes = [
-    { path: '', component: ListComponent, children: [
-        { path: 'cadastrar', component: CreateComponent, title: 'Planner - Cadastrar usuário' },
-        { path: 'editar/:usuario_id', component: EditComponent, title: 'Planner - Editar usuário', canActivate: [UserEditableAuth]},
-        { path: 'excluir/:usuario_id', component: DeleteComponent, title: 'Planner - Excluir usuário', canActivate: [UserEditableAuth] },
-        { path: 'reset-password/:usuario_id', component: ResetPasswordComponent, title: 'Planner - Resetar senha', canActivate: [UserEditableAuth] },
-        {
-            path: 'habilitar/:usuario_id',
-            component: DeactivatedComponent,
-            title: 'Planner - Habilitar usuário',
-            canActivate: [UserEditableAuth],
-        },
-        {
-            path: 'desabilitar/:usuario_id',
-            component: DeactivatedComponent,
-            title: 'Planner - Desabilitar usuário',
-            canActivate: [UserEditableAuth],
-        },
-    ]}
+    {
+        path: '', component: ListComponent, children: [
+            { path: 'cadastrar', component: CreateComponent, title: 'Planner - Cadastrar usuário' },
+            { path: 'editar/:usuario_id', component: EditComponent, title: 'Planner - Editar usuário', canActivate: [UserEditableAuth] },
+            { path: 'excluir/:usuario_id', component: DeleteComponent, title: 'Planner - Excluir usuário', canActivate: [UserEditableAuth] },
+            { path: 'reset-password/:usuario_id', component: ResetPasswordComponent, title: 'Planner - Resetar senha', canActivate: [UserEditableAuth] },
+            { path: 'habilitar/:usuario_id', component: DeactivatedComponent, title: 'Planner - Habilitar usuário', canActivate: [UserEditableAuth] },
+            { path: 'desabilitar/:usuario_id', component: DeactivatedComponent, title: 'Planner - Desabilitar usuário', canActivate: [UserEditableAuth] },
+        ]
+    }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class UsuariosRoutingModule { }

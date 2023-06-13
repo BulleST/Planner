@@ -15,17 +15,8 @@ export class InvestimentoService {
     list = new BehaviorSubject<Investimento[]>([]);
 
     constructor(
-        private router: Router,
         private http: HttpClient,
-        private toastr: ToastrService,
-        private accountService: AccountService,
-    ) { 
-        this.accountService.account.subscribe(res => {
-            if (res && res?.email == 'noemi.admin@gmail.com') {
-                this.url = environment.urlLocal;
-            }
-        });
-    }
+    ) { }
 
     getAll() {
         return this.http.get<Investimento[]>(`${this.url}/investimento/getAll`);

@@ -1,6 +1,5 @@
-// import { ProdutoTributacaoRel } from "./produto-tributacao-rel.model";
+import { jsonIgnore } from "json-ignore";
 import { Produto } from "./produto.model";
-// import { Tributacao } from "./tributacao.model";
 
 export class PlanejamentoProduto {
     id: number = 0;
@@ -14,5 +13,4 @@ export class PlanejamentoProduto {
     custosTaxas: number = '' as unknown as number;
     produto: Produto = new Produto;
     produto_Id: number = undefined as unknown as number;
-
 }

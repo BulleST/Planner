@@ -11,171 +11,98 @@
             </div>
             <div class="modal__body mt-0">
                 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
-                    
-                            <div class="mt-2 mb-2 px-2">
-                                <p class="h6">Selecione o Risco</p>
-                                <div class="d-flex align-items-center">
-                                    <div class="mx-2">
-                                        <input type="radio"
-                                            class="mr-1 mt-1"
-                                            name="tipoRisco"
-                                            id="tipoRisco-0"
-                                            #tipoRisco="ngModel"
-                                            [(ngModel)]="selectedRisco"
-                                            (ngModelChange)="setProdutos()"
-                                            [value]="undefined"
-                                            [checked]="!selectedRisco">
-                                        <label for="tipoRisco-0">Todos</label>
-                                    </div>
-                                    <div *ngFor="let item of tipoRiscos" class="mx-2">
-                                        <input type="radio"
-                                            class="mr-1 mt-1"
-                                            name="tipoRisco"
-                                            id="tipoRisco-{{item.nome}}"
-                                            #tipoRisco="ngModel"
-                                            [(ngModel)]="selectedRisco"
-                                            (ngModelChange)="setProdutos()"
-                                            [value]="item"
-                                            [checked]="item.id == selectedRisco?.id">
-                                        <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
-                                    </div>
-                                </div>
+                    <div class="mt-2 mb-2 px-2">
+                        <p class="h6">Selecione o Risco</p>
+                        <div class="d-flex align-items-center">
+                            <div class="mx-2">
+                                <input type="radio"
+                                       class="mr-1 mt-1"
+                                       name="tipoRisco"
+                                       id="tipoRisco-0"
+                                       #tipoRisco="ngModel"
+                                       [(ngModel)]="selectedRisco"
+                                       (ngModelChange)="setProdutos()"
+                                       [value]="undefined"
+                                       [checked]="!selectedRisco">
+                                <label for="tipoRisco-0">Todos</label>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-lg-12 col-md-4 col-sm-12">
-                                    <label for="produto">Produto: <span class="text-danger">*</span></label>
-                                    <select
+                            <div *ngFor="let item of tipoRiscos" class="mx-2">
+                                <input type="radio"
+                                       class="mr-1 mt-1"
+                                       name="tipoRisco"
+                                       id="tipoRisco-{{item.nome}}"
+                                       #tipoRisco="ngModel"
+                                       [(ngModel)]="selectedRisco"
+                                       (ngModelChange)="setProdutos()"
+                                       [value]="item"
+                                       [checked]="item.id == selectedRisco?.id">
+                                <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
+                            <label for="produto">Produto: <span class="text-danger">*</span></label>
+                            <select
                                     class="form-control"
                                     id="produto"
                                     name="produto"
-                                    #_produto="ngModel"
-                                    [(ngModel)]="produto"
+                                    #produto="ngModel"
+                                    [(ngModel)]="objeto.produto"
                                     required
-                                    (ngModelChange)="produtoChange()">
-                                    <option [ngValue]="undefined">
-                                        <span *ngIf="produtos.length > 0">Selecione</span>
-                                        <span *ngIf="produtos.length == 0">Nenhum produto</span>
-                                    </option>
-                                    <option [ngValue]="item" *ngFor="let item of produtos">{{item.descricao}}</option>
-                                </select>
-                                <div *ngIf="_produto.touched && _produto.errors">
-                                    <p class="text-danger " *ngIf="_produto.errors['required']"><small>Esse campo é obrigatório
-                                    </small></p>
-                                </div>
-                                <!-- <p class="text-warning"><small>Obs.: Filtrando por produtos ainda não adicionados</small></p> -->
-                                </div>
+                                    (ngModelChange)="objeto.produto_Id = produto.value ? produto.value.id : undefined">
+                                <option [ngValue]="undefined">
+                                    <span *ngIf="produtos.length > 0">Selecione</span>
+                                    <span *ngIf="produtos.length == 0">Nenhum produto</span>
+                                </option>
+                                <option [ngValue]="item" *ngFor="let item of produtos">{{item.descricao}}</option>
+                            </select>
+                            <div *ngIf="produto.touched && produto.errors">
+                                <p class="text-danger " *ngIf="produto.errors['required']"><small>Esse campo é obrigatório </small></p>
                             </div>
-                            <div class="form-row">
-                                <!-- <div class="form-group col-lg-8 col-md-8 col-sm-6">
-                                    <label for="produtoTributacaoRel">Tributação: <span class="text-danger">*</span></label>
-                                    <select
-                                            class="form-control"
-                                            id="produtoTributacaoRel"
-                                            name="produtoTributacaoRel"
-                                            #produtoTributacaoRel="ngModel"
-                                            [(ngModel)]="objeto.produtoTributacaoRel"
-                                            (ngModelChange)="tributacaoChange(objeto.produtoTributacaoRel)"
-                                            [disabled]="!produto"
-                                            required>
-                                        <option [ngValue]="undefined" *ngIf="produto">Selecione</option>
-                                        <option [ngValue]="undefined" *ngIf="!produto">Selecione um produto</option>
-                                        <option [ngValue]="item" *ngFor="let item of (produto ? produto.produtoTributacaoRel : [])">{{item.tributacao.descricao}}</option>
-                                    </select>
-                                </div> -->
-                                <div class="form-group col-lg-4 col-md-4 col-sm-6">
-                                    <label for="aliquota">Alíquota: <span class="text-danger">*</span></label>
-                                    <input type="text"
-                                            class="form-control"
-                                            id="aliquota"
-                                            name="aliquota"
-                                            #_aliquota="ngModel"
-                                            mask="separator.5"
-                                            thousandSeparator="."
-                                            suffix="%"
-                                            [(ngModel)]="aliquota"
-                                            [disabled]="!produto"
-                                            readonly>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                                    <label for="percentual">Percentual: <span class="text-danger">*</span></label>
-                                    <input type="text"
-                                            class="form-control"
-                                            id="percentual"
-                                            name="percentual"
-                                            #percentual="ngModel"
-                                            [(ngModel)]="objeto.percentual"
-                                            mask="separator.5"
-                                            thousandSeparator="."
-                                            decimalMarker=","
-                                            suffix="%"
-                                            [ngbPopover]="campoObrigatorio"
-                                            popoverClass="popover-danger"
-                                            [disablePopover]="percentual.errors == null"
-                                            triggers="mouseenter:mouseleave"
-                                            (keyup.arrowup)="objeto.percentual = arrowUp(percentual.value)"
-                                            (keyup.arrowdown)="objeto.percentual = arrowDown(percentual.value)"
-                                            required>
-                                    <div *ngIf="percentual.errors && percentual.touched">
-                                        <p class="text-danger" *ngIf="percentual.errors['required']">Esse campo é obrigatório</p>
-                                    </div>
-                                </div>
-                                <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                                    <label for="rentabilidade">Rentabilidade: <span class="text-danger">*</span></label>
-                                    <input type="text"
-                                            class="form-control"
-                                            id="rentabilidade"
-                                            name="rentabilidade"
-                                            #rentabilidade="ngModel"
-                                            [(ngModel)]="objeto.rentabilidade"
-                                            mask="separator.5"
-                                            thousandSeparator="."
-                                            decimalMarker=","
-                                            suffix="%"
-                                            [ngbPopover]="campoObrigatorio"
-                                            popoverClass="popover-danger"
-                                            [disablePopover]="rentabilidade.errors == null"
-                                            triggers="mouseenter:mouseleave"
-                                            (keyup.arrowup)="objeto.rentabilidade = arrowUp(rentabilidade.value)"
-                                            (keyup.arrowdown)="objeto.rentabilidade = arrowDown(rentabilidade.value)"
-                                            required>
-                                    <div *ngIf="rentabilidade.errors && rentabilidade.touched">
-                                        <p class="text-danger" *ngIf="rentabilidade.errors['required']">Esse campo é obrigatório</p>
-                                    </div>
-                                </div>
-                                <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                                    <label for="montanteAtual">Montante Atual: <span class="text-danger">*</span></label>
-                                    <input type="text"
-                                            class="form-control"
-                                            id="montanteAtual"
-                                            name="montanteAtual"
-                                            #montanteAtual="ngModel"
-                                            [(ngModel)]="objeto.montanteAtual"
-                                            mask="separator.5"
-                                            thousandSeparator="."
-                                            decimalMarker=","
-                                            prefix="R$ "
-                                            [ngbPopover]="campoObrigatorio"
-                                            popoverClass="popover-danger"
-                                            [disablePopover]="montanteAtual.errors == null"
-                                            triggers="mouseenter:mouseleave"
-                                            (keyup.arrowup)="objeto.montanteAtual = arrowUp(montanteAtual.value)"
-                                            (keyup.arrowdown)="objeto.montanteAtual = arrowDown(montanteAtual.value)"
-                                            required>
-                                    <div *ngIf="montanteAtual.errors && montanteAtual.touched">
-                                        <p class="text-danger" *ngIf="montanteAtual.errors['required']">Esse campo é obrigatório</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex p-0 mt-3 align-items-center">
-                                <div *ngIf="erro || form.invalid" class="m-0">
-                                    <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
-                                    <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
-                                </div>
-                                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading || !produto">
-                                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
-                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
+                            <label for="custosTaxas">Custos/Taxas: </label>
+                            <app-input-number [valueInput]="objeto.custosTaxas"
+                                              (valueChanges)="objeto.custosTaxas = $event;"
+                                              [inputId]="'custosTaxas'"
+                                              [mask]="'separator.2'"
+                                              [suffix]="'%'"
+                                              [required]="true"
+                                              [showErrorMessage]="true"
+                                              [allowNegativeNumbers]="false"></app-input-number>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
+                            <label for="rentabilidade">Rentabilidade: <span class="text-danger">*</span></label>
+                            <app-input-number [valueInput]="objeto.rentabilidade"
+                                              (valueChanges)="objeto.rentabilidade = $event;"
+                                              [inputId]="'rentabilidade'"
+                                              [mask]="'separator.2'"
+                                              [suffix]="'%'"
+                                              [required]="true"
+                                              [showErrorMessage]="true"
+                                              [allowNegativeNumbers]="false"></app-input-number>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
+                            <label for="planoAcao">Plano de Ação: <span class="text-danger">*</span></label>
+                            <app-input-number [valueInput]="objeto.planoAcao"
+                                              (valueChanges)="objeto.planoAcao = $event;"
+                                              [inputId]="'planoAcao'"
+                                              [mask]="'separator.2'"
+                                              prefix="R$ "
+                                              [required]="true"
+                                              [showErrorMessage]="true"
+                                              [allowNegativeNumbers]="false"></app-input-number>
+                        </div>
+                    </div>
+                    <div class="d-flex p-0 mt-3 align-items-center">
+                        <div *ngIf="erro || form.invalid" class="m-0">
+                            <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
+                            <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+                        </div>
+                        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading || !produto">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
+                    </div>
                 </form>
                 <ng-template #campoObrigatorio>
                     <div class="py-3 px-4"> Este campo é obrigatório </div>

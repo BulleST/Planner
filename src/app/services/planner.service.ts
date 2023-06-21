@@ -43,7 +43,6 @@ export class PlannerService {
             let obj = this.crypto.decrypt(e);
             this.objeto.next(obj);
         }
-        console.log('getObject', this.objeto.value)
         return this.objeto;
     }
 
@@ -74,7 +73,6 @@ export class PlannerService {
 
     getByClienteId(cliente_id: number) {
         return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(planner => {
-            console.log('getByClienteId res', planner)
             planner.principaisObjetivos = planner.principaisObjetivos ? planner.principaisObjetivos : [];
             planner.planejamentoAgregandoValor = planner.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : planner.planejamentoAgregandoValor
             this.setObject(planner);

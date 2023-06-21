@@ -804,116 +804,97 @@
                                             <td class=" px-3 bg-light text-right" style="white-space: nowrap;">
                                                 <span class="small font-weight-bold">{{ item.investimento.descricao}}</span>
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-custosTaxas-{{index}}"
-                                                       name="investimento-custosTaxas-{{index}}"
-                                                       #custosTaxas="ngModel"
-                                                       [(ngModel)]="item.custosTaxas"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="false"
-                                                       (keyup.arrowup)="item.custosTaxas = arrowUp(custosTaxas.value)"
-                                                       (keyup.arrowdown)="item.custosTaxas = arrowDown(custosTaxas.value, false)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required
-                                                       (change)="saveData()">
+                                            <td>
+                                                <app-input-number [valueInput]="item.custosTaxas"
+                                                    (valueChanges)="item.custosTaxas = $event;saveData();"
+                                                    [inputId]="'investimento-custosTaxas-' + index"
+                                                    [mask]="'separator.2'"
+                                                    suffix="%"
+                                                    [min]="0"
+                                                    [max]="100"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [required]="true"></app-input-number>
                                             </td>
-                                            <td class="">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-rentabilidade-{{index}}"
-                                                       name="investimento-rentabilidade-{{index}}"
-                                                       #rentabilidade="ngModel"
-                                                       [(ngModel)]="item.rentabilidade"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="true"
-                                                       (keyup.arrowup)="item.rentabilidade = arrowUp(rentabilidade.value)"
-                                                       (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       (change)="saveData()">
+                                            <td>
+                                                <app-input-number [valueInput]="item.rentabilidade"
+                                                    (valueChanges)="item.rentabilidade = $event;saveData();"
+                                                    [inputId]="'investimento-rentabilidade-' + index"
+                                                    [mask]="'separator.2'"
+                                                    suffix="%"
+                                                    [min]="0"
+                                                    [max]="100"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [required]="true"></app-input-number>
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-rentabilidadeLiquida-{{index}}"
-                                                       name="investimento-rentabilidadeLiquida-{{index}}"
-                                                       #rentabilidadeLiquida="ngModel"
-                                                       [(ngModel)]="item.rentabilidadeLiquida"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       (keyup.arrowup)="item.rentabilidadeLiquida = arrowUp(rentabilidadeLiquida.value)"
-                                                       (keyup.arrowdown)="item.rentabilidadeLiquida = arrowDown(rentabilidadeLiquida.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       (change)="saveData()">
-                                                <!-- {{ item.rentabilidadeLiquida | mask : 'separator' : ',' }}% -->
+                                            <td>
+                                                <app-input-number [valueInput]="item.rentabilidadeLiquida"
+                                                    (valueChanges)="item.rentabilidadeLiquida = $event"
+                                                    [inputId]="'investimento-rentabilidadeLiquida-' + index"
+                                                    [mask]="'separator.2'"
+                                                    suffix="%"
+                                                    [min]="0"
+                                                    [max]="100"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
                                             </td>
-                                            <td class="">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-montanteAtual-{{index}}"
-                                                       name="investimento-montanteAtual-{{index}}"
-                                                       #montanteAtual="ngModel"
-                                                       [(ngModel)]="item.montanteAtual"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$"
-                                                       (keyup.arrowup)="item.montanteAtual = arrowUp(montanteAtual.value)"
-                                                       (keyup.arrowdown)="item.montanteAtual = arrowDown(montanteAtual.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required
-                                                       (change)="saveData()">
+                                            <td>
+                                                <app-input-number [valueInput]="item.montanteAtual"
+                                                    (valueChanges)="item.montanteAtual = $event"
+                                                    [inputId]="'investimento-montanteAtual-' + index"
+                                                    [mask]="'separator.2'"
+                                                    preffix="R$ "
+                                                    [min]="0"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-sugerido-{{index}}"
-                                                       name="investimento-sugerido-{{index}}"
-                                                       #sugerido="ngModel"
-                                                       [(ngModel)]="item.sugerido"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       (keyup.arrowup)="item.sugerido = arrowUp(sugerido.value)"
-                                                       (keyup.arrowdown)="item.sugerido = arrowDown(sugerido.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       (change)="saveData()">
+                                            <td>
+                                                <app-input-number [valueInput]="item.sugerido"
+                                                    (valueChanges)="item.sugerido = $event"
+                                                    [inputId]="'investimento-sugerido-' + index"
+                                                    [mask]="'separator.2'"
+                                                    prefix="R$ "
+                                                    [min]="0"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap"> <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-planoAcao-{{index}}"
-                                                       name="investimento-planoAcao-{{index}}"
-                                                       #planoAcao="ngModel"
-                                                       [(ngModel)]="item.planoAcao"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
-                                                       (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       (change)="saveData()"></td>
+                                            <td> 
+                                                <app-input-number [valueInput]="item.planoAcao"
+                                                    (valueChanges)="item.planoAcao = $event; saveData();"
+                                                    [inputId]="'investimento-planoAcao-' + index"
+                                                    [mask]="'separator.2'"
+                                                    prefix="R$ "
+                                                    [min]="0"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [required]="true"></app-input-number>
+                                        </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerInvestimento(item)">
                                                     <fa-icon [icon]="faTrash"></fa-icon>
                                                 </a>
                                             </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" [class.bg-danger]="somaInvestimentos.somaSugerido < 0 || somaInvestimentos.somaSugerido > planner.planejamentoAgregandoValor!.montante || somaInvestimentos.somaPlanoAcao < 0  || somaInvestimentos.somaPlanoAcao > planner.planejamentoAgregandoValor!.montante ">
+                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                                <small><b>Total</b></small>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaSugerido | mask : 'separator.2' : '.' }}</td>
+                                            <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td>
+                                            <td></td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
@@ -968,9 +949,9 @@
                                     <button type="button"
                                             triggers="mouseenter:mouseleave"
                                             class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
-                                            (click)="adicionarProdutoCarteira(form)"
+                                            (click)="carregarProdutos(form)"
                                             *ngIf="(planner.carteiraSetup_Id != 0 && mudouCarteiraSetup) || planner.planejamentoProduto.length == 0"
-                                            [disabled]="form.invalid || loading"> Carregar produtos </button>
+                                            [disabled]="form.invalid || loading || !formIsValid"> Carregar produtos </button>
                                     <a class="link ml-3"
                                        [routerLink]="['produto']"
                                        *ngIf="planner.planejamentoInvestimento.length > 0
@@ -1005,79 +986,91 @@
                                                 <small><b>{{ item.produto.descricao }}</b></small>
                                             </td>
                                             <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-custosTaxas-{{index}}"
-                                                       name="produto-custosTaxas-{{index}}"
-                                                       #custosTaxas="ngModel"
-                                                       [(ngModel)]="item.custosTaxas"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="false"
-                                                       (keyup.arrowup)="item.custosTaxas = arrowUp(custosTaxas.value)"
-                                                       (keyup.arrowdown)="item.custosTaxas = arrowDown(custosTaxas.value, false)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       required
-                                                       (change)="saveData()">
-                                            </td>
-                                            <td class="px-2" style="white-space: nowrap"> 
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-percentual-{{index}}"
-                                                       name="produto-percentual-{{index}}"
-                                                       #percentual="ngModel"
-                                                       [(ngModel)]="item.percentual"
-                                                       mask="separator.2"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="false"
-                                                       readonly>
-                                                    <!-- {{item.percentual}} -->
+                                                <app-input-number [valueInput]="item.custosTaxas"
+                                                    (valueChanges)="item.custosTaxas = $event; saveData()"
+                                                    [inputId]="'produto-custosTaxas-' + index"
+                                                    [mask]="'separator.2'"
+                                                    suffix="%"
+                                                    [min]="0"
+                                                    [max]="100"
+                                                    [required]="true"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"></app-input-number>
                                             </td>
                                             <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-rentabilidade-{{index}}"
-                                                       name="produto-rentabilidade-{{index}}"
-                                                       #rentabilidade="ngModel"
-                                                       [(ngModel)]="item.rentabilidade"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="true"
-                                                       (keyup.arrowup)="item.rentabilidade = arrowUp(rentabilidade.value)"
-                                                       (keyup.arrowdown)="item.rentabilidade = arrowDown(rentabilidade.value, true)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       [required]="true"
-                                                       (change)="saveData()">
+                                                <app-input-number [valueInput]="item.percentual"
+                                                    (valueChanges)="item.percentual = $event"
+                                                    [inputId]="'produto-percentual-' + index"
+                                                    [mask]="'separator.2'"
+                                                    suffix="%"
+                                                    [min]="0"
+                                                    [max]="100"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
                                             </td>
-                                            <td class="px-2" style="white-space: nowrap">{{ item.rentabilidadeLiquida | mask : 'separator' : '.' }}%</td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.montanteAtual | mask : 'separator' : '.' }} </td>
-                                            <td class="px-2" style="white-space: nowrap"> R$ {{ item.sugerido | mask : 'separator' : '.' }} </td>
-                                            <td class="px-2" style="white-space: nowrap">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-planoAcao-{{index}}"
-                                                       name="produto-planoAcao-{{index}}"
-                                                       #planoAcao="ngModel"
-                                                       [(ngModel)]="item.planoAcao"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [allowNegativeNumbers]="true"
-                                                       (keyup.arrowup)="item.planoAcao = arrowUp(planoAcao.value)"
-                                                       (keyup.arrowdown)="item.planoAcao = arrowDown(planoAcao.value, false)"
-                                                       [ngbPopover]="setaUpDown"
-                                                       triggers="mouseenter:mouseleave"
-                                                       [required]="true"
-                                                       (change)="calculaPercentual(); saveData()">
+                                            <td>
+                                                <app-input-number [valueInput]="item.rentabilidade"
+                                                    (valueChanges)="item.rentabilidade = $event; saveData()"
+                                                    [inputId]="'produto-rentabilidade-' + index"
+                                                    [mask]="'separator.2'"
+                                                    suffix="%"
+                                                    [min]="0"
+                                                    [max]="100"
+                                                    [required]="true"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"></app-input-number>
+                                            </td>
+                                            <td>
+                                                <app-input-number [valueInput]="item.rentabilidadeLiquida"
+                                                    (valueChanges)="item.rentabilidadeLiquida = $event"
+                                                    [inputId]="'produto-rentabilidadeLiquida-' + index"
+                                                    [mask]="'separator.2'"
+                                                    suffix="%"
+                                                    [min]="0"
+                                                    [max]="100"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td>
+                                                <app-input-number [valueInput]="item.montanteAtual"
+                                                    (valueChanges)="item.montanteAtual = $event"
+                                                    [inputId]="'produto-montanteAtual-' + index"
+                                                    [mask]="'separator.2'"
+                                                    preffix="R$ "
+                                                    [min]="0"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td>
+                                                <app-input-number [valueInput]="item.sugerido"
+                                                    (valueChanges)="item.sugerido = $event"
+                                                    [inputId]="'produto-sugerido-' + index"
+                                                    [mask]="'separator.2'"
+                                                    prefix="R$ "
+                                                    [min]="0"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td style="white-space: nowrap">
+                                                <app-input-number [valueInput]="item.planoAcao"
+                                                    (valueChanges)="item.planoAcao = $event; saveData()"
+                                                    [inputId]="'produto-planoAcao-' + index"
+                                                    [mask]="'separator.2'"
+                                                    prefix="R$ "
+                                                    [min]="0"
+                                                    [required]="true"
+                                                    [showErrorMessage]="false"
+                                                    [allowNegativeNumbers]="false"
+                                                    [readonly]="item.produto_Id == 61"
+                                                    [disabled]="item.produto_Id == 61"></app-input-number>
                                             </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)" *ngIf="item.produto.id != 61"> <!--Conta corrente não pode ser excluido-->
@@ -1087,56 +1080,17 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="footer">
-                                        <tr *ngIf="planner.planejamentoProduto.length > 0">
+                                        <tr *ngIf="planner.planejamentoProduto.length > 0" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
                                             <td></td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="somaPercentualProduto"
-                                                       name="somaPercentualProduto"
-                                                       #_somaPercentualProduto="ngModel"
-                                                       [(ngModel)]="somaPercentualProduto"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [allowNegativeNumbers]="true"
-                                                       [readonly]="true">
-                                            </td>
+                                            <td class="p-2" style="white-space: nowrap">{{ somaProdutos.somaPercentual | mask : 'separator.2' : '.' }}%</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="somaSugeridoProduto"
-                                                       name="somaSugeridoProduto"
-                                                       #_somaSugeridoProduto="ngModel"
-                                                       [(ngModel)]="somaSugeridoProduto"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [allowNegativeNumbers]="true"
-                                                       [readonly]="true">
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="somaPlanoAcaoProduto"
-                                                       name="somaPlanoAcaoProduto"
-                                                       #_somaPlanoAcaoProduto="ngModel"
-                                                       [(ngModel)]="somaPlanoAcaoProduto"
-                                                       mask="separator.5"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       [allowNegativeNumbers]="true"
-                                                       [readonly]="true">
-                                            </td>
+                                            <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaSugerido | mask : 'separator.2' : '.' }}</td>
+                                            <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -1472,7 +1426,7 @@
                     <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
                     <p *ngIf="erro.length == 0" class="text-red">Preencha todos os campos corretamente para salvar</p>
                 </div>
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading || form.invalid || somaPercentualProduto != 100">
+                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading || form.invalid || !formIsValid">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
             </div>
         </form>

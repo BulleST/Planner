@@ -42,6 +42,7 @@ export class PlannerComponent implements OnDestroy {
     modalOpen = false;
     planner: Planejamento = new Planejamento;
     erro: any[] = [];
+    
     loading = false;
     loadingProduto = false;
 
@@ -61,11 +62,19 @@ export class PlannerComponent implements OnDestroy {
     @ViewChild('chartCapitalSegurado') private chartCapitalSegurado;
     mobile: ScreenWidth = ScreenWidth.lg;
 
-    produtoHover?: Produto;
+    formIsValid = false;
+    @ViewChild('form') form: NgForm;
 
-    somaPercentualProduto = 0;
-    somaPlanoAcaoProduto = 0;
-    somaSugeridoProduto = 0;
+    somaProdutos = {
+        somaPercentual: 0,
+        somaPlanoAcao: 0,
+        somaSugerido: 0,
+    }
+
+    somaInvestimentos = {
+        somaPlanoAcao: 0,
+        somaSugerido: 0,
+    }
 
     // se o usuario alterou a carteira setup, não pode adicionar um produto 
     // fora da carteira selecionada antes de salvar e calcular os valores
@@ -120,7 +129,9 @@ export class PlannerComponent implements OnDestroy {
                         
                         var getObject = this.plannerService.objeto.subscribe(res => {
                             this.planner = res;
-                            this.calculaPercentual();
+                            this.calculaPercentualProdutos();
+                            this.calculaPercentualInvestimentos();
+                            this.formIsValid = this.validaForm(this.form);
                         });
                         this.subscription.push(getObject);
 
@@ -134,7 +145,9 @@ export class PlannerComponent implements OnDestroy {
                 this.plannerService.getObject();
                 var getObject = this.plannerService.objeto.subscribe(res => {
                     this.planner = res;
-                    this.calculaPercentual();
+                    this.calculaPercentualInvestimentos();
+                    this.calculaPercentualProdutos();
+                    this.formIsValid = this.validaForm(this.form);
                 })
                 this.subscription.push(getObject);
             }
@@ -162,37 +175,16 @@ export class PlannerComponent implements OnDestroy {
         this.subscription.push(estadoCivil);
         this.subscription.push(perfilInvestidor);
     }
-
-    validateDataNascimento() {
-        var data = new Date(this.planner.cliente.dataNascimento)
-        var dataNascimentoMin = new Date(this.dataNascimentoMin)
-        var dataNascimentoMax = new Date(this.dataNascimentoMax)
-        if (this.dataNascimento) {
-            if (data > dataNascimentoMax) {
-                this.dataNascimento.control.setErrors({
-                    max: true
-                })
-            }
-            else if (data < dataNascimentoMin) {
-                this.dataNascimento.control.setErrors({
-                    min: true
-                })
-    
-            }
-        }
-    }
-
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
-
     voltar() {
         this.modal.voltar();
     }
-
     resetForm() {
         this.plannerService.setObject(new Planejamento);
     }
+
 
     calcularICM() {
         if (!this.planner.cliente.altura || !this.planner.cliente.peso) {
@@ -202,32 +194,68 @@ export class PlannerComponent implements OnDestroy {
         }
     }
 
-    calculaPercentual() {
+    calculaPercentualProdutos() {
         if (this.planner.planejamentoProduto.length > 0 && this.planner.planejamentoAgregandoValor != undefined) {
+            const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
             var montanteTotal = this.planner.planejamentoAgregandoValor.montante ?? 1;
-            
             var somaPercentual = 0;
             var somaPlanoAcao = 0;
             var somaSugerido = 0;
 
-            this.planner.planejamentoProduto = this.planner.planejamentoProduto.map(x => {
-                const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
-                var percentual = x.planoAcao / montanteTotal
-                x.percentual = round(percentual * 100, 2);
+            // Ordena os produtos e deixa conta corrente por ultimo
+            var list = this.planner.planejamentoProduto;
+            list = list.sort((x, y) => x.produto.descricao.toLowerCase() > y.produto.descricao.toLowerCase() ? 1 : -1);
+            var contaCorrenteIndex = list.findIndex(x => x.produto_Id == 61);
+            var contaCorrente = list.splice(contaCorrenteIndex, 1);
+            list.push(contaCorrente[0])
+
+            // Calcula percentuais e calcula valor da sobra para conta corrente
+            list = list.map(x => {
+                var percentual = 0
+                if (x.produto_Id == 61) {
+                    var sobra = this.planner.planejamentoAgregandoValor.montante - somaPlanoAcao;
+                    percentual =  sobra > 0 ? sobra / this.planner.planejamentoAgregandoValor.montante : 0; 
+                    x.percentual = round(percentual * 100, 2);
+                    x.planoAcao = sobra > 0 ? sobra : 0;
+                    x.sugerido = x.sugerido;
+
+                } else {
+                    percentual = x.planoAcao / montanteTotal;
+                    x.percentual = round(percentual * 100, 2);
+                }
                 somaPercentual += percentual;
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
                 return x
             });
+            this.somaProdutos.somaPercentual = round(somaPercentual * 100, 2);
+            this.somaProdutos.somaPlanoAcao = round(somaPlanoAcao, 2);
+            this.somaProdutos.somaSugerido = round(somaSugerido, 2);
+            this.planner.planejamentoProduto = list;
             
-            this.somaPercentualProduto = somaPercentual * 100;
-            this.somaPlanoAcaoProduto = somaPlanoAcao;
-            this.somaSugeridoProduto = somaSugerido;
-
-        } else {
-            this.somaPlanoAcaoProduto = 0;
-            this.somaPercentualProduto = 0;
         }
+
+    }
+
+    calculaPercentualInvestimentos() {
+        if (this.planner.planejamentoInvestimento.length > 0 && this.planner.planejamentoAgregandoValor != undefined) {
+            const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+            var montanteTotal = this.planner.planejamentoAgregandoValor.montante ?? 1;
+            var somaPlanoAcao = 0;
+            var somaSugerido = 0;
+
+            // Ordena os produtos e deixa conta corrente por ultimo
+            this.planner.planejamentoInvestimento = this.planner.planejamentoInvestimento.sort((x, y) => x.investimento.descricao.toLowerCase() > y.investimento.descricao.toLowerCase() ? 1 : -1);
+            this.planner.planejamentoInvestimento.map(x => {
+                somaPlanoAcao += x.planoAcao;
+                somaSugerido += x.sugerido;
+                
+                return x;
+            })
+            this.somaInvestimentos.somaPlanoAcao = round(somaPlanoAcao, 2);
+            this.somaInvestimentos.somaSugerido = round(somaSugerido, 2);
+        }
+
     }
 
     calculaIdade() {
@@ -261,7 +289,6 @@ export class PlannerComponent implements OnDestroy {
             .find(x => x.id == this.planner.cliente.perfilInvestidor_Id) as PerfilInvestidor;
         this.saveData();
     }
-
 
     adicionarFLuxoPontual() {
         this.planner.planejamentoFluxosPontuais.push(new FluxosPontuais)
@@ -319,12 +346,13 @@ export class PlannerComponent implements OnDestroy {
 
     validaForm(form: NgForm) {
         this.erro = [];
-        if (form.invalid) {
+        console.log(form)
+        if (form.touched && form.invalid) {
             this.erro.push('Campos inválidos!');
             this.toastr.error('Campos inválidos!');
-
             return false;
         }
+
         if (this.loading == true) {
             return false;
         }
@@ -337,11 +365,63 @@ export class PlannerComponent implements OnDestroy {
         if (this.planner.planejamentoProduto.length == 0) {
             this.erro.push('Insira um ou mais produtos no planner.');
             this.toastr.error('Insira um ou mais produtos no planner.');
+            return false;
         }
+
+        if (this.planner.planejamentoProduto.find(x => x.planoAcao < 0) != undefined) {
+            this.erro.push('Plano de ação em produto não pode ser inferior a zero.');
+            this.toastr.error('Plano de ação em produto não pode ser inferior a zero.');
+            return false;
+        }
+
+        if (this.planner.planejamentoInvestimento.find(x => x.planoAcao < 0) != undefined) {
+            this.erro.push('Plano de ação em investimento não pode ser inferior a zero.');
+            this.toastr.error('Plano de ação em investimento não pode ser inferior a zero.');
+            return false;
+        }
+
+        if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
+            this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
+            this.toastr.error('Soma de plano de ação em produtos deve ser igual ao montante');
+            return false;
+        }
+
+        if (this.somaInvestimentos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaInvestimentos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
+            this.erro.push('Soma de plano de ação em investimentos deve ser igual ao montante');
+            this.toastr.error('Soma de plano de ação em investimentos deve ser igual ao montante');
+            return false;
+        }
+
+        if (this.somaProdutos.somaPercentual > 100 || this.somaProdutos.somaPercentual < 0) {
+            this.erro.push('Soma total do percentual em produtos deve ser 100%.');
+            this.toastr.error('Soma total do percentual em produtos deve ser 100%.');
+            return false;
+        }
+
 
         return true;
     }
-    adicionarProdutoCarteira(form: NgForm) {
+
+    validateDataNascimento() {
+        var data = new Date(this.planner.cliente.dataNascimento)
+        var dataNascimentoMin = new Date(this.dataNascimentoMin)
+        var dataNascimentoMax = new Date(this.dataNascimentoMax)
+        if (this.dataNascimento) {
+            if (data > dataNascimentoMax) {
+                this.dataNascimento.control.setErrors({
+                    max: true
+                })
+            }
+            else if (data < dataNascimentoMin) {
+                this.dataNascimento.control.setErrors({
+                    min: true
+                })
+    
+            }
+        }
+    }
+
+    carregarProdutos(form: NgForm) {
         if (!this.planner.cliente.empresa) {
             this.planner.cliente.empresa = new Empresa;
         }

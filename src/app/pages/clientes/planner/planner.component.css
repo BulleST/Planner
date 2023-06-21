@@ -2,14 +2,14 @@
 .form-control-solucaoInicial:focus,
 .form-control-solucaoInicial:hover,
 .form-control-solucaoInicial:hover:focus {
-    background-color: var(--primary)!important;
+    background-color: var(--primary) !important;
     border-radius: 0;
-    color: #fff!important;
-    outline: none!important;
-    box-shadow: none!important
+    color: #fff !important;
+    outline: none !important;
+    box-shadow: none !important
 }
 
-.table td.position-sticky, 
+.table td.position-sticky,
 .table th.position-sticky {
     position: sticky;
     left: 0;
@@ -19,7 +19,22 @@
     min-width: 110px;
 }
 
-input#solucao_riscoAssumido_Atual, input#solucao_montante_Atual {
+input#solucao_riscoAssumido_Atual,
+input#solucao_montante_Atual {
     background-color: #104456;
     border: none;
+}
+
+
+tr.bg-danger td {
+    background-color: #f1d6d6 !important;
+    border: 1px #ff0909 solid;
+    border-left-color: #f1d6d6;
+    border-right-color: #f1d6d6;
+    border-spacing: 1px;
+    border-collapse: separate;
+}
+
+tr.bg-danger td .form-control {
+    background-color: #f1d6d6;
 }

@@ -620,8 +620,8 @@ input {
     font-size: 14px;
 }
 
-.form-control-number:hover,
-.form-control-number:focus {
+.form-control-number:not(.form-control[disabled]):not(.form-control[readonly]):hover,
+.form-control-number:not(.form-control[disabled]):not(.form-control[readonly]):focus {
     background-image: url(./assets/img/chevron-updown.png);
     background-size: 8px;
     background-position: right 10px center;

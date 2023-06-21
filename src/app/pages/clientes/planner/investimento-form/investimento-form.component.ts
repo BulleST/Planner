@@ -29,9 +29,6 @@ export class InvestimentoFormComponent implements OnDestroy {
     carteirasSetup: CarteiraSetup[] = []
     loadingCarteiraSetup = true;
     planner: Planejamento = new Planejamento;
-
-
-    investimento: Investimento = undefined as unknown as Investimento;
     investimentos: Investimento[] = [];
     loadingInvestimentos = true;
     aliquota = '';
@@ -44,6 +41,8 @@ export class InvestimentoFormComponent implements OnDestroy {
         private investimentoService: InvestimentoService,
         private toastr: ToastrService,
     ) {
+        this.objeto.investimento = undefined as unknown as Investimento;
+        
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
@@ -58,7 +57,10 @@ export class InvestimentoFormComponent implements OnDestroy {
             .finally(() => this.loadingCarteiraSetup = false);
 
         lastValueFrom(this.investimentoService.getAll())
-            .then(res => this.investimentos = res)
+            .then(res => {
+                var investimentosExistentesId = this.planner.planejamentoInvestimento.map(x => x.investimento_Id);
+                this.investimentos = res.filter(x => !investimentosExistentesId.includes(x.id));
+            })
             .finally(() => this.loadingInvestimentos = false);
 
         setTimeout(() => {
@@ -88,9 +90,12 @@ export class InvestimentoFormComponent implements OnDestroy {
         this.loading = true;
         this.erro = [];
 
-        this.objeto.investimento = this.investimento;
-        this.objeto.investimento_Id = this.investimento.id;
+        this.objeto.investimento_Id = this.objeto.investimento.id;
         this.objeto.planejamento_Id = this.planner.id;
+        this.objeto.rentabilidadeLiquida = this.objeto.rentabilidade;
+        this.objeto.montanteAtual = this.objeto.planoAcao;
+        this.objeto.sugerido = this.objeto.planoAcao;
+        
         let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimento_Id == this.objeto.investimento_Id)
         if (jaExiste) {
             this.erro.push('Esse investimento já está inserido.')

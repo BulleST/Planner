@@ -34,7 +34,6 @@ export function getError(res: HttpErrorResponse) {
         else
             msg = "Ocorreu um erro no processamento da requisição.";
             
-        console.log(msg, res)
     }
     return msg
 }

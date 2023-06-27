@@ -149,7 +149,6 @@ export class ClienteService {
     }
     
     getList(empresaId?: number) {
-        console.log('url', this.url)
         this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
         return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresaId}`)

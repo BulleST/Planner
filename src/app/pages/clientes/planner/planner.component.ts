@@ -81,6 +81,7 @@ export class PlannerComponent implements OnDestroy {
     // dessa carteira pela primeira vez
     carteiraSetupInalterada = new CarteiraSetup;
     mudouCarteiraSetup = false;
+    // hasProdutosLoaded = false; // Botão "Carregar produtos" foi clicado?
 
     clienteIdEncrypted = '';
     subscription: Subscription[] = [];
@@ -114,6 +115,7 @@ export class PlannerComponent implements OnDestroy {
 
         var params = this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['cliente_id'];
+            // this.hasProdutosLoaded = this.isEditPage;
             if (this.isEditPage) {
                 this.loading = true;
                 this.clienteIdEncrypted = item['cliente_id']
@@ -125,6 +127,7 @@ export class PlannerComponent implements OnDestroy {
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
                         this.carteiraSetupInalterada = res.carteiraSetup;
+                        // this.hasProdutosLoaded = true;
                         this.validateDataNascimento();
                         
                         var getObject = this.plannerService.objeto.subscribe(res => {
@@ -154,9 +157,11 @@ export class PlannerComponent implements OnDestroy {
         });
 
         var empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
-        var list = this.setup.list.subscribe(res => this.carteirasSetup = res);
+        var list = this.setup.list.subscribe(res => {
+            this.carteirasSetup = res.sort((x, y) => Number(y.ativo) - Number(x.ativo))
+        });
+        
         lastValueFrom(this.setup.getList(empresa_Id))
-            .then(res => this.carteirasSetup = res)
             .finally(() => this.loadingCarteiraSetup = false);
 
         var estadoCivil = this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
@@ -175,6 +180,7 @@ export class PlannerComponent implements OnDestroy {
         this.subscription.push(estadoCivil);
         this.subscription.push(perfilInvestidor);
     }
+
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
@@ -275,11 +281,10 @@ export class PlannerComponent implements OnDestroy {
         } else {
             this.planner.carteiraSetup = undefined as unknown as CarteiraSetup;
         }
-        if (this.planner.carteiraSetup_Id == this.carteiraSetupInalterada.id) {
-            this.mudouCarteiraSetup = false;
-        } else {
-            this.mudouCarteiraSetup = true;
-        }
+
+        this.mudouCarteiraSetup = !(this.planner.carteiraSetup_Id == this.carteiraSetupInalterada.id);
+        // this.hasProdutosLoaded = !this.mudouCarteiraSetup;
+        console.log(this.mudouCarteiraSetup)
         this.saveData();
 
     }
@@ -346,7 +351,6 @@ export class PlannerComponent implements OnDestroy {
 
     validaForm(form: NgForm) {
         this.erro = [];
-        console.log(form)
         if (form.touched && form.invalid) {
             this.erro.push('Campos inválidos!');
             this.toastr.error('Campos inválidos!');
@@ -374,21 +378,9 @@ export class PlannerComponent implements OnDestroy {
             return false;
         }
 
-        if (this.planner.planejamentoInvestimento.find(x => x.planoAcao < 0) != undefined) {
-            this.erro.push('Plano de ação em investimento não pode ser inferior a zero.');
-            this.toastr.error('Plano de ação em investimento não pode ser inferior a zero.');
-            return false;
-        }
-
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
             this.toastr.error('Soma de plano de ação em produtos deve ser igual ao montante');
-            return false;
-        }
-
-        if (this.somaInvestimentos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaInvestimentos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
-            this.erro.push('Soma de plano de ação em investimentos deve ser igual ao montante');
-            this.toastr.error('Soma de plano de ação em investimentos deve ser igual ao montante');
             return false;
         }
 
@@ -438,13 +430,16 @@ export class PlannerComponent implements OnDestroy {
         lastValueFrom(this.plannerService.create(this.planner))
             .then(res => {
                 this.plannerService.setObject(res);
-                this.mudouCarteiraSetup = true;
-                console.log(res.carteiraSetup)
+                this.mudouCarteiraSetup = false;
+                // this.hasProdutosLoaded = true;
                 if (res.carteiraSetup) {
                     this.carteiraSetupInalterada = res.carteiraSetup
                 }
             })
-            .finally(() => this.loading = false);
+            .finally(() => {
+                this.loading = false;
+
+            });
 
     }
 

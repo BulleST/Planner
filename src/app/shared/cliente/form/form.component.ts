@@ -150,8 +150,6 @@ export class FormClienteComponent {
         var min = 0;
         var max = 100000000;
         var value = input.value;
-        
-        console.log(input, value);
 
         if (value > max) {
             input.control.setErrors(({

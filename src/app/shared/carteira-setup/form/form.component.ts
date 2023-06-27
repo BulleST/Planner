@@ -169,7 +169,6 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
     
     setChartProduto(str: string) {
-        console.log('where', str)
         let index = 0;
         let tipoRiscos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined).map(x => x.produto.tipoRisco);
         tipoRiscos = tipoRiscos.filter((value: any, index: any, self: any) => {
@@ -178,7 +177,6 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         var chartHeight = 70;
         tipoRiscos.forEach(item => chartHeight = chartHeight+=30);
         this.chartHeight = chartHeight + 'px';
-        console.log('chartHeight', this.chartHeight)
         
         this.optionsChartProduto = {
             onClick: (e: any) => { },
@@ -251,9 +249,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             datasets: a,
         }
         if (this.chartProdutos) {
-            console.log('oi', this.chartProdutos, this.optionsChartProduto)
             var e = this.chartProdutos.chart.update();
-            console.log(e)
         }
 
     }

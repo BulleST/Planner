@@ -778,7 +778,7 @@
                     <div class="form-row mb-2">
                         <div class="home__container">
                             <div class="home__container-header mb-2 position-relative">
-                                <h6>Investimento</h6>
+                                <h6>Investimentos</h6>
                                 <a class="btn btn-primary" [routerLink]="['investimento']">Adicionar</a>
                             </div>
                             <div class="form-row">
@@ -794,7 +794,7 @@
                                             <th style="white-space: nowrap;">Rentabilidade</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
                                             <th style="white-space: nowrap;">Montante Atual</th>
-                                            <th style="white-space: nowrap;">Montante Sugerida</th>
+                                            <th style="white-space: nowrap;">Montante Sugerido</th>
                                             <th style="white-space: nowrap;">Plano de Ação</th>
                                             <th class="td-actions"></th>
                                         </tr>
@@ -884,7 +884,7 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="footer">
-                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" [class.bg-danger]="somaInvestimentos.somaSugerido < 0 || somaInvestimentos.somaSugerido > planner.planejamentoAgregandoValor!.montante || somaInvestimentos.somaPlanoAcao < 0  || somaInvestimentos.somaPlanoAcao > planner.planejamentoAgregandoValor!.montante ">
+                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" [class.bg-danger]="somaInvestimentos.somaSugerido < 0 || somaInvestimentos.somaPlanoAcao < 0 ">
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
@@ -912,7 +912,7 @@
                     <div class="form-row mb-2">
                         <div class="home__container">
                             <div class="home__container-header mb-2">
-                                <h6>Produto</h6>
+                                <h6>Produtos</h6>
                                 <div class="d-flex justify-content-end align-items-center w-100">
                                     <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
                                         <p-dropdown
@@ -950,15 +950,38 @@
                                             triggers="mouseenter:mouseleave"
                                             class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                             (click)="carregarProdutos(form)"
-                                            *ngIf="(planner.carteiraSetup_Id != 0 && mudouCarteiraSetup) || planner.planejamentoProduto.length == 0"
-                                            [disabled]="form.invalid || loading || !formIsValid"> Carregar produtos </button>
+                                            *ngIf=" planner.planejamentoInvestimento.length > 0   
+                                                    && planner.carteiraSetup_Id != 0
+                                                    && (planner.planejamentoProduto.length == 0
+                                                    || mudouCarteiraSetup )"
+                                            [disabled]="form.invalid || loading"> 
+                                            <span *ngIf="!mudouCarteiraSetup">Recarregar</span>
+                                            <span *ngIf="mudouCarteiraSetup">Carregar</span>
+                                            <span>&nbsp; produtos</span> 
+                                             
+                                        </button>
                                     <a class="link ml-3"
                                        [routerLink]="['produto']"
-                                       *ngIf="planner.planejamentoInvestimento.length > 0
-                                                && planner.planejamentoProduto.length > 0
+                                       *ngIf="planner.planejamentoInvestimento.length > 0   
+                                                && planner.planejamentoProduto.length > 0 
+                                                && planner.carteiraSetup_Id != 0
                                                 && !mudouCarteiraSetup"> Adicionar outros produtos </a>
                                 </div>
                             </div>
+                            <!-- <div>
+                                <h3>Carregar Produtos</h3>
+                                <p>planner.planejamentoInvestimento.length > 0  {{planner.planejamentoInvestimento.length > 0  }}</p>
+                                <p>planner.planejamentoProduto.length == 0 {{planner.planejamentoProduto.length == 0}}</p>
+                                <p>planner.carteiraSetup_Id != 0 {{planner.carteiraSetup_Id != 0}}</p>
+                                <p>mudouCarteiraSetup {{mudouCarteiraSetup }}</p>
+                            </div>
+                            <div>
+                                <h3>Adicionar outros produtos</h3>
+                                <p>planner.planejamentoInvestimento.length > 0   {{planner.planejamentoInvestimento.length > 0 }}</p>
+                                <p>planner.planejamentoProduto.length > 0  {{planner.planejamentoProduto.length > 0 }}</p>
+                                <p>planner.carteiraSetup_Id != 0 {{ planner.carteiraSetup_Id != 0}}</p>
+                                <p>!mudouCarteiraSetup {{ !mudouCarteiraSetup }}</p>
+                            </div> -->
                             <div class="form-row">
                                 <p class="text-danger px-2" *ngIf="planner.planejamentoInvestimento.length == 0">* Insira um investimento para adicionar um produto</p>
                                 <p-table
@@ -975,7 +998,7 @@
                                             <th style="white-space: nowrap;">Rentabilidade</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
                                             <th style="white-space: nowrap;">Montante Atual</th>
-                                            <th style="white-space: nowrap;">Montante Sugerida</th>
+                                            <th style="white-space: nowrap;">Montante Sugerido</th>
                                             <th style="white-space: nowrap;">Plano de Ação</th>
                                             <th class="td-actions"></th>
                                         </tr>
@@ -1073,7 +1096,7 @@
                                                     [disabled]="item.produto_Id == 61"></app-input-number>
                                             </td>
                                             <td class="td-actions">
-                                                <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)" *ngIf="item.produto.id != 61"> <!--Conta corrente não pode ser excluido-->
+                                                <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)"> <!--  *ngIf="item.produto.id != 61" Conta corrente não pode ser excluido-->
                                                     <fa-icon [icon]="faTrash"></fa-icon>
                                                 </a>
                                             </td>

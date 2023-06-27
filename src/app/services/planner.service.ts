@@ -29,7 +29,6 @@ export class PlannerService {
         private empresaService: EmpresaService,
         private table: Table,
     ) {
-        console.log('planner service')
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
         this.accountService.account.subscribe(res => this.account = res ?? new Account);

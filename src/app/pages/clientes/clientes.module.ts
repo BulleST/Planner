@@ -10,8 +10,8 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListComponent } from './list/list.component';
 import { PlannerComponent } from './planner/planner.component';
 import { DeleteComponent } from './delete/delete.component';
-import { InvestimentoFormComponent } from './planner/investimento-form/investimento-form.component';
-import { ProdutoFormComponent } from './planner/produto-form/produto-form.component';
+import { FormInvestimentoComponent } from './planner/form-investimento/form-investimento.component';
+import { FormProdutoComponent } from './planner/form-produto/form-produto.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { ClientesRoutingModule } from './clientes.routing';
 import { ChartModule } from 'primeng/chart';
@@ -29,8 +29,8 @@ import { InputTextModule } from 'primeng/inputtext';
     PlannerComponent,
     ListComponent,
     DeleteComponent,
-    InvestimentoFormComponent,
-    ProdutoFormComponent,
+    FormInvestimentoComponent,
+    FormProdutoComponent,
     DeletePlannerComponent,
     CreateComponent,
     EditComponent,

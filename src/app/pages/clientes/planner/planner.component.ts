@@ -74,6 +74,7 @@ export class PlannerComponent implements OnDestroy {
     somaInvestimentos = {
         somaPlanoAcao: 0,
         somaSugerido: 0,
+        somaMontanteAtual: 0,
     }
 
     // se o usuario alterou a carteira setup, não pode adicionar um produto 
@@ -249,17 +250,20 @@ export class PlannerComponent implements OnDestroy {
             var montanteTotal = this.planner.planejamentoAgregandoValor.montante ?? 1;
             var somaPlanoAcao = 0;
             var somaSugerido = 0;
+            var somaMontanteAtual = 0;
 
             // Ordena os produtos e deixa conta corrente por ultimo
             this.planner.planejamentoInvestimento = this.planner.planejamentoInvestimento.sort((x, y) => x.investimento.descricao.toLowerCase() > y.investimento.descricao.toLowerCase() ? 1 : -1);
             this.planner.planejamentoInvestimento.map(x => {
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
+                somaMontanteAtual += x.montanteAtual;
                 
                 return x;
             })
             this.somaInvestimentos.somaPlanoAcao = round(somaPlanoAcao, 2);
             this.somaInvestimentos.somaSugerido = round(somaSugerido, 2);
+            this.somaInvestimentos.somaMontanteAtual = round(somaMontanteAtual, 2);
         }
 
     }
@@ -383,13 +387,6 @@ export class PlannerComponent implements OnDestroy {
             this.toastr.error('Soma de plano de ação em produtos deve ser igual ao montante');
             return false;
         }
-
-        if (this.somaProdutos.somaPercentual > 100 || this.somaProdutos.somaPercentual < 0) {
-            this.erro.push('Soma total do percentual em produtos deve ser 100%.');
-            this.toastr.error('Soma total do percentual em produtos deve ser 100%.');
-            return false;
-        }
-
 
         return true;
     }

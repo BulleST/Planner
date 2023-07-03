@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -10,15 +10,16 @@ import { Planejamento } from 'src/app/models/planejamento.model';
 import { InvestimentoService } from 'src/app/services/investimento.service';
 import { PlannerService } from 'src/app/services/planner.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
+import { Crypto } from 'src/app/utils/crypto';
 import { arrowDown, arrowUp } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
-    selector: 'app-investimento-form',
-    templateUrl: './investimento-form.component.html',
-    styleUrls: ['./investimento-form.component.css']
+    selector: 'app-form-investimento',
+    templateUrl: './form-investimento.component.html',
+    styleUrls: ['./form-investimento.component.css']
 })
-export class InvestimentoFormComponent implements OnDestroy {
+export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -26,8 +27,6 @@ export class InvestimentoFormComponent implements OnDestroy {
     erro: any[] = [];
     loading = false;
 
-    carteirasSetup: CarteiraSetup[] = []
-    loadingCarteiraSetup = true;
     planner: Planejamento = new Planejamento;
     investimentos: Investimento[] = [];
     loadingInvestimentos = true;
@@ -40,33 +39,37 @@ export class InvestimentoFormComponent implements OnDestroy {
         private setupService: CarteiraSetupService,
         private investimentoService: InvestimentoService,
         private toastr: ToastrService,
+        private crypto: Crypto,
     ) {
         this.objeto.investimento = undefined as unknown as Investimento;
         
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
-        var getObject = this.plannerService.objeto.subscribe(planner => this.planner = planner);
-        this.subscription.push(getObject);
+        var i = 0;
+        var objeto = this.plannerService.objeto.subscribe(planner => {
+            if (planner.id == 0) {
+                planner = this.getPlanner();
+            }
+            this.planner = planner;
+            this.objeto.planejamento_Id = this.planner.id;
+            console.log('planner ' + i++, planner)
+        });
+        this.subscription.push(objeto);
 
-        var list = this.setupService.list.subscribe(res => this.carteirasSetup = res);
+    }
+
+    ngAfterViewInit(): void {
+        var list = this.investimentoService.list.subscribe(res => this.setInvestimentos(res));
         this.subscription.push(list);
-
-        lastValueFrom(this.setupService.getList())
-            .then(res => this.carteirasSetup = res)
-            .finally(() => this.loadingCarteiraSetup = false);
-
         lastValueFrom(this.investimentoService.getAll())
-            .then(res => {
-                var investimentosExistentesId = this.planner.planejamentoInvestimento.map(x => x.investimento_Id);
-                this.investimentos = res.filter(x => !investimentosExistentesId.includes(x.id));
-            })
+            .then(res => this.setInvestimentos(res))
             .finally(() => this.loadingInvestimentos = false);
 
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
-
+        
     }
 
     ngOnDestroy(): void {
@@ -74,17 +77,23 @@ export class InvestimentoFormComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-
     voltar() {
         this.modal.voltar();
     }
 
-    arrowUp(value: number) {
-        return arrowUp(value)
+    setInvestimentos(list: Investimento[]) {
+        this.loadingInvestimentos = true;
+        var investimentosExistentes = this.planner.planejamentoInvestimento.map(x => x.investimento_Id)
+        console.log('investimentosExistentes', investimentosExistentes)
+        console.log('list', list)
+        this.investimentos = list.filter(x => !investimentosExistentes.includes(x.id))
+        console.log('investimentos', this.investimentos)
+        console.log('planner', this.planner)
+        this.objeto.investimento = undefined as unknown as Investimento;
+        this.objeto.investimento_Id = undefined as unknown as number;
+        this.loadingInvestimentos = false;
     }
-    arrowDown(value: number, allowNegative: boolean = false) {
-        return arrowDown(value, allowNegative)
-    }
+
 
     send(model: NgForm) {
         this.loading = true;
@@ -93,7 +102,7 @@ export class InvestimentoFormComponent implements OnDestroy {
         this.objeto.investimento_Id = this.objeto.investimento.id;
         this.objeto.planejamento_Id = this.planner.id;
         this.objeto.rentabilidadeLiquida = this.objeto.rentabilidade;
-        this.objeto.montanteAtual = this.objeto.planoAcao;
+        this.objeto.planoAcao = this.objeto.montanteAtual;
         this.objeto.sugerido = this.objeto.planoAcao;
         
         let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimento_Id == this.objeto.investimento_Id)
@@ -107,6 +116,12 @@ export class InvestimentoFormComponent implements OnDestroy {
             this.voltar();
         }
         this.loading = false;
+    }
+
+    getPlanner(): Planejamento {
+        let e = localStorage.getItem('planejamento');
+        let planner = this.crypto.decrypt(e);
+        return planner;
     }
 
 }

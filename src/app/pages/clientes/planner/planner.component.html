@@ -794,8 +794,8 @@
                                             <th style="white-space: nowrap;">Rentabilidade</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
                                             <th style="white-space: nowrap;">Montante Atual</th>
-                                            <th style="white-space: nowrap;">Montante Sugerido</th>
-                                            <th style="white-space: nowrap;">Plano de Ação</th>
+                                            <!-- <th style="white-space: nowrap;">Montante Sugerido</th>
+                                            <th style="white-space: nowrap;">Plano de Ação</th> -->
                                             <th class="td-actions"></th>
                                         </tr>
                                     </ng-template>
@@ -846,14 +846,13 @@
                                                     (valueChanges)="item.montanteAtual = $event"
                                                     [inputId]="'investimento-montanteAtual-' + index"
                                                     [mask]="'separator.2'"
-                                                    preffix="R$ "
+                                                    prefix="R$ "
                                                     [min]="0"
+                                                    [required]="true"
                                                     [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
+                                                    [allowNegativeNumbers]="false"></app-input-number>
                                             </td>
-                                            <td>
+                                            <!-- <td>
                                                 <app-input-number [valueInput]="item.sugerido"
                                                     (valueChanges)="item.sugerido = $event"
                                                     [inputId]="'investimento-sugerido-' + index"
@@ -874,8 +873,9 @@
                                                     [min]="0"
                                                     [showErrorMessage]="false"
                                                     [allowNegativeNumbers]="false"
-                                                    [required]="true"></app-input-number>
-                                        </td>
+                                                    [readonly]="true"
+                                                    [disabled]="true"></app-input-number>
+                                        </td> -->
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerInvestimento(item)">
                                                     <fa-icon [icon]="faTrash"></fa-icon>
@@ -891,16 +891,16 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
-                                            <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaSugerido | mask : 'separator.2' : '.' }}</td>
-                                            <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td>
+                                            <td class="p-2 ps-3">R$ {{ somaInvestimentos.somaMontanteAtual | mask : 'separator.2' : '.' }}</td>
+                                            <!-- <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaSugerido | mask : 'separator.2' : '.' }}</td>
+                                            <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td> -->
                                             <td></td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
                                             <td></td>
-                                            <td [attr.colspan]="6" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                            <td [attr.colspan]="4" class="py-2 px-2 text-grey"> Nenhum registro </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -997,7 +997,7 @@
                                             <th style="white-space: nowrap;">Percentual</th>
                                             <th style="white-space: nowrap;">Rentabilidade</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
-                                            <th style="white-space: nowrap;">Montante Atual</th>
+                                            <!-- <th style="white-space: nowrap;">Montante Atual</th> -->
                                             <th style="white-space: nowrap;">Montante Sugerido</th>
                                             <th style="white-space: nowrap;">Plano de Ação</th>
                                             <th class="td-actions"></th>
@@ -1058,7 +1058,7 @@
                                                     [readonly]="true"
                                                     [disabled]="true"></app-input-number>
                                             </td>
-                                            <td>
+                                            <!-- <td>
                                                 <app-input-number [valueInput]="item.montanteAtual"
                                                     (valueChanges)="item.montanteAtual = $event"
                                                     [inputId]="'produto-montanteAtual-' + index"
@@ -1069,7 +1069,7 @@
                                                     [allowNegativeNumbers]="false"
                                                     [readonly]="true"
                                                     [disabled]="true"></app-input-number>
-                                            </td>
+                                            </td> -->
                                             <td>
                                                 <app-input-number [valueInput]="item.sugerido"
                                                     (valueChanges)="item.sugerido = $event"
@@ -1111,7 +1111,7 @@
                                             <td class="p-2" style="white-space: nowrap">{{ somaProdutos.somaPercentual | mask : 'separator.2' : '.' }}%</td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            <!-- <td></td> -->
                                             <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaSugerido | mask : 'separator.2' : '.' }}</td>
                                             <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td>
                                             <td></td>
@@ -1120,7 +1120,7 @@
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
                                             <td></td>
-                                            <td [attr.colspan]="7" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                            <td [attr.colspan]="6" class="py-2 px-2 text-grey"> Nenhum registro </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -1193,10 +1193,11 @@
                                                        name="solucao_rentabilidade_Atual"
                                                        #solucao_rentabilidade_Atual="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Atual"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
+                                                       [allowNegativeNumbers]="true"
                                                        [readOnly]="true">
                                             </td>
                                             <td>
@@ -1206,10 +1207,11 @@
                                                        name="solucao_retornoAnual_Atual"
                                                        #solucao_retornoAnual_Atual="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Atual"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
+                                                       [allowNegativeNumbers]="true"
                                                        [readOnly]="true">
                                             </td>
                                             <td>
@@ -1219,10 +1221,11 @@
                                                        name="solucao_retornoMensal_Atual"
                                                        #solucao_retornoMensal_Atual="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Atual"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
+                                                       [allowNegativeNumbers]="true"
                                                        [readOnly]="true">
                                             </td>
                                             <td>
@@ -1232,7 +1235,7 @@
                                                        name="solucao_plMax_Atual"
                                                        #solucao_plMax_Atual="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Atual"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
@@ -1245,7 +1248,7 @@
                                                        name="solucao_idadeMax_Atual"
                                                        #solucao_idadeMax_Atual="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Atual"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">
@@ -1262,9 +1265,10 @@
                                                        name="solucao_rentabilidade_Sugerida"
                                                        #solucao_rentabilidade_Sugerida="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Sugerida"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
+                                                       [allowNegativeNumbers]="true"
                                                        suffix="%"
                                                        [readOnly]="true">
                                             </td>
@@ -1275,9 +1279,10 @@
                                                        name="solucao_retornoAnual_Sugerido"
                                                        #solucao_retornoAnual_Sugerido="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Sugerido"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
+                                                       [allowNegativeNumbers]="true"
                                                        prefix="R$ "
                                                        [readOnly]="true">
                                             </td>
@@ -1288,9 +1293,10 @@
                                                        name="solucao_retornoMensal_Sugerido"
                                                        #solucao_retornoMensal_Sugerido="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Sugerido"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
+                                                       [allowNegativeNumbers]="true"
                                                        prefix="R$ "
                                                        [readOnly]="true">
                                             </td>
@@ -1301,7 +1307,7 @@
                                                        name="solucao_plMax_Sugerido"
                                                        #solucao_plMax_Sugerido="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Sugerido"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
@@ -1314,7 +1320,7 @@
                                                        name="solucao_idadeMax_Sugerido"
                                                        #solucao_idadeMax_Sugerido="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Sugerido"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">
@@ -1331,7 +1337,7 @@
                                                        name="solucao_rentabilidade_Diferenca"
                                                        #solucao_rentabilidade_Diferenca="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.rentabilidade_Diferenca"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
@@ -1344,7 +1350,7 @@
                                                        name="solucao_retornoAnual_Diferenca"
                                                        #solucao_retornoAnual_Diferenca="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.retornoAnual_Diferenca"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
@@ -1357,7 +1363,7 @@
                                                        name="solucao_retornoMensal_Diferenca"
                                                        #solucao_retornoMensal_Diferenca="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.retornoMensal_Diferenca"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
@@ -1371,7 +1377,7 @@
                                                        name="solucao_plMax_Diferenca"
                                                        #solucao_plMax_Diferenca="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.plMax_Diferenca"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
@@ -1384,7 +1390,7 @@
                                                        name="solucao_idadeMax_Diferenca"
                                                        #solucao_idadeMax_Diferenca="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Diferenca"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">
@@ -1409,7 +1415,7 @@
                                                        name="solucao_pL_Desempenho"
                                                        #solucao_pL_Desempenho="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.pL_Desempenho"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
@@ -1423,7 +1429,7 @@
                                                        name="solucao_idade_Desempenho"
                                                        #solucao_idade_Desempenho="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idade_Desempenho"
-                                                       mask="separator.5"
+                                                       mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        [readOnly]="true">

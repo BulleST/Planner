@@ -11,15 +11,16 @@ import { DropdownService } from 'src/app/services/dropdown.service';
 import { PlannerService } from 'src/app/services/planner.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
+import { Crypto } from 'src/app/utils/crypto';
 import { arrowDown, arrowUp } from 'src/app/utils/format';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
-    selector: 'app-produto-form',
-    templateUrl: './produto-form.component.html',
-    styleUrls: ['./produto-form.component.css']
+    selector: 'app-form-produto',
+    templateUrl: './form-produto.component.html',
+    styleUrls: ['./form-produto.component.css']
 })
-export class ProdutoFormComponent implements OnDestroy {
+export class FormProdutoComponent implements OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -29,9 +30,6 @@ export class ProdutoFormComponent implements OnDestroy {
     loading = false;
     subscription: Subscription[] = [];
 
-    carteirasSetup: CarteiraSetup[] = [];
-    loadingCarteiraSetup = true;
-    
     produtos: Produto[] = [];
     loadingProdutos = true;
     
@@ -43,24 +41,22 @@ export class ProdutoFormComponent implements OnDestroy {
         private modal: ModalOpen,
         private plannerService: PlannerService,
         private produtoService: ProdutoService,
-        private setupService: CarteiraSetupService,
         private dropdown: DropdownService,
+        private crypto: Crypto,
     ) {
        
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
         var objeto = this.plannerService.objeto.subscribe(planner => {
+            if (planner.id == 0) {
+                planner = this.getPlanner();
+            }
+            
             this.planner = planner;
             this.objeto.planejamento_Id = this.planner.id;
         });
         this.subscription.push(objeto);
-
-        var list = this.setupService.list.subscribe(res => this.carteirasSetup = res);
-        this.subscription.push(list);
-        lastValueFrom(this.setupService.getList())
-            .then(res => this.carteirasSetup = res)
-            .finally(() => this.loadingCarteiraSetup = false);
        
         var tipoRisco = this.dropdown.tipoRisco.subscribe(res => this.tipoRiscos = res);
         this.subscription.push(tipoRisco);
@@ -121,6 +117,12 @@ export class ProdutoFormComponent implements OnDestroy {
         this.plannerService.setObject(this.planner);
         this.voltar();
         this.loading = false;
+    }
+
+    getPlanner(): Planejamento {
+        let e = localStorage.getItem('planejamento');
+        let planner = this.crypto.decrypt(e);
+        return planner;
     }
 
 }

@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PlannerComponent } from './planner/planner.component';
 import { DeleteComponent } from './delete/delete.component';
-import { InvestimentoFormComponent } from './planner/investimento-form/investimento-form.component';
 import { ListComponent } from './list/list.component';
-import { ProdutoFormComponent } from './planner/produto-form/produto-form.component';
+import { FormInvestimentoComponent } from './planner/form-investimento/form-investimento.component';
+import { FormProdutoComponent } from './planner/form-produto/form-produto.component';
 import { ProdutoGuard } from './planner/produto.guard';
 import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.component';
 import { CreateComponent } from './create/create.component';
@@ -20,13 +20,13 @@ const routes: Routes = [
         { path: 'desabilitar/:cliente_id', component: DeactivatedComponent, title: 'Planner - Desabilitar cliente' },
     ]},
     { path: 'planner', component: PlannerComponent, title: 'Planner - Planejamento', children: [
-        { path: 'investimento', component: InvestimentoFormComponent },
-        { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
+        { path: 'investimento', component: FormInvestimentoComponent },
+        { path: 'produto', component: FormProdutoComponent, canActivate: [ProdutoGuard] },
         { path: 'excluir/:planner_id', component: DeletePlannerComponent },
     ] },
     { path: 'planner/:cliente_id', component: PlannerComponent, children: [
-        { path: 'investimento', component: InvestimentoFormComponent },
-        { path: 'produto', component: ProdutoFormComponent, canActivate: [ProdutoGuard] },
+        { path: 'investimento', component: FormInvestimentoComponent },
+        { path: 'produto', component: FormProdutoComponent, canActivate: [ProdutoGuard] },
     ] },
 ];
 

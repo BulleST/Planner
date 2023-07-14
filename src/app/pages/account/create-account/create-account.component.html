@@ -155,7 +155,7 @@
                             <a class="link" routerLink="./termos-de-uso" >termos de uso</a> 
                             do planner.</p>
                         <div class="form-group form-floating col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                            <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading">Cadastrar</button>
+                            <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading || (password.value != confirmPassword.value)">Cadastrar</button>
                         </div>
                     </div>
                 </form>

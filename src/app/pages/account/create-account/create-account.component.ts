@@ -36,7 +36,6 @@ export class CreateAccountComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-
     cadastrar(form: NgForm) {
         this.loadingUtils.loading.next(true);
         this.objeto.telefoneCelular = parseInt(this.objeto.telefoneCelular.toString());

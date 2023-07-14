@@ -19,7 +19,7 @@ export class HeaderComponent implements OnDestroy {
     faKey = faKey;
     faUser = faUser;
     modoEscuroAtivado = false;
-    userLogadoOpen = false;
+    menuHeaderOpen = false;
     userLogado?: Account;
     nomeAbreviado = '';
     perfil = '';
@@ -31,7 +31,7 @@ export class HeaderComponent implements OnDestroy {
         private header: Header,
     ) {
         var getAtivado = this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
-        var menuHeaderOpen = this.header.menuHeaderOpen.subscribe(res => this.userLogadoOpen = res);
+        // var menuHeaderOpen = this.header.menuHeaderOpen.subscribe(res => this.userLogadoOpen = res);
 
         this.userLogado = this.accountService.accountValue;
         var account = this.accountService.account.subscribe(async res => {
@@ -47,7 +47,7 @@ export class HeaderComponent implements OnDestroy {
             }
         });
         this.subscription.push(getAtivado);
-        this.subscription.push(menuHeaderOpen);
+        // this.subscription.push(menuHeaderOpen);
         this.subscription.push(account);
     }
 
@@ -58,6 +58,7 @@ export class HeaderComponent implements OnDestroy {
 
 
     toggleMenuHeader(): void {
+        this.menuHeaderOpen = !this.menuHeaderOpen;
         this.header.toggleMenuHeader();
     }
 

@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { Account } from 'src/app/models/account.model';
 import { Usuario } from 'src/app/models/usuario.model';
+import { AccountService } from 'src/app/services/account.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -24,14 +26,19 @@ export class ResetPasswordComponent implements OnDestroy {
     objeto: Usuario = new Usuario;
     subscription: Subscription[] = [];
 
+    userLogado?: Account
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: ModalOpen,
         private empresaService: EmpresaService,
         private userService: UsuarioService,
+        private accountService: AccountService,
         private crypto: Crypto,
     ) {
+
+        this.userLogado = this.accountService.accountValue;
         
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
@@ -40,15 +47,22 @@ export class ResetPasswordComponent implements OnDestroy {
         var params = this.activatedRoute.params.subscribe(res => {
             if (res['usuario_id']) {
                 this.objeto.id = this.crypto.decrypt(res['usuario_id']);
+                lastValueFrom(this.userService.get(this.objeto.id))
+                .then(res => {
+                    this.objeto = res;
+                    setTimeout(() => {
+                        this.modal.setOpen(true);
+                    }, 200);
+                })
+                .catch(res => {
+                    this.voltar();
+                })
             } else {
                 this.voltar();
             }
         });
         this.subscription.push(params);
 
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
         
        
     }
@@ -64,7 +78,10 @@ export class ResetPasswordComponent implements OnDestroy {
     send() {
         this.loading = true;
         lastValueFrom(this.userService.resetPassword(this.objeto.id))
-        .then(res => this.voltar())
+        .then(res => {
+            this.voltar();
+            this.accountService.logout();
+        })
         .catch()
         .finally(() => this.loading = false);
     }

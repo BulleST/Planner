@@ -14,6 +14,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Router } from '@angular/router';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
     declarations: [
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
         MyAccountComponent,
         NavigationComponent,
         MinhaEmpresaComponent,
+        ChangePasswordComponent,
     ],
     imports: [
         CommonModule,

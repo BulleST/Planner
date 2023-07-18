@@ -8,12 +8,16 @@
                    id="descricao"
                    #descricao="ngModel"
                    [(ngModel)]="objeto.descricao"
-                   required
                    popoverClass="popover-danger"
                    [ngbPopover]="campoObrigatorio"
-                   triggers="mouseenter:mouseleave">
+                   triggers="mouseenter:mouseleave"
+                   required
+                   pattern="\S(.*\S)?">
             <div *ngIf="descricao.touched && descricao.errors">
                 <p class="text-danger" *ngIf="descricao.errors['required']">Este campo é obrigatório.</p>
+                <p class="text-danger" *ngIf="descricao.errors['pattern']">
+                    <span *ngIf="descricao.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
+                </p>
             </div>
         </div>
     </div>
@@ -85,7 +89,9 @@
             <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
         </div>
         <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+            <span>Salvar</span> 
+        </button>
     </div>
 </form>
 <ng-template #campoObrigatorio>

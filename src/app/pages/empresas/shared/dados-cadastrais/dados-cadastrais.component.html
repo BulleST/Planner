@@ -23,9 +23,13 @@
                            popoverClass="popover-danger"
                            [ngbPopover]="campoObrigatorio" 
                            triggers="mouseenter:mouseleave"
-                           (change)="setDadosCadastrais()">
+                           (change)="setDadosCadastrais()"
+                           pattern="\S(.*\S)?">
                     <div *ngIf="nome.touched && nome.errors">
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
+                        <p class="text-danger" *ngIf="nome.errors['pattern']">
+                            <span *ngIf="nome.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
+                        </p>
                     </div>
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">

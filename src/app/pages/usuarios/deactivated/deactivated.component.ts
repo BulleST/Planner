@@ -34,13 +34,20 @@ export class DeactivatedComponent implements OnDestroy {
         this.subscription.push(getOpen);
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        var params = activatedRoute.params.subscribe(async p => {
+        var params = activatedRoute.params.subscribe(p => {
             if (p['usuario_id']) {
                 this.objeto.id = this.crypto.decrypt(p['usuario_id']);
-                this.objeto = await lastValueFrom(this.userService.get(this.objeto.id));
-                setTimeout(() => {
-                    this.modal.setOpen(true);
-                }, 200);
+                lastValueFrom(this.userService.get(this.objeto.id))
+                    .then(res => {
+                        this.objeto = res;
+                        setTimeout(() => {
+                            this.modal.setOpen(true);
+                        }, 200);
+                    })
+                    .catch(res => {
+                        this.modal.voltar();
+                    })
+                    .finally(() => {});
                 
             } else {
                 this.voltar();

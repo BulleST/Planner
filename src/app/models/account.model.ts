@@ -56,3 +56,15 @@ export class ResetPassword {
     password: string = '';
     confirmPassword: string = '';
 }
+export class ChangePassword {
+    password: string = '';
+    confirmPassword: string = '';
+}
+
+
+export class UpdateAccount {
+    name: string = '';
+    telefoneCelular: number = 0;
+    email: string = '';
+}
+

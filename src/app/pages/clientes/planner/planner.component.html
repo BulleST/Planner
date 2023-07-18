@@ -35,7 +35,8 @@
                                            [disablePopover]="nome.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           pattern="\S(.*\S)?">
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                     <label for="perfilInvestidor">Perfil de Investidor: <span class="text-danger">*</span></label>
@@ -93,7 +94,8 @@
                                            [disablePopover]="cpf.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}">
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6">
                                     <label for="rg">RG: <span class="text-danger">*</span>
@@ -105,13 +107,14 @@
                                            #rg="ngModel"
                                            [(ngModel)]="planner.cliente.rg"
                                            mask="00.000.000-0"
-                                           placeHolder="00.000.000-0"
+                                           placeholder="00.000.000-0"
                                            [ngbPopover]="campoObrigatorio"
                                            popoverClass="popover-danger"
                                            [disablePopover]="rg.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           pattern="\d{2}\.?\d{3}\.?\d{3}-?\d{1}">
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-6">
                                     <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span></label>
@@ -407,7 +410,8 @@
                                               [disablePopover]="descricao.errors == null"
                                               triggers="mouseenter:mouseleave"
                                               (change)="saveData()"
-                                              required>
+                                              required
+                                              pattern="\S(.*)?">
                                         </textarea>
                                 </div>
                             </div>

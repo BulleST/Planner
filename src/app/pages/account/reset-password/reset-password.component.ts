@@ -5,6 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { ResetPassword } from 'src/app/models/account.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { AccountService } from 'src/app/services/account.service';
+import { getError } from 'src/app/utils/error';
 
 @Component({
     selector: 'app-reset-password',
@@ -34,10 +35,10 @@ export class ResetPasswordComponent {
             .then((res) => {
                 this.erro = '';
                 this.alertService.success(res['message']);
+                this.router.navigate(['account', 'login']);
             })
             .catch((res) => {
-                console.error(res)
-                this.erro = res.error.message;
+                this.erro = getError(res)
             })
             .finally(() => {
                 this.loading = false;

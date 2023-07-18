@@ -4,6 +4,7 @@ import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { lastValueFrom } from 'rxjs';
 import { AccountService } from 'src/app/services/account.service';
+import { getError } from 'src/app/utils/error';
 import { Table } from 'src/app/utils/table';
 
 @Component({
@@ -34,7 +35,7 @@ export class VerifyEmailComponent {
             })
             .catch((res) => {
                 console.error(res)
-                this.erro = res.error.message;
+                this.erro = getError(res)
                 this.mensagemSucesso = '';
             })
             .finally(() => this.loading = false)

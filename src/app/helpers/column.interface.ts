@@ -13,6 +13,8 @@ export interface Column {
     filterShowAddButton?: boolean;
     filterMatchMode?: FilterMatchMode;
     booleanValues?: any;
+    substringLength?: number; // Masktype.substring
+    title?: string;
 }
 
 export enum FilterType {
@@ -39,4 +41,5 @@ export enum MaskType {
     any = 'any',
     boolean = 'boolean',
     telefoneCelular = 'telefoneCelular',
+    substring = 'substring',
 }

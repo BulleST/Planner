@@ -3,10 +3,11 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { Account } from 'src/app/models/account.model';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { AccountService } from 'src/app/services/account.service';
+import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -18,10 +19,10 @@ export class MyAccountComponent implements OnDestroy {
     modalOpen = false;
     faKey = faKey;
     objeto?: Account;
+    subscription: Subscription[] = [];
     loading = false;
     mensagemErro = '';
     erro: string[] = [];
-    subscription: Subscription[] = [];
 
     constructor(
         private router: Router,
@@ -41,7 +42,7 @@ export class MyAccountComponent implements OnDestroy {
             this.modal.setOpen(true);
         }, 200);
     }
-    
+
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
@@ -53,7 +54,7 @@ export class MyAccountComponent implements OnDestroy {
         }, 200);
     }
 
-    create(form: NgForm) {
+    editAccount(form: NgForm) {
         this.erro = [];
         this.loading = true;
         this.loadingUtils.loading.next(true);
@@ -62,6 +63,25 @@ export class MyAccountComponent implements OnDestroy {
             this.toastr.error('Formulário inválido');
             return;
         }
+
+        var obj = {
+            name: this.objeto?.name ?? '',
+            telefoneCelular: this.objeto?.telefoneCelular ?? 0,
+            email: this.objeto?.email ?? '',
+        };
+
+        lastValueFrom(this.accountService.updateAccount(obj))
+            .then(res => {
+                this.voltar();
+            })
+            .catch(res => {
+                var e = getError(res);
+                this.erro.push(e);
+                this.toastr.error(e);
+            })
+            .finally(() => {
+                this.loading = false;
+            })
 
         setTimeout(() => {
             this.loading = false;

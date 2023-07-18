@@ -50,7 +50,8 @@ export var produtoColumns: Column[] = [
     {
         field: 'descricao',
         header: 'Nome',
-        maskType: MaskType.undefined,
+        maskType: MaskType.substring,
+        substringLength: 22,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,

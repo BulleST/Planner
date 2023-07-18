@@ -12,7 +12,7 @@
                 </a>
             </div>
             <div class="modal__body">
-                <form #form="ngForm" (ngSubmit)="create(form)">
+                <form #form="ngForm" (ngSubmit)="editAccount(form)">
                     <div class="form-row">
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
                             <div class="form-floating">
@@ -30,9 +30,17 @@
                     <div class="form-row">
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
                           <div class="form-floating">
-                            <input type="telefoneCelular" class="form-control" id="telefoneCelular" name="telefoneCelular"
-                            #telefoneCelular="ngModel" [(ngModel)]="objeto!.telefoneCelular" mask="(00) 0000-0000||(00) 0.0000-0000"
-                            [hiddenInput]="false" placeholder="(11) x.0000-0000" required>
+                            <input type="text"
+                                class="form-control"
+                                id="telefoneCelular"
+                                name="telefoneCelular"
+                                #telefoneCelular="ngModel"
+                                [(ngModel)]="objeto!.telefoneCelular"
+                                mask="(00) 0000-0000||(00) 0.0000-0000"
+                                pattern="^\(?[1-9]{2}\)? ?(?:[0-9]|9[0-9])[0-9]{3}\-?[0-9]{4}$"
+                                [hiddenInput]="false"
+                                placeholder="(11) x.0000-0000"
+                                required>
                         <label for="telefoneCelular">
                             <span>Telefone/celular <span class="text-danger">*</span></span>
                         </label>
@@ -46,8 +54,16 @@
                     <div class="form-row">
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
                            <div class="form-floating">
-                            <input type="email" email class="form-control" id="email" name="email" #email="ngModel"
-                            [(ngModel)]="objeto!.email" placeholder="example@gmail.com" required>
+                            <input type="email"
+                                email
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                #email="ngModel"
+                                [(ngModel)]="objeto!.email"
+                                placeholder="example@gmail.com"
+                                required
+                                readonly>
                         <label for="email">
                             <span>E-mail <span class="text-danger">*</span></span>
                         </label>
@@ -63,8 +79,8 @@
                             <li class="text-red" *ngFor="let err of erro">{{err | json}}</li>
                         </ul>
                         <div class="d-flex col-sm-12 ml-auto mt-3 mr-0 px-0">
-                            <a class="btn btn-grey ml-auto mr-1" [routerLink]="['..', 'reset-password']"> 
-                                Resetar senha <fa-icon [icon]="faKey" class="ml-1"></fa-icon>
+                            <a class="btn btn-grey ml-auto mr-1" [routerLink]="['change-password']"> 
+                                Alterar senha <fa-icon [icon]="faKey" class="ml-1"></fa-icon>
                             </a>
                             <button type="submit" class="btn btn-primary mr-0"
                                 [disabled]="form.invalid || loading">
@@ -77,3 +93,5 @@
         </div>
     </div>
 </div>
+
+<router-outlet></router-outlet>

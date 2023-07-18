@@ -58,7 +58,9 @@
                 [class.selectable]="selectable && eval(menuTable, item) " 
                 [pSelectableRow]="selectable && eval(menuTable, item) ? item : null" 
                 [pSelectableRowIndex]="selectable && eval(menuTable, item) ? rowIndex : null">
-                <td *ngFor="let col of columns; index as i"  [class.ps-4]="i == 0">
+                <td *ngFor="let col of columns; index as i"  [class.ps-4]="i == 0"
+                    [title]="gelCellTitle(item, col)">
+                    <input type="hidden" [value]="getCellData(item, col)" #text>
                     <p *ngIf="col.maskType == maskType.boolean; else comun">
                             <span class="flag" 
                                 [class.flag-green]="item.ativo" 
@@ -66,7 +68,7 @@
                                 [ngbPopover]="ativo"
                                 [disablePopover]="item.ativo"
                                 triggers="mouseenter:mouseleave">
-                                {{getCellData(item, col)}} 
+                                {{text.value}} 
                             </span>
                             <ng-template #ativo>
                                 <div class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </div>
@@ -74,7 +76,7 @@
                     </p>
                     <ng-template #comun>
                         <p>
-                            {{getCellData(item, col)}}
+                            {{text.value}}
                         </p>
                     </ng-template>
                 </td>

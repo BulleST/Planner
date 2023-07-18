@@ -1,6 +1,6 @@
 <div class="modal" [class.active]="modalOpen">
     <div class="modal__bg" (click)="voltar()"></div>
     <div class="modal__inner" style="max-width: 600px;">
-        <app-shared-deactivated [objeto]="objeto" [service]="userService"></app-shared-deactivated>
+        <app-shared-deactivated [objeto]="objeto" [service]="userService" [isUser]="true"></app-shared-deactivated>
     </div>
 </div>

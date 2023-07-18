@@ -172,7 +172,7 @@ export class UsuarioService {
     }
 
     deactivated(id: number, ativo?: boolean) {
-        return this.http.patch(`${this.url}/usuario/${id}/${ativo}`, {});
+        return this.http.patch<Usuario>(`${this.url}/usuario/${id}/${ativo}`, {});
     }
 
     resetPassword(id: number) {

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faChartSimple, faEdit, faPlus, faTable, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -29,7 +29,6 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
     @Input() clearData: boolean = false;
     
-    produtos: Produto[] = [];
     faPlus = faPlus;
     faTrashAlt = faTrashAlt;
     faChartSimple = faChartSimple;
@@ -42,6 +41,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     carteiraRiscoColumns = carteiraRiscoColumns;
 
     produto?: Produto;
+    produtos: Produto[] = [];
     percentual: number = '' as unknown as number;
     tipoRiscos: TipoRisco[] = [];
     
@@ -79,10 +79,14 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/cadastrar')) {
-            var empresa = this.empresaService.empresa.subscribe(res => this.produtos = res.produto);
+            var empresa = this.empresaService.empresa.subscribe(res => {
+                this.produtos = res.produto;
+            });
             this.subscription.push(empresa);
         } else {
-            lastValueFrom(this.produtoService.getList()).then((res) => this.produtos = res)
+            lastValueFrom(this.produtoService.getList()).then((res) => {
+                this.produtos = res;
+            })
         }
     }
 
@@ -94,7 +98,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         let index = 0;
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
-            this.setChartProduto('ngOnChanges');
+            this.setChartProduto();
             this.validatePercentualRisco();
         }
 
@@ -119,7 +123,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         var container = $('.chart-container').width() ?? 0;
         var viewport = 100 / windowWidth;
         this.chartWidth = (viewport * container).toString() + 'vw';
-        this.setChartProduto('ngAfterViewInit');
+        this.setChartProduto();
     }
 
 
@@ -148,18 +152,39 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
          else 
             produtos = await lastValueFrom(this.produtoService.getList());
 
-        if (this.selectedRisco) // Seleciona os produtos desse risco
-            this.produtos = produtos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id);
+        // Seleciona os produtos desse risco e ativos
+        this.produtos = produtos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id && x.dataDesativado == null);
 
+        this.produtos = this.produtos.sort((x, y) => {
+            if (x.descricao < y.descricao) { 
+                return -1;
+            } else if (x.descricao > y.descricao) {
+                return 1
+            } else { 
+                return 0;
+            }
+
+        })
         this.percentual = '' as unknown as number;
         this.calcularPercentuais();
     }
+
+change(input: NgModel,  e: any) {
+    var max = parseFloat($(e.target).attr('max') ?? '0');
+    if (input.value > max) {
+        input.control.setErrors({ max: true });
+        return;
+    }
+    this.calcularPercentuais();
+    this.setChartProduto();
+}
 
     calcularPercentuais() {
         this.tipoRiscos = this.tipoRiscos.map(x => {
             let produtosRel = this.objeto.carteiraProdutoRel.filter(p => p.produto.tipoRisco_Id == x.id);
             var soma = produtosRel.length > 0 ? produtosRel.map(x => x.percentual).reduce((x,y) => x+y) : 0;
             x.percentualDisponivel = 100 - soma;
+            x.percentualDisponivel = x.percentualDisponivel < 0 ? 0 : x.percentualDisponivel;
             return x;
         });
     }
@@ -168,7 +193,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         return this.tipoRiscos.find(x => x.id == tipoRisco_Id)
     }
     
-    setChartProduto(str: string) {
+    setChartProduto() {
         let index = 0;
         let tipoRiscos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined).map(x => x.produto.tipoRisco);
         tipoRiscos = tipoRiscos.filter((value: any, index: any, self: any) => {
@@ -277,7 +302,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             
             this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
             this.calcularPercentuais();
-            this.setChartProduto('adicionarProduto');
+            this.setChartProduto();
             this.setupService.setObject(this.objeto);
             delete this.produto;
             this.percentual = '' as unknown as number;
@@ -291,7 +316,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         if (index != -1) {
             this.objeto.carteiraProdutoRel.splice(index, 1);
             this.setupService.setObject(this.objeto);
-            this.setChartProduto('removeProduto');
+            this.setChartProduto();
             this.calcularPercentuais();
         }
     }

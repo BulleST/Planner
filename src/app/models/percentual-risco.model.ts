@@ -48,7 +48,8 @@ export var percentualRiscoColumns: Column[] = [
         header: 'Perfil Investidor', 
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
-        maskType: MaskType.undefined, 
+        maskType: MaskType.substring,
+        substringLength: 22,
     },
     { 
         field: 'baixissimo', 

@@ -138,7 +138,11 @@ export class Table {
                 value = col.booleanValues[value]
             } else if (col.maskType == MaskType.telefoneCelular) {
                 value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000' ))
-            }  else {
+            } else if (col.maskType == MaskType.substring) {
+                if (col.substringLength && value.length > col.substringLength) {
+                    value = value.substring(0, col.substringLength) + '...'
+                }
+            } else {
                 return value ?? '-';
             }
 

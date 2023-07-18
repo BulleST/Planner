@@ -159,7 +159,16 @@ export class PlannerComponent implements OnDestroy {
 
         var empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
         var list = this.setup.list.subscribe(res => {
-            this.carteirasSetup = res.sort((x, y) => Number(y.ativo) - Number(x.ativo))
+            this.carteirasSetup = res.filter(x => x.ativo).sort((x, y) => {
+                if (x.nome < y.nome) { 
+                    return -1;
+                } else if (x.nome > y.nome) {
+                    return 1
+                } else { 
+                    return 0;
+                }
+            })
+            // .sort((x, y) => Number(y.ativo) - Number(x.ativo))
         });
         
         lastValueFrom(this.setup.getList(empresa_Id))

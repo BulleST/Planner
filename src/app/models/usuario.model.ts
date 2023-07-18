@@ -46,12 +46,16 @@ export var userColumns = [
         header: 'Nome',
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
+        maskType: MaskType.substring,
+        substringLength: 22,
     },
     {
         field: 'email',
         header: 'E-mail',
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
+        maskType: MaskType.substring,
+        substringLength: 30,
     },
     {
         field: 'telefoneCelular',

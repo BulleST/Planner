@@ -3,7 +3,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Account, Login, Register, ResetPassword } from '../models/account.model';
+import { Account, ChangePassword, Login, Register, ResetPassword, UpdateAccount } from '../models/account.model';
 import { Crypto } from '../utils/crypto';
 import { map, catchError, tap } from 'rxjs/operators';
 import { EmpresaService } from './empresa.service';
@@ -71,14 +71,16 @@ export class AccountService {
         this.http.post<any>(`${this.url}/accounts/revoke-token`, {}, { withCredentials: true } /**/)
             .subscribe({
                 next: res => {
+                },
+                error: error => {
+                    return throwError(() => new Error(error));
+                },
+                complete: () => {
                     this.stopRefreshTokenTimer();
                     this.setAccount(undefined);
                     this.router.navigate(['account', 'login']);
                     localStorage.clear();
                 },
-                error: error => {
-                    return throwError(() => new Error(error));
-                }
             });
     }
 
@@ -100,7 +102,6 @@ export class AccountService {
 
     resetPassword(object: ResetPassword) {
         return this.http.post(`${this.url}/accounts/reset-password`, object);
-
     }
 
     forgotPassword(email: string) {
@@ -109,6 +110,14 @@ export class AccountService {
 
     verifyEmail(token: string) {
         return this.http.post(`${this.url}/accounts/verify-email`, { token: token });
+    }
+
+    changePassword(object: ChangePassword) {
+        return this.http.post(`${this.url}/accounts/change-password`, object);
+    }
+
+    updateAccount(object: UpdateAccount) {
+        return this.http.post(`${this.url}/accounts/update-account`, object);
     }
 
     private refreshTokenTimeout;

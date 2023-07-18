@@ -98,6 +98,15 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
     getCellData(row: any, col: Column): any {
         return this.table.getCellData(row, col);
     }
+    
+    gelCellTitle(row: any, col: Column) {
+        const nestedProperties: string[] = col.field.split('.');
+        let title: any = row;
+        for (const prop of nestedProperties) {
+            title = title ? title[prop] ?? undefined : undefined;
+        }
+        return title;
+    }
 
     create() {
         if (this.canCreate) {

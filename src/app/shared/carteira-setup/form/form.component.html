@@ -15,9 +15,13 @@
                                    #nome="ngModel"
                                    [(ngModel)]="objeto.nome"
                                    placeholder="Digite para cadastrar nova carteira"
-                                   [required]="true">
+                                   [required]="true"
+                                   pattern="\S(.*\S)?">
                             <div *ngIf="nome.touched && nome.errors">
                                 <p class="text-danger error" *ngIf="nome.errors['required']">Esse campo é obrigatório</p>
+                                <p class="text-danger" *ngIf="nome.errors['pattern']">
+                                    <span *ngIf="nome.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -143,6 +147,11 @@
                                         </td>
                                         <td>{{item.produto.descricao}}</td>
                                         <td style="width: 80px; height: 43px;">
+                                            <input type="hidden" hidden
+                                                id="max-{{item.produto.tipoRisco.nome}}-{{i}}"
+                                                name="max-{{item.produto.tipoRisco.nome}}-{{i}}"
+                                                #max
+                                                [value]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel">
                                             <input type="text" *ngIf="item.produto.id != 61"
                                                    class="form-control"
                                                    id="percentual-{{item.produto.tipoRisco.nome}}-{{i}}"
@@ -152,10 +161,11 @@
                                                    decimalMarker=","
                                                    suffix="%"
                                                    #_percentual="ngModel"
-                                                   [max]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel"
-                                                   [placeholder]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel + '%' + ' disponível'"
+                                                   #percentual
+                                                   [max]="max.value"
+                                                   [placeholder]="max.value + '%' + ' disponível'"
                                                    [(ngModel)]="item.percentual"
-                                                   (change)="setChartProduto('');calcularPercentuais();">
+                                                   (change)="change(_percentual, $event)">
                                             <span *ngIf="item.produto.id == 61">-</span>
                                         </td>
                                         <td class="td-action">

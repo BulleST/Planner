@@ -19,6 +19,8 @@ export class DeletePlannerComponent implements OnDestroy {
     loading = false;
     id: number = 0;
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private router: Router,
@@ -27,6 +29,7 @@ export class DeletePlannerComponent implements OnDestroy {
         private plannerService: PlannerService,
         private crypto: Crypto
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
@@ -48,7 +51,7 @@ export class DeletePlannerComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send() {

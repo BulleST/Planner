@@ -25,7 +25,6 @@ export class VerifyEmailComponent {
         private toastrService: ToastrService,
         private table: Table
     ) {
-        // this.table.loading.next(true);
         const token = this.activatedRoute.snapshot.queryParams['token'];
         this.router.navigate([], { relativeTo: this.activatedRoute, replaceUrl: true });
         lastValueFrom(this.accountService.verifyEmail(token))

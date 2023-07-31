@@ -37,6 +37,8 @@ export class EditComponent implements OnDestroy {
     account?: Account;
     empresas: Empresa[] = [];
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
     
     constructor(
         private router: Router,
@@ -51,6 +53,7 @@ export class EditComponent implements OnDestroy {
         private accountService: AccountService,
         private table: Table,
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         var loading = this.table.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
 
@@ -81,11 +84,12 @@ export class EditComponent implements OnDestroy {
     }
 
     voltar() {
-       this.modal.voltar();
+       this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     empresaChange(e) {
-        var path = this.activatedRoute.children.at(this.activatedRoute.children.length - 1)?.routeConfig?.path ?? '';
+        var path = this.activatedRoute.children[this.activatedRoute.children.length - 1]?.routeConfig?.path ?? '';
+        console.log(path)
         this.router.navigate(['empresas', 'editar', this.crypto.encrypt(this.objeto.id), path],
                              {skipLocationChange: true});
     }

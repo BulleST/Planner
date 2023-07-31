@@ -10,6 +10,9 @@ import { DeletePlannerComponent } from './planner/delete-planner/delete-planner.
 import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
 import { DeactivatedComponent } from './deactivated/deactivated.component';
+import { VerPlannerReadonlyComponent } from './ver-planner-readonly/ver-planner-readonly.component';
+import { RoleGuard } from 'src/app/router-guards/role.guard';
+import { Role } from 'src/app/models/account-perfil.model';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [
@@ -28,6 +31,7 @@ const routes: Routes = [
         { path: 'investimento', component: FormInvestimentoComponent },
         { path: 'produto', component: FormProdutoComponent, canActivate: [ProdutoGuard] },
     ] },
+    { path: 'planner/:cliente_id/:backoffice_id', component: VerPlannerReadonlyComponent, canActivate: [RoleGuard], data: { roles: [Role.Backoffice]} }
 ];
 
 @NgModule({

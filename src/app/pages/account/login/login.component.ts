@@ -16,6 +16,7 @@ export class LoginComponent{
     login = new Login;
     loading: boolean = false;
     err = '';
+    emailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
     constructor(
         private accountService: AccountService,

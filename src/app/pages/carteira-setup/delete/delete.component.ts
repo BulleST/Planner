@@ -22,9 +22,9 @@ export class DeleteComponent implements OnDestroy {
     objeto: CarteiraSetup = new CarteiraSetup;
 
     subscription: Subscription[] = [];
-    ngOnDestroy(): void {
-        this.subscription.forEach(item => item.unsubscribe());
-    }
+
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -33,6 +33,7 @@ export class DeleteComponent implements OnDestroy {
         private setupService: CarteiraSetupService,
         private crypto: Crypto,
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
@@ -54,9 +55,13 @@ export class DeleteComponent implements OnDestroy {
             this.modal.setOpen(true);
         }, 200);
     }
+    
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send() {

@@ -12,7 +12,8 @@
                    [ngbPopover]="campoObrigatorio"
                    triggers="mouseenter:mouseleave"
                    required
-                   pattern="\S(.*\S)?">
+                   pattern="\S(.*\S)?"
+                   (change)="objeto.descricao = descricao.value.trim(); ">
             <div *ngIf="descricao.touched && descricao.errors">
                 <p class="text-danger" *ngIf="descricao.errors['required']">Este campo é obrigatório.</p>
                 <p class="text-danger" *ngIf="descricao.errors['pattern']">

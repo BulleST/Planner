@@ -90,7 +90,6 @@ export class DadosCadastraisComponent implements OnDestroy {
         if (this.url.includes('empresas/editar')) {
             lastValueFrom(this.empresaService.edit(this.objeto))
                 .catch(res => this.menuItems.erro.push(getError(res)))
-                .finally(() => this.table.loading.next(false));
         }
     }
 

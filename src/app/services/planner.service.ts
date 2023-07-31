@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Crypto } from '../utils/crypto';
@@ -54,7 +54,7 @@ export class PlannerService {
     getList() {
         this.table.loading.next(true);
         var empresaId = this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id;
-        return this.http.get<Planejamento[]>(`${this.url}/planejamento/all/${empresaId}`)
+        return this.http.get<Planejamento[]>(`${this.url}/planejamento/all/${empresaId}`, { headers: new HttpHeaders({ 'loading': 'false' })})
             .pipe(tap({
                 next: list => {
                     list = list.map(x => {
@@ -63,15 +63,13 @@ export class PlannerService {
                     });
                     this.list.next(list);
                     return of(list);
-                },
-                complete: () => {
-                    this.table.loading.next(false)
                 }
             }));
     }
 
     getByClienteId(cliente_id: number) {
-        return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`).pipe(map(planner => {
+        return this.http.get<Planejamento>(`${this.url}/planejamento/${cliente_id}`, { headers: new HttpHeaders({ 'loading': 'true' }) })
+        .pipe(map(planner => {
             planner.principaisObjetivos = planner.principaisObjetivos ? planner.principaisObjetivos : [];
             planner.planejamentoAgregandoValor = planner.planejamentoAgregandoValor == null ? new PlanejamentoAgregandoValor : planner.planejamentoAgregandoValor
             this.setObject(planner);

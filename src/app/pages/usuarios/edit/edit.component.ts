@@ -24,6 +24,8 @@ export class EditComponent implements OnDestroy {
     loading = false;
     url = '';
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -33,7 +35,7 @@ export class EditComponent implements OnDestroy {
         private userService: UsuarioService,
         private crypto: Crypto,
     ) {
-       
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
@@ -68,7 +70,7 @@ export class EditComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send(form: NgForm) {
@@ -91,7 +93,7 @@ export class EditComponent implements OnDestroy {
                         empresa.account = users;
                         this.empresaService.setObject(empresa, 'edit usuario');
                     }
-                    this.modal.voltar();
+                    this.modal.voltar(this.routerBack, this.routeBackOptions);
                 })
                 .catch(res => {
                     console.error(res)

@@ -17,8 +17,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
     faFilter = faFilter;
     faTimes = faTimes;
     faEllipsisV = faEllipsisV;
-    loading = false;
-    Role = Role;
 
     @Input() list: any[] = [];
     @Input() filterLink = true;
@@ -36,6 +34,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
     // selectedItems: any[] = [];
     filters: string[] = [];
     routeRow: string[] = [];
+    loading = false;
+    Role = Role;
 
     subscription: Subscription[] = [];
 
@@ -44,12 +44,13 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
         private router: Router
     ) {
         this.filters = this.columns.map(x => x.field);
+
         var loading = this.table.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
+
         if (this.selectable) {
             var selected = this.table.selected.subscribe(res => this.selected = res);
             this.subscription.push(selected);
-            // this.table.selectedItems.subscribe(res => this.selectedItems = res);
         }
     }
 

@@ -6,7 +6,7 @@ import { AlertService } from '../parts/alert/alert.service';
 import { EmpresaService } from '../services/empresa.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CarteiraSetupGuard implements CanActivate {
   constructor(

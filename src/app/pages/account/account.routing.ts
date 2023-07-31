@@ -9,14 +9,17 @@ import { TermosDeUsoComponent } from './termos-de-uso/termos-de-uso.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'prefix', },
-    { path: 'login', component: LoginComponent },
-    { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password', component: ResetPasswordComponent },
-    {
-        path: 'register', component: CreateAccountComponent, children: [
+    { path: 'login', component: LoginComponent , children: [
             { path: 'termos-de-uso', component: TermosDeUsoComponent },
         ]
     },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
+    // {
+    //     path: 'register', component: CreateAccountComponent, children: [
+    //         { path: 'termos-de-uso', component: TermosDeUsoComponent },
+    //     ]
+    // },
     { path: 'verify-email', component: VerifyEmailComponent },
 
 ];

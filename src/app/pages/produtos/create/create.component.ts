@@ -27,6 +27,8 @@ export class CreateComponent implements OnDestroy {
     loading = false;
     url = '';
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -35,6 +37,7 @@ export class CreateComponent implements OnDestroy {
         private produtoService: ProdutoService,
         private crypto: Crypto
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
@@ -64,7 +67,7 @@ export class CreateComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send(model: ProdutoRequest) {
@@ -83,7 +86,7 @@ export class CreateComponent implements OnDestroy {
             }
             lastValueFrom(this.produtoService.create(model))
                 .then((res) => {
-                    this.modal.voltar();
+                    this.modal.voltar(this.routerBack, this.routeBackOptions);
                     lastValueFrom(this.produtoService.getList());
                 })
                 .catch(res => {

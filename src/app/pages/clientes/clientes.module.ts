@@ -23,6 +23,7 @@ import { GraficoComparativoComponent } from './planner/grafico-comparativo/grafi
 import { DeactivatedComponent } from './deactivated/deactivated.component';
 import { PatrimonioPorIdadeComponent } from './planner/patrimonio-por-idade/patrimonio-por-idade.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { VerPlannerReadonlyComponent } from './ver-planner-readonly/ver-planner-readonly.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { InputTextModule } from 'primeng/inputtext';
     EditComponent,
     GraficoComparativoComponent,
     DeactivatedComponent,
-    PatrimonioPorIdadeComponent
+    PatrimonioPorIdadeComponent,
+    VerPlannerReadonlyComponent
   ],
   imports: [
     CommonModule,

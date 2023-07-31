@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map } from 'rxjs';
 import { Crypto } from '../utils/crypto';
@@ -155,10 +155,11 @@ export class CarteiraSetupService {
     }
 
     getList(empresaId?: number, ativo?: any) {
+        this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
         ativo = ativo != undefined ? ativo : '';
-        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/all/${empresaId}/${ativo}`).pipe(
-            map(list => {
+        return this.http.get<CarteiraSetup[]>(`${this.url}/carteiraSetup/all/${empresaId}/${ativo}`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        .pipe(map(list => {
                 list = list.map(x => {
                     x.ativo = x.dataDesativado != undefined ? false : true;
                     return x;
@@ -170,7 +171,7 @@ export class CarteiraSetupService {
     }
 
     get(id: number) {
-        return this.http.get<CarteiraSetup>(`${this.url}/carteiraSetup/${id}`)
+        return this.http.get<CarteiraSetup>(`${this.url}/carteiraSetup/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) })
             .pipe(map(item => {
                 this.setObject(item);
                 item.ativo = item.dataDesativado != undefined ? false : true;

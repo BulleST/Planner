@@ -1,10 +1,12 @@
-import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NgModel, ValidationErrors } from '@angular/forms';
+import { AfterContentChecked, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 
 @Component({
     selector: 'app-input-number',
     templateUrl: './input-number.component.html',
-    styleUrls: ['./input-number.component.css']
+    styleUrls: ['./input-number.component.css'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    viewProviders: [{provide: ControlContainer, useExisting: NgForm }] // Permite validação de form pai em input de componente filho
 })
 export class InputNumberComponent implements OnChanges {
 
@@ -20,6 +22,7 @@ export class InputNumberComponent implements OnChanges {
     @Input() required: boolean = false;
     @Input() arrowControls: boolean = true;
     @Input() showErrorMessage: boolean = true;
+    @Input() showPopover: boolean = true;
     @Input() allowNegativeNumbers?: boolean = false;
     @Input() placeholder = '';
     @Input() readonly = false;
@@ -43,10 +46,12 @@ export class InputNumberComponent implements OnChanges {
         if (changes['required']) this.required = changes['required'].currentValue;
         if (changes['arrowControls']) this.arrowControls = changes['arrowControls'].currentValue;
         if (changes['showErrorMessage']) this.showErrorMessage = changes['showErrorMessage'].currentValue;
+        if (changes['showPopover']) this.showPopover = changes['showPopover'].currentValue;
         if (changes['placeholder']) this.placeholder = changes['placeholder'].currentValue;
         if (changes['allowNegativeNumbers']) this.allowNegativeNumbers = changes['allowNegativeNumbers'].currentValue;
         if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
         if (changes['disabled']) this.disabled = changes['disabled'].currentValue;
+       
        
         setTimeout(() => {
             this.validate();
@@ -61,7 +66,8 @@ export class InputNumberComponent implements OnChanges {
         } 
         if (this.max != undefined && (this.valueInput > this.max))
             this.input.control.setErrors({max: true});
-        else if (this.min != undefined && (this.valueInput < this.min)) 
+
+        if (this.min != undefined && (this.valueInput < this.min)) 
             this.input.control.setErrors({min: true});
     }
 

@@ -23,6 +23,8 @@ export class DeleteComponent implements OnDestroy {
     url = '';
     objeto: Usuario = new Usuario;
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -33,6 +35,7 @@ export class DeleteComponent implements OnDestroy {
         private crypto: Crypto,
     ) {
 
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
@@ -59,7 +62,7 @@ export class DeleteComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send() {

@@ -9,7 +9,13 @@ export class Crypto {
 
 	encrypt(data: any) {
 		try {
-			return CryptoJS.AES.encrypt(JSON.stringify(data), this.encryptSecretKey).toString();
+            if (!data) {
+                return null;
+            }
+            var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), this.encryptSecretKey).toString(); while(encrypted.includes('/')) {
+                encrypted = encrypted.replace('/', 'slash'); // Removendo barras para aplicar encrypt em rotas
+            }
+			return encrypted;
 		} catch (e) {
 			console.error(e);
 			return null;
@@ -18,6 +24,12 @@ export class Crypto {
 
 	decrypt(data: any) {
 		try {
+            if (!data) {
+                return null;
+            }
+            while(data.includes('slash')) {
+                data = data.replace('slash', '/'); // Reaplicando as barras para decryptar
+            }
 			const bytes = CryptoJS.AES.decrypt(data, this.encryptSecretKey);
 			if (bytes.toString()) {
 				return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));

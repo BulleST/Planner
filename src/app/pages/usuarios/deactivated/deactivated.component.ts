@@ -22,6 +22,8 @@ export class DeactivatedComponent implements OnDestroy {
     url = '';
     objeto: Usuario = new Usuario;
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -29,6 +31,7 @@ export class DeactivatedComponent implements OnDestroy {
         public userService: UsuarioService,
         private crypto: Crypto,
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
       
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
@@ -45,7 +48,7 @@ export class DeactivatedComponent implements OnDestroy {
                         }, 200);
                     })
                     .catch(res => {
-                        this.modal.voltar();
+                        this.modal.voltar(this.routerBack, this.routeBackOptions);
                     })
                     .finally(() => {});
                 
@@ -61,7 +64,7 @@ export class DeactivatedComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
 }

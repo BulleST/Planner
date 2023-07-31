@@ -155,7 +155,12 @@ export class Table {
         return tableLinks.map(link => {
             if (link.paramsFieldName != undefined && link.paramsFieldName.length) {
                 var paramnsMap = link.paramsFieldName.map(p => {
-                    return this.crypto.encrypt(this.selected.value[p]) ?? '';
+                    const nestedProperties: string[] = p.split('.');
+                    let value: any = this.selected.value;
+                    for (const prop of nestedProperties) {
+                        value = value ? value[prop] ?? undefined : undefined;
+                    }
+                    return this.crypto.encrypt(value) ?? '';
                 })
                 link.fullRoute = [].concat(link.routePath as never[], paramnsMap as never[])
             } else {

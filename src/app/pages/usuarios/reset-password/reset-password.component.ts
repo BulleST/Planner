@@ -26,7 +26,10 @@ export class ResetPasswordComponent implements OnDestroy {
     objeto: Usuario = new Usuario;
     subscription: Subscription[] = [];
 
-    userLogado?: Account
+    userLogado?: Account;
+    
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -72,7 +75,7 @@ export class ResetPasswordComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send() {

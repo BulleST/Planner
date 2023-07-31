@@ -9,6 +9,10 @@ export class Format {
 
 
 }
+
+export function trim(value: string) {
+    return value.toString().trim();
+}
 export function stringToDecimal(value: string) {
     value = value.replace('R$', '').replace('%', '').replace(' ', '').replace('.', '').replace(',', '.')
     return parseFloat(value);

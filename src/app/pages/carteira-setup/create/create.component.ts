@@ -26,6 +26,8 @@ export class CreateComponent implements OnDestroy {
     url = '';
     subscription: Subscription[] = [];
     clearData = false;
+    routerBack: string[] = ['../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -34,6 +36,8 @@ export class CreateComponent implements OnDestroy {
         private toastr: ToastrService,
         private crypto: Crypto,
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
+
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         if (this.url.includes('empresas/editar')) {
             var params = activatedRoute.parent?.parent?.params.subscribe(p => {
@@ -49,7 +53,7 @@ export class CreateComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     ngOnDestroy(): void {
@@ -78,14 +82,14 @@ export class CreateComponent implements OnDestroy {
             }
 
             lastValueFrom(this.setupService.create(this.objeto))
-            .then((res) => {
-                    this.modal.voltar();
+                .then((res) => {
+                    this.voltar();
                     lastValueFrom(this.setupService.getList());
                 })
-            .catch(res => {
+                .catch(res => {
                     this.erro.push(getError(res));
                 })
-            .finally(() => this.loading = false);
+                .finally(() => this.loading = false);
         }
     }
 }

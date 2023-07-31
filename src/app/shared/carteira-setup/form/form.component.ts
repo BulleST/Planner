@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NgForm, NgModel } from '@angular/forms';
+import { NgForm, NgModel, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faChartSimple, faEdit, faPlus, faTable, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -57,6 +57,8 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     @ViewChild('chartProdutos') private chartProdutos;
     subscription: Subscription[] = [];
 
+    hasViewInit = false;
+
     constructor(
         private toastr: ToastrService,
         private empresaService: EmpresaService,
@@ -95,11 +97,12 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        let index = 0;
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
-            this.setChartProduto();
-            this.validatePercentualRisco();
+            if (this.hasViewInit) {
+                this.setChartProduto();
+                this.validatePercentualRisco();
+            }
         }
 
         if (changes['loading'])
@@ -119,11 +122,13 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     ngAfterViewInit(): void {
+        this.hasViewInit = true;
         var windowWidth = window.innerWidth;
         var container = $('.chart-container').width() ?? 0;
         var viewport = 100 / windowWidth;
         this.chartWidth = (viewport * container).toString() + 'vw';
         this.setChartProduto();
+        this.validatePercentualRisco();
     }
 
 
@@ -169,15 +174,21 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         this.calcularPercentuais();
     }
 
-change(input: NgModel,  e: any) {
-    var max = parseFloat($(e.target).attr('max') ?? '0');
-    if (input.value > max) {
-        input.control.setErrors({ max: true });
-        return;
+    change(input: NgModel, min: number, max: number) {
+        if (input.value > 100) {
+            input.control.setErrors({ max: true });
+            return;
+        }
+        if (input.value > max) {
+            input.control.setErrors({ max: true });
+            return;
+        }
+        if (input.value < min) {
+            input.control.setErrors({ min: true });
+            return;
+        }
+        this.setChartProduto();
     }
-    this.calcularPercentuais();
-    this.setChartProduto();
-}
 
     calcularPercentuais() {
         this.tipoRiscos = this.tipoRiscos.map(x => {
@@ -199,82 +210,83 @@ change(input: NgModel,  e: any) {
         tipoRiscos = tipoRiscos.filter((value: any, index: any, self: any) => {
             return index === self.findIndex((x: any) => (x.id === value.id))
         });
-        var chartHeight = 70;
-        tipoRiscos.forEach(item => chartHeight = chartHeight+=30);
-        this.chartHeight = chartHeight + 'px';
-        
-        this.optionsChartProduto = {
-            onClick: (e: any) => { },
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0,0,0,0.95)',
-                    padding: {
-                        x: 15,
-                        y: 10
+        if (tipoRiscos.length > 0) {
+            var chartHeight = 70;
+            tipoRiscos.forEach(item => chartHeight = chartHeight+=30);
+            this.chartHeight = chartHeight + 'px';
+            this.optionsChartProduto = {
+                onClick: (e: any) => { },
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false,
                     },
-                    callbacks: {
-                        beforeTitle: (ctx) => {
-                            let obj = ctx[0].element.$context.raw as CarteiraProdutoRel;
-                            return obj.produto.tipoRisco?.nome;
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.95)',
+                        padding: {
+                            x: 15,
+                            y: 10
                         },
-                        title: (ctx) => {
-                            return '';
-                        },
-                    
-                    }
-                },
-            },
-            scales: {
-                xAxes: {
-                    stacked: true,
-                    min: 0,
-                    max: 100,
-                    suggestedMax: 100,
-                    scaleLabel: { display: true },
-                    grid: {
-                        drawBorder: false,
-                    },
-                    ticks: {
-                        callback: function(value, index, ticks) {
-                            return value + '%';
+                        callbacks: {
+                            beforeTitle: (ctx) => {
+                                let obj = ctx[0].element.$context.raw as CarteiraProdutoRel;
+                                return obj.produto.tipoRisco?.nome;
+                            },
+                            title: (ctx) => {
+                                return '';
+                            },
+                        
                         }
+                    },
+                },
+                scales: {
+                    xAxes: {
+                        stacked: true,
+                        min: 0,
+                        max: 100,
+                        suggestedMax: 100,
+                        scaleLabel: { display: true },
+                        grid: {
+                            drawBorder: false,
+                        },
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    yAxes: {
+                        scaleLabel: { display: true },
+                        stacked: true,
+                        drawOnChartArea: tipoRiscos.length > 0,
+                        drawBorder: tipoRiscos.length > 0,
+                        display: tipoRiscos.length > 0,
                     }
                 },
-                yAxes: {
-                    scaleLabel: { display: true },
-                    stacked: true,
-                    drawOnChartArea: tipoRiscos.length > 0,
-                    drawBorder: tipoRiscos.length > 0,
-                    display: tipoRiscos.length > 0,
-                }
-            },
-            parsing: {
-                yAxisKey: 'produto.tipoRisco.nome',
-                xAxisKey: 'percentual'
-            },
-        }
-       
-        this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
-        let a = this.objeto.carteiraProdutoRel.map(x => {
-            return {
-                type: 'bar',
-                axis: 'y',
-                label: `${x.produto.descricao}`,
-                backgroundColor: colors[index++],
-                data: [ x ]
+                parsing: {
+                    yAxisKey: 'produto.tipoRisco.nome',
+                    xAxisKey: 'percentual'
+                },
             }
-        })
-        this.dataProduto = {
-            datasets: a,
-        }
-        if (this.chartProdutos) {
-            var e = this.chartProdutos.chart.update();
+           
+            this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
+            let a = this.objeto.carteiraProdutoRel.map(x => {
+                return {
+                    type: 'bar',
+                    axis: 'y',
+                    label: `${x.produto.descricao}`,
+                    backgroundColor: colors[index++],
+                    data: [ x ]
+                }
+            })
+            this.dataProduto = {
+                datasets: a,
+            }
+            setTimeout(() => {
+                this.chartProdutos.chart.update();
+            }, 300);
         }
 
     }
@@ -324,7 +336,8 @@ change(input: NgModel,  e: any) {
     validatePercentualRisco() {
         let invalid = false;
         let riscos: CarteiraRiscoRel[] = [];
-        for(let rel of this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined)) {
+        let produtos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined);
+        for(let rel of produtos) {
             let index = riscos.findIndex(x => x.tipoRisco_Id == rel.produto.tipoRisco_Id);
             if (index != -1) {
                 riscos[index].percentual += rel.percentual;
@@ -339,7 +352,7 @@ change(input: NgModel,  e: any) {
             }
         }
         this.erro = riscos.filter(x => x.percentual != 100).map(x => {
-            return `A soma do percentual dos produtos para cada tipo de risco ${x.tipoRisco.nome} deve ser 100%.`
+            return `A soma do percentual dos produtos para o risco ${x.tipoRisco.nome} deve ser 100%.`
         });
         if (this.objeto.carteiraProdutoRel.length == 0) {
             this.erro.push('Você deve selecionar pelo menos um produto');

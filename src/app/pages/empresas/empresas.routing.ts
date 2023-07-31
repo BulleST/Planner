@@ -6,6 +6,7 @@ import { DeleteComponent } from './delete/delete.component';
 import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 import { DadosCadastraisComponent } from './shared/dados-cadastrais/dados-cadastrais.component';
+import { CarteiraSetupGuard } from 'src/app/router-guards/carteira-setup.guard';
 
 // Clientes
 import { ClientesComponent } from './shared/clientes/clientes.component';
@@ -35,7 +36,6 @@ import { EditComponent as CarteiraSetup_EditComponent } from './../carteira-setu
 import { DeleteComponent as CarteiraSetup_DeleteComponent } from './../carteira-setup/delete/delete.component';
 import { DeactivatedComponent as CarteiraSetup_DeactivatedComponent } from './../carteira-setup/deactivated/deactivated.component';
 
-import { CarteiraSetupGuard } from 'src/app/helpers/carteira-setup.guard';
 import { DeactivatedComponent } from './deactivated/deactivated.component';
 
 const routes: Routes = [

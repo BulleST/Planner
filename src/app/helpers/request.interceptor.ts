@@ -12,12 +12,6 @@ import { getError } from '../utils/error';
     providedIn: 'root'
 })
 export class RequestInterceptor implements HttpInterceptor {
-    constructor(
-        private router: Router,
-        private toastr: ToastrService,
-        private table: Table,
-        private loadingUtils: LoadingService,
-    ) { }
 
     excludeUrlsToastr = [
         'tributacao/getAll',
@@ -35,7 +29,6 @@ export class RequestInterceptor implements HttpInterceptor {
         'accounts/get-login',
     ];
 
-
     excludeUrlsLoading = [
         'tributacao/getAll',
         'tipoLiquidez/getAll',
@@ -46,20 +39,29 @@ export class RequestInterceptor implements HttpInterceptor {
         'estadoCivil/getAll',
         'accounts/verify-email',
         'accounts/refresh-token',
-        '/empresa/',
-    ]
+    ];
+
+    constructor(
+        private router: Router,
+        private toastr: ToastrService,
+        private table: Table,
+        private loadingUtils: LoadingService,
+    ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var notLoading = this.excludeUrlsLoading.filter(x => request.url.includes(x));
         var notToastr = this.excludeUrlsToastr.filter(x => request.url.includes(x));
 
-        const started = Date.now();
-        let ok: string;
-
-        if (notLoading.length == 0)
+        var loadingHeader = request.headers.get('loading');
+        if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE' || loadingHeader == 'true') {
             this.loadingUtils.loading.next(true);
+            this.loadingUtils.addLoadingRequest();
+        }
+
+        if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE') {
+            this.table.resetSelection();
+        }
             
-        this.table.resetSelection();
 
         return next.handle(request).pipe(
             tap({
@@ -68,13 +70,10 @@ export class RequestInterceptor implements HttpInterceptor {
                         // request in progress
                     }
                     else if (data instanceof HttpResponse) {
-                        if ([200, 204, 201].includes(data.status)
-                            && ['POST', 'PUT', 'DELETE'].includes(request.method)) {
-                            if (notToastr.length == 0) {
-                                if (request.method == 'POST') this.toastr.success('Operação concluída com sucesso');
-                                if (request.method == 'DELETE') this.toastr.success('Registro excluído com sucesso');
-                                if (request.method == 'PUT') this.toastr.success('Registro atualizado com sucesso');
-                            }
+                        if ([200, 204, 201].includes(data.status)) {
+                            if (request.method == 'POST') this.toastr.success('Operação concluída com sucesso');
+                            else if (request.method == 'DELETE') this.toastr.success('Registro excluído com sucesso');
+                            else if (request.method == 'PUT') this.toastr.success('Registro atualizado com sucesso');
                         }
                     }
                 },
@@ -87,31 +86,27 @@ export class RequestInterceptor implements HttpInterceptor {
                         returnUrl = returnUrl.includes('account/login') ? '' : returnUrl;
                         this.router.navigate(['account', 'login'], { queryParams: { returnUrl } });
                         localStorage.clear();
-                        if (notToastr.length == 0) {
-                            this.toastr.error('Faça login')
-                            this.toastr.error('Acesso não autorizado.');
-                        }
+                        this.toastr.error('Faça login')
+                        this.toastr.error('Acesso não autorizado.');
                     }
                     else if (res.status == 403) {
                         this.toastr.error('Permissão negada.');
                     }
-                    else {
+                    else if (notToastr.length == 0) {
                         this.toastr.error(msg);
                     }
 
-                    ok = 'failed'
                     return throwError(() => new Error(msg));
 
                 }
             }),
             // Log when response observable either completes or errors
             finalize(() => {
-                const elapsed = Date.now() - started;
-                const msg = `${request.method} "${request.urlWithParams}"
-                    ${ok} in ${elapsed} ms.`;
-
                 this.table.loading.next(false)
                 this.loadingUtils.loading.next(false);
+                if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE' || loadingHeader == 'true') {
+                    this.loadingUtils.removeLoadingRequest();
+                }
             }),
         );
     }

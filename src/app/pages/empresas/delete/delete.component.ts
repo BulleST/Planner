@@ -21,6 +21,8 @@ export class DeleteComponent implements OnDestroy {
     erro: any[] = [];
     loading = false;
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private router: Router,
@@ -30,6 +32,7 @@ export class DeleteComponent implements OnDestroy {
         private empresaService: EmpresaService,
         private crypto: Crypto
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);

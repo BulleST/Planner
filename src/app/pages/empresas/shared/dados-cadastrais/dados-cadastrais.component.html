@@ -23,7 +23,7 @@
                            popoverClass="popover-danger"
                            [ngbPopover]="campoObrigatorio" 
                            triggers="mouseenter:mouseleave"
-                           (change)="setDadosCadastrais()"
+                           (change)="objeto.nome = nome.value.trim(); setDadosCadastrais()"
                            pattern="\S(.*\S)?">
                     <div *ngIf="nome.touched && nome.errors">
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>

@@ -620,7 +620,6 @@ input {
     font-size: 14px;
 }
 
-.form-control-number:not(.form-control[disabled]):not(.form-control[readonly]):hover,
 .form-control-number:not(.form-control[disabled]):not(.form-control[readonly]):focus {
     background-image: url(./assets/img/chevron-updown.png);
     background-size: 8px;
@@ -1875,4 +1874,8 @@ body {
 
 .p-dropdown-item:hover {
     background-color: #bfccf4!important;
+}
+
+.text-wrap-balance {
+    text-wrap: balance;
 }

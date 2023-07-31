@@ -5,6 +5,7 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 import { ModalOpen } from 'src/app/utils/modal-open';
 import { MenuItems } from '../shared/menu-items/menu-items';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -24,12 +25,16 @@ export class CreateComponent implements OnDestroy {
     index: number = 1;
     cnpjValid = false;
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../'];
+    routeBackOptions: any;
 
     constructor(
         private empresaService: EmpresaService,
         menuItems: MenuItems,
-        private modal: ModalOpen
+        private modal: ModalOpen,
+        private activatedRoute: ActivatedRoute,
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         
         if ( this.empresaService.object == undefined)
             this.empresaService.setObject(new Empresa, 'CreateComponent');
@@ -52,7 +57,7 @@ export class CreateComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
 }

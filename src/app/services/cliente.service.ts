@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map, of, tap } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
@@ -151,7 +151,7 @@ export class ClienteService {
     getList(empresaId?: number) {
         this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
-        return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresaId}`)
+        return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresaId}`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {
                     list = list.map(x => {
@@ -160,15 +160,16 @@ export class ClienteService {
                     });
                     this.list.next(list);
                     return of(list);
-                },
-                complete: () => {
-                    this.table.loading.next(false)
                 }
             }));
     }
 
     get(id: number) {
-        return this.http.get<Cliente>(`${this.url}/cliente/${id}`);
+        return this.http.get<Cliente>(`${this.url}/cliente/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) })
+    }
+
+    getByDoc(id: number, doc: number) {
+        return this.http.get<boolean>(`${this.url}/cliente/get-by-doc/${id}/${doc}`);
     }
 
     create(request: Cliente) {

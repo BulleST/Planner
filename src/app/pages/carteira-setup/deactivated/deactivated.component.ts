@@ -23,6 +23,9 @@ export class DeactivatedComponent implements OnDestroy {
     objeto: CarteiraSetup = new CarteiraSetup;
     subscription: Subscription[] = [];
 
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: ModalOpen,
@@ -30,6 +33,7 @@ export class DeactivatedComponent implements OnDestroy {
         private crypto: Crypto,
     ) {
 
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
 
@@ -54,7 +58,7 @@ export class DeactivatedComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
 }

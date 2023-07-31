@@ -3,6 +3,7 @@
 .form-control-solucaoInicial:hover,
 .form-control-solucaoInicial:hover:focus {
     background-color: var(--primary) !important;
+    background-image: none !important;
     border-radius: 0;
     color: #fff !important;
     outline: none !important;
@@ -25,6 +26,13 @@ input#solucao_montante_Atual {
     border: none;
 }
 
+tr.bg-light td {
+    border: 1px #919090 solid;
+    border-left-color: #ececed;
+    border-right-color: #ececed;
+    border-spacing: 1px;
+    border-collapse: separate;
+}
 
 tr.bg-danger td {
     background-color: #f1d6d6 !important;
@@ -33,6 +41,14 @@ tr.bg-danger td {
     border-right-color: #f1d6d6;
     border-spacing: 1px;
     border-collapse: separate;
+}
+
+tr.bg-danger td .form-control {
+    background-color: #f1d6d6;
+}
+
+tr.bg-light td .form-control {
+    background-color: #ececed;
 }
 
 tr.bg-danger td .form-control {

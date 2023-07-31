@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
@@ -37,13 +38,18 @@ export class FormProdutoComponent implements OnDestroy {
     tipoRiscos: TipoRisco[] = [];
     loadingRiscos = true;
 
+    routerBack: string[] = ['../'];
+    routeBackOptions: any;
+
     constructor(
         private modal: ModalOpen,
         private plannerService: PlannerService,
         private produtoService: ProdutoService,
         private dropdown: DropdownService,
         private crypto: Crypto,
+        private activatedRoute: ActivatedRoute,
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
        
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
         this.subscription.push(getOpen);
@@ -82,7 +88,7 @@ export class FormProdutoComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     setProdutos() {

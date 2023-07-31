@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RoleGuard } from 'src/app/helpers/role.guard';
 import { Role } from 'src/app/models/account-perfil.model';
 import { InitialComponent } from './initial/initial.component';
 import { MinhaEmpresaComponent } from './minha-empresa/minha-empresa.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { RoleGuard } from 'src/app/router-guards/role.guard';
 
 const clientes = () => import('./../clientes/clientes.module').then(res => res.ClientesModule);
 const empresas = () => import('./../empresas/empresas.module').then(res => res.EmpresasModule);

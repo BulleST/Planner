@@ -24,6 +24,8 @@ export class CreateComponent implements OnDestroy {
     loading = false;
     url = '';
     subscription: Subscription[] = [];
+    routerBack: string[] = ['../'];
+    routeBackOptions: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -33,6 +35,8 @@ export class CreateComponent implements OnDestroy {
         private empresaService: EmpresaService,
         private crypto: Crypto
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
+
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
 
         var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
@@ -61,7 +65,7 @@ export class CreateComponent implements OnDestroy {
 
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send(form: NgForm) {
@@ -78,7 +82,7 @@ export class CreateComponent implements OnDestroy {
         else { // Enviar para a API
             lastValueFrom(this.userService.create(this.objeto))
                 .then(async res => {
-                    this.modal.voltar();
+                    this.modal.voltar(this.routerBack, this.routeBackOptions);
                     var users = await lastValueFrom(this.userService.getList());
                     if (this.url.includes('empresas/editar')) {
                         var empresa = this.empresaService.object;

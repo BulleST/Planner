@@ -81,10 +81,8 @@ export class SetupComponent implements OnDestroy {
     }
 
     next() {
-        this.table.loading.next(true);
         this.menuItems.erro = [];
         if (!this.objeto.nome.trim() || !this.objeto.cnpj.toString().trim() || !this.objeto.cnpj ||!this.objeto.email.trim()) {
-            this.table.loading.next(false);
             this.menuItems.erro.push('Dados cadastrais inválidos.');
             this.toastr.error('Dados cadastrais inválidos.');
             return;
@@ -133,7 +131,6 @@ export class SetupComponent implements OnDestroy {
                 this.modal.voltar();
             })
             .catch(res => this.menuItems.erro.push(getError(res)))
-            .finally(() => this.table.loading.next(false));
         }
         else if (this.url.includes('empresas/editar')) { // Enviar para a API
             lastValueFrom(this.empresaService.edit(obj))
@@ -142,7 +139,6 @@ export class SetupComponent implements OnDestroy {
                 this.modal.voltar();
             })
             .catch(res => this.menuItems.erro.push(getError(res)))
-            .finally(() => this.table.loading.next(false));
         }
     }
     

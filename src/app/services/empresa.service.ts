@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
 import { Empresa } from '../models/empresa.model';
 import { Crypto } from '../utils/crypto';
@@ -40,7 +40,7 @@ export class EmpresaService {
 
     getList() {
         this.table.loading.next(true);
-        return this.http.get<Empresa[]>(`${this.url}/empresa/`)
+        return this.http.get<Empresa[]>(`${this.url}/empresa/`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -49,18 +49,14 @@ export class EmpresaService {
                 });
                 this.list.next(list);
                 return of(list);
-            },
-            complete: () => {
-                this.table.loading.next(false)
             }
         }));
     }
 
     get(id: number) {
-        return this.http.get<Empresa>(`${this.url}/empresa/${id}`)
+        return this.http.get<Empresa>(`${this.url}/empresa/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) })
         .pipe(map(item => {
             this.setObject(item, 'get');
-            this.table.loading.next(false); //Colocando aqui pq no interceptor não funciona 
             return item;
         }));
     }

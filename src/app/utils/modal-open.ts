@@ -29,11 +29,15 @@ export class ModalOpen {
         localStorage.setItem('modal', value.toString())
     }
 
-    voltar() {
+    voltar(where?: string[], options?: any) {
         this.setOpen(false);
         // this.router.dispose()
         setTimeout(() => {
-            this.location.back();
+            if (where && where.length > 0) {
+                this.router.navigate(where, options)
+            } else {
+                this.location.back();
+            }
         }, 200);
     }
 }

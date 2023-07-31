@@ -1,4 +1,4 @@
-<div class="modal__content">
+<div class="modal__content py-0">
     <div class="modal__header pb-2" style="padding: 0 25px;">
         <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
             <a class="link text-dark" (click)="voltar()">
@@ -22,8 +22,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-5 col-md-5 col-sm-12">
-                                    <label for="nome">Nome Completo: <span class="text-danger">*</span>
-                                    </label>
+                                    <label for="nome">Nome Completo: <span class="text-danger">*</span></label>
                                     <input type="text"
                                            name="nome"
                                            id="nome"
@@ -35,8 +34,14 @@
                                            [disablePopover]="nome.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
+                                           (change)="planner.cliente.nome = nome.value.trim(); saveData()"
                                            pattern="\S(.*\S)?">
+                                    <div *ngIf="nome.errors">
+                                        <p class="text-danger" *ngIf="nome.errors['required']">Esse campo é obrigatório</p>
+                                        <p class="text-danger" *ngIf="nome.errors['pattern']">
+                                            <span *ngIf="nome.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
+                                        </p>
+                                    </div>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                     <label for="perfilInvestidor">Perfil de Investidor: <span class="text-danger">*</span></label>
@@ -94,8 +99,11 @@
                                            [disablePopover]="cpf.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
+                                           (change)="saveData(); validaRG_CPF(cpf, cpf.value)"
                                            pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}">
+                                    <div *ngIf="cpf.errors">
+                                        <p class="text-danger" *ngIf="cpf.errors['jaExiste']">{{cpf.errors['jaExiste']}}</p>
+                                    </div>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6">
                                     <label for="rg">RG: <span class="text-danger">*</span>
@@ -113,8 +121,11 @@
                                            [disablePopover]="rg.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()"
+                                           (change)="saveData(); validaRG_CPF(rg, rg.value)"
                                            pattern="\d{2}\.?\d{3}\.?\d{3}-?\d{1}">
+                                    <div *ngIf="rg.errors">
+                                        <p class="text-danger" *ngIf="rg.errors['jaExiste']">{{rg.errors['jaExiste']}}</p>
+                                    </div>
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-6">
                                     <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span></label>
@@ -133,37 +144,27 @@
                                            [disablePopover]="dataNascimento.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required>
-                                        <div *ngIf="dataNascimento.touched && dataNascimento.errors">
-                                            <p class="text-danger" *ngIf="dataNascimento.errors['min']"><small>Data mínima é {{dataNascimentoMin}}</small></p>
-                                            <p class="text-danger" *ngIf="dataNascimento.errors['max']"><small>Data máxima é {{dataNascimentoMax}}</small></p>
-                                        </div>
+                                    <div *ngIf="dataNascimento.touched && dataNascimento.errors">
+                                        <p class="text-danger" *ngIf="dataNascimento.errors['min']"><small>Data mínima é {{dataNascimentoMin}}</small></p>
+                                        <p class="text-danger" *ngIf="dataNascimento.errors['max']"><small>Data máxima é {{dataNascimentoMax}}</small></p>
+                                    </div>
                                     <!-- [formControl]="dataNascimento"      -->
                                 </div>
                                 <div class="form-group col-lg-2 col-md-2 col-sm-6 col-6">
-                                    <label for="idade">Idade: <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="text"
-                                           name="idade"
-                                           id="idade"
-                                           class="form-control form-control-number"
-                                           #idade="ngModel"
-                                           [(ngModel)]="planner.cliente.idade"
-                                           [ngbPopover]="campoObrigatorio"
-                                           popoverClass="popover-danger"
-                                           [disablePopover]="idade.errors == null"
-                                           triggers="mouseenter:mouseleave"
-                                           (keyup.arrowup)="planner.cliente.idade = arrowUp(idade.value)"
-                                           (keyup.arrowdown)="planner.cliente.idade = arrowDown(idade.value, true)"
-                                           mask="0*"
-                                           suffix=" anos"
-                                           required
-                                           (change)="saveData()">
+                                    <label for="idade">Idade: <span class="text-danger">*</span></label>
+                                    <app-input-number [valueInput]="planner.cliente.idade"
+                                                      (valueChanges)="planner.cliente.idade = $event; saveData();"
+                                                      [inputId]="'idade'"
+                                                      [mask]="'0*'"
+                                                      [suffix]="' anos'"
+                                                      [required]="true"
+                                                      [showErrorMessage]="false"
+                                                      [allowNegativeNumbers]="false"></app-input-number>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                    <label for="email">E-mail: <span class="text-danger">*</span>
-                                    </label>
+                                    <label for="email">E-mail: <span class="text-danger">*</span></label>
                                     <input type="email"
                                            [email]="true"
                                            name="email"
@@ -192,57 +193,33 @@
                                 <div class="form-row">
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
                                         <label for="receita">Receita: <span class="text-danger">*</span></label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="receita"
-                                               name="receita"
-                                               #receita="ngModel"
-                                               [(ngModel)]="planner.cliente.receita"
-                                               mask="separator"
-                                               thousandSeparator="."
-                                               decimalMarker=","
-                                               prefix="R$ "
-                                               [ngbPopover]="campoObrigatorio"
-                                               popoverClass="popover-danger"
-                                               [disablePopover]="receita.errors == null"
-                                               triggers="mouseenter:mouseleave"
-                                               (keyup.arrowup)="planner.cliente.receita = arrowUp(receita.value)"
-                                               (keyup.arrowdown)="planner.cliente.receita = arrowDown(receita.value, true)"
-                                               required
-                                               (change)="saveData()"
-                                               [min]="1"
-                                               [max]="100000000">
-                                               <div *ngIf="receita.touched && receita.errors">
-                                                   <p class="text-danger" *ngIf="receita.errors['min']">Valor mínimo é 1.</p>
-                                                   <p class="text-danger" *ngIf="receita.errors['max']">Valor máximo é 100.000.000.</p>
-                                               </div>
+                                        <app-input-number [valueInput]="planner.cliente.receita"
+                                                          (valueChanges)="planner.cliente.receita = $event; saveData();"
+                                                          [inputId]="'receita'"
+                                                          [mask]="'separator'"
+                                                          prefix="R$ "
+                                                          [min]="1"
+                                                          [max]="100000000"
+                                                          [required]="true"
+                                                          [showErrorMessage]="false"
+                                                          [allowNegativeNumbers]="true"
+                                                          placeholder="R$ 00,00"
+                                                          [showErrorMessage]="false"></app-input-number>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="despesa">Despesas: <span class="text-danger">*</span></label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="despesa"
-                                               name="despesa"
-                                               #despesa="ngModel"
-                                               [(ngModel)]="planner.cliente.despesa"
-                                               mask="separator"
-                                               thousandSeparator="."
-                                               decimalMarker=","
-                                               prefix="R$ "
-                                               [ngbPopover]="campoObrigatorio"
-                                               popoverClass="popover-danger"
-                                               [disablePopover]="despesa.errors == null"
-                                               triggers="mouseenter:mouseleave"
-                                               (keyup.arrowup)="planner.cliente.despesa = arrowUp(despesa.value)"
-                                               (keyup.arrowdown)="planner.cliente.despesa = arrowDown(despesa.value, true)"
-                                               required
-                                               [min]="1"
-                                               [max]="100000000"
-                                               (change)="saveData()">
-                                            <div *ngIf="despesa.touched && despesa.errors">
-                                                <p class="text-danger" *ngIf="despesa.errors['min']">Valor mínimo é 1.</p>
-                                                <p class="text-danger" *ngIf="despesa.errors['max']">Valor máximo é 100.000.000.</p>
-                                            </div>
+                                        <app-input-number [valueInput]="planner.cliente.despesa"
+                                                          (valueChanges)="planner.cliente.despesa = $event; saveData();"
+                                                          [inputId]="'despesa'"
+                                                          [mask]="'separator'"
+                                                          prefix="R$ "
+                                                          [min]="1"
+                                                          [max]="100000000"
+                                                          [required]="true"
+                                                          [showErrorMessage]="false"
+                                                          [allowNegativeNumbers]="true"
+                                                          placeholder="R$ 00,00"
+                                                          [showErrorMessage]="false"></app-input-number>
                                     </div>
                                 </div>
                             </div>
@@ -256,45 +233,29 @@
                                 <div class="form-row">
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
                                         <label for="taxaSelic">Taxa Selic: <span class="text-danger">*</span></label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="taxaSelic"
-                                               name="taxaSelic"
-                                               #taxaSelic="ngModel"
-                                               [(ngModel)]="planner.taxaSelic"
-                                               mask="separator"
-                                               thousandSeparator="."
-                                               decimalMarker=","
-                                               suffix="%"
-                                               [ngbPopover]="campoObrigatorio"
-                                               popoverClass="popover-danger"
-                                               [disablePopover]="taxaSelic.errors == null"
-                                               triggers="mouseenter:mouseleave"
-                                               (keyup.arrowup)="planner.taxaSelic = arrowUp(taxaSelic.value)"
-                                               (keyup.arrowdown)="planner.taxaSelic = arrowDown(taxaSelic.value, true)"
-                                               required
-                                               (change)="saveData()">
+                                        <app-input-number [valueInput]="planner.taxaSelic"
+                                                          (valueChanges)="planner.taxaSelic = $event; saveData();"
+                                                          [inputId]="'taxaSelic'"
+                                                          [mask]="'separator'"
+                                                          suffix="%"
+                                                          [required]="true"
+                                                          [showErrorMessage]="false"
+                                                          [allowNegativeNumbers]="true"
+                                                          [placeholder]="'0,00%'"
+                                                          [showErrorMessage]="false"></app-input-number>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="taxaIpca">Taxa IPCA: <span class="text-danger">*</span></label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="taxaIpca"
-                                               name="taxaIpca"
-                                               #taxaIpca="ngModel"
-                                               [(ngModel)]="planner.taxaIpca"
-                                               mask="separator"
-                                               thousandSeparator="."
-                                               decimalMarker=","
-                                               suffix="%"
-                                               [ngbPopover]="campoObrigatorio"
-                                               popoverClass="popover-danger"
-                                               [disablePopover]="taxaIpca.errors == null"
-                                               triggers="mouseenter:mouseleave"
-                                               (keyup.arrowup)="planner.taxaIpca = arrowUp(taxaIpca.value)"
-                                               (keyup.arrowdown)="planner.taxaIpca = arrowDown(taxaIpca.value, true)"
-                                               required
-                                               (change)="saveData()">
+                                        <app-input-number [valueInput]="planner.taxaIpca"
+                                                          (valueChanges)="planner.taxaIpca = $event; saveData();"
+                                                          [inputId]="'taxaIpca'"
+                                                          [mask]="'separator'"
+                                                          suffix="%"
+                                                          [required]="true"
+                                                          [showErrorMessage]="false"
+                                                          [allowNegativeNumbers]="true"
+                                                          [placeholder]="'0,00%'"
+                                                          [showErrorMessage]="false"></app-input-number>
                                     </div>
                                 </div>
                             </div>
@@ -409,10 +370,72 @@
                                               popoverClass="popover-danger"
                                               [disablePopover]="descricao.errors == null"
                                               triggers="mouseenter:mouseleave"
-                                              (change)="saveData()"
+                                              (change)="planner.descricao = descricao.value.trim(); saveData()"
                                               required
-                                              pattern="\S(.*)?">
+                                              pattern="\S(.*\S)?">
                                         </textarea>
+                                    <div *ngIf="descricao.errors">
+                                        <p class="text-danger" *ngIf="descricao.errors['pattern']">
+                                            <span *ngIf="descricao.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Analista responsável -->
+                    <div class="form-row mb-2">
+                        <div class="card card-body">
+                            <div class="home__container-header mb-2">
+                                <h6>Analista responsável</h6>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                    <label for="account">Analista responsável: <span class="text-danger">*</span></label>
+                                    <div *ngIf="account?.perfilAcesso_Id != 3">
+                                        <p-dropdown
+                                                    class="form-control"
+                                                    id="account"
+                                                    name="account"
+                                                    #_account="ngModel"
+                                                    [(ngModel)]="planner.account_Id"
+                                                    [class.form-control-loading]="loadingUsuarios"
+                                                    [disabled]="loadingCarteiraSetup"
+                                                    [options]="listUsuarios"
+                                                    optionLabel="name"
+                                                    optionValue="id"
+                                                    optionDisabled="dataDesativado"
+                                                    [filter]="true"
+                                                    filterBy="name, email"
+                                                    [showClear]="true"
+                                                    [placeholder]="loadingUsuarios ? 'Carregando' : 'Selecione para adicionar'"
+                                                    [required]="true"
+                                                    (ngModelChange)="planner.cliente.account_Id = _account.value">
+                                            <ng-template let-item pTemplate="item">
+                                                <p class="d-flex align-items-center justify-content-between">
+                                                    <span>{{item.name}}</span>
+                                                    <span class="flag flag-red"
+                                                          *ngIf="item.dataDesativado"
+                                                          [ngbPopover]="ativo"> Inativo </span>
+                                                    <ng-template #ativo>
+                                                        <span class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </span>
+                                                    </ng-template>
+                                                </p>
+                                                <p>{{item.email}}</p>
+                                            </ng-template>
+                                        </p-dropdown>
+                                        <div *ngIf="_account.errors">
+                                            <p class="text-danger" *ngIf="_account.errors['required']">Esse campo é obrigatório</p>
+                                        </div>
+                                    </div>
+                                    <input type="text" *ngIf="account?.perfilAcesso_Id == 3"
+                                           class="form-control"
+                                           id="account"
+                                           name="account"
+                                           #_account="ngModel"
+                                           [(ngModel)]="planner.account.name"
+                                           readonly
+                                           disabled>
                                 </div>
                             </div>
                         </div>
@@ -434,16 +457,15 @@
                                         </td>
                                         <td>
                                             <app-input-number [valueInput]="planner.cliente.idadeAposentadoria"
-                                                (valueChanges)="planner.cliente.idadeAposentadoria = $event; saveData();"
-                                                [inputId]="'idadeAposentadoria'"
-                                                [mask]="'0*'"
-                                                [suffix]="' anos'"
-                                                [min]="20"
-                                                [max]="100"
-                                                [required]="true"
-                                                [showErrorMessage]="false"
-                                                [allowNegativeNumbers]="false"
-                                            ></app-input-number>
+                                                              (valueChanges)="planner.cliente.idadeAposentadoria = $event; saveData();"
+                                                              [inputId]="'idadeAposentadoria'"
+                                                              [mask]="'0*'"
+                                                              [suffix]="' anos'"
+                                                              [min]="20"
+                                                              [max]="100"
+                                                              [required]="true"
+                                                              [showErrorMessage]="false"
+                                                              [allowNegativeNumbers]="false"></app-input-number>
                                         </td>
                                     </tr>
                                     <tr>
@@ -452,18 +474,17 @@
                                         </td>
                                         <td>
                                             <app-input-number [valueInput]="planner.cliente.rendaMensalAposentadoria"
-                                                (valueChanges)="planner.cliente.rendaMensalAposentadoria = $event; saveData();"
-                                                [inputId]="'rendaMensalAposentadoria'"
-                                                [mask]="'separator.5'"
-                                                [thousandSeparator]="'.'"
-                                                [decimalMarker]="','"
-                                                [prefix]="'R$'"
-                                                [min]="1"
-                                                [max]="100000000"
-                                                [required]="true"
-                                                [placeholder]="'R$ 00,00'"
-                                                [showErrorMessage]="false"
-                                            ></app-input-number>
+                                                              (valueChanges)="planner.cliente.rendaMensalAposentadoria = $event; saveData();"
+                                                              [inputId]="'rendaMensalAposentadoria'"
+                                                              [mask]="'separator.5'"
+                                                              [thousandSeparator]="'.'"
+                                                              [decimalMarker]="','"
+                                                              [prefix]="'R$'"
+                                                              [min]="1"
+                                                              [max]="100000000"
+                                                              [required]="true"
+                                                              [placeholder]="'R$ 00,00'"
+                                                              [showErrorMessage]="false"></app-input-number>
                                         </td>
                                     </tr>
                                     <tr>
@@ -472,17 +493,16 @@
                                         </td>
                                         <td>
                                             <app-input-number [valueInput]="planner.cliente.rentabilidadeAposentadoria"
-                                                (valueChanges)="planner.cliente.rentabilidadeAposentadoria = $event; saveData();"
-                                                [inputId]="'rentabilidadeAposentadoria'"
-                                                [mask]="'separator.5'"
-                                                [suffix]="'%'"
-                                                [max]="100000000"
-                                                [required]="true"
-                                                [showErrorMessage]="false"
-                                                [allowNegativeNumbers]="true"
-                                                [placeholder]="'0,00%'"
-                                                [showErrorMessage]="false"
-                                            ></app-input-number>
+                                                              (valueChanges)="planner.cliente.rentabilidadeAposentadoria = $event; saveData();"
+                                                              [inputId]="'rentabilidadeAposentadoria'"
+                                                              [mask]="'separator.5'"
+                                                              [suffix]="'%'"
+                                                              [max]="100000000"
+                                                              [required]="true"
+                                                              [showErrorMessage]="false"
+                                                              [allowNegativeNumbers]="true"
+                                                              [placeholder]="'0,00%'"
+                                                              [showErrorMessage]="false"></app-input-number>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -511,43 +531,26 @@
                                 <tbody>
                                     <tr *ngFor="let item of planner.planejamentoFluxosPontuais; index as i;">
                                         <td class="pl-4">
-                                            <input type="text"
-                                                   class="form-control form-control-number"
-                                                   id="idade-{{i}}"
-                                                   name="idade-{{i}}"
-                                                   #idade="ngModel"
-                                                   [(ngModel)]="item.idade"
-                                                   mask="0*"
-                                                   suffix=" anos"
-                                                   (keyup.arrowup)="item.idade = arrowUp(idade.value)"
-                                                   (keyup.arrowdown)="item.idade = arrowDown(idade.value)"
-                                                   [ngbPopover]="campoObrigatorio"
-                                                   popoverClass="popover-danger"
-                                                   [disablePopover]="idade.errors == null"
-                                                   triggers="mouseenter:mouseleave"
-                                                   required
-                                                   (change)="saveData()">
+                                            <app-input-number [valueInput]="item.idade"
+                                                              (valueChanges)="item.idade = $event; saveData();"
+                                                              [inputId]="'idade-{{i}}'"
+                                                              [mask]="'0*'"
+                                                              [suffix]="' anos'"
+                                                              [required]="true"
+                                                              [showErrorMessage]="false"
+                                                              [allowNegativeNumbers]="false"></app-input-number>
                                         </td>
                                         <td>
-                                            <input type="text"
-                                                   class="form-control form-control-number"
-                                                   id="valor{{i}}"
-                                                   name="valor{{i}}"
-                                                   #valor="ngModel"
-                                                   [(ngModel)]="item.valor"
-                                                   mask="separator.5"
-                                                   thousandSeparator="."
-                                                   decimalMarker=","
-                                                   placeholder="R$ 00,00"
-                                                   prefix="R$ "
-                                                   (keyup.arrowup)="item.valor = arrowUp(valor.value)"
-                                                   (keyup.arrowdown)="item.valor = arrowDown(valor.value, true)"
-                                                   [ngbPopover]="campoObrigatorio"
-                                                   popoverClass="popover-danger"
-                                                   [disablePopover]="valor.errors == null"
-                                                   triggers="mouseenter:mouseleave"
-                                                   required
-                                                   (change)="saveData()">
+                                            <app-input-number [valueInput]="item.valor"
+                                                              (valueChanges)="item.valor = $event; saveData();"
+                                                              [inputId]="'valor{{i}}'"
+                                                              [mask]="'separator'"
+                                                              placeholder="R$ 00,00"
+                                                              prefix="R$ "
+                                                              [required]="true"
+                                                              [showErrorMessage]="false"
+                                                              [allowNegativeNumbers]="true"
+                                                              [showErrorMessage]="false"></app-input-number>
                                         </td>
                                         <td class="text-center">
                                             <button class="btn btn-trash d-inline" (click)="removerFluxoPontual(item)" title="Remover linha">
@@ -562,7 +565,7 @@
                             </table>
                         </div>
                     </div>
-                   </div>
+                </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <!-- Cálculos -->
                     <div class="form-row mb-2">
@@ -795,7 +798,7 @@
                                         <tr class="primary">
                                             <th class="text-right">Investimento</th>
                                             <th style="white-space: nowrap;">Custos/Taxas</th>
-                                            <th style="white-space: nowrap;">Rentabilidade</th>
+                                            <th style="white-space: nowrap;">Rentab. Bruta</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
                                             <th style="white-space: nowrap;">Montante Atual</th>
                                             <!-- <th style="white-space: nowrap;">Montante Sugerido</th>
@@ -810,76 +813,52 @@
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.custosTaxas"
-                                                    (valueChanges)="item.custosTaxas = $event;saveData();"
-                                                    [inputId]="'investimento-custosTaxas-' + index"
-                                                    [mask]="'separator.2'"
-                                                    suffix="%"
-                                                    [min]="0"
-                                                    [max]="100"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [required]="true"></app-input-number>
+                                                                  (valueChanges)="item.custosTaxas = $event;saveData();"
+                                                                  [inputId]="'investimento-custosTaxas-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [required]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidade"
-                                                    (valueChanges)="item.rentabilidade = $event;saveData();"
-                                                    [inputId]="'investimento-rentabilidade-' + index"
-                                                    [mask]="'separator.2'"
-                                                    suffix="%"
-                                                    [min]="0"
-                                                    [max]="100"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [required]="true"></app-input-number>
+                                                                  (valueChanges)="item.rentabilidade = $event;saveData();"
+                                                                  [inputId]="'investimento-rentabilidade-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [required]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidadeLiquida"
-                                                    (valueChanges)="item.rentabilidadeLiquida = $event"
-                                                    [inputId]="'investimento-rentabilidadeLiquida-' + index"
-                                                    [mask]="'separator.2'"
-                                                    suffix="%"
-                                                    [min]="0"
-                                                    [max]="100"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
+                                                                  (valueChanges)="item.rentabilidadeLiquida = $event"
+                                                                  [inputId]="'investimento-rentabilidadeLiquida-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.montanteAtual"
-                                                    (valueChanges)="item.montanteAtual = $event"
-                                                    [inputId]="'investimento-montanteAtual-' + index"
-                                                    [mask]="'separator.2'"
-                                                    prefix="R$ "
-                                                    [min]="0"
-                                                    [required]="true"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"></app-input-number>
+                                                                  (valueChanges)="item.montanteAtual = $event"
+                                                                  [inputId]="'investimento-montanteAtual-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [min]="1"
+                                                                  [required]="true"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"></app-input-number>
                                             </td>
-                                            <!-- <td>
-                                                <app-input-number [valueInput]="item.sugerido"
-                                                    (valueChanges)="item.sugerido = $event"
-                                                    [inputId]="'investimento-sugerido-' + index"
-                                                    [mask]="'separator.2'"
-                                                    prefix="R$ "
-                                                    [min]="0"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
-                                            </td>
-                                            <td> 
-                                                <app-input-number [valueInput]="item.planoAcao"
-                                                    (valueChanges)="item.planoAcao = $event; saveData();"
-                                                    [inputId]="'investimento-planoAcao-' + index"
-                                                    [mask]="'separator.2'"
-                                                    prefix="R$ "
-                                                    [min]="0"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
-                                        </td> -->
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerInvestimento(item)">
                                                     <fa-icon [icon]="faTrash"></fa-icon>
@@ -888,16 +867,23 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="footer">
-                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" [class.bg-danger]="somaInvestimentos.somaSugerido < 0 || somaInvestimentos.somaPlanoAcao < 0 ">
+                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light" [class.bg-danger]="somaInvestimentos.somaSugerido < 0 || somaInvestimentos.somaPlanoAcao < 0 ">
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td class="p-2 ps-3">R$ {{ somaInvestimentos.somaMontanteAtual | mask : 'separator.2' : '.' }}</td>
-                                            <!-- <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaSugerido | mask : 'separator.2' : '.' }}</td>
-                                            <td class="p-2 ps-3" style="white-space: nowrap">R$ {{ somaInvestimentos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td> -->
+                                            <td>
+                                                <app-input-number [valueInput]="somaInvestimentos.somaMontanteAtual"
+                                                                  [inputId]="'somaMontanteAtual'"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -917,7 +903,8 @@
                         <div class="home__container">
                             <div class="home__container-header mb-2">
                                 <h6>Produtos</h6>
-                                <div class="d-flex justify-content-end align-items-center w-100">
+                                <div *ngIf="planner.planejamentoInvestimento.length > 0"
+                                     class="d-flex justify-content-end align-items-center w-100">
                                     <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
                                         <p-dropdown
                                                     class="form-control"
@@ -950,46 +937,24 @@
                                             </ng-template>
                                         </p-dropdown>
                                     </div>
-                                    <button type="button"
+                                    <button *ngIf="planner.carteiraSetup_Id != 0 && (planner.planejamentoProduto.length == 0 || mudouCarteiraSetup )"
+                                            type="button"
                                             triggers="mouseenter:mouseleave"
                                             class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                             (click)="carregarProdutos(form)"
-                                            *ngIf=" planner.planejamentoInvestimento.length > 0   
-                                                    && planner.carteiraSetup_Id != 0
-                                                    && (planner.planejamentoProduto.length == 0
-                                                    || mudouCarteiraSetup )"
-                                            [disabled]="form.invalid || loading"> 
-                                            <span *ngIf="!mudouCarteiraSetup">Recarregar</span>
-                                            <span *ngIf="mudouCarteiraSetup">Carregar</span>
-                                            <span>&nbsp; produtos</span> 
-                                             
-                                        </button>
+                                            [disabled]="form.invalid || loading">
+                                        <span>Carregar produtos</span>
+                                    </button>
                                     <a class="link ml-3"
                                        [routerLink]="['produto']"
-                                       *ngIf="planner.planejamentoInvestimento.length > 0   
-                                                && planner.planejamentoProduto.length > 0 
+                                       *ngIf="planner.planejamentoProduto.length > 0 
                                                 && planner.carteiraSetup_Id != 0
                                                 && !mudouCarteiraSetup"> Adicionar outros produtos </a>
                                 </div>
                             </div>
-                            <!-- <div>
-                                <h3>Carregar Produtos</h3>
-                                <p>planner.planejamentoInvestimento.length > 0  {{planner.planejamentoInvestimento.length > 0  }}</p>
-                                <p>planner.planejamentoProduto.length == 0 {{planner.planejamentoProduto.length == 0}}</p>
-                                <p>planner.carteiraSetup_Id != 0 {{planner.carteiraSetup_Id != 0}}</p>
-                                <p>mudouCarteiraSetup {{mudouCarteiraSetup }}</p>
-                            </div>
-                            <div>
-                                <h3>Adicionar outros produtos</h3>
-                                <p>planner.planejamentoInvestimento.length > 0   {{planner.planejamentoInvestimento.length > 0 }}</p>
-                                <p>planner.planejamentoProduto.length > 0  {{planner.planejamentoProduto.length > 0 }}</p>
-                                <p>planner.carteiraSetup_Id != 0 {{ planner.carteiraSetup_Id != 0}}</p>
-                                <p>!mudouCarteiraSetup {{ !mudouCarteiraSetup }}</p>
-                            </div> -->
                             <div class="form-row">
                                 <p class="text-danger px-2" *ngIf="planner.planejamentoInvestimento.length == 0">* Insira um investimento para adicionar um produto</p>
-                                <p-table
-                                         [value]="planner.planejamentoProduto"
+                                <p-table [value]="planner.planejamentoProduto"
                                          [responsive]="true"
                                          responsiveLayout="scroll"
                                          class="table table-editable"
@@ -1001,7 +966,6 @@
                                             <th style="white-space: nowrap;">Percentual</th>
                                             <th style="white-space: nowrap;">Rentabilidade</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
-                                            <!-- <th style="white-space: nowrap;">Montante Atual</th> -->
                                             <th style="white-space: nowrap;">Montante Sugerido</th>
                                             <th style="white-space: nowrap;">Plano de Ação</th>
                                             <th class="td-actions"></th>
@@ -1014,90 +978,78 @@
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.custosTaxas"
-                                                    (valueChanges)="item.custosTaxas = $event; saveData()"
-                                                    [inputId]="'produto-custosTaxas-' + index"
-                                                    [mask]="'separator.2'"
-                                                    suffix="%"
-                                                    [min]="0"
-                                                    [max]="100"
-                                                    [required]="true"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"></app-input-number>
+                                                                  (valueChanges)="item.custosTaxas = $event; saveData()"
+                                                                  [inputId]="'produto-custosTaxas-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [required]="true"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.percentual"
-                                                    (valueChanges)="item.percentual = $event"
-                                                    [inputId]="'produto-percentual-' + index"
-                                                    [mask]="'separator.2'"
-                                                    suffix="%"
-                                                    [min]="0"
-                                                    [max]="100"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
+                                                                  (valueChanges)="item.percentual = $event"
+                                                                  [inputId]="'produto-percentual-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidade"
-                                                    (valueChanges)="item.rentabilidade = $event; saveData()"
-                                                    [inputId]="'produto-rentabilidade-' + index"
-                                                    [mask]="'separator.2'"
-                                                    suffix="%"
-                                                    [min]="0"
-                                                    [max]="100"
-                                                    [required]="true"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"></app-input-number>
+                                                                  (valueChanges)="item.rentabilidade = $event; saveData()"
+                                                                  [inputId]="'produto-rentabilidade-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [required]="true"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidadeLiquida"
-                                                    (valueChanges)="item.rentabilidadeLiquida = $event"
-                                                    [inputId]="'produto-rentabilidadeLiquida-' + index"
-                                                    [mask]="'separator.2'"
-                                                    suffix="%"
-                                                    [min]="0"
-                                                    [max]="100"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
+                                                                  (valueChanges)="item.rentabilidadeLiquida = $event"
+                                                                  [inputId]="'produto-rentabilidadeLiquida-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
                                             </td>
-                                            <!-- <td>
-                                                <app-input-number [valueInput]="item.montanteAtual"
-                                                    (valueChanges)="item.montanteAtual = $event"
-                                                    [inputId]="'produto-montanteAtual-' + index"
-                                                    [mask]="'separator.2'"
-                                                    preffix="R$ "
-                                                    [min]="0"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
-                                            </td> -->
                                             <td>
                                                 <app-input-number [valueInput]="item.sugerido"
-                                                    (valueChanges)="item.sugerido = $event"
-                                                    [inputId]="'produto-sugerido-' + index"
-                                                    [mask]="'separator.2'"
-                                                    prefix="R$ "
-                                                    [min]="0"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="true"
-                                                    [disabled]="true"></app-input-number>
+                                                                  (valueChanges)="item.sugerido = $event"
+                                                                  [inputId]="'produto-sugerido-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [min]="0"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
                                             </td>
                                             <td style="white-space: nowrap">
                                                 <app-input-number [valueInput]="item.planoAcao"
-                                                    (valueChanges)="item.planoAcao = $event; saveData()"
-                                                    [inputId]="'produto-planoAcao-' + index"
-                                                    [mask]="'separator.2'"
-                                                    prefix="R$ "
-                                                    [min]="0"
-                                                    [required]="true"
-                                                    [showErrorMessage]="false"
-                                                    [allowNegativeNumbers]="false"
-                                                    [readonly]="item.produto_Id == 61"
-                                                    [disabled]="item.produto_Id == 61"></app-input-number>
+                                                                  (valueChanges)="item.planoAcao = $event; saveData()"
+                                                                  [inputId]="'produto-planoAcao-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [min]="0"
+                                                                  [required]="true"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [readonly]="item.produto_Id == 61"
+                                                                  [disabled]="item.produto_Id == 61"></app-input-number>
                                             </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)"> <!--  *ngIf="item.produto.id != 61" Conta corrente não pode ser excluido-->
@@ -1107,17 +1059,87 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="footer">
-                                        <tr *ngIf="planner.planejamentoProduto.length > 0" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                        <tr *ngIf="planner.planejamentoProduto.length > 0" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
                                             <td></td>
-                                            <td class="p-2" style="white-space: nowrap">{{ somaProdutos.somaPercentual | mask : 'separator.2' : '.' }}%</td>
+                                            <td>
+                                                <app-input-number [valueInput]="somaProdutos.somaPercentual"
+                                                                  [inputId]="'somaPercentual'"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
                                             <td></td>
                                             <td></td>
-                                            <!-- <td></td> -->
-                                            <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaSugerido | mask : 'separator.2' : '.' }}</td>
-                                            <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td>
+                                            <td>
+                                                <app-input-number [valueInput]="somaProdutos.somaSugerido"
+                                                                  [inputId]="'somaSugerido'"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td>
+                                                <app-input-number [valueInput]="somaProdutos.somaPlanoAcao"
+                                                                  [inputId]="'somaPlanoAcao'"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr *ngIf="somaProdutos.somaPercentual > 100 || somaProdutos.somaSugerido > this.planner.planejamentoAgregandoValor.montante || somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante"
+                                            class="bg-light"
+                                            [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                                <small><b>Diferença</b></small>
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <app-input-number [valueInput]="100 - somaProdutos.somaPercentual"
+                                                                  [inputId]="'diferenca-somaPercentual'"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="true"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <app-input-number [valueInput]="this.planner.planejamentoAgregandoValor.montante - somaProdutos.somaSugerido"
+                                                                  [inputId]="'diferenca-somaSugerido'"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="true"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td>
+                                                <app-input-number [valueInput]="this.planner.planejamentoAgregandoValor.montante - somaProdutos.somaPlanoAcao"
+                                                                  [inputId]="'diferenca-somaPlanoAcao'"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="true"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -1459,7 +1481,7 @@
                     <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
                     <p *ngIf="erro.length == 0" class="text-red">Preencha todos os campos corretamente para salvar</p>
                 </div>
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="loading || form.invalid || !formIsValid">
+                <button class="btn btn-primary mr-0 ml-auto" *ngIf="form.valid && formIsValid" [disabled]="loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
             </div>
         </form>

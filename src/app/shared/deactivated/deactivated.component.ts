@@ -26,6 +26,8 @@ export class DeactivatedComponent implements OnChanges {
     loading = false;
     url = '';
     account?: Account;
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
 
     constructor(
         private modal: ModalOpen,
@@ -34,8 +36,9 @@ export class DeactivatedComponent implements OnChanges {
         private accountService: AccountService,
     ) {
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
     }
-    
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
@@ -53,7 +56,7 @@ export class DeactivatedComponent implements OnChanges {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     send() {
@@ -78,7 +81,7 @@ export class DeactivatedComponent implements OnChanges {
                     var list = await lastValueFrom(this.service.getList());
                     if (this.url.includes('empresas/editar')) {
                         var empresa = this.empresaService.object;
-                        if (this.url.includes('usuarios')) 
+                        if (this.url.includes('usuarios'))
                             empresa.account = list as Usuario[];
                         else if (this.url.includes('clientes'))
                             empresa.cliente = list as Cliente[];

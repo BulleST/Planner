@@ -26,6 +26,9 @@ export class EditComponent implements OnDestroy {
     url = '';
     subscription: Subscription[] = [];
 
+    routerBack: string[] = ['../../'];
+    routeBackOptions: any;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
@@ -34,6 +37,8 @@ export class EditComponent implements OnDestroy {
         private setupService: CarteiraSetupService,
         private empresaService: EmpresaService,
     ) {
+        this.routeBackOptions = { relativeTo: this.activatedRoute };
+        
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         var params = activatedRoute.params.subscribe(p => {
             if (p['setup_id']) {
@@ -62,7 +67,7 @@ export class EditComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar();
+        this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
     resetForm() {
@@ -87,7 +92,7 @@ export class EditComponent implements OnDestroy {
             lastValueFrom(this.setupService.edit(this.objeto))
                 .then((res) => {
                     lastValueFrom(this.setupService.getList());
-                    this.modal.voltar();
+                    this.modal.voltar(this.routerBack, this.routeBackOptions);
                 })
                 .catch(res => {
                     this.erro.push(getError(res));

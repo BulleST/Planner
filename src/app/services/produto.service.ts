@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map } from 'rxjs';
 import { Crypto } from '../utils/crypto';
@@ -156,10 +156,11 @@ export class ProdutoService {
     }
 
     getList(empresaId?: number, ativo?: any) {
+        this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
         ativo = ativo != undefined ? ativo : '';
-        return this.http.get<Produto[]>(`${this.url}/produto/all/${empresaId}/${ativo}`).pipe(
-            map(list => {
+        return this.http.get<Produto[]>(`${this.url}/produto/all/${empresaId}/${ativo}`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        .pipe(map(list => {
                 list = list.map(x => {
                     x.ativo = !x.dataDesativado;
                     return x;
@@ -171,7 +172,7 @@ export class ProdutoService {
     }
 
     get(id: number){
-        return this.http.get<Produto>(`${this.url}/produto/${id}`);
+        return this.http.get<Produto>(`${this.url}/produto/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
 
     create(request: ProdutoRequest) {

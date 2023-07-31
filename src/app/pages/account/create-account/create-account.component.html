@@ -62,7 +62,8 @@
                                        [(ngModel)]="objeto.empresa"
                                        placeholder="Empresa"
                                        required
-                                       pattern="\S(.*\S)?">
+                                       pattern="\S(.*\S)?"
+                                       (change)="objeto.empresa = empresa.value.trim()">
                                 <label for="empresa">
                                     <span>Empresa <span class="text-danger">*</span></span>
                                 </label>

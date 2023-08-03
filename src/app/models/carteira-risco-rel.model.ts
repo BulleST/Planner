@@ -1,7 +1,8 @@
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
+import { ListActions } from "./actions.model";
 import { TipoRisco } from "./tipoRisco.model";
 
-export class CarteiraRiscoRel {
+export class CarteiraRiscoRel extends ListActions {
     id: number = 0;
     carteiraSetup_Id: number = 0;
     percentual: number = undefined as unknown as number;

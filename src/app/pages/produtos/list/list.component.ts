@@ -31,7 +31,11 @@ export class ListComponent implements OnDestroy {
         private accountService: AccountService,
     ) {
         var account = this.accountService.account.subscribe(res => this.account = res);
-        var list = this.produtoService.list.subscribe(res => this.list = res);
+        var list = this.produtoService.list.subscribe(res => {
+            this.list = res;
+            this.list.filter(x => x.id == 61).forEach(x => {x.showMenuOption = false; x.canSelect = false});
+            console.log(this.list)
+        });
         var empresa = this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;
             if (res.id != 0)

@@ -65,28 +65,6 @@ export class FormClienteComponent {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
-            this.objeto = {
-                "id": 0,
-                "empresa_Id": 3,
-                "account_Id": undefined as unknown as number,
-                "perfilInvestidor_Id": 2,
-                "nome": "Teste aaa",
-                "idade": 22,
-                "altura": "" as unknown as number,
-                "peso": "" as unknown as number,
-                "imc": "" as unknown as number,
-                "estadoCivil_Id": 2,
-                "dataNascimento": "2000-11-11" as unknown as Date,
-                "cpf": 11111111111,
-                "rg": 111111111,
-                "email": "teste@teste.com",
-                "receita": 11111111111111,
-                "despesa": 11111111111111,
-                "idadeAposentadoria": 0,
-                "rendaMensalAposentadoria": 0,
-                "rentabilidadeAposentadoria": 0,
-                "registroNaoSalvo": false
-            }
         }
 
         if (changes['loading'])

@@ -73,10 +73,9 @@ export class DeactivatedComponent implements OnChanges {
             // Enviar para a API
             lastValueFrom(this.service.deactivated(this.objeto.id, enabled))
                 .then(async res => {
-                    if (this.isUser && (res as Usuario).dataDesativado) {
+                    if (this.isUser && (res as Usuario).dataDesativado && (res as Usuario).email == this.account?.email) {
                         this.accountService.logout();
                     }
-
 
                     var list = await lastValueFrom(this.service.getList());
                     if (this.url.includes('empresas/editar')) {

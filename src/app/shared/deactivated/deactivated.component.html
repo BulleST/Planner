@@ -15,6 +15,8 @@
             <span *ngIf="!objeto.ativo" class="font-weight-bold">Habilitar</span> esse registro?
         </p>
         <p class="text-danger" *ngIf="objeto.ativo && objeto.email == account?.email">Você será automaticamente deslogado e não poderá acessar o Planner.</p>
+        <p class="text-danger" *ngIf="objeto.ativo && objeto.email != account?.email">Após isso, o usuário não poderá acessar o Planner.</p>
+        
         <button class="btn btn-grey ml-auto d-flex mt-2" (click)="send()">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
             <span *ngIf="objeto.ativo">Desabilitar</span>

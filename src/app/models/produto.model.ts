@@ -5,8 +5,9 @@ import { Empresa } from "./empresa.model";
 import { TipoAtivo } from "./tipoAtivo.model";
 import { TipoLiquidez } from "./tipoLiquidez.model";
 import { TipoRisco } from "./tipoRisco.model";
+import { ListActions } from "./actions.model";
 
-export class Produto {
+export class Produto extends ListActions {
     id: number = undefined as unknown as number;
     descricao: string = '';
     empresa_Id: number = undefined as unknown as number;
@@ -22,6 +23,7 @@ export class Produto {
 
     @jsonIgnore()
     registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
+    
 }
 
 export class ProdutoRequest {

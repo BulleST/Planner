@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { faIdCard, faKey, faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Header } from 'src/app/utils/header';
 import { ModoEscuro } from 'src/app/utils/modo-escuro';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent implements OnDestroy, AfterViewInit {
     Role = Role;
     faSignOut = faSignOut;
     faIdCard = faIdCard;
@@ -31,8 +31,7 @@ export class HeaderComponent implements OnDestroy {
         private header: Header,
     ) {
         var getAtivado = this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
-        // var menuHeaderOpen = this.header.menuHeaderOpen.subscribe(res => this.userLogadoOpen = res);
-
+        
         this.userLogado = this.accountService.accountValue;
         var account = this.accountService.account.subscribe(async res => {
             this.userLogado = res;
@@ -47,18 +46,22 @@ export class HeaderComponent implements OnDestroy {
             }
         });
         this.subscription.push(getAtivado);
-        // this.subscription.push(menuHeaderOpen);
         this.subscription.push(account);
+
+        var menuHeaderOpen = this.header.menuHeaderOpen.subscribe(res => this.menuHeaderOpen = res);
+        this.subscription.push(menuHeaderOpen);
     }
 
-
+ngAfterViewInit(): void {
+    this.header.clickOut();
+}
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
 
     toggleMenuHeader(): void {
-        this.menuHeaderOpen = !this.menuHeaderOpen;
+        // this.menuHeaderOpen = !this.menuHeaderOpen;
         this.header.toggleMenuHeader();
     }
 

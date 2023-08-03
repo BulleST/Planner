@@ -50,20 +50,20 @@ export class Header {
     clickOut() {
         var classe = this;
         $('body').on('click', function (e) {
-            classe.setMenuAside(false);
+            // classe.setMenuAside(false);
             classe.closeMenuHeader();
         });
-
+        
         $('.header__userLogado').on('click', function (e) {
             e.stopPropagation();
         });
 
-        $('.navigation__toggle').on('click', function (e) {
-            e.stopPropagation();
-        });
+        // $('.navigation__toggle').on('click', function (e) {
+        //     e.stopPropagation();
+        // });
 
-        $('.aside').on('click', function (e) {
-            e.stopPropagation();
-        });
+        // $('.aside').on('click', function (e) {
+        //     e.stopPropagation();
+        // });
     }
 }

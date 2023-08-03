@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NgForm, NgModel, Validators } from '@angular/forms';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faChartSimple, faEdit, faPlus, faTable, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -28,7 +28,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     @Input() erro: any[] = [];
     @Output() sendData: EventEmitter<NgForm> = new EventEmitter<NgForm>();
     @Input() clearData: boolean = false;
-    
+
     faPlus = faPlus;
     faTrashAlt = faTrashAlt;
     faChartSimple = faChartSimple;
@@ -44,7 +44,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     produtos: Produto[] = [];
     percentual: number = '' as unknown as number;
     tipoRiscos: TipoRisco[] = [];
-    
+
     selectedRisco: TipoRisco = new TipoRisco;
     url = '';
 
@@ -152,28 +152,35 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
 
     async tipoRiscoChange() {
         let produtos: Produto[] = [];
-        if (this.url.includes('empresas/cadastrar')) 
+        if (this.url.includes('empresas/cadastrar'))
             produtos = this.empresaService.object.produto;
-         else 
+        else
             produtos = await lastValueFrom(this.produtoService.getList());
 
-        // Seleciona os produtos desse risco e ativos
-        this.produtos = produtos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id && x.dataDesativado == null);
+        var produtosExistentes = this.objeto.carteiraProdutoRel.map(x => x.produto_Id);
+        // Seleciona os produtos desse risco, que estão ativos e ainda não foram selecionados
+        this.produtos = produtos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id
+            && x.dataDesativado == null
+            && !produtosExistentes.includes(x.id));
 
         this.produtos = this.produtos.sort((x, y) => {
-            if (x.descricao < y.descricao) { 
+            if (x.descricao < y.descricao) {
                 return -1;
             } else if (x.descricao > y.descricao) {
                 return 1
-            } else { 
+            } else {
                 return 0;
             }
 
-        })
-        this.percentual = '' as unknown as number;
+        });
+        if (this.produtos.length == 0 ) {
+            this.percentual = '' as unknown as number;
+        } 
         this.calcularPercentuais();
     }
 
+    async setProdutos() {
+    }
     change(input: NgModel, min: number, max: number) {
         if (input.value > 100) {
             input.control.setErrors({ max: true });
@@ -193,7 +200,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     calcularPercentuais() {
         this.tipoRiscos = this.tipoRiscos.map(x => {
             let produtosRel = this.objeto.carteiraProdutoRel.filter(p => p.produto.tipoRisco_Id == x.id);
-            var soma = produtosRel.length > 0 ? produtosRel.map(x => x.percentual).reduce((x,y) => x+y) : 0;
+            var soma = produtosRel.length > 0 ? produtosRel.map(x => x.percentual).reduce((x, y) => x + y) : 0;
             x.percentualDisponivel = 100 - soma;
             x.percentualDisponivel = x.percentualDisponivel < 0 ? 0 : x.percentualDisponivel;
             return x;
@@ -203,7 +210,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     getRisco(tipoRisco_Id: number) {
         return this.tipoRiscos.find(x => x.id == tipoRisco_Id)
     }
-    
+
     setChartProduto() {
         let index = 0;
         let tipoRiscos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined).map(x => x.produto.tipoRisco);
@@ -212,7 +219,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         });
         if (tipoRiscos.length > 0) {
             var chartHeight = 70;
-            tipoRiscos.forEach(item => chartHeight = chartHeight+=30);
+            tipoRiscos.forEach(item => chartHeight = chartHeight += 30);
             this.chartHeight = chartHeight + 'px';
             this.optionsChartProduto = {
                 onClick: (e: any) => { },
@@ -237,7 +244,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                             title: (ctx) => {
                                 return '';
                             },
-                        
+
                         }
                     },
                 },
@@ -252,7 +259,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                             drawBorder: false,
                         },
                         ticks: {
-                            callback: function(value, index, ticks) {
+                            callback: function (value, index, ticks) {
                                 return value + '%';
                             }
                         }
@@ -270,7 +277,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                     xAxisKey: 'percentual'
                 },
             }
-           
+
             this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
             let a = this.objeto.carteiraProdutoRel.map(x => {
                 return {
@@ -278,7 +285,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                     axis: 'y',
                     label: `${x.produto.descricao}`,
                     backgroundColor: colors[index++],
-                    data: [ x ]
+                    data: [x]
                 }
             })
             this.dataProduto = {
@@ -292,9 +299,9 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     adicionarProduto() {
-        if (!this.produto) 
+        if (!this.produto)
             this.toastr.error('Selecione um produto para adicionar');
-       
+
         else {
             let carteiraProdutoRel: CarteiraProdutoRel = {
                 id: 0,
@@ -311,16 +318,14 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             } else { // Se não existir, só adiciona um novo
                 this.objeto.carteiraProdutoRel.push(carteiraProdutoRel);
             }
-            
+
             this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
-            this.calcularPercentuais();
             this.setChartProduto();
             this.setupService.setObject(this.objeto);
             delete this.produto;
-            this.percentual = '' as unknown as number;
+            this.tipoRiscoChange();
 
         }
-        console.groupEnd();
     }
 
     removeProduto(item: CarteiraProdutoRel) {
@@ -329,7 +334,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             this.objeto.carteiraProdutoRel.splice(index, 1);
             this.setupService.setObject(this.objeto);
             this.setChartProduto();
-            this.calcularPercentuais();
+            this.tipoRiscoChange();
         }
     }
 
@@ -337,7 +342,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         let invalid = false;
         let riscos: CarteiraRiscoRel[] = [];
         let produtos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined);
-        for(let rel of produtos) {
+        for (let rel of produtos) {
             let index = riscos.findIndex(x => x.tipoRisco_Id == rel.produto.tipoRisco_Id);
             if (index != -1) {
                 riscos[index].percentual += rel.percentual;
@@ -348,6 +353,8 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                     tipoRisco: rel.produto.tipoRisco as TipoRisco,
                     tipoRisco_Id: rel.produto.tipoRisco_Id,
                     percentual: rel.percentual,
+                    showMenuOption: true,
+                    canSelect: true,
                 });
             }
         }
@@ -357,7 +364,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         if (this.objeto.carteiraProdutoRel.length == 0) {
             this.erro.push('Você deve selecionar pelo menos um produto');
         }
-        if(this.erro.length > 0) {
+        if (this.erro.length > 0) {
             invalid = true;
         }
         return invalid;

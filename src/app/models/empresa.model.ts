@@ -5,8 +5,9 @@ import { Cliente, ClienteRequest } from "./cliente.model";
 import { PercentualRisco, PercentualRiscoRequest } from "./percentual-risco.model";
 import { Produto, ProdutoRequest } from "./produto.model";
 import { Usuario, UsuarioRequest } from "./usuario.model";
+import { ListActions } from "./actions.model";
 
-export class Empresa {
+export class Empresa extends ListActions {
     id: number = 0;
     nome: string = '';
     cnpj: number = '' as unknown as number;

@@ -5,6 +5,7 @@ import { faChevronLeft, faTimes, faWallet } from '@fortawesome/free-solid-svg-ic
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
+import { Produto } from 'src/app/models/produto.model';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
@@ -43,6 +44,7 @@ export class CreateComponent implements OnDestroy {
             var params = activatedRoute.parent?.parent?.params.subscribe(p => {
                 if (p['empresa_id']) {
                     this.objeto.empresa_Id = this.crypto.decrypt(p['empresa_id']);
+                   
                 } else {
                     this.voltar();
                 }
@@ -50,6 +52,13 @@ export class CreateComponent implements OnDestroy {
             if (params)
                 this.subscription.push(params)
         }
+        this.objeto.carteiraProdutoRel.push({
+            id: 0,
+            carteiraSetup_Id: 0,
+            percentual: 0,
+            produto_Id: 61,
+            produto: {id: 61, descricao: 'Conta Corrente', tipoRisco_Id: 1, tipoRisco: {id: 1, nome: 'Baixíssimo'}, tipoAtivo_Id: 1, tipoLiquidez_Id: 0} as unknown as Produto,
+        })
     }
 
     voltar() {
@@ -80,7 +89,6 @@ export class CreateComponent implements OnDestroy {
         else { // Enviar para a API
             if (this.url.includes('empresas/editar')) {
             }
-
             lastValueFrom(this.setupService.create(this.objeto))
                 .then((res) => {
                     this.voltar();

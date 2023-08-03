@@ -3,8 +3,9 @@ import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { CarteiraProdutoRel, CarteiraProdutoRelRequest } from "./carteira-produto-rel";
 import { CarteiraRiscoRel } from "./carteira-risco-rel.model";
+import { ListActions } from "./actions.model";
 
-export class CarteiraSetup {
+export class CarteiraSetup extends ListActions {
     id: number = 0;
     nome: string = '';
     empresa_Id: number = 0;

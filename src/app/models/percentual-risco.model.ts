@@ -1,8 +1,9 @@
 import { jsonIgnore } from "json-ignore";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { PerfilInvestidor } from "./perfilInvestidor.model";
+import { ListActions } from "./actions.model";
 
-export class PercentualRisco {
+export class PercentualRisco extends ListActions {
     id: number = 0;
     empresa_Id: number = 0;
     perfilInvestidor?: PerfilInvestidor;

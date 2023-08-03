@@ -1,5 +1,5 @@
-<div class="p-2" *ngIf="list.length == 0 || loading">
-    <p *ngIf="!list.length && !loading">Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Clique aqui para adicionar</a></p>
+<div class="p-2">
+    <p *ngIf="list.length == 0 && !loading">Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Clique aqui para adicionar</a></p>
     <p *ngIf="loading"> 
         <span class="spinner-border spinner-border-sm mr-1"></span>
         <span>Carregando... </span>
@@ -58,9 +58,9 @@
         <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex" >
             <!-- [class.selected-many]="selectedItems.includes(item) && eval(menuTable, item) "  -->
             <tr [class.selected]="item == selected && eval(menuTable, item) " 
-                [class.selectable]="selectable && eval(menuTable, item) " 
-                [pSelectableRow]="selectable && eval(menuTable, item) ? item : null" 
-                [pSelectableRowIndex]="selectable && eval(menuTable, item) ? rowIndex : null">
+                [class.selectable]="item.canSelect != false && selectable && eval(menuTable, item) " 
+                [pSelectableRow]="item.canSelect != false && selectable && eval(menuTable, item) ? item : null" 
+                [pSelectableRowIndex]="item.canSelect != false && selectable && eval(menuTable, item) ? rowIndex : null">
                 <td *ngFor="let col of columns; index as i"  [class.ps-4]="i == 0"
                     [title]="gelCellTitle(item, col)">
                     <input type="hidden" [value]="getCellData(item, col)" #text>
@@ -84,7 +84,7 @@
                     </ng-template>
                 </td>
                 <td class="td-actions">
-                    <div class="actions" *ngIf="menuTable && eval(menuTable, item)">
+                    <div class="actions" *ngIf="item.showMenuOption != false && menuTable && eval(menuTable, item)">
                         <button class="actions__toggle" [class.active]="item == selected">
                             <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
                                 <fa-icon [icon]="faEllipsisV"></fa-icon>

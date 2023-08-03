@@ -4,8 +4,9 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 import { Empresa } from "./empresa.model";
 import { EstadoCivil } from "./estadoCivil.model";
 import { PerfilInvestidor } from "./perfilInvestidor.model";
+import { ListActions } from "./actions.model";
 
-export class Cliente {
+export class Cliente extends ListActions {
     id: number = 0;
     empresa?: Empresa = new Empresa;
     empresa_Id: number = undefined as unknown as number;

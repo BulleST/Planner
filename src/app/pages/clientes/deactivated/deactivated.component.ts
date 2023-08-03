@@ -50,7 +50,7 @@ export class DeactivatedComponent implements OnDestroy {
                 lastValueFrom(this.clienteService.get(this.objeto.id))
                     .then(res => {
                         this.objeto = res;
-                        if (this.account?.id == res.account_Id) {
+                        if (this.account?.perfilAcesso_Id != 3 || (this.account?.perfilAcesso_Id == 3 && this.account?.id == res.account_Id)) {
                             setTimeout(() => {
                                 this.modal.setOpen(true);
                             }, 200);

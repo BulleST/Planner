@@ -75,7 +75,7 @@
                             </p-dropdown>
                             <div class="mt-1 px-1">
                                 <p class="text-danger" *ngIf="selectedRisco == undefined">Selecione um risco para continuar.</p>
-                                <p class="text-danger" *ngIf=" selectedRisco != undefined && produtos.length == 0">Nenhum produto para {{selectedRisco.nome}}.</p>
+                                <p class="text-danger" *ngIf=" selectedRisco != undefined && produtos.length == 0">Nenhum produto disponível em {{selectedRisco.nome}}.</p>
                             </div>
                         </div>
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
@@ -90,11 +90,11 @@
                                    suffix="%"
                                    #_percentual="ngModel"
                                    [max]="selectedRisco.percentualDisponivel"
-                                   [placeholder]="selectedRisco.percentualDisponivel + '%' + ' disponível'"
+                                   [placeholder]="produtos.length > 0 ? selectedRisco.percentualDisponivel + '%' + ' disponível' : ''"
                                    [disabled]="produto == undefined"
                                    [(ngModel)]="percentual">
                             <div class="mt-1 px-1">
-                                <p class="text-danger" *ngIf="_percentual.touched && _percentual.value ==''">Informe o percentual</p>
+                                <p class="text-danger" *ngIf="_percentual.touched && _percentual.value == ''">Informe o percentual</p>
                                 <p class="text-danger" *ngIf="percentual > selectedRisco.percentualDisponivel">Valor máximo disponível é {{selectedRisco.percentualDisponivel}}%</p>
                             </div>
                         </div>

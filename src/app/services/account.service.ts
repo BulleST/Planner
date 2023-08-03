@@ -82,8 +82,7 @@ export class AccountService {
                     localStorage.clear();
                 },
             });
-    }
-
+    } 
     refreshToken() {
         return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
             .pipe(map((account) => {

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NgForm, NgModel } from '@angular/forms';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { NgForm, NgModel, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faChartSimple, faEdit, faPlus, faTable, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -41,7 +41,8 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     carteiraRiscoColumns = carteiraRiscoColumns;
 
     produto?: Produto;
-    produtos: Produto[] = [];
+    allProdutos: Produto[] = [];
+    produtosRisco: Produto[] = [];
     percentual: number = '' as unknown as number;
     tipoRiscos: TipoRisco[] = [];
 
@@ -56,9 +57,9 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     chartHeight: string = '70px';
     @ViewChild('chartProdutos') private chartProdutos;
     subscription: Subscription[] = [];
-
     hasViewInit = false;
 
+    @ViewChildren('_percentual') percentuais: QueryList<NgModel>;
     constructor(
         private toastr: ToastrService,
         private empresaService: EmpresaService,
@@ -70,24 +71,29 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         var params = this.activatedRoute.params.subscribe(item => this.isEditPage = !!item['setup_id']);
         this.subscription.push(params);
 
-        var tipoRisco = this.dropdown.tipoRisco.subscribe(res => this.tipoRiscos = res);
-        this.subscription.push(tipoRisco);
+
         lastValueFrom(this.dropdown.getRisco())
             .then((res) => {
                 this.selectedRisco = res[0];
-                this.tipoRiscoChange();
             })
             .finally(() => this.loading = false);
+            
+        var tipoRisco = this.dropdown.tipoRisco.subscribe(res => this.tipoRiscos = res);
+        this.subscription.push(tipoRisco);
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
-        if (this.url.includes('empresas/cadastrar')) {
+        if (this.url.includes('empresas/cadastrar') ) {
             var empresa = this.empresaService.empresa.subscribe(res => {
-                this.produtos = res.produto;
+                this.allProdutos = res.produto;
             });
             this.subscription.push(empresa);
         } else {
-            lastValueFrom(this.produtoService.getList()).then((res) => {
-                this.produtos = res;
+            lastValueFrom(this.produtoService.getList())
+            .then(async (res) => {
+                this.allProdutos = res;
+                if (this.tipoRiscos.length == 0) 
+                    this.selectedRisco = { id: 1, nome: 'Baixissimo', percentualDisponivel: 100 };
+                this.setProdutosByRisco();
             })
         }
     }
@@ -131,7 +137,9 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         this.validatePercentualRisco();
     }
 
-
+    parseFloat(value: string) {
+        return parseFloat(value)
+    }
     @HostListener('window:resize', ['$event'])
     onResize(event: any) {
         var windowWidth = window.innerWidth;
@@ -150,54 +158,45 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         this.sendData.emit(form);
     }
 
-    async tipoRiscoChange() {
-        let produtos: Produto[] = [];
-        if (this.url.includes('empresas/cadastrar'))
-            produtos = this.empresaService.object.produto;
-        else
-            produtos = await lastValueFrom(this.produtoService.getList());
-
-        var produtosExistentes = this.objeto.carteiraProdutoRel.map(x => x.produto_Id);
+    setProdutosByRisco() {
+        console.log('setProdutosByRisco')
+        let produtosExistentes = this.objeto.carteiraProdutoRel.map(x => x.produto_Id);
         // Seleciona os produtos desse risco, que estão ativos e ainda não foram selecionados
-        this.produtos = produtos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id
+        this.produtosRisco = this.allProdutos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id
             && x.dataDesativado == null
             && !produtosExistentes.includes(x.id));
 
-        this.produtos = this.produtos.sort((x, y) => {
-            if (x.descricao < y.descricao) {
-                return -1;
-            } else if (x.descricao > y.descricao) {
-                return 1
-            } else {
-                return 0;
-            }
-
+        this.produtosRisco = this.produtosRisco.sort((x, y) => {
+            if (x.descricao < y.descricao) return -1
+            else if (x.descricao > y.descricao) return 1
+            else return 0
         });
-        if (this.produtos.length == 0 ) {
-            this.percentual = '' as unknown as number;
-        } 
-        this.calcularPercentuais();
+        this.percentual = '' as unknown as number;
+        this.calculaPercentualMaxRisco();
     }
 
-    async setProdutos() {
-    }
-    change(input: NgModel, min: number, max: number) {
-        if (input.value > 100) {
-            input.control.setErrors({ max: true });
-            return;
-        }
-        if (input.value > max) {
-            input.control.setErrors({ max: true });
-            return;
-        }
-        if (input.value < min) {
-            input.control.setErrors({ min: true });
-            return;
-        }
+    change(input: NgModel, rel: CarteiraProdutoRel) {
+        this.calculaPercentualMaxRisco();
+        this.validateInput(input, 1, this.calculaPercentualMaxProduto(rel.produto ));
+        this.validatePercentualRisco();
         this.setChartProduto();
+        var rels = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco_Id == rel.produto.tipoRisco_Id);
+        var somaPercentuais = rels.map(x => x.percentual).reduce((x, y) => x + y);
+        
+        this.percentuais.forEach((el, index) => {
+            var indexRel = this.objeto.carteiraProdutoRel.map((x,  indexRel ) => rels.map(x => x.produto_Id).includes(x.produto_Id) ? indexRel : -1).filter(x => x != -1);
+            if (indexRel.includes(index + 1)) {
+                if (somaPercentuais > 100) {
+                    el.control.setErrors({max: true})
+                } else {
+                    delete el.control.errors?.['max'];
+                    el.control.updateValueAndValidity();
+                }
+            }
+        })
     }
 
-    calcularPercentuais() {
+    calculaPercentualMaxRisco() {
         this.tipoRiscos = this.tipoRiscos.map(x => {
             let produtosRel = this.objeto.carteiraProdutoRel.filter(p => p.produto.tipoRisco_Id == x.id);
             var soma = produtosRel.length > 0 ? produtosRel.map(x => x.percentual).reduce((x, y) => x + y) : 0;
@@ -207,16 +206,18 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         });
     }
 
-    getRisco(tipoRisco_Id: number) {
-        return this.tipoRiscos.find(x => x.id == tipoRisco_Id)
+    calculaPercentualMaxProduto(produto: Produto) {
+        var percentuais = this.objeto.carteiraProdutoRel.filter(x => x.produto_Id != produto.id && x.produto.tipoRisco_Id == produto.tipoRisco_Id).map(x => x.percentual);
+        var somaOutrosRels = percentuais.length > 0 ? percentuais.reduce((x, y) => x + y) : 0;
+        var dif = 100 - somaOutrosRels;
+        dif = dif < 0 ? 0 : dif
+        return dif;
     }
 
     setChartProduto() {
         let index = 0;
         let tipoRiscos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined).map(x => x.produto.tipoRisco);
-        tipoRiscos = tipoRiscos.filter((value: any, index: any, self: any) => {
-            return index === self.findIndex((x: any) => (x.id === value.id))
-        });
+        tipoRiscos = tipoRiscos.filter((value: any, index: any, self: any) => index === self.findIndex((x: any) => (x.id === value.id)));
         if (tipoRiscos.length > 0) {
             var chartHeight = 70;
             tipoRiscos.forEach(item => chartHeight = chartHeight += 30);
@@ -278,7 +279,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                 },
             }
 
-            this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
+            this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.produto.descricao, y.produto.descricao))
             let a = this.objeto.carteiraProdutoRel.map(x => {
                 return {
                     type: 'bar',
@@ -298,10 +299,13 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
 
     }
 
+    getRisco(tipoRisco_Id: number) {
+        return this.tipoRiscos.find(x => x.id == tipoRisco_Id)
+    }
+
     adicionarProduto() {
         if (!this.produto)
             this.toastr.error('Selecione um produto para adicionar');
-
         else {
             let carteiraProdutoRel: CarteiraProdutoRel = {
                 id: 0,
@@ -318,13 +322,13 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             } else { // Se não existir, só adiciona um novo
                 this.objeto.carteiraProdutoRel.push(carteiraProdutoRel);
             }
-
-            this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.percentual, y.percentual))
-            this.setChartProduto();
+            this.objeto.carteiraProdutoRel.sort((x, y) => this.cmp(x.produto.tipoRisco_Id, y.produto.tipoRisco_Id) || this.cmp(x.produto.descricao, y.produto.descricao))
             this.setupService.setObject(this.objeto);
             delete this.produto;
-            this.tipoRiscoChange();
-
+            this.setProdutosByRisco();
+            this.calculaPercentualMaxRisco();
+            this.setChartProduto();
+            this.validatePercentualRisco();
         }
     }
 
@@ -334,11 +338,17 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             this.objeto.carteiraProdutoRel.splice(index, 1);
             this.setupService.setObject(this.objeto);
             this.setChartProduto();
-            this.tipoRiscoChange();
+            this.setProdutosByRisco();
+            this.validatePercentualRisco();
         }
     }
 
     validatePercentualRisco() {
+        console.log('validatePercentualRisco')
+        if (this.objeto.carteiraProdutoRel.length == 0) {
+            this.erro.push('Você deve selecionar pelo menos um produto');
+            return false
+        }
         let invalid = false;
         let riscos: CarteiraRiscoRel[] = [];
         let produtos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined);
@@ -358,15 +368,39 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
                 });
             }
         }
-        this.erro = riscos.filter(x => x.percentual != 100).map(x => {
-            return `A soma do percentual dos produtos para o risco ${x.tipoRisco.nome} deve ser 100%.`
-        });
-        if (this.objeto.carteiraProdutoRel.length == 0) {
-            this.erro.push('Você deve selecionar pelo menos um produto');
-        }
+
+        var baixissimos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco_Id == 1)
+        console.log('condicao 1', riscos.filter(x => x.tipoRisco_Id != 1 && x.percentual != 100 ));
+        console.log('condicao 2', riscos.filter(x => x.tipoRisco_Id == 1 && baixissimos.length > 1 && x.percentual != 100 ));
+        console.log('condicao 3', riscos.filter(x => (x.tipoRisco_Id != 1&& x.percentual != 100 ) || (x.tipoRisco_Id == 1 && baixissimos.length > 1 && x.percentual != 100 )));
+
+        this.erro = riscos.filter(x =>  
+            (x.tipoRisco_Id != 1
+                && x.percentual != 100 )
+            || (x.tipoRisco_Id == 1
+                && baixissimos.length > 1
+                && x.percentual != 100 )
+            )
+            .map(x => `A soma do percentual dos produtos para o risco ${x.tipoRisco.nome} deve ser 100%.`);
         if (this.erro.length > 0) {
             invalid = true;
         }
         return invalid;
+    }
+
+    validateInput(input: NgModel, min: number, max: number) {
+        if (input.value > 100) {    
+            input.control.setErrors({ max: true });
+            return input;
+        }
+        if (input.value > max) {
+            input.control.setErrors({ max: true });
+            return input;
+        }
+        if (input.value < min) {
+            input.control.setErrors({ min: true });
+        }
+        return input;
+        
     }
 }

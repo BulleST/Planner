@@ -431,6 +431,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     validaForm(form: NgForm) {
         this.erro = [];
         if (form.touched && form.invalid) {
+            console.log(form.errors)
             this.erro.push('Campos inválidos!');
             this.toastr.error('Campos inválidos!');
             return false;
@@ -441,23 +442,27 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
 
         if (this.planner.planejamentoInvestimento.length == 0) {
+            console.log('Insira um ou mais investimentos no planner.')
             this.erro.push('Insira um ou mais investimentos no planner.');
             this.toastr.error('Insira um ou mais investimentos no planner.');
             return false;
         }
         if (this.planner.planejamentoProduto.length == 0) {
+            console.log('Insira um ou mais produtos no planner.')
             this.erro.push('Insira um ou mais produtos no planner.');
             this.toastr.error('Insira um ou mais produtos no planner.');
             return false;
         }
 
         if (this.planner.planejamentoProduto.find(x => x.planoAcao < 0) != undefined) {
+            console.log('Plano de ação em produto não pode ser inferior a zero.')
             this.erro.push('Plano de ação em produto não pode ser inferior a zero.');
             this.toastr.error('Plano de ação em produto não pode ser inferior a zero.');
             return false;
         }
 
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
+            console.log('Soma de plano de ação em produtos deve ser igual ao montante')
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
             this.toastr.error('Soma de plano de ação em produtos deve ser igual ao montante');
             return false;

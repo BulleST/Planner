@@ -4,6 +4,7 @@ import { Column, FilterDisplay, FilterType, MaskType } from '../helpers/column.i
 import { CarteiraRiscoRel } from "./carteira-risco-rel.model";
 import { FilterMatchMode } from "primeng/api";
 import { Produto } from "./produto.model";
+import { jsonIgnore } from "json-ignore";
 
 export class CarteiraProdutoRel {
     id: number = 0;
@@ -12,6 +13,8 @@ export class CarteiraProdutoRel {
     percentual: number = 0;
     produto_Id: number = 0;
     produto: Produto = new Produto;
+    @jsonIgnore()
+    percentualMax?: number = 100;
     // produtoTributacaoRel_Id: number = 0;
     // produtoTributacaoRel: ProdutoTributacaoRel = new ProdutoTributacaoRel;
 }

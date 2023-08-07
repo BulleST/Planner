@@ -9,13 +9,13 @@ export class CarteiraSetup extends ListActions {
     id: number = 0;
     nome: string = '';
     empresa_Id: number = 0;
-    @jsonIgnore()
-    ativo?: boolean;
     dataDesativado?: Date;
     carteiraProdutoRel: CarteiraProdutoRel[] = [];
     carteiraRiscoRel: CarteiraRiscoRel[] = [];
     @jsonIgnore()
-    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
+    ativo?: boolean;
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se foi inserida pelo empresa/cadastrar ou empresa/editar
 }
 
 export class CarteiraSetupRequest {

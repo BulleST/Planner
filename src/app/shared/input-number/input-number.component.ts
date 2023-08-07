@@ -29,9 +29,12 @@ export class InputNumberComponent implements OnChanges {
     @Input() disabled = false;
 
     @Output() valueChanges: EventEmitter<number> = new EventEmitter<number>();
+    @Output() ngModel: EventEmitter<NgModel> = new EventEmitter<NgModel>();
     @ViewChild('input') input: NgModel;
 
-    constructor() { }
+    constructor() { 
+        this.ngModel.emit(this.input);
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['valueInput']) this.valueInput = changes['valueInput'].currentValue;

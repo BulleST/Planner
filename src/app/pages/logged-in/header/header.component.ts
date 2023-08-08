@@ -6,6 +6,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { Account } from 'src/app/models/account.model';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Subscription } from 'rxjs';
+import { AlertService } from 'src/app/parts/alert/alert.service';
 
 @Component({
     selector: 'app-header',
@@ -29,6 +30,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
         private modoEscuro: ModoEscuro,
         private accountService: AccountService,
         private header: Header,
+        private alertService: AlertService,
     ) {
         var getAtivado = this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
         
@@ -43,6 +45,15 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
                 } else {
                     this.nomeAbreviado = array[0] + ' ' + array[array.length - 1];
                 }
+
+                if (res.passwordReset == undefined) {
+                    this.alertService.info(`
+                        <h5>Atenção</h5>
+                        <h6>Sua conta não está protegida!</h6>
+                        <p>Após sua conta ter sido cadastrada a senha padrão não foi alterada, isso torna sua conta vulnerável à acessos não autorizados.</p>
+                        <p>Por favor, altere sua senha em <a href="./my-account/change-password">/my-account/change-password</a>.</p>
+                    `)
+                }
             }
         });
         this.subscription.push(getAtivado);
@@ -50,6 +61,8 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
 
         var menuHeaderOpen = this.header.menuHeaderOpen.subscribe(res => this.menuHeaderOpen = res);
         this.subscription.push(menuHeaderOpen);
+
+
     }
 
 ngAfterViewInit(): void {

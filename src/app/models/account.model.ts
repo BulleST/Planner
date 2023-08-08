@@ -32,6 +32,7 @@ export interface Account {
     perfilAcesso_Id: number;
     perfilAcesso: PerfilAcesso;
     role?: Role;
+    passwordReset?: Date;
 }
 
 export class Account {
@@ -49,6 +50,7 @@ export class Account {
     perfilAcesso: PerfilAcesso = undefined as unknown as PerfilAcesso;
     empresa: Empresa = new Empresa;
     empresa_Id: number = undefined as unknown as number;
+    passwordReset?: Date;
 }
 
 export class ResetPassword {

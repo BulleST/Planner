@@ -33,9 +33,7 @@ export class ResetPasswordComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
         private modal: ModalOpen,
-        private empresaService: EmpresaService,
         private userService: UsuarioService,
         private accountService: AccountService,
         private crypto: Crypto,
@@ -83,7 +81,9 @@ export class ResetPasswordComponent implements OnDestroy {
         lastValueFrom(this.userService.resetPassword(this.objeto.id))
         .then(res => {
             this.voltar();
-            this.accountService.logout();
+            if (this.objeto.email == this.userLogado?.email) {
+                this.accountService.logout();
+            }
         })
         .catch()
         .finally(() => this.loading = false);

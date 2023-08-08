@@ -76,7 +76,6 @@ export class DeactivatedComponent implements OnChanges {
                     if (this.isUser && (res as Usuario).dataDesativado && (res as Usuario).email == this.account?.email) {
                         this.accountService.logout();
                     }
-
                     var list = await lastValueFrom(this.service.getList());
                     if (this.url.includes('empresas/editar')) {
                         var empresa = this.empresaService.object;

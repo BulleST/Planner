@@ -31,6 +31,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
         private accountService: AccountService,
         private header: Header,
         private alertService: AlertService,
+        
     ) {
         var getAtivado = this.modoEscuro.getAtivado().subscribe(res => this.modoEscuroAtivado = res);
         
@@ -46,7 +47,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
                     this.nomeAbreviado = array[0] + ' ' + array[array.length - 1];
                 }
 
-                if (res.passwordReset == undefined) {
+                if (res.passwordReset == undefined && window.location.pathname.includes('my-account/change-password') == false) {
                     this.alertService.info(`
                         <h5>Atenção</h5>
                         <h6>Sua conta não está protegida!</h6>

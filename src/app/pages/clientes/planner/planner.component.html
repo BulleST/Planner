@@ -903,12 +903,11 @@
                     <div class="form-row mb-2">
                         <div class="home__container">
                             <div class="home__container-header mb-2">
-                                <h6>Produtos</h6>
+                                <h6>Portifólio</h6>
                                 <div *ngIf="planner.planejamentoInvestimento.length > 0"
                                      class="d-flex justify-content-end align-items-center w-100">
                                     <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
-                                        <p-dropdown
-                                                    class="form-control"
+                                        <p-dropdown class="form-control"
                                                     id="carteirasSetup"
                                                     name="carteirasSetup"
                                                     #_carteirasSetup="ngModel"
@@ -1478,9 +1477,13 @@
                 </div>
             </div>
             <div class="form-footer-submit-fixed">
-                <div *ngIf="erro || form.invalid" class="m-0">
-                    <p class="text-red" *ngFor="let err of erro">{{err | json}}</p>
-                    <p *ngIf="erro.length == 0" class="text-red">Preencha todos os campos corretamente para salvar</p>
+                
+                <div>
+                    <div *ngIf="erro.length > 0 || form.invalid || !formIsValid" class="m-0">
+                        <p class="text-danger" *ngFor="let err of erro">{{err | json}}</p>
+                        <p *ngIf="erro.length == 0" class="text-danger">Preencha todos os campos corretamente para salvar</p>
+                        <p class="text-danger" *ngIf="form.errors">{{form.errors | json}}</p>
+                    </div>
                 </div>
                 <button class="btn btn-primary mr-0 ml-auto" *ngIf="form.valid && formIsValid" [disabled]="loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
@@ -1488,12 +1491,6 @@
         </form>
         <ng-template #campoObrigatorio>
             <div class="py-2 px-2 text-danger"> Este campo é obrigatório </div>
-        </ng-template>
-        <ng-template #setaUpDown>
-            <div class="py-2 px-2 text-info"> Acione a seta para cima ou para baixo no teclado para mudar o valor </div>
-        </ng-template>
-        <ng-template #formInvalido>
-            <div class="py-2 px-2 text-danger">Preencha todos os campos corretamente para adicionar produtos</div>
         </ng-template>
     </div>
 </div>

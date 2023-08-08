@@ -185,6 +185,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 this.routerBack = ['../../'];
                 lastValueFrom(this.plannerService.getByClienteId(this.planner.cliente_Id))
                     .then(res => {
+                        this.loading = false;
                         if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar()
 
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
@@ -410,7 +411,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     validaRG_CPF(input: NgModel, doc: number) {
-        console.log(input, doc)
         if (!input) {
             return
         }
@@ -440,14 +440,16 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         if (this.loading == true) {
             return false;
         }
-
+        
         if (this.planner.planejamentoInvestimento.length == 0) {
+            console.log('form invalid no investimentos', this.planner.planejamentoInvestimento)
             console.log('Insira um ou mais investimentos no planner.')
             this.erro.push('Insira um ou mais investimentos no planner.');
             this.toastr.error('Insira um ou mais investimentos no planner.');
             return false;
         }
         if (this.planner.planejamentoProduto.length == 0) {
+            console.log('form invalid no produtos', this.planner.planejamentoProduto)
             console.log('Insira um ou mais produtos no planner.')
             this.erro.push('Insira um ou mais produtos no planner.');
             this.toastr.error('Insira um ou mais produtos no planner.');
@@ -455,6 +457,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
 
         if (this.planner.planejamentoProduto.find(x => x.planoAcao < 0) != undefined) {
+            console.log('form invalid no produtos plano acao ', this.planner.planejamentoProduto)
             console.log('Plano de ação em produto não pode ser inferior a zero.')
             this.erro.push('Plano de ação em produto não pode ser inferior a zero.');
             this.toastr.error('Plano de ação em produto não pode ser inferior a zero.');
@@ -462,6 +465,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
 
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
+            console.log('form invalid no produtos montante ', this.planner.planejamentoProduto)
             console.log('Soma de plano de ação em produtos deve ser igual ao montante')
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
             this.toastr.error('Soma de plano de ação em produtos deve ser igual ao montante');

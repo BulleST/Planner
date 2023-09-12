@@ -61,6 +61,7 @@ export class RequestInterceptor implements HttpInterceptor {
         if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE') {
             this.table.resetSelection();
         }
+
             
 
         return next.handle(request).pipe(
@@ -68,22 +69,33 @@ export class RequestInterceptor implements HttpInterceptor {
                 next: (data: any) => {
                     if (data.type == 0) {
                         // request in progress
+                        if (request.method == 'POST' || request.method == 'PUT' || request.method == 'PATCH' || request.method == 'DELETE') {
+                            this.table.onRowUnselect();
+                        } else {
+                        }
                     }
                     else if (data instanceof HttpResponse) {
                         if ([200, 204, 201].includes(data.status)) {
                             if (request.method == 'POST') {
                                 this.toastr.success('Operação concluída com sucesso');
-                                this.table.onRowUnselect()
                             }
                             else if (request.method == 'PUT') {
                                 this.toastr.success('Registro atualizado com sucesso');
-                                this.table.selected.next(undefined)
+                                this.table.onRowUnselect();
                             }
                             else if (request.method == 'PATCH') {
                                 this.toastr.success('Registro atualizado com sucesso');
-                                this.table.selected.next(undefined)
+                                this.table.onRowUnselect();
                             }
-                            else if (request.method == 'DELETE') this.toastr.success('Registro excluído com sucesso');
+                            else if (request.method == 'DELETE') {
+                                this.toastr.success('Registro excluído com sucesso')
+                                this.table.onRowUnselect();
+                            }
+                            else if (request.method == 'GET') {
+                                setTimeout(() => {
+                                    this.table.goToCurrentPage();
+                                }, 100);
+                            }
 
                         }
                     }
@@ -97,8 +109,7 @@ export class RequestInterceptor implements HttpInterceptor {
                         returnUrl = returnUrl.includes('account/login') ? '' : returnUrl;
                         this.router.navigate(['account', 'login'], { queryParams: { returnUrl } });
                         localStorage.clear();
-                        this.toastr.error('Faça login')
-                        console.log('request', request.url)
+                        this.toastr.error('Faça login \r\n  Faça login.')
                         this.toastr.error('Acesso não autorizado.');
                     }
                     else if (res.status == 403) {

@@ -17,6 +17,9 @@ export class Table {
     // selectedItems: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     selected: BehaviorSubject<any | undefined> = new BehaviorSubject<any | undefined>(undefined);
 
+    currentPage = new BehaviorSubject<number>(0);
+
+
     constructor(
         private toastr: ToastrService,
         private crypto: Crypto,
@@ -33,7 +36,6 @@ export class Table {
     resetSelection() {
         this.selected.next(undefined)
         this.fecharMenuTable();
-        // this.selectedItems.next([]);
     }
 
     onRowSelect(event: any) {
@@ -141,5 +143,22 @@ export class Table {
         });
     }
 
+    currentPageChange() {
+        var classe = this;
+        $('p-table').find('p-paginator').find('.p-paginator-pages').find('.p-paginator-page').unbind('click')
+        $('p-table').find('p-paginator').find('.p-paginator-pages').find('.p-paginator-page').on('click', (e) => {
+            let currentPage = parseInt($(e.target).text()) ?? 1;
+            if(currentPage != this.currentPage.value) {
+                this.onRowUnselect();
+            }
+            classe.currentPage.next(currentPage)
+        })
+    }
+    
+    goToCurrentPage() {
+        setTimeout(() => {
+            $('p-table').find('p-paginator').find('.p-paginator-pages').find(`.p-paginator-page:contains(${this.currentPage.value})`).trigger('click')
+        }, 100);
+    }
 
 }

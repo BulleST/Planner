@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
-                                        <label for="receita">Receita: <span class="text-danger">*</span></label>
+                                        <label for="receita">Receita <small>(R$)</small>: <span class="text-danger">*</span></label>
                                         <app-input-number [valueInput]="planner.cliente.receita"
                                                           (valueChanges)="planner.cliente.receita = $event; saveData();"
                                                           [inputId]="'receita'"
@@ -207,7 +207,7 @@
                                                           [showErrorMessage]="false"></app-input-number>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                        <label for="despesa">Despesas: <span class="text-danger">*</span></label>
+                                        <label for="despesa">Despesas <small>(R$)</small>: <span class="text-danger">*</span></label>
                                         <app-input-number [valueInput]="planner.cliente.despesa"
                                                           (valueChanges)="planner.cliente.despesa = $event; saveData();"
                                                           [inputId]="'despesa'"
@@ -232,12 +232,13 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
-                                        <label for="taxaSelic">Taxa Selic: <span class="text-danger">*</span></label>
+                                        <label for="taxaSelic">Taxa Selic <small>(%)</small>: <span class="text-danger">*</span></label>
                                         <app-input-number [valueInput]="planner.taxaSelic"
                                                           (valueChanges)="planner.taxaSelic = $event; saveData();"
                                                           [inputId]="'taxaSelic'"
                                                           [mask]="'separator'"
                                                           suffix="%"
+                                                          [max]="100"
                                                           [required]="true"
                                                           [showErrorMessage]="false"
                                                           [allowNegativeNumbers]="true"
@@ -245,12 +246,13 @@
                                                           [showErrorMessage]="false"></app-input-number>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                        <label for="taxaIpca">Taxa IPCA: <span class="text-danger">*</span></label>
+                                        <label for="taxaIpca">Taxa IPCA <small>(%)</small>: <span class="text-danger">*</span></label>
                                         <app-input-number [valueInput]="planner.taxaIpca"
                                                           (valueChanges)="planner.taxaIpca = $event; saveData();"
                                                           [inputId]="'taxaIpca'"
                                                           [mask]="'separator'"
                                                           suffix="%"
+                                                          [max]="100"
                                                           [required]="true"
                                                           [showErrorMessage]="false"
                                                           [allowNegativeNumbers]="true"
@@ -273,7 +275,7 @@
                                         <div class="form-container-title font-weight-bold">Reserva de Emergência</div>
                                         <div class="form-container-body">
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-1">
-                                                <label for="rE_Sugerido"> Sugerida:</label>
+                                                <label for="rE_Sugerido"> Sugerida <small>(R$)</small>:</label>
                                                 <input type="text"
                                                        class="form-control form-control-number"
                                                        id="rE_Sugerido"
@@ -289,7 +291,7 @@
                                                        readonly>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
-                                                <label for="rE_Planejado"> Planejada:</label>
+                                                <label for="rE_Planejado"> Planejada <small>(R$)</small>:</label>
                                                 <input type="text"
                                                        class="form-control form-control-number"
                                                        id="rE_Planejado"
@@ -312,7 +314,7 @@
                                         <div class="form-container-title font-weight-bold">Risco</div>
                                         <div class="form-container-body">
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-1">
-                                                <label for="riscoAssumido"> Assumido:</label>
+                                                <label for="riscoAssumido"> Assumido <small>(R$)</small>:</label>
                                                 <input type="text"
                                                        class="form-control form-control-number"
                                                        id="riscoAssumido"
@@ -328,7 +330,7 @@
                                                        readonly>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
-                                                <label for="riscoTolerado"> Tolerado:</label>
+                                                <label for="riscoTolerado"> Tolerado <small>(R$)</small>:</label>
                                                 <input type="text"
                                                        class="form-control form-control-number"
                                                        id="riscoTolerado"
@@ -471,7 +473,7 @@
                                     </tr>
                                     <tr>
                                         <td class="bg-light px-3 text-right" style="white-space: nowrap;">
-                                            <small><b>Renda Mensal</b></small>
+                                            <small><b>Renda Mensal </b>(R$)</small>
                                         </td>
                                         <td>
                                             <app-input-number [valueInput]="planner.cliente.rendaMensalAposentadoria"
@@ -490,7 +492,7 @@
                                     </tr>
                                     <tr>
                                         <td class="bg-light px-3 text-right" style="white-space: nowrap;">
-                                            <small><b>Rentabilidade</b></small>
+                                            <small><b>Rentabilidade</b> (%)</small>
                                         </td>
                                         <td>
                                             <app-input-number [valueInput]="planner.cliente.rentabilidadeAposentadoria"
@@ -498,7 +500,7 @@
                                                               [inputId]="'rentabilidadeAposentadoria'"
                                                               [mask]="'separator.5'"
                                                               [suffix]="'%'"
-                                                              [max]="100000000"
+                                                              [max]="100"
                                                               [required]="true"
                                                               [showErrorMessage]="false"
                                                               [allowNegativeNumbers]="true"
@@ -525,18 +527,20 @@
                                     </tr>
                                     <tr class="subheader">
                                         <th class="pl-4">Idade</th>
-                                        <th>Valor</th>
+                                        <th>Valor <small>(R$)</small></th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of planner.planejamentoFluxosPontuais; index as i;">
+                                    <tr *ngFor="let item of planner.planejamentoFluxosPontuais; index as i">
                                         <td class="pl-4">
                                             <app-input-number [valueInput]="item.idade"
                                                               (valueChanges)="item.idade = $event; saveData();"
-                                                              [inputId]="'idade-{{i}}'"
+                                                              [inputId]="'idade-' + i"
                                                               [mask]="'0*'"
                                                               [suffix]="' anos'"
+                                                              [max]="20"
+                                                              [max]="100"
                                                               [required]="true"
                                                               [showErrorMessage]="false"
                                                               [allowNegativeNumbers]="false"></app-input-number>
@@ -544,7 +548,7 @@
                                         <td>
                                             <app-input-number [valueInput]="item.valor"
                                                               (valueChanges)="item.valor = $event; saveData();"
-                                                              [inputId]="'valor{{i}}'"
+                                                              [inputId]="'valor-' + i"
                                                               [mask]="'separator'"
                                                               placeholder="R$ 00,00"
                                                               prefix="R$ "
@@ -575,210 +579,212 @@
                                 <h6>Cálculos</h6>
                             </div>
                             <div class="form-row">
-                                <table class="table table-editable table-responsive">
-                                    <thead class="primary">
-                                        <tr>
-                                            <th></th>
-                                            <th>Baixíssimo</th>
-                                            <th>Baixo</th>
-                                            <th>Moderado</th>
-                                            <th>Arrojado</th>
-                                            <th style="white-space: nowrap;">Super Arrojado</th>
-                                            <th>Hedge</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right"><small><b>Sugestão</b></small></td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Baixissimo"
-                                                       name="sugestao_Baixissimo"
-                                                       #sugestao_Baixissimo="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Baixissimo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Baixo"
-                                                       name="sugestao_Baixo"
-                                                       #sugestao_Baixo="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Baixo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Moderado"
-                                                       name="sugestao_Moderado"
-                                                       #sugestao_Moderado="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Moderado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Arrojado"
-                                                       name="sugestao_Arrojado"
-                                                       #sugestao_Arrojado="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Arrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_SuperArrojado"
-                                                       name="sugestao_SuperArrojado"
-                                                       #sugestao_SuperArrojado="ngModel"
-                                                       [(ngModel)]="planner.sugestao_SuperArrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Hedge"
-                                                       name="sugestao_Hedge"
-                                                       #sugestao_Hedge="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Hedge"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="sugestao_Total"
-                                                       name="sugestao_Total"
-                                                       #sugestao_Total="ngModel"
-                                                       [(ngModel)]="planner.sugestao_Total"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 bg-light text-right"><small><b>Plano</b></small></td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Baixissimo"
-                                                       name="plano_Baixissimo"
-                                                       #plano_Baixissimo="ngModel"
-                                                       [(ngModel)]="planner.plano_Baixissimo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Baixo"
-                                                       name="plano_Baixo"
-                                                       #plano_Baixo="ngModel"
-                                                       [(ngModel)]="planner.plano_Baixo"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Moderado"
-                                                       name="plano_Moderado"
-                                                       #plano_Moderado="ngModel"
-                                                       [(ngModel)]="planner.plano_Moderado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Arrojado"
-                                                       name="plano_Arrojado"
-                                                       #plano_Arrojado="ngModel"
-                                                       [(ngModel)]="planner.plano_Arrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_SuperArrojado"
-                                                       name="plano_SuperArrojado"
-                                                       #plano_SuperArrojado="ngModel"
-                                                       [(ngModel)]="planner.plano_SuperArrojado"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Hedge"
-                                                       name="plano_Hedge"
-                                                       #plano_Hedge="ngModel"
-                                                       [(ngModel)]="planner.plano_Hedge"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="plano_Total"
-                                                       name="plano_Total"
-                                                       #plano_Total="ngModel"
-                                                       [(ngModel)]="planner.plano_Total"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       prefix="R$ "
-                                                       readonly>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-editable">
+                                        <thead class="primary">
+                                            <tr>
+                                                <th></th>
+                                                <th>Baixíssimo</th>
+                                                <th>Baixo</th>
+                                                <th>Moderado</th>
+                                                <th>Arrojado</th>
+                                                <th style="white-space: nowrap;">Super Arrojado</th>
+                                                <th>Hedge</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="px-3 bg-light text-right"><small><b>Sugestão</b></small></td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="sugestao_Baixissimo"
+                                                           name="sugestao_Baixissimo"
+                                                           #sugestao_Baixissimo="ngModel"
+                                                           [(ngModel)]="planner.sugestao_Baixissimo"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="sugestao_Baixo"
+                                                           name="sugestao_Baixo"
+                                                           #sugestao_Baixo="ngModel"
+                                                           [(ngModel)]="planner.sugestao_Baixo"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="sugestao_Moderado"
+                                                           name="sugestao_Moderado"
+                                                           #sugestao_Moderado="ngModel"
+                                                           [(ngModel)]="planner.sugestao_Moderado"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="sugestao_Arrojado"
+                                                           name="sugestao_Arrojado"
+                                                           #sugestao_Arrojado="ngModel"
+                                                           [(ngModel)]="planner.sugestao_Arrojado"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="sugestao_SuperArrojado"
+                                                           name="sugestao_SuperArrojado"
+                                                           #sugestao_SuperArrojado="ngModel"
+                                                           [(ngModel)]="planner.sugestao_SuperArrojado"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="sugestao_Hedge"
+                                                           name="sugestao_Hedge"
+                                                           #sugestao_Hedge="ngModel"
+                                                           [(ngModel)]="planner.sugestao_Hedge"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="sugestao_Total"
+                                                           name="sugestao_Total"
+                                                           #sugestao_Total="ngModel"
+                                                           [(ngModel)]="planner.sugestao_Total"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-3 bg-light text-right"><small><b>Plano</b></small></td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="plano_Baixissimo"
+                                                           name="plano_Baixissimo"
+                                                           #plano_Baixissimo="ngModel"
+                                                           [(ngModel)]="planner.plano_Baixissimo"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="plano_Baixo"
+                                                           name="plano_Baixo"
+                                                           #plano_Baixo="ngModel"
+                                                           [(ngModel)]="planner.plano_Baixo"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="plano_Moderado"
+                                                           name="plano_Moderado"
+                                                           #plano_Moderado="ngModel"
+                                                           [(ngModel)]="planner.plano_Moderado"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="plano_Arrojado"
+                                                           name="plano_Arrojado"
+                                                           #plano_Arrojado="ngModel"
+                                                           [(ngModel)]="planner.plano_Arrojado"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="plano_SuperArrojado"
+                                                           name="plano_SuperArrojado"
+                                                           #plano_SuperArrojado="ngModel"
+                                                           [(ngModel)]="planner.plano_SuperArrojado"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="plano_Hedge"
+                                                           name="plano_Hedge"
+                                                           #plano_Hedge="ngModel"
+                                                           [(ngModel)]="planner.plano_Hedge"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="plano_Total"
+                                                           name="plano_Total"
+                                                           #plano_Total="ngModel"
+                                                           [(ngModel)]="planner.plano_Total"
+                                                           mask="separator"
+                                                           thousandSeparator="."
+                                                           decimalMarker=","
+                                                           prefix="R$ "
+                                                           readonly>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

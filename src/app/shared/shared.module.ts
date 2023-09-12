@@ -24,6 +24,8 @@ import { EmpresaSelectComponent } from './empresa-select/empresa-select.componen
 import { DeactivatedComponent } from "./deactivated/deactivated.component";
 import { InputNumberComponent } from './input-number/input-number.component';
 import { TypeofPipe } from "../utils/typeof.pipe";
+import { PaginatorModule } from "primeng/paginator";
+import { ButtonModule } from "primeng/button";
 
 @NgModule({
     declarations: [
@@ -52,6 +54,8 @@ import { TypeofPipe } from "../utils/typeof.pipe";
         MatAutocompleteModule,
         PickListModule,
         StepsModule,
+        PaginatorModule,
+        ButtonModule
     ],
     exports: [
         FormUsuarioComponent,

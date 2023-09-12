@@ -38,6 +38,7 @@ export class ListComponent implements OnDestroy {
 
         var list = this.empresaService.list.subscribe(res => this.list = res);
         this.subscription.push(list);   
+        this.table.currentPage.next(1);
 
         lastValueFrom(this.empresaService.getList());
     }

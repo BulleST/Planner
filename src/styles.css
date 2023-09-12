@@ -94,14 +94,14 @@ hr {
 }
 
 .page__header {
-    padding: 15px calc(0.4vw + 20px);
+    padding: 15px 20px;
     background-color: white;
     box-shadow: 2px 2px 2px #0000001c;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 0px auto 10px;
-    width: 97%;
+    width: 98%;
     flex-flow: wrap;
 }
 
@@ -675,6 +675,7 @@ input {
 .btn-togglePassword:focus {
     outline: 0;
 }
+
 .form-floating .input-group-prepend .input-group-text,
 .form-floating .input-group-append .input-group-text,
 .form-floating .form-control::placeholder,
@@ -1070,7 +1071,6 @@ color: #fff;
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-
 .form-group label[for]:not(.inputFile-content, .inputFile-button),
 .overflow_text {
     white-space: nowrap;
@@ -1268,7 +1268,6 @@ tr.selected,
 }
 
 /* testeee*/
-
 .border-left-0 {
     border-left: 0 !important;
 }
@@ -1354,7 +1353,6 @@ td.td-actions {
     padding: 0;
     vertical-align: middle;
 }
-
 
 .table-editable td .form-control:focus {
     box-shadow: 0px 10000px 1px 1px rgb(202, 233, 244) inset;
@@ -1858,12 +1856,11 @@ body {
     border-color: var(--primary-light) !important;
 }
 
-
 .modal__content:not(.modal .modal__content) {
     padding-top: 20px;
 }
 
-.p-dropdown-panel .p-dropdown-items p-dropdownitem:nth-child(even) .p-dropdown-item{
+.p-dropdown-panel .p-dropdown-items p-dropdownitem:nth-child(even) .p-dropdown-item {
     background: #e7e7e7;
 }
 
@@ -1871,9 +1868,8 @@ body {
     background: white;
 }
 
-
 .p-dropdown-item:hover {
-    background-color: #bfccf4!important;
+    background-color: #bfccf4 !important;
 }
 
 .text-wrap-balance {

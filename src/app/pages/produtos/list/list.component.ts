@@ -35,6 +35,8 @@ export class ListComponent implements OnDestroy {
             this.list = res;
             this.list.filter(x => x.id == 61).forEach(x => {x.showMenuOption = false; x.canSelect = false});
         });
+        console.log('oi')
+        this.table.currentPage.next(1);
         var empresa = this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;
             if (res.id != 0)

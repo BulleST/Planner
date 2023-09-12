@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListSharedComponent implements OnDestroy, OnChanges {
+export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit, AfterViewChecked {
     maskType = MaskType;
     faFilter = faFilter;
     faTimes = faTimes;
@@ -39,6 +39,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
 
     subscription: Subscription[] = [];
 
+    first = 2;
+
     constructor(
         private table: Table,
         private router: Router
@@ -52,6 +54,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
             var selected = this.table.selected.subscribe(res => this.selected = res);
             this.subscription.push(selected);
         }
+
     }
 
     ngOnDestroy(): void {
@@ -86,7 +89,14 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
         if (changes['tableLinks'])
             this.tableLinks = changes['tableLinks'].currentValue;
     }
-
+    ngAfterViewInit(): void {
+    }
+    
+    ngAfterViewChecked(): void {
+        setTimeout(() => {
+            this.table.currentPageChange();
+        }, 200);
+    }
 
     onRowSelect(event: any) {
         this.table.onRowSelect(event);
@@ -119,6 +129,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges {
 
     eval(str, item) {
         return eval(str) as boolean
+    }
+
+    onPageChange(e: any) {
+
     }
 }
 

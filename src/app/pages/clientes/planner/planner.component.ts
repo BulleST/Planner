@@ -406,7 +406,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     saveData() {
-        console.log('saveData', this.planner.planejamentoProduto)
+        console.log(this.planner.planejamentoFluxosPontuais)
         this.plannerService.setObject(this.planner);
     }
 
@@ -443,14 +443,12 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         
         if (this.planner.planejamentoInvestimento.length == 0) {
             console.log('form invalid no investimentos', this.planner.planejamentoInvestimento)
-            console.log('Insira um ou mais investimentos no planner.')
             this.erro.push('Insira um ou mais investimentos no planner.');
             this.toastr.error('Insira um ou mais investimentos no planner.');
             return false;
         }
         if (this.planner.planejamentoProduto.length == 0) {
             console.log('form invalid no produtos', this.planner.planejamentoProduto)
-            console.log('Insira um ou mais produtos no planner.')
             this.erro.push('Insira um ou mais produtos no planner.');
             this.toastr.error('Insira um ou mais produtos no planner.');
             return false;
@@ -458,7 +456,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
         if (this.planner.planejamentoProduto.find(x => x.planoAcao < 0) != undefined) {
             console.log('form invalid no produtos plano acao ', this.planner.planejamentoProduto)
-            console.log('Plano de ação em produto não pode ser inferior a zero.')
             this.erro.push('Plano de ação em produto não pode ser inferior a zero.');
             this.toastr.error('Plano de ação em produto não pode ser inferior a zero.');
             return false;
@@ -466,7 +463,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
             console.log('form invalid no produtos montante ', this.planner.planejamentoProduto)
-            console.log('Soma de plano de ação em produtos deve ser igual ao montante')
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
             this.toastr.error('Soma de plano de ação em produtos deve ser igual ao montante');
             return false;
@@ -508,7 +504,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             }
             lastValueFrom(this.plannerService.create(this.planner))
                 .then(res => {
-                    this.router.navigate([this.crypto.encrypt(res.cliente_Id)], { skipLocationChange: true, relativeTo: this.activatedRoute })
+                    // this.router.navigate([this.clienteIdEncrypted], { skipLocationChange: true, relativeTo: this.activatedRoute })
                     this.plannerService.setObject(res);
                     this.mudouCarteiraSetup = false;
                     if (res.carteiraSetup) {
@@ -517,7 +513,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 })
                 .finally(() => {
                     this.loading = false;
-
                 });
         }
 
@@ -531,6 +526,14 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 return;
             }
             lastValueFrom(this.plannerService.edit(this.planner))
+                .then(res => {
+                    // this.router.navigate([this.clienteIdEncrypted], { skipLocationChange: true, relativeTo: this.activatedRoute })
+                    this.plannerService.setObject(res);
+                    this.mudouCarteiraSetup = false;
+                    if (res.carteiraSetup) {
+                        this.carteiraSetupInalterada = res.carteiraSetup
+                    }
+                })
                 .finally(() => this.loading = false);
         }
     }

@@ -159,7 +159,6 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     setProdutosByRisco() {
-        console.log('setProdutosByRisco')
         let produtosExistentes = this.objeto.carteiraProdutoRel.map(x => x.produto_Id);
         // Seleciona os produtos desse risco, que estão ativos e ainda não foram selecionados
         this.produtosRisco = this.allProdutos.filter(x => x.tipoRisco_Id == this.selectedRisco!.id
@@ -344,7 +343,6 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     validatePercentualRisco() {
-        console.log('validatePercentualRisco')
         if (this.objeto.carteiraProdutoRel.length == 0) {
             this.erro.push('Você deve selecionar pelo menos um produto');
             return false
@@ -370,10 +368,6 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         }
 
         var baixissimos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco_Id == 1)
-        console.log('condicao 1', riscos.filter(x => x.tipoRisco_Id != 1 && x.percentual != 100 ));
-        console.log('condicao 2', riscos.filter(x => x.tipoRisco_Id == 1 && baixissimos.length > 1 && x.percentual != 100 ));
-        console.log('condicao 3', riscos.filter(x => (x.tipoRisco_Id != 1&& x.percentual != 100 ) || (x.tipoRisco_Id == 1 && baixissimos.length > 1 && x.percentual != 100 )));
-
         this.erro = riscos.filter(x =>  
             (x.tipoRisco_Id != 1
                 && x.percentual != 100 )

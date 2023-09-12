@@ -51,12 +51,10 @@ export class VerPlannerReadonlyComponent implements OnInit {
         this.planner.carteiraSetup = new CarteiraSetup;
         this.account = this.accountService.accountValue;
         var params = this.activatedRoute.params.subscribe(item => {
-            console.log(item)
             if (item['cliente_id'] && item['backoffice_id']) {
                 this.loading = true;
                 this.planner.cliente_Id = this.crypto.decrypt(item['cliente_id'])
                 var backoffice_id = this.crypto.decrypt(item['backoffice_id'])
-                console.log(backoffice_id)
                 if (backoffice_id != 3) {
                     this.voltar();
                     return

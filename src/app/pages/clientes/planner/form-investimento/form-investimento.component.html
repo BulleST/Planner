@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
-                            <label for="custosTaxas">Custos/Taxas: <span class="text-danger">*</span> </label>
+                            <label for="custosTaxas">Custos/Taxas <small>(%)</small>: <span class="text-danger">*</span> </label>
                             <app-input-number [valueInput]="objeto.custosTaxas"
                                 (valueChanges)="objeto.custosTaxas = $event;"
                                 [inputId]="'custosTaxas'"
@@ -46,7 +46,7 @@
                                 [required]="true"></app-input-number>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
-                            <label for="rentabilidade">Rentab. Bruta: <span class="text-danger">*</span></label>
+                            <label for="rentabilidade">Rentab. Bruta <small>(%)</small>: <span class="text-danger">*</span></label>
                             <app-input-number [valueInput]="objeto.rentabilidade"
                                 (valueChanges)="objeto.rentabilidade = $event;"
                                 [inputId]="'rentabilidade'"
@@ -59,7 +59,7 @@
                                 [required]="true"></app-input-number>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
-                            <label for="montanteAtual">Montante Atual: </label>
+                            <label for="montanteAtual">Montante Atual <small>(R$)</small>: <span class="text-danger">*</span></label>
                             <app-input-number [valueInput]="objeto.montanteAtual"
                                 (valueChanges)="objeto.montanteAtual = $event;"
                                 [inputId]="'montanteAtual'"

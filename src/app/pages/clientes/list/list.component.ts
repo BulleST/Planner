@@ -39,8 +39,12 @@ export class ListComponent implements OnDestroy {
     ) {
         var list = this.clienteService.list.subscribe(res => this.list = res);
         this.subscription.push(list);
+
+        this.table.currentPage.next(1);
+
         var account = this.accountService.account.subscribe(res => this.account = res);
         this.subscription.push(account);
+
         var empresa = this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;
             if (res.id != 0) {
@@ -53,7 +57,6 @@ export class ListComponent implements OnDestroy {
             if (res) {
                 this.tableLinks = [
                     { label: 'Ver planner', routePath: ['planner'], paramsFieldName: ['id'] }, 
-                    // { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
 
                 // perfilAcesso_Id 3 - Backoffice -> Não pode realizar ações em planner que não o pertence

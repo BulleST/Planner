@@ -35,6 +35,7 @@ export class ListComponent implements OnDestroy {
     ) { 
         var account = this.accountService.account.subscribe(res => this.account = res ?? new Account);
         var list = this.userService.list.subscribe(res => this.list = res);
+        this.table.currentPage.next(1);
         
         var empresa = this.empresaService.empresa.subscribe(async res => {
             this.empresaSelected = res;

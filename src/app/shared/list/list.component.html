@@ -5,25 +5,25 @@
         <span>Carregando... </span>
      </p>
 </div>
-<div class="content" *ngIf="list.length > 0">
+<div class="content" *ngIf="list.length > 0" #aa>
     <p-table
              class="table"
              #dt
              [columns]="columns"
              [value]="list"
-             [paginator]="paginator && list.length > 0"
              [rows]="10"
              [rowHover]="true"
              [rowsPerPageOptions]="[10, 25, 50]"
              responsiveLayout="scroll"
+             [paginator]="paginator && list.length > 0"
              [showCurrentPageReport]="true"
+             currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)"
              [globalFilterFields]="filters"
              [(selection)]="selected"
              [selectionMode]="'single'"
              (onRowSelect)="onRowSelect($event)"
              (onRowUnselect)="onRowUnselect($event)"
-             [filterDelay]="100"
-             currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)">
+             [filterDelay]="100">
         <ng-template pTemplate="caption">
             <div class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 p-0 mb-sm-0 mb-2">

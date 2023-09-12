@@ -1,5 +1,7 @@
 import { AfterContentChecked, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { AlertService } from 'src/app/parts/alert/alert.service';
 
 @Component({
     selector: 'app-input-number',
@@ -32,7 +34,10 @@ export class InputNumberComponent implements OnChanges {
     @Output() ngModel: EventEmitter<NgModel> = new EventEmitter<NgModel>();
     @ViewChild('input') input: NgModel;
 
-    constructor() { 
+    constructor(
+        private alertService: AlertService,
+        private toastrService: ToastrService,
+    ) { 
         this.ngModel.emit(this.input);
     }
 
@@ -63,16 +68,22 @@ export class InputNumberComponent implements OnChanges {
 
     validate() {
         this.input.control.setValue(this.valueInput)
-
         if (this.required == true && !this.valueInput.toString().trim()) {
             this.input.control.setErrors({required: true});
         } 
-        if (this.max != undefined && (this.valueInput > this.max))
-            this.input.control.setErrors({max: true});
-
-        if (this.min != undefined && (this.valueInput < this.min)) 
-            this.input.control.setErrors({min: true});
+        if (this.max != undefined && (this.valueInput > this.max)) {
+            // this.input.control.setErrors({max: true});
+            this.input.control.setValue(this.max);
+            if(this.input.touched) this.toastrService.error('O valor máximo é ' + this.max)
+        }
+        
+        if (this.min != undefined && (this.valueInput < this.min))  {
+            // this.input.control.setErrors({min: true});
+            if(this.input.touched) this.toastrService.error('O valor mínimo é ' + this.min)
+            this.input.control.setValue(this.min)
+        }
     }
+
 
     inputChanged() {
         this.valueChanges.emit(this.valueInput);

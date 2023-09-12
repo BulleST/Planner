@@ -78,19 +78,19 @@ export class PatrimonioPorIdadeComponent implements OnChanges, OnDestroy {
             // labels: Array.from({length: 18}, (_, i) => i * 5), // int[]
             datasets: [
                 {
-                    type: 'line',
+                    type: 'bar',
                     label: 'Planejado',
                     // data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
                     data: this.planner.planejamentoGrafico.map(x => x.valorPlanejado),
-                    backgroundColor: '#242424',
-                    borderColor: '#2424247a'
+                    backgroundColor: '#2d7a95',
                 },
                 {
-                    type: 'bar',
+                    type: 'line',
                     label: 'Realidade Atual',
                     // data: Array.from({length: 18}, (_, i) => parseInt((Math.random() * (80 - 0) + 0).toString())),// int[]
                     data: this.planner.planejamentoGrafico.map(x => x.valorAtual),
-                    backgroundColor: '#2d7a95',
+                    backgroundColor: '#242424',
+                    borderColor: '#2424247a'
                 },
             ]
         }

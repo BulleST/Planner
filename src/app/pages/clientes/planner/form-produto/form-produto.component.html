@@ -62,31 +62,33 @@
                             </div>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
-                            <label for="custosTaxas">Custos/Taxas: </label>
+                            <label for="custosTaxas">Custos/Taxas <small>(%)</small>: <span class="text-danger">*</span> </label>
                             <app-input-number [valueInput]="objeto.custosTaxas"
                                               (valueChanges)="objeto.custosTaxas = $event;"
                                               [inputId]="'custosTaxas'"
                                               [mask]="'separator.2'"
                                               [suffix]="'%'"
                                               [max]="100"
+                                              [min]="0"
                                               [required]="true"
                                               [showErrorMessage]="true"
                                               [allowNegativeNumbers]="false"></app-input-number>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
-                            <label for="rentabilidade">Rentabilidade: <span class="text-danger">*</span></label>
+                            <label for="rentabilidade">Rentabilidade <small>(%)</small>: <span class="text-danger">*</span> </label>
                             <app-input-number [valueInput]="objeto.rentabilidade"
                                               (valueChanges)="objeto.rentabilidade = $event;"
                                               [inputId]="'rentabilidade'"
                                               [mask]="'separator.2'"
                                               [suffix]="'%'"
                                               [max]="100"
+                                              [min]="0"
                                               [required]="true"
                                               [showErrorMessage]="true"
                                               [allowNegativeNumbers]="false"></app-input-number>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
-                            <label for="planoAcao">Plano de Ação: <span class="text-danger">*</span></label>
+                            <label for="planoAcao">Plano de Ação <small>(R$)</small>: <span class="text-danger">*</span> </label>
                             <app-input-number [valueInput]="objeto.planoAcao"
                                               (valueChanges)="objeto.planoAcao = $event;"
                                               [inputId]="'planoAcao'"

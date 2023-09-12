@@ -90,7 +90,6 @@ export class EditComponent implements OnDestroy {
 
     empresaChange(e) {
         var path = this.activatedRoute.children[this.activatedRoute.children.length - 1]?.routeConfig?.path ?? '';
-        console.log(path)
         this.router.navigate(['empresas', 'editar', this.crypto.encrypt(this.objeto.id), path],
                              {skipLocationChange: true});
     }

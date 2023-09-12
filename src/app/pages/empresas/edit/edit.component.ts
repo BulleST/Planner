@@ -5,6 +5,7 @@ import { faArrowRight, faChevronLeft, faCity, faEllipsisV, faFilter, faTimes, fa
 import { MenuItem } from 'primeng/api';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Account } from 'src/app/models/account.model';
+import { Cliente } from 'src/app/models/cliente.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { AccountService } from 'src/app/services/account.service';
 import { ClienteService } from 'src/app/services/cliente.service';
@@ -100,7 +101,7 @@ export class EditComponent implements OnDestroy {
             this.empresaService.setObject(this.objeto, 'getEmpresaData userService')
         });
         lastValueFrom(this.clienteService.getList(this.objeto.id)).then(res => {
-            this.objeto.cliente = res;
+            this.objeto.cliente = res as unknown as Cliente[];
             this.empresaService.setObject(this.objeto, 'getEmpresaData clienteService')
         });
         lastValueFrom(this.produtoService.getList(this.objeto.id)).then(res => {

@@ -5,7 +5,7 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { FilterDisplay, FilterType, MaskType } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Account } from 'src/app/models/account.model';
-import { Cliente, clienteColumns } from 'src/app/models/cliente.model';
+import { Cliente, ClienteList, clienteColumns } from 'src/app/models/cliente.model';
 import { Empresa } from 'src/app/models/empresa.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
 import { AccountService } from 'src/app/services/account.service';
@@ -22,7 +22,7 @@ import { Table } from 'src/app/utils/table';
 })
 export class ListComponent implements OnDestroy {
     faCity = faCity;
-    list: Cliente[] = [];
+    list: ClienteList[] = [];
     columns = clienteColumns;
     tableLinks: MenuTableLink[] = [];
     empresaSelected = new Empresa;

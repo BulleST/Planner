@@ -13,9 +13,6 @@ const usuarios = () => import('./../usuarios/usuarios.module').then(res => res.U
 const produtos = () => import('./../produtos/produtos.module').then(res => res.ProdutosModule);
 const setup = () => import('./../carteira-setup/carteira-setup.module').then(res => res.CarteiraSetupModule);
 
-
-
-
 const routes: Routes = [
     {
         path: '', component: InitialComponent, children: [

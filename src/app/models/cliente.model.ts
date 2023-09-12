@@ -35,7 +35,19 @@ export class Cliente extends ListActions {
     ativo?: boolean;
 
     @jsonIgnore()
-    registroNaoSalvo?: boolean = false; // Se  foi inserida pelo empresa/cadastrar ou empresa/editar
+    registroNaoSalvo?: boolean = false; // Se foi inserida pelo empresa/cadastrar ou empresa/editar
+}
+
+export class ClienteList extends ListActions {
+    id: number = 0;
+    nome: string = '';
+    perfilInvestidor: string = '';
+    accountEmail: string = '';
+    cpf: number = '' as unknown as number;
+    dataDesativado?: Date;
+    ativo?: boolean;
+    @jsonIgnore()
+    registroNaoSalvo?: boolean = false; // Se foi inserida pelo empresa/cadastrar ou empresa/editar
 }
 
 
@@ -72,7 +84,8 @@ export var clienteColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-    }, {
+    }, 
+    {
         field: 'nome',
         header: 'Nome',
         maskType: MaskType.substring,
@@ -94,7 +107,8 @@ export var clienteColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'perfilInvestidor.descricao',
+        // field: 'perfilInvestidor.descricao',
+        field: 'perfilInvestidor',
         header: 'Perfil Investidor',    
         maskType: MaskType.substring,
         substringLength: 20,
@@ -104,7 +118,8 @@ export var clienteColumns: Column[] = [
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     }, {
-        field: 'account.email',
+        // field: 'account.email',
+        field: 'accountEmail',
         header: 'Analista Resp.',
         maskType: MaskType.substring,
         substringLength: 15,

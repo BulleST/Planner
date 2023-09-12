@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map, of, tap } from 'rxjs';
-import { Cliente } from '../models/cliente.model';
+import { Cliente, ClienteList } from '../models/cliente.model';
 import { environment } from 'src/environments/environment';
 import { Crypto } from '../utils/crypto';
 import { Empresa } from '../models/empresa.model';
@@ -16,7 +16,7 @@ import { Role } from '../models/account-perfil.model';
 
 @Injectable({ providedIn: 'root' })
 export class ClienteService {
-    list = new BehaviorSubject<Cliente[]>([]);
+    list = new BehaviorSubject<ClienteList[]>([]);
     url = environment.url;
     objeto = new BehaviorSubject<Cliente>(new Cliente);
     empresa = new Empresa;
@@ -151,10 +151,10 @@ export class ClienteService {
     getList(empresaId?: number) {
         this.table.loading.next(true);
         empresaId = empresaId ?? (this.account.perfilAcesso_Id != Role.Admin ? this.account.empresa_Id : this.empresa.id);
-        return this.http.get<Cliente[]>(`${this.url}/cliente/all/${empresaId}`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<ClienteList[]>(`${this.url}/cliente/all/${empresaId}`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {
-                    list = list.map(x => {
+                    list = (list ?? []).map(x => {
                         x.ativo = !x.dataDesativado;
                         return x;
                     });

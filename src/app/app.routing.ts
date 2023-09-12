@@ -6,8 +6,8 @@ const account = () => import('./pages/account/account.module').then(res => res.A
 const loggedIn = () => import('./pages/logged-in/logged-in.module').then(res => res.LoggedInModule);
 
 const routes: Routes = [
-    { path: '', loadChildren: loggedIn, canActivate: [AuthGuard] },
     { path: 'account', loadChildren: account },
+    { path: '', loadChildren: loggedIn, canActivate: [AuthGuard] },
     { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

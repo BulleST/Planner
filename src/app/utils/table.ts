@@ -40,43 +40,14 @@ export class Table {
         let row: any = event.data;
         if (row != undefined) {
             this.selected.next(row);
-            // let index = this.selectedItems.value.findIndex(n => n.id == row.id);
-            // if (index == -1) {
-            //     let selectedItems = this.selectedItems.value;
-            //     selectedItems.push(row);
-            //     this.selectedItems.next(selectedItems);
-            // }
             this.exibirMenuTable();
         }
     }
 
-    onRowUnselect(event: any) {
-        // let selectedItems = this.selectedItems.value;
-        // if (event.data) {
-        //     let row = event.data;
-        //     let index = this.selectedItems.value.findIndex(n => n.id == row.id);
-        //     if (index != -1) {
-        //         selectedItems.splice(index, 1);
-        //         this.selectedItems.next(selectedItems);
-        //     }
-        // }
-        // if (selectedItems.length > 0) {
-        //     this.selected.next(selectedItems[selectedItems.length - 1]);
-        //     this.exibirMenuTable();
-        // }
-        // else {
-        // }
+    onRowUnselect(event?: any) {
         this.selected.next(undefined)
         this.fecharMenuTable();
     }
-
-    // onAllRowToggle(event: any) {
-    //     if (event.checked == false) {
-    //         this.selectedItems.next([]);
-    //         this.selected.next(undefined);
-    //     }
-    //     this.fecharMenuTable();
-    // }
 
     fecharMenuTable() {
         $('.actions__nav').css({

@@ -14,7 +14,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
 @Component({
     selector: 'app-shared-deactivated',
     templateUrl: './deactivated.component.html',
-    styleUrls: ['./deactivated.component.css']
+    styleUrls: ['./deactivated.component.css'],
 })
 export class DeactivatedComponent implements OnChanges {
     faTimes = faTimes;

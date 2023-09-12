@@ -7,7 +7,6 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { InputTextModule } from 'primeng/inputtext';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { AccountComponent } from './account.component';
 import { NgxMaskModule } from 'ngx-mask';

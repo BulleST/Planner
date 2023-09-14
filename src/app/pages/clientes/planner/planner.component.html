@@ -99,10 +99,11 @@
                                            [disablePopover]="cpf.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData(); validaRG_CPF(cpf, cpf.value)"
+                                           (change)="validaRG_CPF(cpf, cpf.value)"
                                            pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}">
                                     <div *ngIf="cpf.errors">
                                         <p class="text-danger" *ngIf="cpf.errors['jaExiste']">{{cpf.errors['jaExiste']}}</p>
+                                        <p class="text-danger" *ngIf="cpf.errors['invalid']">Esse CPF é inválido</p>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6">
@@ -157,9 +158,11 @@
                                                       [inputId]="'idade'"
                                                       [mask]="'0*'"
                                                       [suffix]="' anos'"
+                                                      [min]="18"
                                                       [required]="true"
-                                                      [showErrorMessage]="false"
+                                                      [showErrorMessage]="true"
                                                       [allowNegativeNumbers]="false"></app-input-number>
+                                    <p class="text-danger" *ngIf="planner.cliente.idade < 18">O cliente deve ter 18 anos</p>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -193,33 +196,35 @@
                                 <div class="form-row">
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
                                         <label for="receita">Receita <small>(R$)</small>: <span class="text-danger">*</span></label>
-                                        <app-input-number [valueInput]="planner.cliente.receita"
+                                        <app-input-number #receita 
+                                                          [valueInput]="planner.cliente.receita"
                                                           (valueChanges)="planner.cliente.receita = $event; saveData();"
+                                                          (ngModelChanged)="validaReceitaDespesa($event)"
                                                           [inputId]="'receita'"
                                                           [mask]="'separator'"
                                                           prefix="R$ "
                                                           [min]="1"
                                                           [max]="100000000"
                                                           [required]="true"
-                                                          [showErrorMessage]="false"
                                                           [allowNegativeNumbers]="true"
                                                           placeholder="R$ 00,00"
-                                                          [showErrorMessage]="false"></app-input-number>
+                                                          [showErrorMessage]="true"></app-input-number>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="despesa">Despesas <small>(R$)</small>: <span class="text-danger">*</span></label>
-                                        <app-input-number [valueInput]="planner.cliente.despesa"
+                                        <app-input-number  #despesa 
+                                                          [valueInput]="planner.cliente.despesa"
                                                           (valueChanges)="planner.cliente.despesa = $event; saveData();"
+                                                          (ngModelChanged)="validaReceitaDespesa($event)"
                                                           [inputId]="'despesa'"
                                                           [mask]="'separator'"
                                                           prefix="R$ "
                                                           [min]="1"
                                                           [max]="100000000"
                                                           [required]="true"
-                                                          [showErrorMessage]="false"
                                                           [allowNegativeNumbers]="true"
                                                           placeholder="R$ 00,00"
-                                                          [showErrorMessage]="false"></app-input-number>
+                                                          [showErrorMessage]="true"></app-input-number>
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +319,7 @@
                                         <div class="form-container-title font-weight-bold">Risco</div>
                                         <div class="form-container-body">
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-1">
-                                                <label for="riscoAssumido"> Assumido <small>(R$)</small>:</label>
+                                                <label for="riscoAssumido"> Assumido <small>(%)</small>:</label>
                                                 <input type="text"
                                                        class="form-control form-control-number"
                                                        id="riscoAssumido"
@@ -330,7 +335,7 @@
                                                        readonly>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
-                                                <label for="riscoTolerado"> Tolerado <small>(R$)</small>:</label>
+                                                <label for="riscoTolerado"> Tolerado <small>(%)</small>:</label>
                                                 <input type="text"
                                                        class="form-control form-control-number"
                                                        id="riscoTolerado"
@@ -927,7 +932,7 @@
                                                     [filter]="true"
                                                     filterBy="nome"
                                                     [showClear]="true"
-                                                    placeholder="Selecione para adicionar"
+                                                    placeholder="Selecione para carregar"
                                                     (ngModelChange)="carteiraSetupChange(_carteirasSetup)"
                                                     [required]="true">
                                             <ng-template let-item pTemplate="item">
@@ -969,11 +974,11 @@
                                         <tr class="primary">
                                             <th class="text-right position-sticky" style="white-space: nowrap;">Produto</th>
                                             <th style="white-space: nowrap;">Custos/Taxas</th>
-                                            <th style="white-space: nowrap;">Percentual</th>
-                                            <th style="white-space: nowrap;">Rentabilidade</th>
+                                            <th style="white-space: nowrap;">Rentab. Bruta</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
                                             <th style="white-space: nowrap;">Montante Sugerido</th>
                                             <th style="white-space: nowrap;">Plano de Ação</th>
+                                            <th style="white-space: nowrap;">Percentual</th>
                                             <th class="td-actions"></th>
                                         </tr>
                                     </ng-template>
@@ -983,7 +988,8 @@
                                                 <small><b>{{ item.produto.descricao }}</b></small>
                                             </td>
                                             <td>
-                                                <app-input-number [valueInput]="item.custosTaxas"
+                                                <app-input-number *ngIf="item.produto_Id != 61"
+                                                                  [valueInput]="item.custosTaxas"
                                                                   (valueChanges)="item.custosTaxas = $event; saveData()"
                                                                   [inputId]="'produto-custosTaxas-' + index"
                                                                   [mask]="'separator.2'"
@@ -993,22 +999,11 @@
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"></app-input-number>
+                                                <span *ngIf="item.produto_Id == 61">-</span>
                                             </td>
                                             <td>
-                                                <app-input-number [valueInput]="item.percentual"
-                                                                  (valueChanges)="item.percentual = $event"
-                                                                  [inputId]="'produto-percentual-' + index"
-                                                                  [mask]="'separator.2'"
-                                                                  suffix="%"
-                                                                  [min]="0"
-                                                                  [max]="100"
-                                                                  [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"
-                                                                  [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
-                                            </td>
-                                            <td>
-                                                <app-input-number [valueInput]="item.rentabilidade"
+                                                <app-input-number *ngIf="item.produto_Id != 61"
+                                                                  [valueInput]="item.rentabilidade"
                                                                   (valueChanges)="item.rentabilidade = $event; saveData()"
                                                                   [inputId]="'produto-rentabilidade-' + index"
                                                                   [mask]="'separator.2'"
@@ -1018,9 +1013,11 @@
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"></app-input-number>
+                                                                  <span *ngIf="item.produto_Id == 61">-</span>
                                             </td>
                                             <td>
-                                                <app-input-number [valueInput]="item.rentabilidadeLiquida"
+                                                <app-input-number *ngIf="item.produto_Id != 61"
+                                                                  [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
                                                                   [inputId]="'produto-rentabilidadeLiquida-' + index"
                                                                   [mask]="'separator.2'"
@@ -1031,6 +1028,7 @@
                                                                   [allowNegativeNumbers]="false"
                                                                   [readonly]="true"
                                                                   [disabled]="true"></app-input-number>
+                                                                  <span *ngIf="item.produto_Id == 61">-</span>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.sugerido"
@@ -1057,6 +1055,19 @@
                                                                   [readonly]="item.produto_Id == 61"
                                                                   [disabled]="item.produto_Id == 61"></app-input-number>
                                             </td>
+                                            <td>
+                                                <app-input-number [valueInput]="item.percentual"
+                                                                  (valueChanges)="item.percentual = $event"
+                                                                  [inputId]="'produto-percentual-' + index"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)"> <!--  *ngIf="item.produto.id != 61" Conta corrente não pode ser excluido-->
                                                     <fa-icon [icon]="faTrash"></fa-icon>
@@ -1069,19 +1080,7 @@
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
-                                            <td></td>
-                                            <td>
-                                                <app-input-number [valueInput]="somaProdutos.somaPercentual"
-                                                                  [inputId]="'somaPercentual'"
-                                                                  [mask]="'separator.2'"
-                                                                  suffix="%"
-                                                                  [required]="false"
-                                                                  [showErrorMessage]="false"
-                                                                  [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
+                                            <td colspan="4"></td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.somaSugerido"
                                                                   [inputId]="'somaSugerido'"
@@ -1102,7 +1101,16 @@
                                                                   [readonly]="true"
                                                                   [disabled]="true"></app-input-number>
                                             </td>
-                                            <td></td>
+                                            <td>
+                                                <app-input-number [valueInput]="somaProdutos.somaPercentual"
+                                                                  [inputId]="'somaPercentual'"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
                                         </tr>
                                         <tr *ngIf="somaProdutos.somaPercentual > 100 || somaProdutos.somaSugerido > this.planner.planejamentoAgregandoValor.montante || somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante"
                                             class="bg-light"
@@ -1462,9 +1470,10 @@
                                                        #solucao_idade_Desempenho="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idade_Desempenho"
                                                        mask="separator.2"
+                                                       suffix="%"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       [readOnly]="true">
+                                                       [readonly]="true">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1483,7 +1492,6 @@
                 </div>
             </div>
             <div class="form-footer-submit-fixed">
-                
                 <div>
                     <div *ngIf="erro.length > 0 || form.invalid || !formIsValid" class="m-0">
                         <p class="text-danger" *ngFor="let err of erro">{{err | json}}</p>
@@ -1491,8 +1499,10 @@
                         <p class="text-danger" *ngIf="form.errors">{{form.errors | json}}</p>
                     </div>
                 </div>
-                <button class="btn btn-primary mr-0 ml-auto" *ngIf="form.valid && formIsValid" [disabled]="loading">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
+                <button type="submit" class="btn btn-primary mr-0 ml-auto" *ngIf="form.valid && formIsValid" [disabled]="loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+                    <span>Salvar</span> 
+                </button>
             </div>
         </form>
         <ng-template #campoObrigatorio>

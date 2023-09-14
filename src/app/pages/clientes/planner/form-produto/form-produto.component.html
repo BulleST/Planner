@@ -1,6 +1,6 @@
 <div class="modal" [class.active]="modalOpen">
     <div class="modal__bg" (click)="voltar()"></div>
-    <div class="modal__inner" style="max-width: 700px;">
+    <div class="modal__inner" style="max-width: 700px; overflow: visible; max-height: 95vh">
         <div class="modal__content">
             <div class="modal__header pb-2">
                 <h3 class="text-orange">Adicionar produto</h3>
@@ -43,7 +43,40 @@
                     <div class="form-row">
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
                             <label for="produto">Produto: <span class="text-danger">*</span></label>
-                            <select
+                            <p-dropdown class="form-control"
+                            id="produto"
+                            name="produto"
+                            #produto="ngModel"
+                            [class.form-control-loading]="loadingProdutos"
+                            [disabled]="loadingRiscos"
+                            [options]="produtos"
+                            [(ngModel)]="objeto.produto"
+                            optionLabel="descricao"
+                            optionValue="id"
+                            optionDisabled="dataDesativado"
+                            [filter]="true"
+                            filterBy="nome"
+                            [showClear]="true"
+                            placeholder="Selecione"
+                            (ngModelChange)="objeto.produto_Id = produto.value ? produto.value.id : undefined"
+                            [required]="true">
+                    <ng-template let-item pTemplate="item">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="mb-0">{{item.descricao}}</p>
+                                <p class="mb-0"><strong>Risco:</strong> {{item.tipoRisco.nome}}</p>
+                            </div>
+                            <span class="flag flag-red"
+                                  *ngIf="item.dataDesativado"
+                                  [ngbPopover]="ativo"> Inativo </span>
+                            <ng-template #ativo>
+                                <div class="py-2 px-3">Desativado em {{item.dataDesativado | date : "dd/MM/yyyy" : 'UTC' }} </div>
+                            </ng-template>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+
+                            <!-- <select
                                     class="form-control"
                                     id="produto"
                                     name="produto"
@@ -56,7 +89,7 @@
                                     <span *ngIf="produtos.length == 0">Nenhum produto</span>
                                 </option>
                                 <option [ngValue]="item" *ngFor="let item of produtos">{{item.descricao}}</option>
-                            </select>
+                            </select> -->
                             <div *ngIf="produto.touched && produto.errors">
                                 <p class="text-danger " *ngIf="produto.errors['required']"><small>Esse campo é obrigatório </small></p>
                             </div>
@@ -75,7 +108,7 @@
                                               [allowNegativeNumbers]="false"></app-input-number>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
-                            <label for="rentabilidade">Rentabilidade <small>(%)</small>: <span class="text-danger">*</span> </label>
+                            <label for="rentabilidade">Rentab. Bruta <small>(%)</small>: <span class="text-danger">*</span> </label>
                             <app-input-number [valueInput]="objeto.rentabilidade"
                                               (valueChanges)="objeto.rentabilidade = $event;"
                                               [inputId]="'rentabilidade'"

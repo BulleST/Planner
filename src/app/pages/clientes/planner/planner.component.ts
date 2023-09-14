@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowRight, faChartPie, faChevronLeft, faPlus, faTimes, faTrash, faTrashAlt, faWallet } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +25,7 @@ import { UsuarioService } from 'src/app/services/user.service';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { getError } from 'src/app/utils/error';
 import { EmpresaService } from 'src/app/services/empresa.service';
+import { InputNumberComponent } from 'src/app/shared/input-number/input-number.component';
 
 @Component({
     selector: 'app-planner',
@@ -103,6 +104,10 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     routerBack: string[] = ['../../'];
     routeBackOptions: any;
 
+    
+    @ViewChild('receita') receita: InputNumberComponent;
+    @ViewChild('despesa') despesa: InputNumberComponent;
+
     constructor(
         private modal: ModalOpen,
         private toastr: ToastrService,
@@ -119,11 +124,11 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
 
-        var dataNascimentoMax = new Date();
-        dataNascimentoMax.setFullYear(dataNascimentoMax.getFullYear() + 100);
-        this.dataNascimentoMax = dataNascimentoMax.toJSON().substring(0, 10);
+        var data = new Date();
+        // var dataNascimentoMax = new Date(data.getFullYear() - 18, data.getMonth(), data.getDate() - 1);
+        this.dataNascimentoMax = data.toJSON().substring(0, 10);
 
-        var dataNascimentoMin = new Date();
+        var dataNascimentoMin = data;
         dataNascimentoMin.setFullYear(dataNascimentoMin.getFullYear() - 100);
         this.dataNascimentoMin = dataNascimentoMin.toJSON().substring(0, 10);
 
@@ -147,16 +152,16 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         lastValueFrom(this.usuarioService.getList(empresa_Id))
             .finally(() => this.loadingUsuarios = false);
 
-        
 
-        var list = this.setup.list.subscribe(res => 
+
+        var list = this.setup.list.subscribe(res =>
             this.carteirasSetup = res.sort((x, y) => {
                 if (Number(y.ativo) < Number(x.ativo)) return -1
-                 else if (Number(y.ativo) > Number(x.ativo)) return 1
+                else if (Number(y.ativo) > Number(x.ativo)) return 1
                 if (x.nome < y.nome) return -1
                 else if (x.nome > y.nome) return 1
                 else return 0
-        }));
+            }));
         var usuarios = this.usuarioService.list.subscribe(res => this.listUsuarios = res
             .sort((x, y) => {
                 if (Number(y.ativo) < Number(x.ativo)) return -1;
@@ -165,10 +170,10 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 if (x.name < y.name) return -1;
                 else if (x.name > y.name) return 1
                 else return 0;
-        }));
+            }));
         var estadoCivil = this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
         var perfilInvestidor = this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
-        
+
         this.subscription.push(list);
         this.subscription.push(usuarios);
         this.subscription.push(estadoCivil);
@@ -197,7 +202,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                         var empresa_Id: number;
                         if (this.account?.perfilAcesso_Id == 1) empresa_Id = this.empresaService.object.id;
                         else empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
-                            
+
                         this.validateDataNascimento();
                         this.validaRG_CPF(this.rg, this.planner.cliente.rg);
                         this.validaRG_CPF(this.cpf, this.planner.cliente.cpf);
@@ -207,7 +212,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                             this.calculaPercentualProdutos();
                             this.calculaPercentualInvestimentos();
                             this.formIsValid = this.validaForm(this.form);
-                            
+
                         });
                         this.subscription.push(getObject);
 
@@ -226,7 +231,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     plannerInitial.account = this.account as Account;
                     plannerInitial.cliente.account_Id = plannerInitial.account_Id;
                 }
-                
+
                 var empresa_Id: number;
                 if (this.account?.perfilAcesso_Id == 1) empresa_Id = this.empresaService.object.id;
                 else empresa_Id = this.planner.account.empresa_Id;
@@ -243,7 +248,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 this.validaRG_CPF(this.cpf, this.planner.cliente.cpf);
             }
         });
-        
+
         this.subscription.push(params);
     }
 
@@ -258,7 +263,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     resetForm() {
         this.plannerService.setObject(new Planejamento);
     }
-    
+
     calcularICM() {
         if (!this.planner.cliente.altura || !this.planner.cliente.peso) {
             this.planner.cliente.imc = '' as unknown as number;
@@ -406,85 +411,158 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     saveData() {
-        console.log(this.planner.planejamentoFluxosPontuais)
+        console.log('saveData', this.planner)
         this.plannerService.setObject(this.planner);
     }
 
     validaRG_CPF(input: NgModel, doc: number) {
         if (!input) {
-            return
-        }
-        if (!doc || doc == 0) {
-            input.control.setErrors({required: true});
             return;
         }
+        if (!doc || doc == 0) {
+            input.control.setErrors({ required: true });
+            return;
+        }
+
+        if (input.name == 'cpf') {
+            var valid = this.validaCPF(doc)
+            if (!valid) {
+                input.control.setErrors({
+                    invalid: true
+                })
+                return;
+            }
+        }
         lastValueFrom(this.clienteService.getByDoc(this.planner.cliente_Id, doc))
-            .then(res => {})
+            .then(res => { 
+                this.saveData();
+            })
             .catch(res => {
                 input.control.setErrors({
                     jaExiste: getError(res)
                 });
             });
-            
+
+    }
+
+    validaCPF(doc: number) {
+        var cpf: string = doc.toString();
+        if (cpf.length > 11)
+            return false;
+        cpf = cpf.padStart(11, '0')
+        if (cpf.length != 11)
+            return false;
+
+        var igual: boolean = true;
+        for (let i = 1; i < 11; i++) {
+            if (cpf[i] != cpf[0])
+                igual = false;
+        }
+        if (igual || cpf == '12345678909')
+            return false;
+
+        var numeros: number[] = Array.of(11);
+        for (let i = 0; i < 11; i++) {
+            numeros[i] = parseInt(cpf[i]);
+        }
+
+        var soma: number = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += (10 - i) * numeros[i];
+        }
+
+        var resultado: number = soma % 11;
+        if (resultado == 1 || resultado == 0) {
+            if (numeros[9] != 0)
+                return false;
+        }
+        else if (numeros[9] != 11 - resultado) {
+            return false;
+        }
+
+        soma = 0;
+
+        for (let i = 0; i < 10; i++)
+            soma += (11 - i) * numeros[i];
+        resultado = soma % 11;
+        if (resultado == 1 || resultado == 0) {
+            if (numeros[10] != 0)
+                return false;
+        }
+        else if (numeros[10] != 11 - resultado) {
+            return false;
+        }
+        return true;
+
     }
 
     validaForm(form: NgForm) {
         this.erro = [];
         if (form.touched && form.invalid) {
-            console.log(form.errors)
             this.erro.push('Campos inválidos!');
-            this.toastr.error('Campos inválidos!');
             return false;
         }
 
         if (this.loading == true) {
             return false;
         }
-        
+
         if (this.planner.planejamentoInvestimento.length == 0) {
-            console.log('form invalid no investimentos', this.planner.planejamentoInvestimento)
             this.erro.push('Insira um ou mais investimentos no planner.');
-            this.toastr.error('Insira um ou mais investimentos no planner.');
             return false;
         }
         if (this.planner.planejamentoProduto.length == 0) {
-            console.log('form invalid no produtos', this.planner.planejamentoProduto)
             this.erro.push('Insira um ou mais produtos no planner.');
-            this.toastr.error('Insira um ou mais produtos no planner.');
             return false;
         }
 
         if (this.planner.planejamentoProduto.find(x => x.planoAcao < 0) != undefined) {
-            console.log('form invalid no produtos plano acao ', this.planner.planejamentoProduto)
             this.erro.push('Plano de ação em produto não pode ser inferior a zero.');
-            this.toastr.error('Plano de ação em produto não pode ser inferior a zero.');
             return false;
         }
 
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
-            console.log('form invalid no produtos montante ', this.planner.planejamentoProduto)
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
-            this.toastr.error('Soma de plano de ação em produtos deve ser igual ao montante');
+            return false;
+        }
+
+        if (this.planner.cliente.receita < this.planner.cliente.despesa) {
+            this.erro.push('Receita deve ser maior que despesas');
             return false;
         }
 
         return true;
     }
 
+    // Receita deve ser maior que despesa
+    validaReceitaDespesa(input: NgModel) {
+        if (this.planner.cliente.receita < this.planner.cliente.despesa) {
+            if (input.name == 'despesa') {
+                this.despesa.error = {message: 'Despesa não pode ser maior que receita.'};
+            } else if (input.name == 'receita'){
+                this.receita.error = {message: 'Receita não pode ser menor que despesa.'};
+            }
+        } else {
+            this.receita.error = null;
+            this.despesa.error = null;
+            this.receita.validate();
+            this.despesa.validate();
+        }
+        
+        return input;
+    }
+
     validateDataNascimento() {
-        var data = new Date(this.planner.cliente.dataNascimento)
-        var dataNascimentoMin = new Date(this.dataNascimentoMin)
-        var dataNascimentoMax = new Date(this.dataNascimentoMax)
+        var data = new Date(this.planner.cliente.dataNascimento);
+        var dataNascimentoMin = new Date(this.dataNascimentoMin);
+        var dataNascimentoMax = new Date(this.dataNascimentoMax);
+
         if (this.dataNascimento) {
             if (data > dataNascimentoMax) {
-                this.dataNascimento.control.setErrors({
-                    max: true
-                })
+                this.dataNascimento.control.setErrors({ max: true })
             }
             else if (data < dataNascimentoMin) {
-                this.dataNascimento.control.setErrors({
-                    min: true
-                })
+                this.dataNascimento.control.setErrors({ min: true })
 
             }
         }
@@ -504,7 +582,12 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             }
             lastValueFrom(this.plannerService.create(this.planner))
                 .then(res => {
-                    // this.router.navigate([this.clienteIdEncrypted], { skipLocationChange: true, relativeTo: this.activatedRoute })
+                    this.clienteIdEncrypted = this.crypto.encrypt(res.cliente_Id) as string;
+                    if (!this.isEditPage) {
+                        this.router.navigate([this.clienteIdEncrypted], { relativeTo: this.activatedRoute });
+                    }
+                    res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
+                    res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                     this.plannerService.setObject(res);
                     this.mudouCarteiraSetup = false;
                     if (res.carteiraSetup) {
@@ -519,15 +602,26 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     send(form: NgForm) {
-        if (this.isEditPage && this.account?.id == this.planner.account_Id) {
-            this.saveData();
-            let valid = this.validaForm(form);
-            if (!valid) {
-                return;
-            }
+        // Se for tela de cadastro isEditPage = false
+        // Ou Se for tela de edição (isEditPage = true) E o usuário logado criou o planner
+        // Ou se o usuário não criou o Planner mas é perfil Admin ou master
+        // Ai sim ele pode editar o planner.
+
+        this.saveData();
+        let valid = this.validaForm(form);
+        if (!valid) {
+            this.toastr.error('Campos inválidos')
+            return;
+        }
+
+        if (!this.isEditPage || ((this.isEditPage && this.account?.id == this.planner.account_Id) || this.account?.perfilAcesso_Id != 3)) {
             lastValueFrom(this.plannerService.edit(this.planner))
                 .then(res => {
-                    // this.router.navigate([this.clienteIdEncrypted], { skipLocationChange: true, relativeTo: this.activatedRoute })
+                    if (!this.isEditPage) {
+                        this.router.navigate([this.clienteIdEncrypted], { relativeTo: this.activatedRoute });
+                    }
+                    res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
+                    res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                     this.plannerService.setObject(res);
                     this.mudouCarteiraSetup = false;
                     if (res.carteiraSetup) {

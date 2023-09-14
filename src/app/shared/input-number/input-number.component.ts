@@ -1,5 +1,5 @@
 import { AfterContentChecked, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { ControlContainer, NgForm, NgModel } from '@angular/forms';
+import { ControlContainer, NgForm, NgModel, ValidationErrors, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 
@@ -10,7 +10,7 @@ import { AlertService } from 'src/app/parts/alert/alert.service';
     changeDetection: ChangeDetectionStrategy.Default,
     viewProviders: [{provide: ControlContainer, useExisting: NgForm }] // Permite validação de form pai em input de componente filho
 })
-export class InputNumberComponent implements OnChanges {
+export class InputNumberComponent implements OnChanges, AfterViewInit {
 
     @Input() valueInput: any;
     @Input() mask?: string;
@@ -29,20 +29,25 @@ export class InputNumberComponent implements OnChanges {
     @Input() placeholder = '';
     @Input() readonly = false;
     @Input() disabled = false;
+    @Input() error: ValidationErrors | null;
 
     @Output() valueChanges: EventEmitter<number> = new EventEmitter<number>();
-    @Output() ngModel: EventEmitter<NgModel> = new EventEmitter<NgModel>();
+    @Output() ngModelChanged: EventEmitter<NgModel> = new EventEmitter<NgModel>();
     @ViewChild('input') input: NgModel;
+    viewInit = false;
 
     constructor(
         private alertService: AlertService,
         private toastrService: ToastrService,
-    ) { 
-        this.ngModel.emit(this.input);
-    }
+    ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['valueInput']) this.valueInput = changes['valueInput'].currentValue;
+        if (changes['valueInput']) {
+            this.valueInput = changes['valueInput'].currentValue;
+            if (this.viewInit) {
+                this.validate();
+            }
+        };
         if (changes['mask']) this.mask = changes['mask'].currentValue;
         if (changes['suffix']) this.suffix = changes['suffix'].currentValue;
         if (changes['prefix']) this.prefix = changes['prefix'].currentValue;
@@ -59,34 +64,57 @@ export class InputNumberComponent implements OnChanges {
         if (changes['allowNegativeNumbers']) this.allowNegativeNumbers = changes['allowNegativeNumbers'].currentValue;
         if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
         if (changes['disabled']) this.disabled = changes['disabled'].currentValue;
-       
+     
        
         setTimeout(() => {
             this.validate();
-        }, 300);
+        }, 400);
     }
+
+    ngAfterViewInit(): void {
+        this.viewInit = true;
+    }
+
+    setErrors(errors: ValidationErrors) {
+        this.error = errors;
+    }
+
 
     validate() {
         this.input.control.setValue(this.valueInput)
         if (this.required == true && !this.valueInput.toString().trim()) {
-            this.input.control.setErrors({required: true});
+            this.input.control.setErrors(Object.assign({}, {required: true}));
         } 
         if (this.max != undefined && (this.valueInput > this.max)) {
-            // this.input.control.setErrors({max: true});
-            this.input.control.setValue(this.max);
-            if(this.input.touched) this.toastrService.error('O valor máximo é ' + this.max)
+            if(this.input.touched) {
+                this.input.control.setValue(this.max);
+                this.toastrService.error('O valor máximo é ' + this.max);
+                this.inputChanged();
+            } else {
+                this.input.control.setErrors(Object.assign({}, {max: true}));
+            }
         }
-        
-        if (this.min != undefined && (this.valueInput < this.min))  {
-            // this.input.control.setErrors({min: true});
-            if(this.input.touched) this.toastrService.error('O valor mínimo é ' + this.min)
-            this.input.control.setValue(this.min)
+        else if (this.min != undefined && (this.valueInput < this.min))  {
+            if(this.input.touched) {
+                this.input.control.setValue(this.min);
+                this.inputChanged();
+                this.toastrService.error('O valor mínimo é ' + this.min);
+             
+                this.inputChanged();
+            } else {
+                this.input.control.setErrors(Object.assign({}, {min: true}));
+            }
+        } else {
+            this.input.control.setErrors(this.error)
         }
+
     }
 
+    
 
     inputChanged() {
         this.valueChanges.emit(this.valueInput);
+        this.ngModelChanged.emit(this.input)
     }
 
     arrowUp(value: number, skip = 1, min = 0, max = 100000000, allowNegativeNumbers = this.allowNegativeNumbers) {

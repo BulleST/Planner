@@ -138,7 +138,7 @@
                                            [(ngModel)]="planner.cliente.dataNascimento"
                                            (ngModelChange)="calculaIdade()"
                                            (change)="saveData(); validateDataNascimento()"
-                                           [min]="dataNascimentoMin"
+                                           [min]="  "
                                            [max]="dataNascimentoMax"
                                            [ngbPopover]="campoObrigatorio"
                                            popoverClass="popover-danger"
@@ -158,11 +158,10 @@
                                                       [inputId]="'idade'"
                                                       [mask]="'0*'"
                                                       [suffix]="' anos'"
-                                                      [min]="18"
+                                                      [readonly]="true"
                                                       [required]="true"
                                                       [showErrorMessage]="true"
                                                       [allowNegativeNumbers]="false"></app-input-number>
-                                    <p class="text-danger" *ngIf="planner.cliente.idade < 18">O cliente deve ter 18 anos</p>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -932,7 +931,7 @@
                                                     [filter]="true"
                                                     filterBy="nome"
                                                     [showClear]="true"
-                                                    placeholder="Selecione para carregar"
+                                                    placeholder="Selecione setup para carregar produtos"
                                                     (ngModelChange)="carteiraSetupChange(_carteirasSetup)"
                                                     [required]="true">
                                             <ng-template let-item pTemplate="item">
@@ -999,7 +998,7 @@
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"></app-input-number>
-                                                <span *ngIf="item.produto_Id == 61">-</span>
+                                                <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
                                             <td>
                                                 <app-input-number *ngIf="item.produto_Id != 61"
@@ -1013,7 +1012,7 @@
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"></app-input-number>
-                                                                  <span *ngIf="item.produto_Id == 61">-</span>
+                                                                  <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
                                             <td>
                                                 <app-input-number *ngIf="item.produto_Id != 61"
@@ -1028,7 +1027,7 @@
                                                                   [allowNegativeNumbers]="false"
                                                                   [readonly]="true"
                                                                   [disabled]="true"></app-input-number>
-                                                                  <span *ngIf="item.produto_Id == 61">-</span>
+                                                                  <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.sugerido"
@@ -1080,7 +1079,7 @@
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
-                                            <td colspan="4"></td>
+                                            <td colspan="3"></td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.somaSugerido"
                                                                   [inputId]="'somaSugerido'"

@@ -18,7 +18,6 @@ export class GraficoComparativoComponent implements OnChanges {
     @Input() open: boolean = true;
     @Input() planner: Planejamento = new Planejamento;
 
-
     chartAtivoData_Investimento: any;
     chartAtivoOptions_Investimento: any;
     @ViewChild('chartAtivo_Investimento') chartAtivo_Investimento;

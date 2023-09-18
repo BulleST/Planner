@@ -85,7 +85,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         if (this.required == true && !this.valueInput.toString().trim()) {
             this.input.control.setErrors(Object.assign({}, {required: true}));
         } 
-        if (this.max != undefined && (this.valueInput > this.max)) {
+        else if (this.max != undefined && (this.valueInput > this.max)) {
             if(this.input.touched) {
                 this.input.control.setValue(this.max);
                 this.toastrService.error('O valor máximo é ' + this.max);

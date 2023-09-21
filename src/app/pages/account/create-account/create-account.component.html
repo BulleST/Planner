@@ -87,7 +87,8 @@
                                        #email="ngModel"
                                        [(ngModel)]="objeto.email"
                                        placeholder="example@gmail.com"
-                                       required>
+                                       required
+                                       [pattern]="emailPattern">
                                 <label for="email">
                                     <span>E-mail <span class="text-danger">*</span></span>
                                 </label>
@@ -109,7 +110,7 @@
                                        [(ngModel)]="objeto.password"
                                        placeholder="******"
                                        required
-                                       minlength="4">
+                                       minlength="6">
                                 <label for="password">
                                     <span>Senha <span class="text-danger">*</span>
                                     </span>
@@ -117,7 +118,7 @@
                             </div>
                             <div *ngIf="password.errors != null && password.touched" class="pl-2 pt-2 pb-0">
                                 <p class="text-danger" *ngIf="password.errors['required']">Este campo é obrigatório.</p>
-                                <p class="text-danger" *ngIf="password.errors['minlength']">Senha deve conter pelo menos 4 caracteres.</p>
+                                <p class="text-danger" *ngIf="password.errors['minlength']">Senha deve conter pelo menos {{password.errors['requiredLength']}} caracteres.</p>
                             </div>
                         </div>
                     </div>

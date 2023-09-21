@@ -61,9 +61,11 @@ export class ListComponent implements OnDestroy {
 
                 // perfilAcesso_Id 3 - Backoffice -> Não pode realizar ações em planner que não o pertence
                 if (this.account?.perfilAcesso_Id != 3 || this.account?.id == res.account_Id) {
+                    var a = res.ativo ? 'Desabilitar' : 'Habilitar';
                     this.tableLinks = [
                         { label: 'Ver planner', routePath: ['planner'], paramsFieldName: ['id'] }, 
-                        { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] }
+                        { label: a, routePath: [ a.toLowerCase() ], paramsFieldName: ['id'] },
+                        { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
                     ];
                     this.tableLinks = this.table.encryptParams(this.tableLinks);
                 } else if (this.account?.perfilAcesso_Id == 3 && this.account?.id != res.account_Id){

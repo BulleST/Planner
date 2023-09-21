@@ -55,6 +55,7 @@ export class ListComponent implements OnDestroy {
                         { label: 'Editar', routePath: [ 'editar'], paramsFieldName: ['id'] },
                         { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] },
                         { label: 'Resetar senha', routePath: [ 'reset-password'], paramsFieldName: ['id'] },
+                        { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                     ];
                 }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);

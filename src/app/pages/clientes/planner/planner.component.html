@@ -100,10 +100,14 @@
                                            triggers="mouseenter:mouseleave"
                                            required
                                            (change)="validaRG_CPF(cpf, cpf.value)"
-                                           pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}">
-                                    <div *ngIf="cpf.errors">
+                                           pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+                                           [readonly]="isEditPage"> 
+                                    <div *ngIf="cpf.touched && cpf.errors">
                                         <p class="text-danger" *ngIf="cpf.errors['jaExiste']">{{cpf.errors['jaExiste']}}</p>
                                         <p class="text-danger" *ngIf="cpf.errors['invalid']">Esse CPF é inválido</p>
+                                    </div>
+                                    <div *ngIf="!cpf.errors && cpf.touched && cpf.dirty">
+                                        <p class="text-info">Após salvar, o CPF não poderá ser alterado</p>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6">
@@ -180,7 +184,8 @@
                                            [disablePopover]="email.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="saveData()">
+                                           (change)="saveData()"
+                                           [pattern]="emailPattern">
                                 </div>
                             </div>
                         </div>
@@ -543,7 +548,7 @@
                                                               [inputId]="'idade-' + i"
                                                               [mask]="'0*'"
                                                               [suffix]="' anos'"
-                                                              [max]="20"
+                                                              [min]="20"
                                                               [max]="100"
                                                               [required]="true"
                                                               [showErrorMessage]="false"
@@ -556,6 +561,7 @@
                                                               [mask]="'separator'"
                                                               placeholder="R$ 00,00"
                                                               prefix="R$ "
+                                                              [min]="1"
                                                               [required]="true"
                                                               [showErrorMessage]="false"
                                                               [allowNegativeNumbers]="true"
@@ -846,6 +852,7 @@
                                                                   [allowNegativeNumbers]="false"
                                                                   [required]="true"></app-input-number>
                                             </td>
+
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
@@ -861,7 +868,7 @@
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.montanteAtual"
-                                                                  (valueChanges)="item.montanteAtual = $event"
+                                                                  (valueChanges)="item.montanteAtual = $event; saveData();"
                                                                   [inputId]="'investimento-montanteAtual-' + index"
                                                                   [mask]="'separator.2'"
                                                                   prefix="R$ "
@@ -947,19 +954,24 @@
                                             </ng-template>
                                         </p-dropdown>
                                     </div>
-                                    <button *ngIf="planner.carteiraSetup_Id != 0 && (planner.planejamentoProduto.length == 0 || mudouCarteiraSetup )"
-                                            type="button"
-                                            triggers="mouseenter:mouseleave"
-                                            class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
-                                            (click)="carregarProdutos(form)"
-                                            [disabled]="form.invalid || loading">
-                                        <span>Carregar produtos</span>
-                                    </button>
-                                    <a class="link ml-3"
-                                       [routerLink]="['produto']"
-                                       *ngIf="planner.planejamentoProduto.length > 0 
-                                                && planner.carteiraSetup_Id != 0
-                                                && !mudouCarteiraSetup"> Adicionar outros produtos </a>
+                                    <!-- <div>
+                                        <p>mudouCarteiraSetup: {{mudouCarteiraSetup}}</p>
+                                        <p>planner.planejamentoProduto.length: {{planner.planejamentoProduto.length}}</p>
+                                        <p *ngIf="planner.planejamentoProduto[0]">planner.planejamentoProduto[0].produto_Id: {{planner.planejamentoProduto[0].produto_Id}}</p>
+                                        <p>planner.carteiraSetup.carteiraProdutoRel.length: {{planner.carteiraSetup.carteiraProdutoRel.length}}</p>
+                                        <p *ngIf="planner.carteiraSetup.carteiraProdutoRel[0]">planner.carteiraSetup.carteiraProdutoRel[0].produto_Id: {{planner.carteiraSetup.carteiraProdutoRel[0].produto_Id}}</p>
+                                    </div> -->
+                                    <div *ngIf="planner.carteiraSetup_Id != 0">
+                                        <button type="button"  *ngIf="mudouCarteiraSetup || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61 && planner.carteiraSetup.carteiraProdutoRel.length == 1 && planner.carteiraSetup.carteiraProdutoRel[0].produto_Id != 61)"
+                                                triggers="mouseenter:mouseleave"
+                                                class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
+                                                (click)="carregarProdutos(form)"
+                                                [disabled]="form.invalid || loading">
+                                            <span>Carregar produtos</span>
+                                        </button>
+                                        <a class="link ml-3" [routerLink]="['produto']"
+                                           *ngIf="planner.planejamentoProduto.length > 0 && !mudouCarteiraSetup"> Adicionar outros produtos </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -971,26 +983,30 @@
                                          emptyMessage="Nenhum registro">
                                     <ng-template pTemplate="header" let-columns>
                                         <tr class="primary">
-                                            <th class="text-right position-sticky" style="white-space: nowrap;">Produto</th>
+                                            <th class="text-right px-3 pe-0" style="white-space: nowrap;">Risco |</th>
+                                            <th class="text-left px-3 ps-1 position-sticky" style="white-space: nowrap;">Produto</th>
                                             <th style="white-space: nowrap;">Custos/Taxas</th>
                                             <th style="white-space: nowrap;">Rentab. Bruta</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
                                             <th style="white-space: nowrap;">Montante Sugerido</th>
                                             <th style="white-space: nowrap;">Plano de Ação</th>
-                                            <th style="white-space: nowrap;">Percentual</th>
+                                            <th style="white-space: nowrap;">Percentual (~)</th>
                                             <th class="td-actions"></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-item let-index="rowIndex">
                                         <tr>
-                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                            <td class="px-3 pe-0 bg-light text-right" style="white-space: nowrap;">
+                                                <small><b>{{item.produto.tipoRisco.nome}}</b> |</small>
+                                            </td>
+                                            <td class="px-3 ps-1 bg-light text-left position-sticky" style="white-space: nowrap;">
                                                 <small><b>{{ item.produto.descricao }}</b></small>
                                             </td>
                                             <td>
                                                 <app-input-number *ngIf="item.produto_Id != 61"
                                                                   [valueInput]="item.custosTaxas"
                                                                   (valueChanges)="item.custosTaxas = $event; saveData()"
-                                                                  [inputId]="'produto-custosTaxas-' + index"
+                                                                  [inputId]="'produto-custosTaxas-' + item.produto_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
                                                                   [min]="0"
@@ -1004,7 +1020,7 @@
                                                 <app-input-number *ngIf="item.produto_Id != 61"
                                                                   [valueInput]="item.rentabilidade"
                                                                   (valueChanges)="item.rentabilidade = $event; saveData()"
-                                                                  [inputId]="'produto-rentabilidade-' + index"
+                                                                  [inputId]="'produto-rentabilidade-' + item.produto_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
                                                                   [min]="0"
@@ -1018,7 +1034,7 @@
                                                 <app-input-number *ngIf="item.produto_Id != 61"
                                                                   [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
-                                                                  [inputId]="'produto-rentabilidadeLiquida-' + index"
+                                                                  [inputId]="'produto-rentabilidadeLiquida-' + item.produto_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
                                                                   [min]="0"
@@ -1032,7 +1048,7 @@
                                             <td>
                                                 <app-input-number [valueInput]="item.sugerido"
                                                                   (valueChanges)="item.sugerido = $event"
-                                                                  [inputId]="'produto-sugerido-' + index"
+                                                                  [inputId]="'produto-sugerido-' + item.produto_Id"
                                                                   [mask]="'separator.2'"
                                                                   prefix="R$ "
                                                                   [min]="0"
@@ -1044,7 +1060,7 @@
                                             <td style="white-space: nowrap">
                                                 <app-input-number [valueInput]="item.planoAcao"
                                                                   (valueChanges)="item.planoAcao = $event; saveData()"
-                                                                  [inputId]="'produto-planoAcao-' + index"
+                                                                  [inputId]="'produto-planoAcao-' + item.produto_Id"
                                                                   [mask]="'separator.2'"
                                                                   prefix="R$ "
                                                                   [min]="0"
@@ -1057,8 +1073,8 @@
                                             <td>
                                                 <app-input-number [valueInput]="item.percentual"
                                                                   (valueChanges)="item.percentual = $event"
-                                                                  [inputId]="'produto-percentual-' + index"
-                                                                  [mask]="'separator.2'"
+                                                                  [inputId]="'produto-percentual-' + item.produto_Id"
+                                                                  [mask]="'separator'"
                                                                   suffix="%"
                                                                   [min]="0"
                                                                   [max]="100"
@@ -1068,7 +1084,7 @@
                                                                   [disabled]="true"></app-input-number>
                                             </td>
                                             <td class="td-actions">
-                                                <a class="btn btn-trash" title="Remover linha" (click)="removerProduto(item)"> <!--  *ngIf="item.produto.id != 61" Conta corrente não pode ser excluido-->
+                                                <a class="btn btn-trash" *ngIf="item.produto.id != 61" (click)="removerProduto(item)" title="Remover linha"> <!--  Conta corrente não pode ser excluido-->
                                                     <fa-icon [icon]="faTrash"></fa-icon>
                                                 </a>
                                             </td>
@@ -1076,12 +1092,14 @@
                                     </ng-template>
                                     <ng-template pTemplate="footer">
                                         <tr *ngIf="planner.planejamentoProduto.length > 0" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                            <td></td>
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
                                             <td colspan="3"></td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.somaSugerido"
+                                                                  (valueChanges)="somaProdutos.somaSugerido = $event"
                                                                   [inputId]="'somaSugerido'"
                                                                   [mask]="'separator.2'"
                                                                   prefix="R$ "
@@ -1092,6 +1110,7 @@
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.somaPlanoAcao"
+                                                                  (valueChanges)="somaProdutos.somaPlanoAcao = $event"
                                                                   [inputId]="'somaPlanoAcao'"
                                                                   [mask]="'separator.2'"
                                                                   prefix="R$ "
@@ -1102,6 +1121,7 @@
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.somaPercentual"
+                                                                  (valueChanges)="somaProdutos.somaPercentual = $event"
                                                                   [inputId]="'somaPercentual'"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
@@ -1110,48 +1130,37 @@
                                                                   [readonly]="true"
                                                                   [disabled]="true"></app-input-number>
                                             </td>
-                                        </tr>
-                                        <tr *ngIf="somaProdutos.somaPercentual > 100 || somaProdutos.somaSugerido > this.planner.planejamentoAgregandoValor.montante || somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante"
-                                            class="bg-light"
-                                            [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                            <td></td>
+                                        </tr>     
+                                        <tr *ngIf="somaProdutos.somaPercentual > 100" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                            <td></td>
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Diferença</b></small>
                                             </td>
-                                            <td></td>
+                                            <td colspan="4"></td>
                                             <td>
-                                                <app-input-number [valueInput]="100 - somaProdutos.somaPercentual"
-                                                                  [inputId]="'diferenca-somaPercentual'"
+                                                <app-input-number [valueInput]="somaProdutos.diferencaPlanoAcao"
+                                                                  (valueChanges)="somaProdutos.diferencaPlanoAcao = $event"
+                                                                  [inputId]="'diferencaPlanoAcao'"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"
+                                                                  [allowNegativeNumbers]="true"></app-input-number>
+                                            </td>
+                                            <td>
+                                                <app-input-number [valueInput]="somaProdutos.diferencaPercentual"
+                                                                  (valueChanges)="somaProdutos.diferencaPercentual = $event"
+                                                                  [inputId]="'diferencaPercentual'"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
                                                                   [required]="false"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="true"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <app-input-number [valueInput]="this.planner.planejamentoAgregandoValor.montante - somaProdutos.somaSugerido"
-                                                                  [inputId]="'diferenca-somaSugerido'"
-                                                                  [mask]="'separator.2'"
-                                                                  prefix="R$ "
-                                                                  [required]="false"
-                                                                  [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="true"
-                                                                  [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
-                                            </td>
-                                            <td>
-                                                <app-input-number [valueInput]="this.planner.planejamentoAgregandoValor.montante - somaProdutos.somaPlanoAcao"
-                                                                  [inputId]="'diferenca-somaPlanoAcao'"
-                                                                  [mask]="'separator.2'"
-                                                                  prefix="R$ "
-                                                                  [required]="false"
-                                                                  [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="true"
-                                                                  [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [allowNegativeNumbers]="true"></app-input-number>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -1159,7 +1168,7 @@
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
                                             <td></td>
-                                            <td [attr.colspan]="6" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                            <td [attr.colspan]="9" class="py-2 px-2 text-grey"> Nenhum registro </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -1380,7 +1389,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
-                                                       [readOnly]="true">
+                                                       [readOnly]="true"
+                                                       [allowNegativeNumbers]="true">
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1393,7 +1403,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       [readOnly]="true">
+                                                       [readOnly]="true"
+                                                       [allowNegativeNumbers]="true">
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1406,7 +1417,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       [readOnly]="true">
+                                                       [readOnly]="true"
+                                                       [allowNegativeNumbers]="true">
                                             </td>
                                             <td class="border-primary border-left border-top">
                                                 <!-- {{planner.planejamentoAgregandoValor!.plMax_Diferenca}} <br> -->
@@ -1420,7 +1432,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       [readOnly]="true">
+                                                       [readOnly]="true"
+                                                       [allowNegativeNumbers]="true">
                                             </td>
                                             <td class="border-primary border">
                                                 <input type="text"
@@ -1432,7 +1445,8 @@
                                                        mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       [readOnly]="true">
+                                                       [readOnly]="true"
+                                                       [allowNegativeNumbers]="true">
                                             </td>
                                         </tr>
                                         <tr>
@@ -1458,7 +1472,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
-                                                       [readOnly]="true">
+                                                       [readOnly]="true"
+                                                       [allowNegativeNumbers]="true">
                                             </td>
                                             <td class="border-primary border">
                                                 <input type="text"
@@ -1472,7 +1487,8 @@
                                                        suffix="%"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       [readonly]="true">
+                                                       [readonly]="true"
+                                                       [allowNegativeNumbers]="true">
                                             </td>
                                         </tr>
                                     </tbody>

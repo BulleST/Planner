@@ -71,6 +71,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         somaPercentual: 0,
         somaPlanoAcao: 0,
         somaSugerido: 0,
+        diferencaPercentual: 0,
+        diferencaPlanoAcao: 0,
+        diferencaSugerido: 0,
     }
 
     somaInvestimentos = {
@@ -108,6 +111,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     @ViewChild('receita') receita: InputNumberComponent;
     @ViewChild('despesa') despesa: InputNumberComponent;
 
+    emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    
     constructor(
         private modal: ModalOpen,
         private toastr: ToastrService,
@@ -147,12 +152,15 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         else empresa_Id = this.planner.account.empresa_Id;
 
         lastValueFrom(this.setup.getList(empresa_Id))
+            .then(res => {
+                if (this.planner.carteiraSetup_Id) {
+                    this.planner.carteiraSetup = res.find(x => x.id == this.planner.carteiraSetup_Id) as CarteiraSetup;
+                }
+            })
             .finally(() => this.loadingCarteiraSetup = false);
 
         lastValueFrom(this.usuarioService.getList(empresa_Id))
             .finally(() => this.loadingUsuarios = false);
-
-
 
         var list = this.setup.list.subscribe(res =>
             this.carteirasSetup = res.sort((x, y) => {
@@ -161,7 +169,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 if (x.nome < y.nome) return -1
                 else if (x.nome > y.nome) return 1
                 else return 0
-            }));
+        }));
+        this.subscription.push(list);
         var usuarios = this.usuarioService.list.subscribe(res => this.listUsuarios = res
             .sort((x, y) => {
                 if (Number(y.ativo) < Number(x.ativo)) return -1;
@@ -170,14 +179,14 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 if (x.name < y.name) return -1;
                 else if (x.name > y.name) return 1
                 else return 0;
-            }));
-        var estadoCivil = this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
-        var perfilInvestidor = this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
-
-        this.subscription.push(list);
+        }));
         this.subscription.push(usuarios);
+
+        var estadoCivil = this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
         this.subscription.push(estadoCivil);
+        var perfilInvestidor = this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
         this.subscription.push(perfilInvestidor);
+
     }
 
     ngAfterViewInit(): void {
@@ -198,7 +207,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
                         this.carteiraSetupInalterada = res.carteiraSetup;
-
                         var empresa_Id: number;
                         if (this.account?.perfilAcesso_Id == 1) empresa_Id = this.empresaService.object.id;
                         else empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
@@ -282,36 +290,70 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
             // Ordena os produtos e deixa conta corrente por ultimo
             var list = this.planner.planejamentoProduto;
-            list = list.sort((x, y) => x.produto.descricao.toLowerCase() > y.produto.descricao.toLowerCase() ? 1 : -1);
+            list = list.sort((x, y) => {
+                
+                if (x.produto.tipoRisco_Id > y.produto.tipoRisco_Id) return -1;
+                else if (x.produto.tipoRisco_Id < y.produto.tipoRisco_Id)  return 1;
+               
+                // Else go to the 2nd item
+                if (x.produto.descricao.toLowerCase() < y.produto.descricao.toLowerCase()) return -1;
+                else if (x.produto.descricao.toLowerCase() > y.produto.descricao.toLowerCase()) return 1;
+                else return 0;  // nothing to split them
+            });
+            
+            
+            // .sort((x, y) => x.produto.tipoRisco.nome.toLowerCase() > y.produto.tipoRisco.nome.toLowerCase() ? 1 : -1);
             var contaCorrenteIndex = list.findIndex(x => x.produto_Id == 61);
             var contaCorrente = list.splice(contaCorrenteIndex, 1);
             list.push(contaCorrente[0])
 
+            var maxDecimalLength = 2
             // Calcula percentuais e calcula valor da sobra para conta corrente
             list = list.map(x => {
-                var percentual = 0
-                if (x.produto_Id == 61) {
-                    var sobra = this.planner.planejamentoAgregandoValor.montante - somaPlanoAcao;
-                    percentual = sobra > 0 ? sobra / this.planner.planejamentoAgregandoValor.montante : 0;
-                    x.percentual = round(percentual * 100, 2);
-                    x.planoAcao = sobra > 0 ? sobra : 0;
-                    x.sugerido = x.sugerido;
+                var decimalLength = 2;
+                var percentual = 0;
+                var multiplier = 1;
 
+                if (x.produto_Id == 61) { // Se for conta corrente calcula a sobra
+                    var sobra = montanteTotal - somaPlanoAcao;
+                    x.sugerido = x.sugerido;
+                    x.planoAcao = sobra > 0 ? sobra: 0;
+                    if (sobra > 0) {
+                        x.planoAcao = sobra;
+                        var total: number[] | number = this.planner.planejamentoProduto.filter(x => x.produto_Id != 61).map(x => x.percentual);
+                        total = total.length > 0 ? total.reduce((x, y) => x + y) : 0;
+                        percentual = 100 - total;
+                    } else {
+                        x.planoAcao, percentual = 0
+                    }
+                    x.percentual = round(percentual, maxDecimalLength);
+                    
                 } else {
                     percentual = x.planoAcao / montanteTotal;
-                    x.percentual = round(percentual * 100, 2);
+                    x.percentual = round(percentual * 100, decimalLength);
+                    while (x.planoAcao != 0 && x.percentual == 0) {
+                        x.percentual = round(percentual * multiplier, ++decimalLength);
+                        maxDecimalLength = decimalLength > maxDecimalLength ? decimalLength : maxDecimalLength;
+                    }
                 }
-                somaPercentual += percentual;
+                somaPercentual += x.percentual;
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
-                x = Object.assign({}, x) // Força a mudança na model
                 return x
             });
-            this.somaProdutos.somaPercentual = round(somaPercentual * 100, 2);
+
+
+            this.somaProdutos.somaPercentual = round(somaPercentual, 2)  ;
             this.somaProdutos.somaPlanoAcao = round(somaPlanoAcao, 2);
             this.somaProdutos.somaSugerido = round(somaSugerido, 2);
-            this.planner.planejamentoProduto = list;
-
+            this.somaProdutos.diferencaPercentual = round(100 - this.somaProdutos.somaPercentual, 2);
+            this.somaProdutos.diferencaPlanoAcao = round(montanteTotal - this.somaProdutos.somaPlanoAcao, 2);
+            this.somaProdutos.diferencaSugerido = round(montanteTotal - this.somaProdutos.somaSugerido, 2);
+            
+            setTimeout(() => { // espera atualizar html
+                this.planner.planejamentoProduto = Object.assign([], list); // Força a mudança na model
+                this.somaProdutos = Object.assign({}, this.somaProdutos) // Força a mudança na model
+            }, 1000);
         }
 
     }
@@ -357,7 +399,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         } else {
             this.planner.carteiraSetup = undefined as unknown as CarteiraSetup;
         }
-
+        
+        console.log(this.planner.carteiraSetup)
         this.mudouCarteiraSetup = !(this.planner.carteiraSetup_Id == this.carteiraSetupInalterada.id);
         this.saveData();
     }
@@ -403,10 +446,12 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     removerProduto(item: PlanejamentoProduto) {
-        let index = this.planner.planejamentoProduto.findIndex(x => x == item);
-        if (index != -1) {
-            this.planner.planejamentoProduto.splice(index, 1);
-            this.saveData();
+        if (item.produto_Id != 61) {
+            let index = this.planner.planejamentoProduto.findIndex(x => x == item);
+            if (index != -1) {
+                this.planner.planejamentoProduto.splice(index, 1);
+                this.saveData();
+            }
         }
     }
 

@@ -12,16 +12,8 @@ const routes: Routes = [
     {
         path: '', component: ListComponent, children: [
             { path: 'excluir/:setup_id', component: DeleteComponent, title: 'Planner - Excluir carteira ' },
-            {
-                path: 'habilitar/:setup_id',
-                component: DeactivatedComponent,
-                title: 'Planner - Habilitar carteira'
-            },
-            {
-                path: 'desabilitar/:setup_id',
-                component: DeactivatedComponent,
-                title: 'Planner - Desabilitar carteira'
-            },
+            { path: 'habilitar/:setup_id', component: DeactivatedComponent, title: 'Planner - Habilitar carteira' },
+            { path: 'desabilitar/:setup_id', component: DeactivatedComponent, title: 'Planner - Desabilitar carteira' },
         ]
     }
 ];

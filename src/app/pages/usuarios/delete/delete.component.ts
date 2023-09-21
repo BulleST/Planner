@@ -7,6 +7,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
+import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -87,6 +88,7 @@ export class DeleteComponent implements OnDestroy {
                     this.voltar();
                     this.userService.setObject(new Usuario);
                 })
+                .catch(res => this.erro.push(getError(res)))
                 .finally(() => this.loading = false);
         }
     }

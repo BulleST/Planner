@@ -7,6 +7,7 @@ import { Produto } from 'src/app/models/produto.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { Crypto } from 'src/app/utils/crypto';
+import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -92,6 +93,7 @@ export class DeleteComponent implements OnDestroy {
                     this.voltar();
                     this.produtoService.setObject(new Produto);
                 })
+                .catch(res => this.erro.push(getError(res)))
                 .finally(() => this.loading = false);
         }
     }

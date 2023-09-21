@@ -26,6 +26,8 @@ export class DadosCadastraisComponent implements OnDestroy {
     url = '';
     subscription: Subscription[] = [];
 
+    emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    
     constructor(
         private toastr: ToastrService,
         private empresaService: EmpresaService,

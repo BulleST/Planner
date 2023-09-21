@@ -6,6 +6,7 @@ import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
 import { Crypto } from 'src/app/utils/crypto';
+import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
 
 @Component({
@@ -81,7 +82,7 @@ export class DeleteComponent implements OnDestroy {
                     this.voltar();
                     this.setupService.setObject(new CarteiraSetup);
                 })
-                .catch()
+                .catch(res => this.erro.push(getError(res)))
                 .finally(() => this.loading = false);
         }
     }

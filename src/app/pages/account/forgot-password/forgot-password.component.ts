@@ -19,6 +19,7 @@ export class ForgotPasswordComponent {
     object = {
         email: '',
     };
+    emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     constructor(
         private activatedRoute: ActivatedRoute,

@@ -21,6 +21,8 @@ export class CreateAccountComponent implements OnDestroy {
     loading: boolean = false;
     erro = '';
     subscription: Subscription[] = [];
+    emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
     constructor(
         private toastr: ToastrService,
         private router: Router,

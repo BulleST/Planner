@@ -23,7 +23,6 @@ import { FormClienteComponent } from './cliente/form/form.component';
 import { EmpresaSelectComponent } from './empresa-select/empresa-select.component';
 import { DeactivatedComponent } from "./deactivated/deactivated.component";
 import { InputNumberComponent } from './input-number/input-number.component';
-import { TypeofPipe } from "../utils/typeof.pipe";
 import { PaginatorModule } from "primeng/paginator";
 import { ButtonModule } from "primeng/button";
 

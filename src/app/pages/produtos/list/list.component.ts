@@ -46,6 +46,7 @@ export class ListComponent implements OnDestroy {
                 this.tableLinks = [
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
                     { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [(res.ativo ? 'desabilitar' : 'habilitar')], paramsFieldName: ['id'] },
+                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             } else if (res && res.descricao != 'Conta Corrente') {

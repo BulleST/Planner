@@ -37,6 +37,8 @@ export class FormClienteComponent {
     @ViewChild('dataNascimento') dataNascimento?: NgModel;
     dataNascimentoMin = '';
     dataNascimentoMax = '';
+    emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    
 
     constructor(
         private toastr: ToastrService,

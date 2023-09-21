@@ -22,6 +22,7 @@ export class FormUsuarioComponent implements OnDestroy {
     perfil: PerfilAcesso[] = [];
     loadingPerfil = true;
     subscription: Subscription[] = [];
+    emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 
     constructor(

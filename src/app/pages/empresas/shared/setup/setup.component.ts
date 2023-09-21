@@ -124,19 +124,19 @@ export class SetupComponent implements OnDestroy {
             return x;
         });
 
-        if (this.url.includes('empresas/cadastrar')) {
+        if (this.url.includes('empresas/cadastrar')) { // Cadastrar
             lastValueFrom(this.empresaService.create(obj))
             .then(res => {
                 lastValueFrom(this.empresaService.getList());
-                this.modal.voltar();
+                this.modal.voltar(['empresas'], {});
             })
             .catch(res => this.menuItems.erro.push(getError(res)))
         }
-        else if (this.url.includes('empresas/editar')) { // Enviar para a API
+        else if (this.url.includes('empresas/editar')) { // Editar
             lastValueFrom(this.empresaService.edit(obj))
             .then(res => {
                 lastValueFrom(this.empresaService.getList());
-                this.modal.voltar();
+                this.modal.voltar(['empresas'], {});
             })
             .catch(res => this.menuItems.erro.push(getError(res)))
         }

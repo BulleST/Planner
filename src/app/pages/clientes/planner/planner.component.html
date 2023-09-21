@@ -2,7 +2,9 @@
     <div class="modal__header pb-2" style="padding: 0 25px;">
         <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
             <a class="link text-dark" (click)="voltar()">
-                <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> Voltar </a>
+                <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> 
+                <span>Voltar</span>
+            </a>
             <div>
                 <button class="btn btn-yellow" (click)="resetForm()">Limpar campos</button>
                 <!-- <a class="btn btn-primary ml-1" [routerLink]="['..', 'excluir', plannerIdEncrypted]" *ngIf="planner.id != 0">Excluir planner</a> -->

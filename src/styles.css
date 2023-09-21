@@ -82,10 +82,9 @@ hr {
     margin-bottom: 5px;
 }
 
-.btn-check:focus+.btn,
-.btn:focus {
+.btn-check:focus+.btn, .btn:focus {
     outline: none;
-    box-shadow: none;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
 }
 
 .page {

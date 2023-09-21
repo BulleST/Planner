@@ -9,6 +9,12 @@
         </div>
     </div>
     <div class="page__body px-3">
+     <p class="mb-3">
+        <a class="link text-dark" (click)="voltar()">
+            <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> 
+            <span>Voltar</span>
+        </a>
+     </p>
         <form #form="ngForm">
             <app-menu-items></app-menu-items>
         </form>

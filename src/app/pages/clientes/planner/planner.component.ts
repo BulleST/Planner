@@ -26,6 +26,7 @@ import { ClienteService } from 'src/app/services/cliente.service';
 import { getError } from 'src/app/utils/error';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { InputNumberComponent } from 'src/app/shared/input-number/input-number.component';
+import { validaCPF } from 'src/app/utils/validate-cpf';
 
 @Component({
     selector: 'app-planner',
@@ -130,7 +131,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
 
         var data = new Date();
-        // var dataNascimentoMax = new Date(data.getFullYear() - 18, data.getMonth(), data.getDate() - 1);
         this.dataNascimentoMax = data.toJSON().substring(0, 10);
 
         var dataNascimentoMin = data;
@@ -470,7 +470,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
 
         if (input.name == 'cpf') {
-            var valid = this.validaCPF(doc)
+            var valid = validaCPF(doc)
             if (!valid) {
                 input.control.setErrors({
                     invalid: true
@@ -487,57 +487,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     jaExiste: getError(res)
                 });
             });
-
-    }
-
-    validaCPF(doc: number) {
-        var cpf: string = doc.toString();
-        if (cpf.length > 11)
-            return false;
-        cpf = cpf.padStart(11, '0')
-        if (cpf.length != 11)
-            return false;
-
-        var igual: boolean = true;
-        for (let i = 1; i < 11; i++) {
-            if (cpf[i] != cpf[0])
-                igual = false;
-        }
-        if (igual || cpf == '12345678909')
-            return false;
-
-        var numeros: number[] = Array.of(11);
-        for (let i = 0; i < 11; i++) {
-            numeros[i] = parseInt(cpf[i]);
-        }
-
-        var soma: number = 0;
-        for (let i = 0; i < 9; i++) {
-            soma += (10 - i) * numeros[i];
-        }
-
-        var resultado: number = soma % 11;
-        if (resultado == 1 || resultado == 0) {
-            if (numeros[9] != 0)
-                return false;
-        }
-        else if (numeros[9] != 11 - resultado) {
-            return false;
-        }
-
-        soma = 0;
-
-        for (let i = 0; i < 10; i++)
-            soma += (11 - i) * numeros[i];
-        resultado = soma % 11;
-        if (resultado == 1 || resultado == 0) {
-            if (numeros[10] != 0)
-                return false;
-        }
-        else if (numeros[10] != 11 - resultado) {
-            return false;
-        }
-        return true;
 
     }
 

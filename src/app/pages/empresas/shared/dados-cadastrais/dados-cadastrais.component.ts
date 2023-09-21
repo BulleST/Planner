@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowLeft, faArrowRight, faCheck, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -9,25 +9,26 @@ import { Table } from 'src/app/utils/table';
 import { MenuItems } from '../menu-items/menu-items';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
+import { regexCNPJ, validateCnpj } from 'src/app/utils/validate-cnpj';
 
 @Component({
     selector: 'app-dados-cadastrais-create',
     templateUrl: './dados-cadastrais.component.html',
     styleUrls: ['./dados-cadastrais.component.css']
 })
-export class DadosCadastraisComponent implements OnDestroy {
+export class DadosCadastraisComponent implements OnDestroy, AfterViewInit {
     faIdCard = faIdCard;
     objeto: Empresa = new Empresa;
     faArrowLeft = faArrowLeft;
     faArrowRight = faArrowRight;
     faCheck = faCheck;
-    cnpjValid = false;
     isEditPage = false;
     url = '';
     subscription: Subscription[] = [];
 
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    
+    @ViewChild('cnpj') cnpjModel: NgModel;
+    regexCNPJ = regexCNPJ;
     constructor(
         private toastr: ToastrService,
         private empresaService: EmpresaService,
@@ -42,19 +43,20 @@ export class DadosCadastraisComponent implements OnDestroy {
         } else {
             this.isEditPage = false;
         }
-        var empresa = this.empresaService.empresa.subscribe(res => {
-            this.objeto = Object.assign(JSON.parse(JSON.stringify(res))) as Empresa;
-            if (this.objeto.cnpj.toString().trim()) {
-                this.objeto.cnpj = this.objeto.cnpj.toString().padStart(14, '0') as unknown as number;
-            } else {
-                this.objeto.cnpj = '' as unknown as number;
-            }
-            this.validateCnpj()
-        });
-        this.subscription.push(empresa);
-
     }
-
+    ngAfterViewInit(): void {
+            var empresa = this.empresaService.empresa.subscribe(res => {
+                this.objeto = Object.assign(JSON.parse(JSON.stringify(res))) as Empresa;
+                if (this.objeto.cnpj.toString().trim()) {
+                    this.objeto.cnpj = this.objeto.cnpj.toString().padStart(14, '0') as unknown as number;
+                } else {
+                    this.objeto.cnpj = '' as unknown as number;
+                }
+                this.validateCnpj(this.cnpjModel)
+            });
+            this.subscription.push(empresa);
+        
+    }
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
@@ -63,14 +65,14 @@ export class DadosCadastraisComponent implements OnDestroy {
         this.empresaService.setObject(this.objeto, 'setDadosCadastrais');
     }
 
-    validateCnpj() {
-        if (this.objeto.cnpj.toString().length != 14) {
-            return this.cnpjValid = false;
+    validateCnpj(cnpj: NgModel) {
+        var valid = validateCnpj(this.objeto.cnpj);
+        if (!valid) {
+            cnpj.control.setErrors({invalid: true})
+        } else {
+            cnpj.control.setErrors(null);
         }
-        if (parseInt(this.objeto.cnpj.toString()) == 0) {
-            return this.cnpjValid = false;
-        }
-        return this.cnpjValid = true;
+        return valid;
     }
 
     next(form: NgForm) {
@@ -89,10 +91,14 @@ export class DadosCadastraisComponent implements OnDestroy {
             return;
         }
         this.objeto.cnpj = parseInt(this.objeto.cnpj.toString());
-        if (this.url.includes('empresas/editar')) {
+        if (this.objeto.id == 0 && this.url.includes('empresas/cadastrar')) {
+            lastValueFrom(this.empresaService.create(this.objeto))
+                .catch(res => this.menuItems.erro.push(getError(res)))
+        } else {
             lastValueFrom(this.empresaService.edit(this.objeto))
                 .catch(res => this.menuItems.erro.push(getError(res)))
         }
     }
 
 }
+

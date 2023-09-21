@@ -9,6 +9,10 @@ import { PerfilInvestidor } from 'src/app/models/perfilInvestidor.model';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { arrowDown, arrowUp } from 'src/app/utils/format';
 import { lastValueFrom } from 'rxjs';
+import { validaCPF } from 'src/app/utils/validate-cpf';
+import { ClienteService } from 'src/app/services/cliente.service';
+import { getError } from 'src/app/utils/error';
+import { InputNumberComponent } from '../../input-number/input-number.component';
 
 @Component({
     selector: 'app-form-cliente',
@@ -39,10 +43,13 @@ export class FormClienteComponent {
     dataNascimentoMax = '';
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     
+    @ViewChild('receita') receita: InputNumberComponent;
+    @ViewChild('despesa') despesa: InputNumberComponent;
 
     constructor(
         private toastr: ToastrService,
         private dropdown: DropdownService,
+        private clienteService: ClienteService,
     ) {
 
         lastValueFrom(this.dropdown.getPerfilInvestidor())
@@ -54,27 +61,20 @@ export class FormClienteComponent {
             .catch()
             .finally(() => this.loadingEstadoCivil = false);
             
-        var dataNascimentoMax = new Date();
-        dataNascimentoMax.setFullYear(dataNascimentoMax.getFullYear() + 100);
-        this.dataNascimentoMax = dataNascimentoMax.toJSON().substring(0, 10);
-        
-        var dataNascimentoMin = new Date();
+        var data = new Date();
+        this.dataNascimentoMax = data.toJSON().substring(0, 10);
+
+        var dataNascimentoMin = data;
         dataNascimentoMin.setFullYear(dataNascimentoMin.getFullYear() - 100);
         this.dataNascimentoMin = dataNascimentoMin.toJSON().substring(0, 10);
+
 
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['objeto']) {
-            this.objeto = changes['objeto'].currentValue;
-        }
-
-        if (changes['loading'])
-            this.loading = changes['loading'].currentValue;
-
-        if (changes['erro'])
-            this.erro = changes['erro'].currentValue;
-
+        if (changes['objeto']) this.objeto = changes['objeto'].currentValue;       
+        if (changes['loading']) this.loading = changes['loading'].currentValue;
+        if (changes['erro']) this.erro = changes['erro'].currentValue;
     }
 
     send(form: NgForm) {
@@ -90,6 +90,7 @@ export class FormClienteComponent {
         this.sendData.emit(this.objeto);
     }
 
+ 
     calculaIdade() {
         if (this.objeto.dataNascimento && this.objeto.dataNascimento.toString().trim() != '') {
             var ageDifMs = Date.now() - new Date(new Date(this.objeto.dataNascimento).toUTCString()).getTime();;
@@ -126,24 +127,49 @@ export class FormClienteComponent {
         }
     }
 
-    validateNumber(input: NgModel) {
-        var min = 0;
-        var max = 100000000;
-        var value = input.value;
-
-        if (value > max) {
-            input.control.setErrors(({
-                max: true,
-            }))
+    // Receita deve ser maior que despesa
+    validaReceitaDespesa(input: NgModel) {
+        if (this.objeto.receita < this.objeto.despesa) {
+            if (input.name == 'despesa') {
+                this.despesa.error = {message: 'Despesa não pode ser maior que receita.'};
+            } else if (input.name == 'receita'){
+                this.receita.error = {message: 'Receita não pode ser menor que despesa.'};
+            }
+        } else {
+            this.receita.error = null;
+            this.despesa.error = null;
+            this.receita.validate();
+            this.despesa.validate();
         }
         
-        if (value > min) {
-            input.control.setErrors(({
-                min: true,
-            }))
-        }
         return input;
     }
+
+    validaRG_CPF(input: NgModel, doc: number) {
+        if (!input) {
+            return;
+        }
+        if (!doc || doc == 0) {
+            input.control.setErrors({ required: true });
+            return;
+        }
+
+        if (input.name == 'cpf') {
+            var valid = validaCPF(doc)
+            if (!valid) {
+                input.control.setErrors({ invalid: true });
+                return;
+            }
+        }
+
+        lastValueFrom(this.clienteService.getByDoc(this.objeto.id, doc))
+            .then(res => { })
+            .catch(res => {
+                input.control.setErrors({ jaExiste: getError(res)});
+            });
+
+    }
+
 }
 
 

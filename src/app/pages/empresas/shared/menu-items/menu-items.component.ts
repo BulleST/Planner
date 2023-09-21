@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { MenuItem } from "primeng/api";
 import { Subscription } from "rxjs";
@@ -6,6 +7,7 @@ import { Empresa } from "src/app/models/empresa.model";
 import { EmpresaService } from "src/app/services/empresa.service";
 import { IsMobile, ScreenWidth } from "src/app/utils/mobile";
 import { Table } from "src/app/utils/table";
+import { validateCnpj } from "src/app/utils/validate-cnpj";
 
 @Component({
     selector: 'app-menu-items',
@@ -19,16 +21,20 @@ export class MenuItemsComponent implements OnDestroy {
     screen: ScreenWidth = ScreenWidth.lg;
     ScreenWidth = ScreenWidth;
     subscription: Subscription[] = [];
-
+    url = '';
+    isEditPage = false;
     constructor(
         private table: Table,
         private toastr: ToastrService,
         private isMobile: IsMobile,
         private empresaService: EmpresaService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
     ) {
         var get = this.isMobile.get().subscribe(res => this.screen = res);
         this.subscription.push(get);
 
+        this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');
         this.items = [
             {
                 label: 'Dados Cadastrais',
@@ -38,43 +44,56 @@ export class MenuItemsComponent implements OnDestroy {
                     this.table.selected.next(undefined);
                 },
             },
-            {
-                label: 'Usuários',
-                routerLink: 'usuarios',
-                iconClass: 'pi pi-users',
-                command: (event: any) => {
-                    this.table.selected.next(undefined);
-                    this.validateDadosCadastrais();
-                }
-            },
-            {
-                label: 'Clientes',
-                routerLink: 'clientes',
-                iconClass: 'pi pi-user',
-                command: (event: any) => {
-                    this.table.selected.next(undefined);
-                    this.validateDadosCadastrais();
-                }
-            },
-            {
-                label: 'Produtos',
-                routerLink: 'produtos',
-                iconClass: 'fa-solid fa-p',
-                command: (event: any) => {
-                    this.table.selected.next(undefined);
-                    this.validateDadosCadastrais();
-                }
-            },
-            {
-                label: 'Carteira Setup',
-                iconClass: 'pi pi-wallet',
-                routerLink: 'setup',
-                command: (event: any) => {
-                    this.table.selected.next(undefined);
-                    this.validateDadosCadastrais();
-                }
-            },
-        ];
+        ]
+        if (this.url.includes('empresas/editar')) {
+            this.isEditPage = true;
+            this.items = [
+                {
+                    label: 'Dados Cadastrais',
+                    routerLink: 'dados-cadastrais',
+                    iconClass: 'pi pi-id-card',
+                    command: (event: any) => {
+                        this.table.selected.next(undefined);
+                    },
+                },
+                {
+                    label: 'Usuários',
+                    routerLink: 'usuarios',
+                    iconClass: 'pi pi-users',
+                    command: (event: any) => {
+                        this.table.selected.next(undefined);
+                        this.validateDadosCadastrais();
+                    }
+                },
+                {
+                    label: 'Clientes',
+                    routerLink: 'clientes',
+                    iconClass: 'pi pi-user',
+                    command: (event: any) => {
+                        this.table.selected.next(undefined);
+                        this.validateDadosCadastrais();
+                    }
+                },
+                {
+                    label: 'Produtos',
+                    routerLink: 'produtos',
+                    iconClass: 'fa-solid fa-p',
+                    command: (event: any) => {
+                        this.table.selected.next(undefined);
+                        this.validateDadosCadastrais();
+                    }
+                },
+                {
+                    label: 'Carteira Setup',
+                    iconClass: 'pi pi-wallet',
+                    routerLink: 'setup',
+                    command: (event: any) => {
+                        this.table.selected.next(undefined);
+                        this.validateDadosCadastrais();
+                    }
+                },
+            ];
+        } 
         var empresa = this.empresaService.empresa.subscribe(res => this.objeto = res);
        this.subscription.push(empresa);
     }
@@ -84,21 +103,26 @@ export class MenuItemsComponent implements OnDestroy {
     }
 
     validateDadosCadastrais() {
-        let valid = true;
         this.erro = [];
 
-        if (parseInt(this.objeto.cnpj.toString()) == 0) 
-            valid = false;
-        else if (!this.objeto.nome.trim() || !this.objeto.email.trim())
-            valid = false;
-        else 
-            valid = true;
-      
-        if (!valid) {
-            this.toastr.error('Dados cadastrais inválidos.');
-            this.erro.push('Dados cadastrais inválidos');
+        if (!validateCnpj(this.objeto.cnpj)) {
+            this.toastr.error('CNPJ inválido.');
+            this.erro.push('CNPJ inválido.');
+            return false;
         }
-        return valid;
+        else if (!this.objeto.nome.trim()){
+            this.toastr.error('Razão Social inválida.');
+            this.erro.push('Razão Social inválida.');
+            return false;
+        }
+        else if ( !this.objeto.email.trim()) {
+            this.toastr.error('E-mail inválido.');
+            this.erro.push('E-mail inválido.');
+            return false;
+        }
+        else  {
+            return true;
+        }
     }
 }
 

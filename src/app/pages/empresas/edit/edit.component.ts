@@ -84,8 +84,10 @@ export class EditComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
+  
     voltar() {
-       this.modal.voltar(this.routerBack, this.routeBackOptions);
+        this.router.navigate(this.routerBack, { relativeTo: this.activatedRoute, preserveFragment: false, replaceUrl: true})
+        this.modal.setOpen(false);
     }
 
     empresaChange(e) {

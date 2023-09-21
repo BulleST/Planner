@@ -39,14 +39,14 @@ import { DeactivatedComponent as CarteiraSetup_DeactivatedComponent } from './..
 import { DeactivatedComponent } from './deactivated/deactivated.component';
 
 const routes: Routes = [
-    { path: '', component: ListComponent, children: [
+    { path: '', component: ListComponent, title: 'Planner - Empresas', children: [
         { path: 'habilitar/:empresa_id', component: DeactivatedComponent, title: 'Planner - Habilitar empresa' },
         { path: 'desabilitar/:empresa_id', component: DeactivatedComponent, title: 'Planner - Desabilitar empresa' },
-        { path: 'excluir/:empresa_id', component: DeleteComponent },
+        { path: 'excluir/:empresa_id', component: DeleteComponent, title: 'Planner - Excluir empresa' },
     ] },
     { path: 'editar/:empresa_id', redirectTo: 'editar/:empresa_id/dados-cadastrais', pathMatch: 'prefix' },
     {
-        path: 'editar/:empresa_id', component: EditComponent, children: [
+        path: 'editar/:empresa_id', component: EditComponent, title: 'Planner - Editar empresa', children: [
             { path: 'dados-cadastrais', component: DadosCadastraisComponent },
             { path: 'clientes', component: ClientesComponent, children: [
                 { path: 'cadastrar', component: Cliente_CreateComponent },
@@ -81,33 +81,33 @@ const routes: Routes = [
             },
         ]
     },
-    { path: 'cadastrar', redirectTo: 'cadastrar/dados-cadastrais', pathMatch: 'prefix' },
+    { path: 'cadastrar', redirectTo: 'cadastrar/dados-cadastrais', title: 'Planner - Cadastrar empresa', pathMatch: 'prefix' },
     {
-        path: 'cadastrar', component: CreateComponent, children: [
+        path: 'cadastrar', component: CreateComponent, title: 'Planner - Cadastrar empresa', children: [
             { path: 'dados-cadastrais', component: DadosCadastraisComponent },
-            { path: 'usuarios', component: UsuariosComponent, children: [
-                    { path: 'cadastrar', component: Usuario_CreateComponent },
-                    { path: 'editar/:usuario_id', component: Usuario_EditComponent },
-                    { path: 'excluir/:usuario_id', component: Usuario_DeleteComponent },
-                ]
-            },
-            { path: 'clientes', component: ClientesComponent, children: [
-                { path: 'cadastrar', component: Cliente_CreateComponent },
-                { path: 'editar/:cliente_id', component: Cliente_EditComponent },
-                { path: 'excluir/:cliente_id', component: Cliente_DeleteComponent },
-            ] },
-            { path: 'produtos', component: ProdutosComponent, children: [
-                    { path: 'cadastrar', component: Produto_CreateComponent },
-                    { path: 'editar/:produto_id', component: Produto_EditComponent },
-                    { path: 'excluir/:produto_id', component: Produto_DeleteComponent },
-                ]
-            },
-            { path: 'setup/cadastrar', component: CarteiraSetup_CreateComponent, canActivate: [CarteiraSetupGuard] },
-            { path: 'setup/editar/:setup_id', component: CarteiraSetup_EditComponent },
-            { path: 'setup', component: SetupComponent, children: [
-                    { path: 'excluir/:setup_id', component: CarteiraSetup_DeleteComponent },
-                ]
-            },
+            // { path: 'usuarios', component: UsuariosComponent, children: [
+            //         { path: 'cadastrar', component: Usuario_CreateComponent },
+            //         { path: 'editar/:usuario_id', component: Usuario_EditComponent },
+            //         { path: 'excluir/:usuario_id', component: Usuario_DeleteComponent },
+            //     ]
+            // },
+            // { path: 'clientes', component: ClientesComponent, children: [
+            //     { path: 'cadastrar', component: Cliente_CreateComponent },
+            //     { path: 'editar/:cliente_id', component: Cliente_EditComponent },
+            //     { path: 'excluir/:cliente_id', component: Cliente_DeleteComponent },
+            // ] },
+            // { path: 'produtos', component: ProdutosComponent, children: [
+            //         { path: 'cadastrar', component: Produto_CreateComponent },
+            //         { path: 'editar/:produto_id', component: Produto_EditComponent },
+            //         { path: 'excluir/:produto_id', component: Produto_DeleteComponent },
+            //     ]
+            // },
+            // { path: 'setup/cadastrar', component: CarteiraSetup_CreateComponent, canActivate: [CarteiraSetupGuard] },
+            // { path: 'setup/editar/:setup_id', component: CarteiraSetup_EditComponent },
+            // { path: 'setup', component: SetupComponent, children: [
+            //         { path: 'excluir/:setup_id', component: CarteiraSetup_DeleteComponent },
+            //     ]
+            // },
         ]
     },
 ];

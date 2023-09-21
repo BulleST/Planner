@@ -11,7 +11,7 @@
             </div>
             <div class="modal__body mt-0">
                 <p class="mt-2">Tem certeza que deseja excluir esse registro? Ele não poderá ser recuperado.</p>
-                <p class="mt-2">O usuário não terá acesso mais ao planner.</p>
+                <p>O usuário não terá acesso mais ao planner.</p>
                 <p class="text-info">Obs.: Se esse usuário estiver relacionado a um planner, não poderá ser excluído.</p>
                 <ul *ngIf="erro" class="m-0 col-lg3-12 mt-1">
                     <li class="text-red" *ngFor="let err of erro">{{err | json}}</li>

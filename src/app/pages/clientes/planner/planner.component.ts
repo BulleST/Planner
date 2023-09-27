@@ -175,7 +175,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             .sort((x, y) => {
                 if (Number(y.ativo) < Number(x.ativo)) return -1;
                 else if (Number(y.ativo) > Number(x.ativo)) return 1;
-
                 if (x.name < y.name) return -1;
                 else if (x.name > y.name) return 1
                 else return 0;
@@ -186,6 +185,11 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         this.subscription.push(estadoCivil);
         var perfilInvestidor = this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
         this.subscription.push(perfilInvestidor);
+        
+        var planejamentoBackup = this.plannerService.planejamentoBackup.subscribe(res => {
+            console.log('planejamentoBackup', res)
+        })
+        this.subscription.push(planejamentoBackup);
 
     }
 
@@ -200,12 +204,13 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 lastValueFrom(this.plannerService.getByClienteId(this.planner.cliente_Id))
                     .then(res => {
                         this.loading = false;
-                        if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar()
-
+                        if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar();
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
+                        console.log('request.res', res.planejamentoProduto)
+                        this.plannerService.planejamentoBackup.next(Object.assign({}, res));
                         this.carteiraSetupInalterada = res.carteiraSetup;
                         var empresa_Id: number;
                         if (this.account?.perfilAcesso_Id == 1) empresa_Id = this.empresaService.object.id;

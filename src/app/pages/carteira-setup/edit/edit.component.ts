@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { CarteiraProdutoRel } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
@@ -28,6 +29,7 @@ export class EditComponent implements OnDestroy {
 
     routerBack: string[] = ['../../'];
     routeBackOptions: any;
+    clearData = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -70,9 +72,14 @@ export class EditComponent implements OnDestroy {
         this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
+
     resetForm() {
-        this.objeto = new CarteiraSetup
-        this.setupService.setObject(new CarteiraSetup);
+        console.log(this.objeto)
+        var contaCorrente = this.objeto.carteiraProdutoRel.find(x => x.produto_Id == 61) as CarteiraProdutoRel;
+        this.objeto = new CarteiraSetup;
+        this.objeto.carteiraProdutoRel = [contaCorrente];
+        this.setupService.setObject(this.objeto);
+        this.clearData = true;
     }
 
     send(form: NgForm) {
@@ -92,7 +99,7 @@ export class EditComponent implements OnDestroy {
             lastValueFrom(this.setupService.edit(this.objeto))
                 .then((res) => {
                     lastValueFrom(this.setupService.getList());
-                    this.modal.voltar(this.routerBack, this.routeBackOptions);
+                    // this.voltar();
                 })
                 .catch(res => {
                     this.erro.push(getError(res));

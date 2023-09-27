@@ -2,7 +2,7 @@
     <div class="modal__header pb-2" style="padding: 0 25px;">
         <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
             <a class="link text-dark" (click)="voltar()">
-                <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon> 
+                <fa-icon class="mr-1" [icon]="faChevronLeft"></fa-icon>
                 <span>Voltar</span>
             </a>
             <div>
@@ -66,8 +66,7 @@
                                 <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                     <label for="estadoCivil">Estado Civil: <span class="text-danger">*</span>
                                     </label>
-                                    <select
-                                            name="estadoCivil"
+                                    <select name="estadoCivil"
                                             id="estadoCivil"
                                             class="form-control"
                                             [class.form-control-loading]="loadingEstadoCivil"
@@ -103,7 +102,7 @@
                                            required
                                            (change)="validaRG_CPF(cpf, cpf.value)"
                                            pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
-                                           [readonly]="isEditPage"> 
+                                           [readonly]="isEditPage">
                                     <div *ngIf="cpf.touched && cpf.errors">
                                         <p class="text-danger" *ngIf="cpf.errors['jaExiste']">{{cpf.errors['jaExiste']}}</p>
                                         <p class="text-danger" *ngIf="cpf.errors['invalid']">Esse CPF é inválido</p>
@@ -167,7 +166,8 @@
                                                       [readonly]="true"
                                                       [required]="true"
                                                       [showErrorMessage]="true"
-                                                      [allowNegativeNumbers]="false"></app-input-number>
+                                                      [allowNegativeNumbers]="false"
+                                                      [autoReplaceValue]="true"></app-input-number>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -202,7 +202,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12 d-lg-block d-md-block">
                                         <label for="receita">Receita <small>(R$)</small>: <span class="text-danger">*</span></label>
-                                        <app-input-number #receita 
+                                        <app-input-number #receita
                                                           [valueInput]="planner.cliente.receita"
                                                           (valueChanges)="planner.cliente.receita = $event; saveData();"
                                                           (ngModelChanged)="validaReceitaDespesa($event)"
@@ -214,11 +214,12 @@
                                                           [required]="true"
                                                           [allowNegativeNumbers]="true"
                                                           placeholder="R$ 00,00"
-                                                          [showErrorMessage]="true"></app-input-number>
+                                                          [showErrorMessage]="true"
+                                                          [autoReplaceValue]="true"></app-input-number>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="despesa">Despesas <small>(R$)</small>: <span class="text-danger">*</span></label>
-                                        <app-input-number  #despesa 
+                                        <app-input-number #despesa
                                                           [valueInput]="planner.cliente.despesa"
                                                           (valueChanges)="planner.cliente.despesa = $event; saveData();"
                                                           (ngModelChanged)="validaReceitaDespesa($event)"
@@ -230,7 +231,8 @@
                                                           [required]="true"
                                                           [allowNegativeNumbers]="true"
                                                           placeholder="R$ 00,00"
-                                                          [showErrorMessage]="true"></app-input-number>
+                                                          [showErrorMessage]="true"
+                                                          [autoReplaceValue]="true"></app-input-number>
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +256,8 @@
                                                           [showErrorMessage]="false"
                                                           [allowNegativeNumbers]="true"
                                                           [placeholder]="'0,00%'"
-                                                          [showErrorMessage]="false"></app-input-number>
+                                                          [showErrorMessage]="false"
+                                                          [autoReplaceValue]="true"></app-input-number>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="taxaIpca">Taxa IPCA <small>(%)</small>: <span class="text-danger">*</span></label>
@@ -268,7 +271,8 @@
                                                           [showErrorMessage]="false"
                                                           [allowNegativeNumbers]="true"
                                                           [placeholder]="'0,00%'"
-                                                          [showErrorMessage]="false"></app-input-number>
+                                                          [showErrorMessage]="false"
+                                                          [autoReplaceValue]="true"></app-input-number>
                                     </div>
                                 </div>
                             </div>
@@ -477,9 +481,10 @@
                                                               [min]="planner.cliente.idade ? planner.cliente.idade : 20"
                                                               [max]="100"
                                                               [required]="true"
-                                                              placeholder="Entre 20 e 100 anos"
+                                                              placeholder="Entre {{planner.cliente.idade ? planner.cliente.idade : 20}} e 100 anos"
                                                               [showErrorMessage]="false"
-                                                              [allowNegativeNumbers]="false"></app-input-number>
+                                                              [allowNegativeNumbers]="false"
+                                                              [autoReplaceValue]="true"></app-input-number>
                                         </td>
                                     </tr>
                                     <tr>
@@ -498,7 +503,8 @@
                                                               [max]="100000000"
                                                               [required]="true"
                                                               [placeholder]="'R$ 00,00'"
-                                                              [showErrorMessage]="false"></app-input-number>
+                                                              [showErrorMessage]="false"
+                                                              [autoReplaceValue]="true"></app-input-number>
                                         </td>
                                     </tr>
                                     <tr>
@@ -516,7 +522,8 @@
                                                               [showErrorMessage]="false"
                                                               [allowNegativeNumbers]="true"
                                                               [placeholder]="'0,00%'"
-                                                              [showErrorMessage]="false"></app-input-number>
+                                                              [showErrorMessage]="false"
+                                                              [autoReplaceValue]="true"></app-input-number>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -554,7 +561,8 @@
                                                               [max]="100"
                                                               [required]="true"
                                                               [showErrorMessage]="false"
-                                                              [allowNegativeNumbers]="false"></app-input-number>
+                                                              [allowNegativeNumbers]="false"
+                                                              [autoReplaceValue]="true"></app-input-number>
                                         </td>
                                         <td>
                                             <app-input-number [valueInput]="item.valor"
@@ -563,11 +571,11 @@
                                                               [mask]="'separator'"
                                                               placeholder="R$ 00,00"
                                                               prefix="R$ "
-                                                              [min]="1"
                                                               [required]="true"
                                                               [showErrorMessage]="false"
                                                               [allowNegativeNumbers]="true"
-                                                              [showErrorMessage]="false"></app-input-number>
+                                                              [showErrorMessage]="false"
+                                                              [autoReplaceValue]="true"></app-input-number>
                                         </td>
                                         <td class="text-center">
                                             <button class="btn btn-trash d-inline" (click)="removerFluxoPontual(item)" title="Remover linha">
@@ -840,7 +848,8 @@
                                                                   [max]="100"
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"
-                                                                  [required]="true"></app-input-number>
+                                                                  [required]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidade"
@@ -852,9 +861,9 @@
                                                                   [max]="100"
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"
-                                                                  [required]="true"></app-input-number>
+                                                                  [required]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
-
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
@@ -866,7 +875,8 @@
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.montanteAtual"
@@ -877,7 +887,8 @@
                                                                   [min]="1"
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"></app-input-number>
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" title="Remover linha" (click)="removerInvestimento(item)">
@@ -902,7 +913,8 @@
                                                                   [required]="false"
                                                                   [showErrorMessage]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -956,20 +968,13 @@
                                             </ng-template>
                                         </p-dropdown>
                                     </div>
-                                    <!-- <div>
-                                        <p>mudouCarteiraSetup: {{mudouCarteiraSetup}}</p>
-                                        <p>planner.planejamentoProduto.length: {{planner.planejamentoProduto.length}}</p>
-                                        <p *ngIf="planner.planejamentoProduto[0]">planner.planejamentoProduto[0].produto_Id: {{planner.planejamentoProduto[0].produto_Id}}</p>
-                                        <p>planner.carteiraSetup.carteiraProdutoRel.length: {{planner.carteiraSetup.carteiraProdutoRel.length}}</p>
-                                        <p *ngIf="planner.carteiraSetup.carteiraProdutoRel[0]">planner.carteiraSetup.carteiraProdutoRel[0].produto_Id: {{planner.carteiraSetup.carteiraProdutoRel[0].produto_Id}}</p>
-                                    </div> -->
                                     <div *ngIf="planner.carteiraSetup_Id != 0">
-                                        <button type="button"  *ngIf="mudouCarteiraSetup || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61 && planner.carteiraSetup.carteiraProdutoRel.length == 1 && planner.carteiraSetup.carteiraProdutoRel[0].produto_Id != 61)"
+                                        <button type="button" *ngIf="mudouCarteiraSetup || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61 && planner.carteiraSetup.carteiraProdutoRel.length == 1 && planner.carteiraSetup.carteiraProdutoRel[0].produto_Id != 61)"
                                                 triggers="mouseenter:mouseleave"
                                                 class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                                 (click)="carregarProdutos(form)"
                                                 [disabled]="form.invalid || loading">
-                                            <span>Carregar produtos</span>
+                                            <span>Carregar produtos e salvar</span>
                                         </button>
                                         <a class="link ml-3" [routerLink]="['produto']"
                                            *ngIf="planner.planejamentoProduto.length > 0 && !mudouCarteiraSetup"> Adicionar outros produtos </a>
@@ -1002,7 +1007,7 @@
                                                 <small><b>{{item.produto.tipoRisco.nome}}</b> |</small>
                                             </td>
                                             <td class="px-3 ps-1 bg-light text-left position-sticky" style="white-space: nowrap;">
-                                                <small><b>{{ item.produto.descricao }}</b></small>
+                                                <small><b>{{ item.produto.descricao }}</b> </small>
                                             </td>
                                             <td>
                                                 <app-input-number *ngIf="item.produto_Id != 61"
@@ -1015,7 +1020,8 @@
                                                                   [max]="100"
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"></app-input-number>
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                                 <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
                                             <td>
@@ -1029,8 +1035,9 @@
                                                                   [max]="100"
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"></app-input-number>
-                                                                  <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [autoReplaceValue]="true"></app-input-number>
+                                                <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
                                             <td>
                                                 <app-input-number *ngIf="item.produto_Id != 61"
@@ -1044,8 +1051,9 @@
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
-                                                                  <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
+                                                <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.sugerido"
@@ -1057,7 +1065,8 @@
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td style="white-space: nowrap">
                                                 <app-input-number [valueInput]="item.planoAcao"
@@ -1070,7 +1079,8 @@
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"
                                                                   [readonly]="item.produto_Id == 61"
-                                                                  [disabled]="item.produto_Id == 61"></app-input-number>
+                                                                  [disabled]="item.produto_Id == 61"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.percentual"
@@ -1083,7 +1093,8 @@
                                                                   [showErrorMessage]="false"
                                                                   [allowNegativeNumbers]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td class="td-actions">
                                                 <a class="btn btn-trash" *ngIf="item.produto.id != 61" (click)="removerProduto(item)" title="Remover linha"> <!--  Conta corrente não pode ser excluido-->
@@ -1108,7 +1119,8 @@
                                                                   [required]="false"
                                                                   [showErrorMessage]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.somaPlanoAcao"
@@ -1119,7 +1131,8 @@
                                                                   [required]="false"
                                                                   [showErrorMessage]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.somaPercentual"
@@ -1130,10 +1143,11 @@
                                                                   [required]="false"
                                                                   [showErrorMessage]="false"
                                                                   [readonly]="true"
-                                                                  [disabled]="true"></app-input-number>
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td></td>
-                                        </tr>     
+                                        </tr>
                                         <tr *ngIf="somaProdutos.somaPercentual > 100" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
                                             <td></td>
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
@@ -1150,7 +1164,8 @@
                                                                   [showErrorMessage]="false"
                                                                   [readonly]="true"
                                                                   [disabled]="true"
-                                                                  [allowNegativeNumbers]="true"></app-input-number>
+                                                                  [allowNegativeNumbers]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="somaProdutos.diferencaPercentual"
@@ -1162,7 +1177,8 @@
                                                                   [showErrorMessage]="false"
                                                                   [readonly]="true"
                                                                   [disabled]="true"
-                                                                  [allowNegativeNumbers]="true"></app-input-number>
+                                                                  [allowNegativeNumbers]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -1517,8 +1533,8 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary mr-0 ml-auto" *ngIf="form.valid && formIsValid" [disabled]="loading">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
-                    <span>Salvar</span> 
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    <span>Salvar</span>
                 </button>
             </div>
         </form>

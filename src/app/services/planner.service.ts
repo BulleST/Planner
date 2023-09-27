@@ -21,6 +21,8 @@ export class PlannerService {
     objeto = new BehaviorSubject<Planejamento>(new Planejamento);
     empresa = new Empresa;
     account = new Account;
+    planejamentoBackup = new BehaviorSubject<Planejamento>(new Planejamento);
+
 
     constructor(
         private http: HttpClient,

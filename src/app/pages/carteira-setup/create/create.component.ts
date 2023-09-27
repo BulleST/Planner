@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faChevronLeft, faTimes, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { CarteiraProdutoRel } from 'src/app/models/carteira-produto-rel';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { Produto } from 'src/app/models/produto.model';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
@@ -70,8 +71,11 @@ export class CreateComponent implements OnDestroy {
     }
 
     resetForm() {
-        this.objeto = new CarteiraSetup
-        this.setupService.setObject(new CarteiraSetup);
+        console.log(this.objeto)
+        var contaCorrente = this.objeto.carteiraProdutoRel.find(x => x.produto_Id == 61) as CarteiraProdutoRel;
+        this.objeto = new CarteiraSetup;
+        this.objeto.carteiraProdutoRel = [contaCorrente];
+        this.setupService.setObject(this.objeto);
         this.clearData = true;
     }
 
@@ -91,7 +95,7 @@ export class CreateComponent implements OnDestroy {
             }
             lastValueFrom(this.setupService.create(this.objeto))
                 .then((res) => {
-                    this.voltar();
+                    // this.voltar();
                     lastValueFrom(this.setupService.getList());
                 })
                 .catch(res => {

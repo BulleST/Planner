@@ -8,7 +8,7 @@ import { AlertService } from 'src/app/parts/alert/alert.service';
     templateUrl: './input-number.component.html',
     styleUrls: ['./input-number.component.css'],
     changeDetection: ChangeDetectionStrategy.Default,
-    viewProviders: [{provide: ControlContainer, useExisting: NgForm }] // Permite validação de form pai em input de componente filho
+    viewProviders: [{ provide: ControlContainer, useExisting: NgForm }] // Permite validação de form pai em input de componente filho
 })
 export class InputNumberComponent implements OnChanges, AfterViewInit {
 
@@ -29,6 +29,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
     @Input() placeholder = '';
     @Input() readonly = false;
     @Input() disabled = false;
+    @Input() autoReplaceValue = false;
     @Input() error: ValidationErrors | null;
 
     @Output() valueChanges: EventEmitter<number> = new EventEmitter<number>();
@@ -64,8 +65,9 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         if (changes['allowNegativeNumbers']) this.allowNegativeNumbers = changes['allowNegativeNumbers'].currentValue;
         if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
         if (changes['disabled']) this.disabled = changes['disabled'].currentValue;
-     
-       
+        if (changes['autoReplaceValue']) this.autoReplaceValue = changes['autoReplaceValue'].currentValue;
+
+
         setTimeout(() => {
             this.validate();
         }, 400);
@@ -83,34 +85,35 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
     validate() {
         this.input.control.setValue(this.valueInput)
         if (this.required == true && !this.valueInput.toString().trim()) {
-            this.input.control.setErrors(Object.assign({}, {required: true}));
-        } 
+            this.input.control.setErrors(Object.assign({}, { required: true }));
+            return false;
+        }
         else if (this.max != undefined && (this.valueInput > this.max)) {
-            if(this.input.touched) {
+            this.toastrService.error('O valor máximo é ' + this.max);
+            if (this.autoReplaceValue) {
                 this.input.control.setValue(this.max);
-                this.toastrService.error('O valor máximo é ' + this.max);
                 this.inputChanged();
             } else {
-                this.input.control.setErrors(Object.assign({}, {max: true}));
+                this.input.control.setErrors(Object.assign({}, { max: true }));
+                return false;
             }
         }
-        else if (this.min != undefined && (this.valueInput < this.min))  {
-            if(this.input.touched) {
+        else if (this.min != undefined && (this.valueInput < this.min)) {
+            this.toastrService.error('O valor mínimo é ' + this.min);
+            if (this.autoReplaceValue) {
                 this.input.control.setValue(this.min);
                 this.inputChanged();
-                this.toastrService.error('O valor mínimo é ' + this.min);
-             
-                this.inputChanged();
             } else {
-                this.input.control.setErrors(Object.assign({}, {min: true}));
+                this.input.control.setErrors(Object.assign({}, { min: true }));
+                return false;
             }
         } else {
             this.input.control.setErrors(this.error)
         }
-
+        return true;
     }
 
-    
+
 
     inputChanged() {
         this.valueChanges.emit(this.valueInput);
@@ -135,7 +138,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
             value: value,
             skip: skip,
             min: min,
-            max: max,
+            max: max,   
             allowNegativeNumbers: allowNegativeNumbers ?? false
         });
         this.valueInput = parseFloat(newValue as unknown as string);
@@ -146,16 +149,16 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
 function arrowUp(model: FormatNumber) {
     model.value += model.skip;
-    if (model.max != null && model.max != undefined && model.value > model.max) 
+    if (model.max != null && model.max != undefined && model.value > model.max)
         model.value = model.max;
     return model.value;
 }
 
 function arrowDown(model: FormatNumber) {
     var value = model.value - model.skip;
-    if (!model.allowNegativeNumbers && value < 1) 
+    if (!model.allowNegativeNumbers && value < 1)
         value = 0;
-    else if (model.min != null && model.min != undefined && value < model.min) 
+    else if (model.min != null && model.min != undefined && value < model.min)
         value = model.min;
     return value;
 }

@@ -25,6 +25,7 @@ import { DeactivatedComponent } from "./deactivated/deactivated.component";
 import { InputNumberComponent } from './input-number/input-number.component';
 import { PaginatorModule } from "primeng/paginator";
 import { ButtonModule } from "primeng/button";
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { ButtonModule } from "primeng/button";
         PickListModule,
         StepsModule,
         PaginatorModule,
-        ButtonModule
+        ButtonModule,
+        RadioButtonModule,
     ],
     exports: [
         FormUsuarioComponent,

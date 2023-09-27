@@ -12,9 +12,10 @@
             <div class="modal__body mt-0">
                 <p class="mt-2">Tem certeza que deseja excluir esse registro? Ele não poderá ser recuperado.</p>
                 <p class="text-info">Obs.: Se esse produto estiver relacionado a um setup ou planner, não poderá ser excluído.</p>
-                <ul *ngIf="erro" class="m-0 col-lg3-12 mt-1">
-                    <li class="text-red" *ngFor="let err of erro">{{err | json}}</li>
-                </ul>
+      
+                <div *ngIf="erro" class="m-0  mt-1" >
+                    <p class="text-red" *ngFor="let err of erro" [innerHTML]="err | json"></p>
+                </div>
 
                 <button class="btn btn-grey ml-auto d-flex mt-2" (click)="send()">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

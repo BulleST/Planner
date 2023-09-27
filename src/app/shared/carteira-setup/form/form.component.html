@@ -31,18 +31,17 @@
                     <div class="form-row mt-2 mb-2">
                         <div class="d-flex align-items-start justify-content-start flex-wrap col-12">
                             <p class="h6 me-3 w-100">Selecione o Risco</p>
-                            <div *ngFor="let item of tipoRiscos" class="mx-2">
+                            <div *ngFor="let item of tipoRiscos" class="me-2 mb-2 d-flex align-items-center">
                                 <input type="radio"
                                        class="mr-1 mt-1"
                                        name="tipoRisco"
-                                       id="tipoRisco-{{item.nome}}"
+                                       id="tipoRisco-{{item.id}}"
                                        #tipoRisco="ngModel"
+                                       (ngModelChange)="riscoChange(tipoRisco)"
                                        [(ngModel)]="selectedRisco"
-                                       (ngModelChange)="calculaPercentualMaxRisco()"
-                                       (change)="setProdutosByRisco()"
                                        [value]="item"
                                        [checked]="item.id == selectedRisco.id">
-                                <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
+                                <label class="mb-0 ms-1" for="tipoRisco-{{item.id}}">{{item.nome}}</label>
                             </div>
                         </div>
                     </div>
@@ -86,13 +85,13 @@
                                               [inputId]="'percentual'"
                                               [mask]="'separator'"
                                               suffix="%"
-                                              [min]="0"
+                                              [min]="selectedRisco.percentualDisponivel == 0 || produto == undefined ? 0 : 1"
                                               [max]="selectedRisco.percentualDisponivel"
                                               [required]="false"
-                                              placeholder="Entre 20 e 100 anos"
                                               [showErrorMessage]="false"
-                                              [placeholder]="produtosRisco.length > 0 ? selectedRisco.percentualDisponivel + '%' + ' disponível' : ''"
-                                              [allowNegativeNumbers]="false"></app-input-number>
+                                              [placeholder]="selectedRisco.percentualDisponivel + '% disponível'"
+                                              [allowNegativeNumbers]="false"
+                                              [autoReplaceValue]="false"></app-input-number>
                             <div class="mt-1 px-1">
                                 <p class="text-danger" *ngIf="!percentual">Informe o percentual</p>
                                 <p class="text-danger" *ngIf="percentual > selectedRisco.percentualDisponivel">Valor máximo disponível é {{selectedRisco.percentualDisponivel}}%</p>
@@ -101,10 +100,11 @@
                         <div class="form-group align-items-end px-1">
                             <button type="button"
                                     class="btn btn-grey w-100"
-                                    (click)="adicionarProduto()"
                                     [disabled]="produto == undefined 
                                         || percentual.toString() == ''
-                                        || percentual > selectedRisco.percentualDisponivel"> Adicionar </button>
+                                        || percentual > selectedRisco.percentualDisponivel
+                                        || percentual == 0"
+                                    (click)="adicionarProduto()"> Adicionar </button>
                         </div>
                     </div>
                 </div>
@@ -141,33 +141,30 @@
                                     <tr *ngFor="let item of objeto.carteiraProdutoRel; index as i" [class.selected]="item.produto.tipoRisco_Id == selectedRisco.id" class="tiporisco-{{item.produto.tipoRisco_Id}}">
                                         <td></td>
                                         <td>{{item.id }}</td>
-                                        <td>
-                                            <span *ngIf="item.produto.tipoRisco">{{item.produto.tipoRisco.nome}}</span>
-                                            <span *ngIf="!item.produto.tipoRisco">-</span>
-                                        </td>
+                                        <td class="text-right ms-3"><span class="font-weight-bold">{{item.produto.tipoRisco.nome}} </span> | </td>
                                         <td>{{item.produto.descricao}}</td>
                                         <td style="width: 110px; height: 43px;">
                                             <div *ngIf="item.produto.id != 61">
-                                                <input type="number" #max hidden id="max-{{item.produto.tipoRisco.nome}}-{{i}}" name="max-{{item.produto.tipoRisco.nome}}-{{i}}" [ngModel]="getRisco(item.produto.tipoRisco_Id)?.percentualDisponivel">
-                                                <input type="text" 
-                                                       class="form-control"
-                                                       id="percentual-{{item.produto.tipoRisco.nome}}-{{i}}"
-                                                       name="percentual-{{item.produto.tipoRisco.nome}}-{{i}}"
-                                                       mask="separator"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
-                                                       suffix="%"
-                                                       [min]="1"
-                                                       [placeholder]="max.value + '%' + ' disponível'"
-                                                       #_percentual="ngModel"
-                                                       [(ngModel)]="item.percentual"
-                                                       (change)="change(_percentual, item)"
-                                                       required>
+                                                    <app-input-number #_percentual
+                                                        [valueInput]="item.percentual"
+                                                        (valueChanges)="item.percentual = $event; percentualChange(_percentual, item);"
+                                                        [inputId]="'percentual-' + item.produto_Id"
+                                                        [mask]="'separator'"
+                                                        suffix="%"
+                                                        [min]="1"
+                                                        [required]="false"
+                                                        [showErrorMessage]="false"
+                                                        [placeholder]="selectedRisco.percentualDisponivel + '% disponível'"
+                                                        [allowNegativeNumbers]="false"
+                                                        [autoReplaceValue]="true"></app-input-number>
                                             </div>
                                             <span *ngIf="item.produto.id == 61">-</span>
                                         </td>
                                         <td class="td-action">
-                                            <button type="button" class="btn-trash ml-auto d-block px-2 text-dark" (click)="removeProduto(item)" *ngIf="item.produto.id != 61">
+                                            <button *ngIf="item.produto.id != 61"
+                                                    type="button"
+                                                    class="btn-trash ml-auto d-block px-2 text-dark"
+                                                    (click)="removeProduto(item)">
                                                 <fa-icon [icon]="faTrashAlt" class="d-md-none d-block"></fa-icon>
                                                 <span class="d-md-block d-none btn btn-dark">Excluir</span>
                                             </button>
@@ -187,7 +184,8 @@
             <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
         </div>
         <button class="btn btn-primary mr-0 ml-auto"
-                [disabled]="form.invalid || loading || validatePercentualRisco()">
+                [disabled]="form.invalid || loading || !formValid">
+                <!--  || validatePercentualRisco() -->
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
     </div>
 </form>

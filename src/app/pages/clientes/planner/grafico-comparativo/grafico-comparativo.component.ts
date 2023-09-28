@@ -61,13 +61,13 @@ export class GraficoComparativoComponent implements OnChanges {
     produtoTotal = 0;
     investimentoTotal = 0;
 
-    showInvestimentoRisco = false;
-    showInvestimentoLiquidez = false;
-    showInvestimentoAtivo = false;
+    showInvestimentoRisco = true;
+    showInvestimentoLiquidez = true;
+    showInvestimentoAtivo = true;
 
-    showProdutoRisco = false;
-    showProdutoLiquidez = false;
-    showProdutoAtivo = false;
+    showProdutoRisco = true;
+    showProdutoLiquidez = true;
+    showProdutoAtivo = true;
 
     constructor(
         private dropdown: DropdownService,
@@ -113,6 +113,7 @@ export class GraficoComparativoComponent implements OnChanges {
             this.setChartRisco_Produto();
             this.setChartLiquidez_Produto();
             this.setChartAtivo_Produto();
+            console.log(this.planner)
         }
 
     }
@@ -138,7 +139,7 @@ export class GraficoComparativoComponent implements OnChanges {
         var value: any[] = [];
         var obj;
         
-        this.showProdutoRisco = value && value.length > 0;
+        // this.showProdutoRisco = value && value.length > 0;
 
         
         this.planner.planejamentoProduto.forEach(x => {
@@ -183,7 +184,7 @@ export class GraficoComparativoComponent implements OnChanges {
         var value: any[] = [];
         var obj;
         
-        this.showProdutoLiquidez = value && value.length > 0;
+        // this.showProdutoLiquidez = value && value.length > 0;
         
         this.planner.planejamentoProduto.forEach(x => {
             var index = value.findIndex(y => x.produto.tipoLiquidez_Id == y.tipoLiquidez_Id);
@@ -227,7 +228,7 @@ export class GraficoComparativoComponent implements OnChanges {
         var value: any[] = [];
         var obj;
         
-        this.showProdutoAtivo = value && value.length > 0;
+        // this.showProdutoAtivo = value && value.length > 0;
 
         
         this.planner.planejamentoProduto.forEach(x => {
@@ -273,7 +274,7 @@ export class GraficoComparativoComponent implements OnChanges {
         var value: any[] = [];
         var obj;
         
-        this.showInvestimentoRisco = value && value.length > 0;
+        // this.showInvestimentoRisco = value && value.length > 0;
 
         this.planner.planejamentoInvestimento.forEach(x => {
             var index = value.findIndex(y => x.investimento.tipoRisco_Id == y.tipoRisco_Id);
@@ -317,7 +318,7 @@ export class GraficoComparativoComponent implements OnChanges {
         var value: any[] = [];
         var obj;
 
-        this.showInvestimentoLiquidez = value && value.length > 0;
+        // this.showInvestimentoLiquidez = value && value.length > 0;
 
         this.planner.planejamentoInvestimento.forEach(x => {
             var index = value.findIndex(y => x.investimento.tipoLiquidez_Id == y.tipoLiquidez_Id);
@@ -362,7 +363,7 @@ export class GraficoComparativoComponent implements OnChanges {
         var value: any[] = [];
         var obj;
 
-        this.showInvestimentoAtivo = value && value.length > 0;
+        // // this.showInvestimentoAtivo = value && value.length > 0;
 
         this.planner.planejamentoInvestimento.forEach(x => {
             var index = value.findIndex(y => x.investimento.tipoAtivo_Id == y.tipoAtivo_Id);

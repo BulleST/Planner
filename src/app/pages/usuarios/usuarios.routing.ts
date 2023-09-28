@@ -11,7 +11,7 @@ import { UserEditableAuth } from './user-editable.guard';
 
 const routes: Routes = [
     {
-        path: '', component: ListComponent, children: [
+        path: '', component: ListComponent, title: 'Planner - Usuários', children: [
             { path: 'cadastrar', component: CreateComponent, title: 'Planner - Cadastrar usuário' },
             { path: 'editar/:usuario_id', component: EditComponent, title: 'Planner - Editar usuário', canActivate: [UserEditableAuth] },
             { path: 'excluir/:usuario_id', component: DeleteComponent, title: 'Planner - Excluir usuário', canActivate: [UserEditableAuth] },

@@ -8,7 +8,7 @@ import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 
 const routes: Routes = [
-    { path: '', component: ListComponent, children: [
+    { path: '', component: ListComponent, title: 'Planner - Produtos', children: [
         { path: 'cadastrar', component: CreateComponent, title: 'Planner - Cadastrar produto' },
         { path: 'editar/:produto_id', component: EditComponent, title: 'Planner - Editar produto' },
         { path: 'excluir/:produto_id', component: DeleteComponent, title: 'Planner - Excluir produto' },

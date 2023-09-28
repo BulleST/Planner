@@ -74,7 +74,6 @@ export class EditComponent implements OnDestroy {
 
 
     resetForm() {
-        console.log(this.objeto)
         var contaCorrente = this.objeto.carteiraProdutoRel.find(x => x.produto_Id == 61) as CarteiraProdutoRel;
         this.objeto = new CarteiraSetup;
         this.objeto.carteiraProdutoRel = [contaCorrente];

@@ -286,7 +286,6 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         });
         
         this.selectedRisco.percentualDisponivel = this.tipoRiscos.find(x => x.id == this.selectedRisco.id)?.percentualDisponivel ?? 100;
-        console.log('calculaPercentualDisponivel tipoRiscos', this.tipoRiscos)
     }
 
     setProdutos() {
@@ -358,12 +357,9 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
             return false
         }
         this.formValid = true;
-        console.log('tipoRiscos', this.tipoRiscos);
         if (this.tipoRiscos.length) {
-
             this.objeto.carteiraProdutoRel.filter(x => x.produto_Id != 61).every(x => {
                 var risco = this.tipoRiscos.find(y => y.id == x.produto.tipoRisco_Id);
-                console.log('risco', risco, risco?.percentualDisponivel)
                 if (risco && risco?.percentualDisponivel != 0) {
                     this.erro.push(`A soma do percentual dos produtos para o risco ${risco.nome} deve ser 100%.`);
                     this.formValid = false

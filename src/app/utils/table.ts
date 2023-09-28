@@ -85,9 +85,7 @@ export class Table {
         const nestedProperties: string[] = col.field.split('.');
         let value: any = row;
         
-        // console.log(col.field, row)
         for (const prop of nestedProperties) {
-            // console.log(col.field, value[prop] ?? value)
             value = value ? value[prop] ?? undefined : undefined;
         }
         if (col.maskType && value != undefined && value.toString().trim() != '') {

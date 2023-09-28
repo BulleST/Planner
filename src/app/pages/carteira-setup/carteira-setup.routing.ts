@@ -10,7 +10,7 @@ const routes: Routes = [
     { path: 'cadastrar', component: CreateComponent, title: 'Planner - Cadastrar carteira ' },
     { path: 'editar/:setup_id', component: EditComponent, title: 'Planner - Cadastrar carteira ' },
     {
-        path: '', component: ListComponent, children: [
+        path: '', component: ListComponent, title: 'Planner - Carteira setup', children: [
             { path: 'excluir/:setup_id', component: DeleteComponent, title: 'Planner - Excluir carteira ' },
             { path: 'habilitar/:setup_id', component: DeactivatedComponent, title: 'Planner - Habilitar carteira' },
             { path: 'desabilitar/:setup_id', component: DeactivatedComponent, title: 'Planner - Desabilitar carteira' },

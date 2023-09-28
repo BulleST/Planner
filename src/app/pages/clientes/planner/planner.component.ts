@@ -185,11 +185,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         this.subscription.push(estadoCivil);
         var perfilInvestidor = this.dropdown.perfilInvestidor.subscribe(res => this.perfilInvestidor = res);
         this.subscription.push(perfilInvestidor);
-        
-        var planejamentoBackup = this.plannerService.planejamentoBackup.subscribe(res => {
-            console.log('planejamentoBackup', res)
-        })
-        this.subscription.push(planejamentoBackup);
 
     }
 
@@ -209,7 +204,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         this.planner = res;
-                        console.log('request.res', res.planejamentoProduto)
                         this.plannerService.planejamentoBackup.next(Object.assign({}, res));
                         this.carteiraSetupInalterada = res.carteiraSetup;
                         var empresa_Id: number;
@@ -405,7 +399,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             this.planner.carteiraSetup = undefined as unknown as CarteiraSetup;
         }
         
-        console.log(this.planner.carteiraSetup)
         this.mudouCarteiraSetup = !(this.planner.carteiraSetup_Id == this.carteiraSetupInalterada.id);
         this.saveData();
     }
@@ -461,7 +454,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     saveData() {
-        console.log('saveData', this.planner)
         this.plannerService.setObject(this.planner);
     }
 

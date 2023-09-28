@@ -1519,7 +1519,7 @@
                         <app-patrimonio-por-idade style="width: 100%" [planner]="planner"></app-patrimonio-por-idade>
                     </div>
                     <!-- Comparativo Investimento x Produto -->
-                    <div class="form-row mb-2" *ngIf="planner.planejamentoProduto.length > 0 || planner.planejamentoInvestimento.length > 0">
+                    <div class="form-row mb-2" *ngIf="planner.planejamentoProduto.length > 0 && planner.planejamentoInvestimento.length > 0">
                         <app-grafico-comparativo style="width: 100%" #investimentoGraficos [planner]="planner"></app-grafico-comparativo>
                     </div>
                 </div>

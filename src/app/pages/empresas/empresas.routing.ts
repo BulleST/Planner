@@ -6,7 +6,7 @@ import { DeleteComponent } from './delete/delete.component';
 import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 import { DadosCadastraisComponent } from './shared/dados-cadastrais/dados-cadastrais.component';
-import { CarteiraSetupGuard } from 'src/app/router-guards/carteira-setup.guard';
+import { CarteiraSetupGuard } from 'src/app/guards/carteira-setup.guard';
 
 // Clientes
 import { ClientesComponent } from './shared/clientes/clientes.component';

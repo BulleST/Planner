@@ -27,6 +27,7 @@ import { getError } from 'src/app/utils/error';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { InputNumberComponent } from 'src/app/shared/input-number/input-number.component';
 import { validaCPF } from 'src/app/utils/validate-cpf';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
     selector: 'app-planner',
@@ -112,6 +113,15 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     @ViewChild('receita') receita: InputNumberComponent;
     @ViewChild('despesa') despesa: InputNumberComponent;
 
+    colsProdutos = {
+        custosTaxas: true,
+        rentabLiquida: true,
+        rentabBruta: true,
+        montanteSugerido: true,
+        planoAcao: true,
+        percentual: true,
+    }
+
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     
     constructor(
@@ -127,6 +137,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         private plannerService: PlannerService,
         private usuarioService: UsuarioService,
         private empresaService: EmpresaService,
+        private currency: CurrencyPipe,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
 
@@ -199,7 +210,10 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 lastValueFrom(this.plannerService.getByClienteId(this.planner.cliente_Id))
                     .then(res => {
                         this.loading = false;
-                        if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar();
+                        if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id){
+                            console.log('voltar 1')
+                            this.voltar();
+                        }
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
@@ -225,6 +239,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
                     })
                     .catch(res => {
+                        console.log('voltar 2', res)
                         this.voltar();
                     })
                     .finally(() => this.loading = false);
@@ -264,6 +279,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     voltar() {
+        console.log('voltar 3')
         this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
@@ -334,6 +350,16 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                         x.percentual = round(percentual * multiplier, ++decimalLength);
                         maxDecimalLength = decimalLength > maxDecimalLength ? decimalLength : maxDecimalLength;
                     }
+
+                    // Calcula rentabilidade líquida
+                    var rentabilidadeLiquida = (x.rentabilidade * (100 - x.custosTaxas)) / 100;
+                    x.rentabilidadeLiquida = round(rentabilidadeLiquida, 2);
+
+                    var liquidoSugerido = (x.sugerido * rentabilidadeLiquida) / 100
+                    x.valorLiquido_MontanteAtual = round(liquidoSugerido, 2);
+
+                    var liquido_PlanoAcao = (x.planoAcao * rentabilidadeLiquida) / 100
+                    x.valorLiquido_PlanoAcao = round(liquido_PlanoAcao, 2);
                 }
                 somaPercentual += x.percentual;
                 somaPlanoAcao += x.planoAcao;
@@ -371,6 +397,13 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
                 somaMontanteAtual += x.montanteAtual;
+
+                // Calcula rentabilidade líquida
+                var rentabilidadeLiquida = (x.rentabilidade * (100 - x.custosTaxas)) / 100;
+                x.rentabilidadeLiquida = round(rentabilidadeLiquida, 2);
+
+                var liquidoSugerido = (x.montanteAtual * rentabilidadeLiquida) / 100
+                x.valorLiquido_MontanteAtual = round(liquidoSugerido, 2);
 
                 return x;
             })
@@ -622,4 +655,19 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 .finally(() => this.loading = false);
         }
     }
+
+    formatReais(valor: number) {
+        const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+        valor = round(valor, 2)
+        var newValue = this.currency.transform(valor, 'BRL', 'R$', '1.2')
+        return newValue;
+    }
+
+    formatPorcentagem(valor: number) {
+        const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+        valor = round(valor, 2)
+        var newValue = this.currency.transform(valor, 'BRL', '', '1.2') + '%'
+        return newValue;
+    }
+    
 }

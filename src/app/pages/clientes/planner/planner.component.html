@@ -841,7 +841,7 @@
                                             <td>
                                                 <app-input-number [valueInput]="item.custosTaxas"
                                                                   (valueChanges)="item.custosTaxas = $event;saveData();"
-                                                                  [inputId]="'investimento-custosTaxas-' + index"
+                                                                  [inputId]="'investimento-custosTaxas-' + item.investimento_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
                                                                   [min]="0"
@@ -854,7 +854,7 @@
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidade"
                                                                   (valueChanges)="item.rentabilidade = $event;saveData();"
-                                                                  [inputId]="'investimento-rentabilidade-' + index"
+                                                                  [inputId]="'investimento-rentabilidade-' + item.investimento_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
                                                                   [min]="0"
@@ -867,7 +867,7 @@
                                             <td>
                                                 <app-input-number [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
-                                                                  [inputId]="'investimento-rentabilidadeLiquida-' + index"
+                                                                  [inputId]="'investimento-rentabilidadeLiquida-' + item.investimento_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
                                                                   [min]="0"
@@ -878,10 +878,10 @@
                                                                   [disabled]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td>
+                                            <td [title]="'Líquido ' + formatReais(item.valorLiquido_MontanteAtual)">
                                                 <app-input-number [valueInput]="item.montanteAtual"
                                                                   (valueChanges)="item.montanteAtual = $event; saveData();"
-                                                                  [inputId]="'investimento-montanteAtual-' + index"
+                                                                  [inputId]="'investimento-montanteAtual-' + item.investimento_Id"
                                                                   [mask]="'separator.2'"
                                                                   prefix="R$ "
                                                                   [min]="1"
@@ -968,48 +968,104 @@
                                             </ng-template>
                                         </p-dropdown>
                                     </div>
+                                    <!-- || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61 && planner.carteiraSetup.carteiraProdutoRel.length == 1 && planner.carteiraSetup.carteiraProdutoRel[0].produto_Id != 61) -->
                                     <div *ngIf="planner.carteiraSetup_Id != 0">
-                                        <button type="button" *ngIf="mudouCarteiraSetup || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61 && planner.carteiraSetup.carteiraProdutoRel.length == 1 && planner.carteiraSetup.carteiraProdutoRel[0].produto_Id != 61)"
+                                        <button type="button" *ngIf="mudouCarteiraSetup || planner.planejamentoProduto[0].produto_Id == 61"
                                                 triggers="mouseenter:mouseleave"
                                                 class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                                 (click)="carregarProdutos(form)"
                                                 [disabled]="form.invalid || loading">
-                                            <span>Carregar produtos e salvar</span>
+                                            <span>Carregar setup e salvar</span>
                                         </button>
                                         <a class="link ml-3" [routerLink]="['produto']"
-                                           *ngIf="planner.planejamentoProduto.length > 0 && !mudouCarteiraSetup"> Adicionar outros produtos </a>
+                                           *ngIf="planner.planejamentoProduto.length > 1 && !mudouCarteiraSetup"> Adicionar outros produtos </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <p class="text-danger px-2" *ngIf="planner.planejamentoInvestimento.length == 0">* Insira um investimento para adicionar um produto</p>
+                                <div class="w-100">
+                                    <div class="w-100 d-flex flex-wrap my-2">
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="custosTaxas" 
+                                                        name="custosTaxas" 
+                                                        #custosTaxas="ngModel" 
+                                                        [(ngModel)]="colsProdutos.custosTaxas">
+                                            <label for="custosTaxas" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="custosTaxas.value" [class.text-white]="custosTaxas.value" [class.bg-light.text-dark]="!custosTaxas.value"><small>Custos/Taxas</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="rentabLiquida" 
+                                                        name="rentabLiquida" 
+                                                        #rentabLiquida="ngModel" 
+                                                        [(ngModel)]="colsProdutos.rentabLiquida">
+                                            <label for="rentabLiquida" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="rentabLiquida.value" [class.text-white]="rentabLiquida.value" [class.bg-light.text-dark]="!rentabLiquida.value"><small>Rentab. Liquida</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="rentabBruta" 
+                                                        name="rentabBruta" 
+                                                        #rentabBruta="ngModel" 
+                                                        [(ngModel)]="colsProdutos.rentabBruta">
+                                            <label for="rentabBruta" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="rentabBruta.value" [class.text-white]="rentabBruta.value" [class.bg-light.text-dark]="!rentabBruta.value"><small>Rentab. Bruta</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="montanteSugerido" 
+                                                        name="montanteSugerido" 
+                                                        #montanteSugerido="ngModel" 
+                                                        [(ngModel)]="colsProdutos.montanteSugerido">
+                                            <label for="montanteSugerido" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="montanteSugerido.value" [class.text-white]="montanteSugerido.value" [class.bg-light.text-dark]="!montanteSugerido.value"><small>Montante Sugerido</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="planoAcao" 
+                                                        name="planoAcao" 
+                                                        #planoAcao="ngModel" 
+                                                        [(ngModel)]="colsProdutos.planoAcao">
+                                            <label for="planoAcao" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="planoAcao.value" [class.text-white]="planoAcao.value" [class.bg-light.text-dark]="!planoAcao.value"><small>Plano Ação</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="percentual" 
+                                                        name="percentual" 
+                                                        #percentual="ngModel" 
+                                                        [(ngModel)]="colsProdutos.percentual">
+                                            <label for="percentual" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="percentual.value" [class.text-white]="percentual.value" [class.bg-light.text-dark]="!percentual.value"><small>Percentual</small></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <p-table [value]="planner.planejamentoProduto"
                                          [responsive]="true"
                                          responsiveLayout="scroll"
                                          class="table table-editable"
-                                         emptyMessage="Nenhum registro">
+                                         emptyMessage="Nenhum registro"
+                                         [resizableColumns]="true"
+                                         columnResizeMode="expand">
                                     <ng-template pTemplate="header" let-columns>
                                         <tr class="primary">
-                                            <th class="text-right px-3 pe-0" style="white-space: nowrap;">Risco |</th>
-                                            <th class="text-left px-3 ps-1 position-sticky" style="white-space: nowrap;">Produto</th>
-                                            <th style="white-space: nowrap;">Custos/Taxas</th>
-                                            <th style="white-space: nowrap;">Rentab. Bruta</th>
-                                            <th style="white-space: nowrap;">Rentab. Liquida</th>
-                                            <th style="white-space: nowrap;">Montante Sugerido</th>
-                                            <th style="white-space: nowrap;">Plano de Ação</th>
-                                            <th style="white-space: nowrap;">Percentual (~)</th>
+                                            <th pResizableColumn class="text-right px-3 pe-0" >Risco |</th>
+                                            <th pResizableColumn class="text-left px-3 ps-1 position-sticky" >Produto</th>
+                                            <th pResizableColumn  *ngIf="custosTaxas.value">Custos/Taxas</th>
+                                            <th pResizableColumn  *ngIf="rentabBruta.value">Rentab. Bruta</th>
+                                            <th pResizableColumn  *ngIf="rentabLiquida.value">Rentab. Liquida</th>
+                                            <th pResizableColumn  *ngIf="montanteSugerido.value">Montante Sugerido</th>
+                                            <th pResizableColumn  *ngIf="planoAcao.value">Plano de Ação</th>
+                                            <th pResizableColumn  *ngIf="percentual.value">Percentual (~)</th>
                                             <th class="td-actions"></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-item let-index="rowIndex">
                                         <tr>
-                                            <td class="px-3 pe-0 bg-light text-right" style="white-space: nowrap;">
+                                            <td pResizableColumn class="px-3 pe-0 bg-light text-right">
                                                 <small><b>{{item.produto.tipoRisco.nome}}</b> |</small>
                                             </td>
-                                            <td class="px-3 ps-1 bg-light text-left position-sticky" style="white-space: nowrap;">
+                                            <td pResizableColumn class="px-3 ps-1 bg-light text-left position-sticky">
                                                 <small><b>{{ item.produto.descricao }}</b> </small>
                                             </td>
-                                            <td>
+                                            <td pResizableColumn *ngIf="custosTaxas.value">
                                                 <app-input-number *ngIf="item.produto_Id != 61"
                                                                   [valueInput]="item.custosTaxas"
                                                                   (valueChanges)="item.custosTaxas = $event; saveData()"
@@ -1024,7 +1080,7 @@
                                                                   [autoReplaceValue]="true"></app-input-number>
                                                 <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
-                                            <td>
+                                            <td pResizableColumn *ngIf="rentabBruta.value">
                                                 <app-input-number *ngIf="item.produto_Id != 61"
                                                                   [valueInput]="item.rentabilidade"
                                                                   (valueChanges)="item.rentabilidade = $event; saveData()"
@@ -1039,7 +1095,7 @@
                                                                   [autoReplaceValue]="true"></app-input-number>
                                                 <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
-                                            <td>
+                                            <td pResizableColumn *ngIf="rentabLiquida.value">
                                                 <app-input-number *ngIf="item.produto_Id != 61"
                                                                   [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
@@ -1055,7 +1111,7 @@
                                                                   [autoReplaceValue]="true"></app-input-number>
                                                 <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
-                                            <td>
+                                            <td pResizableColumn *ngIf="montanteSugerido.value" [title]="'Líquido ' + formatReais(item.valorLiquido_MontanteAtual)">
                                                 <app-input-number [valueInput]="item.sugerido"
                                                                   (valueChanges)="item.sugerido = $event"
                                                                   [inputId]="'produto-sugerido-' + item.produto_Id"
@@ -1068,7 +1124,7 @@
                                                                   [disabled]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td style="white-space: nowrap">
+                                            <td pResizableColumn *ngIf="planoAcao.value" [title]="'Líquido ' + formatReais(item.valorLiquido_PlanoAcao)">
                                                 <app-input-number [valueInput]="item.planoAcao"
                                                                   (valueChanges)="item.planoAcao = $event; saveData()"
                                                                   [inputId]="'produto-planoAcao-' + item.produto_Id"
@@ -1082,7 +1138,7 @@
                                                                   [disabled]="item.produto_Id == 61"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td>
+                                            <td pResizableColumn *ngIf="percentual.value">
                                                 <app-input-number [valueInput]="item.percentual"
                                                                   (valueChanges)="item.percentual = $event"
                                                                   [inputId]="'produto-percentual-' + item.produto_Id"
@@ -1109,8 +1165,10 @@
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
-                                            <td colspan="3"></td>
-                                            <td>
+                                            <td *ngIf="custosTaxas.value"></td>
+                                            <td *ngIf="rentabBruta.value"></td>
+                                            <td *ngIf="rentabLiquida.value"></td>
+                                            <td *ngIf="montanteSugerido.value">
                                                 <app-input-number [valueInput]="somaProdutos.somaSugerido"
                                                                   (valueChanges)="somaProdutos.somaSugerido = $event"
                                                                   [inputId]="'somaSugerido'"
@@ -1122,7 +1180,7 @@
                                                                   [disabled]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td>
+                                            <td *ngIf="planoAcao.value">
                                                 <app-input-number [valueInput]="somaProdutos.somaPlanoAcao"
                                                                   (valueChanges)="somaProdutos.somaPlanoAcao = $event"
                                                                   [inputId]="'somaPlanoAcao'"
@@ -1134,7 +1192,7 @@
                                                                   [disabled]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td>
+                                            <td *ngIf="percentual.value">
                                                 <app-input-number [valueInput]="somaProdutos.somaPercentual"
                                                                   (valueChanges)="somaProdutos.somaPercentual = $event"
                                                                   [inputId]="'somaPercentual'"

@@ -11,6 +11,7 @@ export class PlanejamentoInvestimento {
     custosTaxas: number = '' as unknown as number;
     investimento: Investimento = new Investimento;
     investimento_Id: number = undefined as unknown as number;
+    valorLiquido_MontanteAtual: number = 0 
 }
 
 export class PlanejamentoInvestimentoRequest {

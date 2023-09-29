@@ -108,11 +108,11 @@ export class GraficoComparativoComponent implements OnChanges {
                 this.investimentoTotal = this.planner.planejamentoInvestimento.map(x => x.montanteAtual).reduce((x,y) => x+y)
             
             this.setChartRisco_Investimento();
-            this.setChartLiquidez_Investimento();
-            this.setChartAtivo_Investimento();
             this.setChartRisco_Produto();
-            this.setChartLiquidez_Produto();
-            this.setChartAtivo_Produto();
+            // this.setChartLiquidez_Investimento();
+            // this.setChartLiquidez_Produto();
+            // this.setChartAtivo_Investimento();
+            // this.setChartAtivo_Produto();
             console.log(this.planner)
         }
 
@@ -275,23 +275,30 @@ export class GraficoComparativoComponent implements OnChanges {
         var obj;
         
         // this.showInvestimentoRisco = value && value.length > 0;
-
-        this.planner.planejamentoInvestimento.forEach(x => {
-            var index = value.findIndex(y => x.investimento.tipoRisco_Id == y.tipoRisco_Id);
+        console.log('investimentos', this.planner.planejamentoInvestimento);
+        console.log('value 1', value);
+        this.planner.planejamentoInvestimento.forEach(investimento => {
+            console.log('investimento', investimento);
+            var index = value.findIndex(y => investimento.investimento.tipoRisco_Id == y.tipoRisco_Id);
+            console.log('value 2', value);
+            console.log('index', index);
             if (index == -1) {
                 obj = {
-                    tipoRisco_Id: x.investimento.tipoRisco ? x.investimento.tipoRisco_Id : 0,
-                    tipoRisco: x.investimento.tipoRisco ? x.investimento.tipoRisco : undefined,
-                    montanteAtual: x.montanteAtual,
-                    label: x.investimento.tipoRisco ? x.investimento.tipoRisco.nome : '-'
+                    tipoRisco_Id: investimento.investimento.tipoRisco ? investimento.investimento.tipoRisco_Id : 0,
+                    tipoRisco: investimento.investimento.tipoRisco ? investimento.investimento.tipoRisco : undefined,
+                    montanteAtual: investimento.montanteAtual,
+                    label: investimento.investimento.tipoRisco ? investimento.investimento.tipoRisco.nome : '-'
                 };
             } else {
                 obj = value[index]; 
-                obj.montanteAtual += x.montanteAtual;
+                obj.montanteAtual += investimento.montanteAtual;
             }
             
-            obj.percentual = (obj.montanteAtual / this.investimentoTotal) * 100
+            obj.percentual = (obj.montanteAtual / this.investimentoTotal) * 100;
+            console.log('obj', obj);
+            console.log('investimentoTotal', this.investimentoTotal);
             value.splice(index, (index == -1 ? 0 : 1), obj);
+            console.log('value 3', value);
         });
 
         this.chartRiscoData_Investimento =  {

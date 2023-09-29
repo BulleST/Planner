@@ -12,4 +12,7 @@ export class PlanejamentoProduto {
     custosTaxas: number = '' as unknown as number;
     produto: Produto = new Produto;
     produto_Id: number = undefined as unknown as number;
+
+    valorLiquido_MontanteAtual: number = 0 
+    valorLiquido_PlanoAcao: number = 0 
 }

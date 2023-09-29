@@ -7,32 +7,12 @@
 # Referencias 
 https://www.c-sharpcorner.com/blogs/a-guide-on-how-to-deploy-angular-applications-to-github-pages#:~:text=To/0deploy/0an/0Angular/0application/0to/0GitHub/0Pages/0you/0have,be/0deployed/0using/0GitHub/0Pages.
 
-CRUD SEP
-List/Mapa
-Cadastro
-Edição
-Exclusão
-Deactivated
 
-CRUD Estabelecimento
-List/Mapa
-Cadastro
-Edição
-Exclusão
+Incluir divorciado em Estado civil
+Investimento ao adicionar altera o valor dos outros investimentos
+Conforme alterou os investimentos, não alterou o portifólio
+Manter as cores do grafico comparativo, os mesmos tipos iguais
+Ao adicionar fluxo pontual de R$120.000 aos 60 anos, o grafico fez projeção absurda, qdo tira o fluxo pontual ele volta o grafico ok
+Percentual da solução de risco não bate
+Diferença de idade
 
-Crud Empresa
-List
-Cadastro
-Edição
-Exclusão
-
-Monitoramento
-Mapa Visão de todos os seps
-Detalhes do Sep com mais dados
-
-Crud usuarios
-List
-Cadastro
-Edição
-Exclusão
-Deactivated

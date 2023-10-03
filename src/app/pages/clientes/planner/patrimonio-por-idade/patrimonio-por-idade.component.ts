@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { AfterViewInit, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Planejamento } from 'src/app/models/planejamento.model';
@@ -32,6 +33,7 @@ export class PatrimonioPorIdadeComponent implements OnChanges, OnDestroy {
 
     constructor(
         private plannerService: PlannerService,
+        private currency: CurrencyPipe,
     ) {
         var getObject = this.plannerService.objeto.subscribe(res => {
             this.planner = res;
@@ -115,12 +117,19 @@ export class PatrimonioPorIdadeComponent implements OnChanges, OnDestroy {
                 },
                 legend: {
                     position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        title: (ctx) => ctx[0].dataset.label,
+                        label: (ctx) => '  ' + ctx.label + ' anos',
+                        footer: (ctx) => this.formatReais(ctx[0].raw),
+                    }
                 }
             },
             scales: {
                 xAxes: {
                     min: 0,
-                    max: 100,
+                    // max: 100,
                     suggestedMax: 100,
                     display: true,
                     title: {
@@ -144,6 +153,20 @@ export class PatrimonioPorIdadeComponent implements OnChanges, OnDestroy {
                 }
             },
         };
+    }
+
+    formatReais(valor: number) {
+        const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+        valor = round(valor, 2)
+        var newValue = this.currency.transform(valor, 'BRL', 'R$', '1.2')
+        return newValue;
+    }
+
+    formatPorcentagem(valor: number) {
+        const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+        valor = round(valor, 2)
+        var newValue = this.currency.transform(valor, 'BRL', '', '1.2') + '%'
+        return newValue;
     }
 
 }

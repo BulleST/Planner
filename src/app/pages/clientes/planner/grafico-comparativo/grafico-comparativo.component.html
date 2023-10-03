@@ -3,42 +3,81 @@
         <h6>Comparativo</h6>
     </div>
     <div class="d-flex flex-wrap">
-        <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-4 ps-md-0" *ngIf="showInvestimentoRisco || showProdutoRisco">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-4 ps-md-0" >
             <p class="card-header border  text-center font-weight-bold w-100">Risco</p>
             <div class="card card-body rounded-0 d-flex flex-wrap flex-row p-0 pt-4">
-                <div class="col-sm-6 col-6 px-1" *ngIf="showInvestimentoRisco">
+                <div class="col-sm-6 col-6 px-1" >
                     <p class="text-center font-weight-bold w-100 mb-2">Investimento</p>
-                    <p-chart type="pie" #chartRisco_Investimento [data]="chartRiscoData_Investimento" [options]="chartRiscoOptions_Investimento"></p-chart>
-                </div>
-                <div class="col-sm-6 col-6 px-1" *ngIf="showProdutoRisco">
+                    <p-chart type="pie" #chartRisco_Investimento [data]="chartRiscoData_Investimento" [options]="chartRiscoOptions"></p-chart>
+                </div> 
+                <div class="col-sm-6 col-6 px-1" >
                     <p class="text-center font-weight-bold w-100 mb-2">Produto</p>
-                    <p-chart type="pie" #chartRisco_Produto [data]="chartRiscoData_Produto" [options]="chartRiscoOptions_Produto"></p-chart>
+                    <p-chart type="pie" #chartRisco_Produto [data]="chartRiscoData_Produto" [options]="chartRiscoOptions"></p-chart>
+                </div>
+                <div class="col-12 chart-legenda" >
+                    <label *ngFor="let item of colorsRisco" [for]="'colorsRisco-' + item.id" class="chart-legenda-item" [class.hidden]="!item.visible">
+                        <span class="box-color" [ngStyle]="{'background-color': item.color}"></span>
+                        <input type="checkbox" hidden 
+                                name="colorsRisco-{{item.id}}" 
+                                id="colorsRisco-{{item.id}}" 
+                                [value]="true"
+                                #modelRisco="ngModel"
+                                [(ngModel)]="item.visible"
+                                (change)="setVisibilityRisco(item)">
+                        <span class="box-text">{{item.nome}}</span>
+                    </label>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-4 px-sm-0" *ngIf="showInvestimentoLiquidez || showProdutoLiquidez">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-4 px-sm-0" >
             <p class="card-header border  text-center font-weight-bold w-100">Liquidez</p>
             <div class="card card-body rounded-0 d-flex flex-wrap flex-row p-0 pt-4">
-                <div class="col-sm-6 col-6 px-1" *ngIf="showInvestimentoLiquidez">
+                <div class="col-sm-6 col-6 px-1" >
                     <p class="text-center font-weight-bold w-100 mb-2">Investimento</p>
-                    <p-chart type="pie" #chartLiquidez_Investimento [data]="chartLiquidezData_Investimento" [options]="chartLiquidezOptions_Investimento"></p-chart>
+                    <p-chart type="pie" #chartLiquidez_Investimento [data]="chartLiquidezData_Investimento" [options]="chartLiquidezOptions"></p-chart>
                 </div>
-                <div class="col-sm-6 col-6 px-1" *ngIf="showProdutoLiquidez">
+                <div class="col-sm-6 col-6 px-1" >
                     <p class="text-center font-weight-bold w-100 mb-2">Produto</p>
-                    <p-chart type="pie" #chartLiquidez_Produto [data]="chartLiquidezData_Produto" [options]="chartLiquidezOptions_Produto"></p-chart>
+                    <p-chart type="pie" #chartLiquidez_Produto [data]="chartLiquidezData_Produto" [options]="chartLiquidezOptions"></p-chart>
+                </div>
+                <div class="col-12 chart-legenda" >
+                    <label *ngFor="let item of colorsLiquidez" [for]="'colorsLiquidez-' + item.id" class="chart-legenda-item" [class.hidden]="!item.visible">
+                        <span class="box-color" [ngStyle]="{'background-color': item.color}"></span>
+                        <input type="checkbox" hidden 
+                                name="colorsLiquidez-{{item.id}}" 
+                                id="colorsLiquidez-{{item.id}}" 
+                                [value]="true"
+                                #modelRisco="ngModel"
+                                [(ngModel)]="item.visible"
+                                (change)="setVisibilityLiquidez(item)">
+                        <span class="box-text">{{item.nome}}</span>
+                    </label>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-4 pe-md-0" *ngIf="showInvestimentoAtivo || showProdutoAtivo">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-4 pe-md-0" >
             <p class="card-header border  text-center font-weight-bold w-100">Ativo</p>
             <div class="card card-body rounded-0 d-flex flex-wrap flex-row p-0 pt-4">
-                <div class="col-sm-6 col-6 px-1" *ngIf="showInvestimentoAtivo">
+                <div class="col-sm-6 col-6 px-1" >
                     <p class="text-center font-weight-bold w-100 mb-2">Investimento</p>
-                    <p-chart type="pie" #chartAtivo_Investimento [data]="chartAtivoData_Investimento" [options]="chartAtivoOptions_Investimento"></p-chart>
+                    <p-chart type="pie" #chartAtivo_Investimento [data]="chartAtivoData_Investimento" [options]="chartAtivoOptions"></p-chart>
                 </div>
-                <div class="col-sm-6 col-6 px-1" *ngIf="showProdutoAtivo">
+                <div class="col-sm-6 col-6 px-1" >
                     <p class="text-center font-weight-bold w-100 mb-2">Produto</p>
-                    <p-chart type="pie" #chartAtivo_Produto [data]="chartAtivoData_Produto" [options]="chartAtivoOptions_Produto"></p-chart>
+                    <p-chart type="pie" #chartAtivo_Produto [data]="chartAtivoData_Produto" [options]="chartAtivoOptions"></p-chart>
+                </div>
+                <div class="col-12 chart-legenda" >
+                    <label *ngFor="let item of colorsAtivo" [for]="'colorsAtivo-' + item.id" class="chart-legenda-item" [class.hidden]="!item.visible">
+                        <span class="box-color" [ngStyle]="{'background-color': item.color}"></span>
+                        <input type="checkbox" hidden 
+                                name="colorsAtivo-{{item.id}}" 
+                                id="colorsAtivo-{{item.id}}" 
+                                [value]="true"
+                                #modelRisco="ngModel"
+                                [(ngModel)]="item.visible"
+                                (change)="setVisibilityAtivo(item)">
+                        <span class="box-text">{{item.nome}}</span>
+                    </label>
                 </div>
             </div>
         </div>

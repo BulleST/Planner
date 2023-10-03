@@ -31,13 +31,21 @@
                     <div class="form-row">
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
                             <label for="produto">Produto: <span class="text-danger">*</span></label>
-                            <p-dropdown class="form-control" id="produto" name="produto" #produto="ngModel"
-                                [class.form-control-loading]="loadingProdutos" [disabled]="loadingRiscos"
-                                [options]="produtos" [(ngModel)]="objeto.produto" optionLabel="descricao"
-                                optionDisabled="dataDesativado" [filter]="true" filterBy="nome" [showClear]="true"
-                                placeholder="Selecione"
-                                (ngModelChange)="objeto.produto_Id = produto.value ? produto.value.id : undefined"
-                                [required]="true">
+                            <p-dropdown class="form-control" 
+                                        id="produto" 
+                                        name="produto" #produto="ngModel"
+                                        [class.form-control-loading]="loadingProdutos" 
+                                        [disabled]="loadingRiscos"
+                                        [options]="produtos" 
+                                        [(ngModel)]="objeto.produto" 
+                                        optionLabel="descricao"
+                                        optionDisabled="dataDesativado" 
+                                        [filter]="true" 
+                                        filterBy="descricao" 
+                                        [showClear]="true"
+                                        placeholder="Selecione"
+                                        (ngModelChange)="objeto.produto_Id = produto.value ? produto.value.id : undefined"
+                                        [required]="true">
                                 <ng-template let-item pTemplate="item">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>

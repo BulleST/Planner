@@ -7,6 +7,8 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { Investimento } from 'src/app/models/investimento.model';
 import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimento.model';
 import { Planejamento } from 'src/app/models/planejamento.model';
+import { TipoRisco } from 'src/app/models/tipoRisco.model';
+import { DropdownService } from 'src/app/services/dropdown.service';
 import { InvestimentoService } from 'src/app/services/investimento.service';
 import { PlannerService } from 'src/app/services/planner.service';
 import { CarteiraSetupService } from 'src/app/services/setup.service';
@@ -18,7 +20,7 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     templateUrl: './form-investimento.component.html',
     styleUrls: ['./form-investimento.component.css']
 })
-export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
+export class FormInvestimentoComponent implements OnDestroy {
     faTimes = faTimes;
     faChevronLeft = faChevronLeft;
     modalOpen = false;
@@ -29,10 +31,14 @@ export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
     planner: Planejamento = new Planejamento;
     investimentos: Investimento[] = [];
     loadingInvestimentos = true;
-    aliquota = '';
+
     subscription: Subscription[] = [];
     routerBack: string[] = ['../'];
     routeBackOptions: any;
+
+    selectedRisco?: TipoRisco;
+    tipoRiscos: TipoRisco[] = [];
+    loadingRiscos = true;
 
     constructor(
         private modal: ModalOpen,
@@ -42,6 +48,7 @@ export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
         private toastr: ToastrService,
         private crypto: Crypto,
         private activatedRoute: ActivatedRoute,
+        private dropdown: DropdownService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
         this.objeto.investimento = undefined as unknown as Investimento;
@@ -58,19 +65,23 @@ export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
         });
         this.subscription.push(objeto);
 
-    }
+        var tipoRisco = this.dropdown.tipoRisco.subscribe(res => this.tipoRiscos = res);
+        this.subscription.push(tipoRisco);
+        lastValueFrom(this.dropdown.getRisco())
+            .then(res => this.tipoRiscos = res)
+            .finally(() => this.loadingRiscos = false);
 
-    ngAfterViewInit(): void {
-        var list = this.investimentoService.list.subscribe(res => this.setInvestimentos(res));
+        var list = this.investimentoService.list.subscribe(res => this.setInvestimentos());
         this.subscription.push(list);
+        
         lastValueFrom(this.investimentoService.getAll())
-            .then(res => this.setInvestimentos(res))
+            .then(res => this.setInvestimentos())
             .finally(() => this.loadingInvestimentos = false);
 
         setTimeout(() => {
             this.modal.setOpen(true);
         }, 200);
-        
+
     }
 
     ngOnDestroy(): void {
@@ -78,14 +89,29 @@ export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
+  
     voltar() {
         this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
-    setInvestimentos(list: Investimento[]) {
+    setInvestimentos() {
         this.loadingInvestimentos = true;
         var investimentosExistentes = this.planner.planejamentoInvestimento.map(x => x.investimento_Id)
-        this.investimentos = list.filter(x => !investimentosExistentes.includes(x.id))
+        this.investimentos = this.investimentoService.list.value;
+        if(this.selectedRisco) {
+            this.investimentos = this.investimentos.filter(x => x.tipoRisco_Id == this.selectedRisco?.id)
+        }
+        this.investimentos = this.investimentos.filter(x => !investimentosExistentes.includes(x.id))      
+        this.investimentos = this.investimentos.sort((x, y) => {
+            if (x.tipoRisco_Id > y.tipoRisco_Id) return 1;
+            else if (x.tipoRisco_Id < y.tipoRisco_Id)  return -1;
+           
+            // Else go to the 2nd item
+            if (x.descricao.toLowerCase() < y.descricao.toLowerCase()) return -1;
+            else if (x.descricao.toLowerCase() > y.descricao.toLowerCase()) return 1;
+            else return 0;  // nothing to split them
+        });
+
         this.objeto.investimento = undefined as unknown as Investimento;
         this.objeto.investimento_Id = undefined as unknown as number;
         this.loadingInvestimentos = false;
@@ -99,8 +125,8 @@ export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
         this.objeto.investimento_Id = this.objeto.investimento.id;
         this.objeto.planejamento_Id = this.planner.id;
         this.objeto.rentabilidadeLiquida = this.objeto.rentabilidade;
-        this.objeto.planoAcao = this.objeto.montanteAtual;
-        this.objeto.sugerido = this.objeto.planoAcao;
+        // this.objeto.planoAcao = this.objeto.montanteAtual;
+        // this.objeto.sugerido = this.objeto.planoAcao;
         
         let jaExiste = this.planner.planejamentoInvestimento.find(x => x.investimento_Id == this.objeto.investimento_Id)
         if (jaExiste) {
@@ -120,5 +146,4 @@ export class FormInvestimentoComponent implements OnDestroy, AfterViewInit {
         let planner = this.crypto.decrypt(e);
         return planner;
     }
-
 }

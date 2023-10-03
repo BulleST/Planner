@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -23,13 +24,17 @@ export class VerPlannerReadonlyComponent implements OnInit {
     somaProdutos = {
         somaPercentual: 0,
         somaPlanoAcao: 0,
+        somaPlanoAcaoLiquido: 0,
         somaSugerido: 0,
+        somaSugeridoLiquido: 0,
+        diferencaPercentual: 0,
+        diferencaPlanoAcao: 0,
+        diferencaSugerido: 0,
     }
 
     somaInvestimentos = {
-        somaPlanoAcao: 0,
-        somaSugerido: 0,
         somaMontanteAtual: 0,
+        somaMontanteAtualLiquido: 0,
     }
 
     subscription: Subscription[] = [];
@@ -39,12 +44,22 @@ export class VerPlannerReadonlyComponent implements OnInit {
     routerBack: string[] = ['../../'];
     routeBackOptions: any;
 
+    colsProdutos = {
+        custosTaxas: true,
+        rentabLiquida: true,
+        rentabBruta: true,
+        montanteSugerido: true,
+        planoAcao: true,
+        percentual: true,
+    }
+
     constructor(
         private modal: ModalOpen,
         private activatedRoute: ActivatedRoute,
         private crypto: Crypto,
         private plannerService: PlannerService,
         private accountService: AccountService,
+        private currency: CurrencyPipe,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
         
@@ -96,29 +111,6 @@ export class VerPlannerReadonlyComponent implements OnInit {
         this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
-    calculaPercentualInvestimentos() {
-        if (this.planner.planejamentoInvestimento.length > 0 && this.planner.planejamentoAgregandoValor != undefined) {
-            const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
-            var montanteTotal = this.planner.planejamentoAgregandoValor.montante ?? 1;
-            var somaPlanoAcao = 0;
-            var somaSugerido = 0;
-            var somaMontanteAtual = 0;
-
-            // Ordena os produtos e deixa conta corrente por ultimo
-            this.planner.planejamentoInvestimento = this.planner.planejamentoInvestimento.sort((x, y) => x.investimento.descricao.toLowerCase() > y.investimento.descricao.toLowerCase() ? 1 : -1);
-            this.planner.planejamentoInvestimento.map(x => {
-                somaPlanoAcao += x.planoAcao;
-                somaSugerido += x.sugerido;
-                somaMontanteAtual += x.montanteAtual;
-                
-                return x;
-            })
-            this.somaInvestimentos.somaPlanoAcao = round(somaPlanoAcao, 2);
-            this.somaInvestimentos.somaSugerido = round(somaSugerido, 2);
-            this.somaInvestimentos.somaMontanteAtual = round(somaMontanteAtual, 2);
-        }
-    }
-
     calculaPercentualProdutos() {
         if (this.planner.planejamentoProduto.length > 0 && this.planner.planejamentoAgregandoValor != undefined) {
             const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
@@ -126,6 +118,8 @@ export class VerPlannerReadonlyComponent implements OnInit {
             var somaPercentual = 0;
             var somaPlanoAcao = 0;
             var somaSugerido = 0;
+            var somaSugerido_Liquido = 0;
+            var somaPlanoAcao_Liquido = 0;
 
             // Ordena os produtos e deixa conta corrente por ultimo
             var list = this.planner.planejamentoProduto;
@@ -151,15 +145,66 @@ export class VerPlannerReadonlyComponent implements OnInit {
                 somaPercentual += percentual;
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
+                somaPlanoAcao_Liquido += x.valorLiquido_PlanoAcao; 
+                somaSugerido_Liquido += x.valorLiquido_MontanteAtual;
                 return x
             });
-            this.somaProdutos.somaPercentual = round(somaPercentual * 100, 2);
+            this.somaProdutos.somaPercentual = round(somaPercentual, 2);
             this.somaProdutos.somaPlanoAcao = round(somaPlanoAcao, 2);
             this.somaProdutos.somaSugerido = round(somaSugerido, 2);
+
+            this.somaProdutos.somaSugeridoLiquido = round(somaSugerido_Liquido, 2);
+            this.somaProdutos.somaPlanoAcaoLiquido = round(somaPlanoAcao_Liquido, 2);
+
+            this.somaProdutos.diferencaPercentual = round(100 - this.somaProdutos.somaPercentual, 2);
+            this.somaProdutos.diferencaPlanoAcao = round(montanteTotal - this.somaProdutos.somaPlanoAcao, 2);
+            this.somaProdutos.diferencaSugerido = round(montanteTotal - this.somaProdutos.somaSugerido, 2);
+            
             this.planner.planejamentoProduto = list;
             
         }
 
+    }
+    calculaPercentualInvestimentos() {
+        if (this.planner.planejamentoInvestimento.length > 0 && this.planner.planejamentoAgregandoValor != undefined) {
+            const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+            var montanteTotal = this.planner.planejamentoAgregandoValor.montante ?? 1;
+            var somaMontanteAtual = 0;
+            var somaMontanteAtual_Liquido = 0;
+
+            // Ordena os produtos e deixa conta corrente por ultimo
+            this.planner.planejamentoInvestimento = this.planner.planejamentoInvestimento.sort((x, y) => x.investimento.descricao.toLowerCase() > y.investimento.descricao.toLowerCase() ? 1 : -1);
+            this.planner.planejamentoInvestimento.map(x => {
+                
+                // Calcula rentabilidade líquida
+                var rentabilidadeLiquida = (x.rentabilidade * (100 - x.custosTaxas)) / 100;
+                var liquidoSugerido = (x.montanteAtual * rentabilidadeLiquida) / 100
+                
+                x.rentabilidadeLiquida = round(rentabilidadeLiquida, 2);
+                x.valorLiquido_MontanteAtual = round(liquidoSugerido, 2);
+                
+                somaMontanteAtual += x.montanteAtual;
+                somaMontanteAtual_Liquido += x.valorLiquido_MontanteAtual;
+
+                return x;
+            })
+            this.somaInvestimentos.somaMontanteAtual = round(somaMontanteAtual, 2);
+            this.somaInvestimentos.somaMontanteAtualLiquido = round(somaMontanteAtual_Liquido, 2);
+        }
+
+    }
+    formatReais(valor: number) {
+        const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+        valor = round(valor, 2)
+        var newValue = this.currency.transform(valor, 'BRL', 'R$', '1.2')
+        return newValue;
+    }
+
+    formatPorcentagem(valor: number) {
+        const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+        valor = round(valor, 2)
+        var newValue = this.currency.transform(valor, 'BRL', '', '1.2') + '%'
+        return newValue;
     }
 
 }

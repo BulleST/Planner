@@ -45,7 +45,7 @@ registerLocaleData(localePt);
         FormsModule,
         DropdownModule,
         NgbPopoverModule,
-        ToastrModule.forRoot({ preventDuplicates: true, timeOut: 8000, }),
+        ToastrModule.forRoot({ preventDuplicates: true, timeOut: 8000, enableHtml: true }),
         NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
         TableModule,
         ChartModule,

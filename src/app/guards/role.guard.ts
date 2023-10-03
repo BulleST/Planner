@@ -21,7 +21,7 @@ export class RoleGuard implements CanActivate {
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         let account = this.accountService.accountValue;
         if (!account) {
-            this.toastr.error('Acesso não autorizado. \r\n Faça login.');
+            this.toastr.error(`Acesso não autorizado. <br> Faça login.`);
             this.router.navigate(['account', 'login'], { queryParams: { returnUrl: state.url } })
             return false;
         } else if (route.data['roles'] && !route.data['roles'].includes(account?.role)) {

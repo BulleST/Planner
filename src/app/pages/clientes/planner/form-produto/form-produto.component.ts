@@ -72,6 +72,7 @@ export class FormProdutoComponent implements OnDestroy {
 
         var list = this.produtoService.list.subscribe(res => this.setProdutos());
         this.subscription.push(list);
+
         lastValueFrom(this.produtoService.getList())
             .then(res => this.setProdutos())
             .finally(() => this.loadingProdutos = false);
@@ -92,25 +93,27 @@ export class FormProdutoComponent implements OnDestroy {
     }
 
     setProdutos() {
+        console.log(this.produtos)
         this.loadingProdutos = true;
         var produtosExistentes = this.planner.planejamentoProduto.map(x => x.produto_Id)
         this.produtos = this.produtoService.list.value;
         if(this.selectedRisco) {
-            this.produtos = this.produtoService.list.value
-            .filter(x => x.tipoRisco_Id == this.selectedRisco?.id)
+            this.produtos = this.produtos.filter(x => x.tipoRisco_Id == this.selectedRisco?.id)
         }
-        this.produtos = this.produtos.filter(x => !produtosExistentes.includes(x.id))
+        this.produtos = this.produtos.filter(x => !produtosExistentes.includes(x.id));
+        this.produtos = this.produtos.sort((x, y) => {
+            if (x.tipoRisco_Id > y.tipoRisco_Id) return 1;
+            else if (x.tipoRisco_Id < y.tipoRisco_Id)  return -1;
+           
+            // Else go to the 2nd item
+            if (x.descricao.toLowerCase() < y.descricao.toLowerCase()) return -1;
+            else if (x.descricao.toLowerCase() > y.descricao.toLowerCase()) return 1;
+            else return 0;  // nothing to split them
+        });
         this.objeto.produto = undefined as unknown as Produto;
         this.objeto.produto_Id = undefined as unknown as number;
         this.loadingProdutos = false;
-    }
-
-    arrowUp(value: number) {
-        return arrowUp(value)
-    }
-
-    arrowDown(value: number, allowNegative: boolean = false) {
-        return arrowDown(value, allowNegative)
+        console.log(this.produtos)
     }
 
     send(model: NgForm) {

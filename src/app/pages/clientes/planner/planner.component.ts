@@ -72,16 +72,17 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     somaProdutos = {
         somaPercentual: 0,
         somaPlanoAcao: 0,
+        somaPlanoAcaoLiquido: 0,
         somaSugerido: 0,
+        somaSugeridoLiquido: 0,
         diferencaPercentual: 0,
         diferencaPlanoAcao: 0,
         diferencaSugerido: 0,
     }
 
     somaInvestimentos = {
-        somaPlanoAcao: 0,
-        somaSugerido: 0,
         somaMontanteAtual: 0,
+        somaMontanteAtualLiquido: 0,
     }
 
     // se o usuario alterou a carteira setup, não pode adicionar um produto 
@@ -302,6 +303,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             var somaPercentual = 0;
             var somaPlanoAcao = 0;
             var somaSugerido = 0;
+            var somaSugerido_Liquido = 0;
+            var somaPlanoAcao_Liquido = 0;
 
             // Ordena os produtos e deixa conta corrente por ultimo
             var list = this.planner.planejamentoProduto;
@@ -317,7 +320,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             });
             
             
-            // .sort((x, y) => x.produto.tipoRisco.nome.toLowerCase() > y.produto.tipoRisco.nome.toLowerCase() ? 1 : -1);
             var contaCorrenteIndex = list.findIndex(x => x.produto_Id == 61);
             var contaCorrente = list.splice(contaCorrenteIndex, 1);
             list.push(contaCorrente[0])
@@ -364,13 +366,19 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 somaPercentual += x.percentual;
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
+                somaPlanoAcao_Liquido += x.valorLiquido_PlanoAcao; 
+                somaSugerido_Liquido += x.valorLiquido_MontanteAtual; 
                 return x
             });
 
 
-            this.somaProdutos.somaPercentual = round(somaPercentual, 2)  ;
+            this.somaProdutos.somaPercentual = round(somaPercentual, 2);
             this.somaProdutos.somaPlanoAcao = round(somaPlanoAcao, 2);
             this.somaProdutos.somaSugerido = round(somaSugerido, 2);
+
+            this.somaProdutos.somaSugeridoLiquido = round(somaSugerido_Liquido, 2);
+            this.somaProdutos.somaPlanoAcaoLiquido = round(somaPlanoAcao_Liquido, 2);
+
             this.somaProdutos.diferencaPercentual = round(100 - this.somaProdutos.somaPercentual, 2);
             this.somaProdutos.diferencaPlanoAcao = round(montanteTotal - this.somaProdutos.somaPlanoAcao, 2);
             this.somaProdutos.diferencaSugerido = round(montanteTotal - this.somaProdutos.somaSugerido, 2);
@@ -387,29 +395,42 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         if (this.planner.planejamentoInvestimento.length > 0 && this.planner.planejamentoAgregandoValor != undefined) {
             const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
             var montanteTotal = this.planner.planejamentoAgregandoValor.montante ?? 1;
-            var somaPlanoAcao = 0;
-            var somaSugerido = 0;
             var somaMontanteAtual = 0;
+            var somaMontanteAtual_Liquido = 0;
 
-            // Ordena os produtos e deixa conta corrente por ultimo
-            this.planner.planejamentoInvestimento = this.planner.planejamentoInvestimento.sort((x, y) => x.investimento.descricao.toLowerCase() > y.investimento.descricao.toLowerCase() ? 1 : -1);
-            this.planner.planejamentoInvestimento.map(x => {
-                somaPlanoAcao += x.planoAcao;
-                somaSugerido += x.sugerido;
-                somaMontanteAtual += x.montanteAtual;
-
+           
+            // Ordena os investimentos por risco
+            var list = this.planner.planejamentoInvestimento;
+            list = list.sort((x, y) => {
+                if (x.investimento.tipoRisco_Id > y.investimento.tipoRisco_Id) return -1;
+                else if (x.investimento.tipoRisco_Id < y.investimento.tipoRisco_Id)  return 1;
+               
+                // Else go to the 2nd item
+                if (x.investimento.descricao.toLowerCase() < y.investimento.descricao.toLowerCase()) return -1;
+                else if (x.investimento.descricao.toLowerCase() > y.investimento.descricao.toLowerCase()) return 1;
+                else return 0;  // nothing to split them
+            });
+            
+            list = list.map(x => {
                 // Calcula rentabilidade líquida
                 var rentabilidadeLiquida = (x.rentabilidade * (100 - x.custosTaxas)) / 100;
-                x.rentabilidadeLiquida = round(rentabilidadeLiquida, 2);
-
                 var liquidoSugerido = (x.montanteAtual * rentabilidadeLiquida) / 100
+                
+                x.rentabilidadeLiquida = round(rentabilidadeLiquida, 2);
                 x.valorLiquido_MontanteAtual = round(liquidoSugerido, 2);
+                
+                somaMontanteAtual += x.montanteAtual;
+                somaMontanteAtual_Liquido += x.valorLiquido_MontanteAtual;
 
                 return x;
             })
-            this.somaInvestimentos.somaPlanoAcao = round(somaPlanoAcao, 2);
-            this.somaInvestimentos.somaSugerido = round(somaSugerido, 2);
             this.somaInvestimentos.somaMontanteAtual = round(somaMontanteAtual, 2);
+            this.somaInvestimentos.somaMontanteAtualLiquido = round(somaMontanteAtual_Liquido, 2);
+            
+            setTimeout(() => { // espera atualizar html
+                this.planner.planejamentoInvestimento = Object.assign([], list); // Força a mudança na model
+                this.somaInvestimentos = Object.assign({}, this.somaInvestimentos) // Força a mudança na model
+            }, 1000);
         }
 
     }

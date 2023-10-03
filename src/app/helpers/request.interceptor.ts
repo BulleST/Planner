@@ -109,8 +109,7 @@ export class RequestInterceptor implements HttpInterceptor {
                         returnUrl = returnUrl.includes('account/login') ? '' : returnUrl;
                         this.router.navigate(['account', 'login'], { queryParams: { returnUrl } });
                         localStorage.clear();
-                        this.toastr.error('Faça login \r\n  Faça login.')
-                        this.toastr.error('Acesso não autorizado.');
+                        this.toastr.error(`Acesso não autorizado. <br> Faça login.`);
                     }
                     else if (res.status == 403) {
                         this.toastr.error('Permissão negada.');

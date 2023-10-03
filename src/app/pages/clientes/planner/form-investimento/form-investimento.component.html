@@ -1,6 +1,6 @@
 <div class="modal" [class.active]="modalOpen">
     <div class="modal__bg" (click)="voltar()"></div>
-    <div class="modal__inner" style="max-width: 700px;">
+    <div class="modal__inner" style="max-width: 700px; overflow: visible; max-height: 95vh">
         <div class="modal__content">
             <div class="modal__header pb-2">
                 <h3 class="text-orange">Adicionar investimento</h3>
@@ -11,23 +11,58 @@
             </div>
             <div class="modal__body mt-0">
                 <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
+                    <div class="mt-2 mb-2 px-2">
+                        <p class="h6">Selecione o Risco</p>
+                        <div class="d-flex align-items-center">
+                            <div class="mx-2">
+                                <input type="radio" class="mr-1 mt-1" name="tipoRisco" id="tipoRisco-0"
+                                    #tipoRisco="ngModel" [(ngModel)]="selectedRisco" (ngModelChange)="setInvestimentos()"
+                                    [value]="undefined" [checked]="!selectedRisco">
+                                <label for="tipoRisco-0">Todos</label>
+                            </div>
+                            <div *ngFor="let item of tipoRiscos" class="mx-2">
+                                <input type="radio" class="mr-1 mt-1" name="tipoRisco" id="tipoRisco-{{item.nome}}"
+                                    #tipoRisco="ngModel" [(ngModel)]="selectedRisco" (ngModelChange)="setInvestimentos()"
+                                    [value]="item" [checked]="item.id == selectedRisco?.id">
+                                <label for="tipoRisco-{{item.nome}}">{{item.nome}}</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
                             <label for="investimento">Investimento: <span class="text-danger">*</span></label>
-                            <select class="form-control"
-                                [class.form-control-loading]="loadingInvestimentos"
+
+                            <p-dropdown class="form-control" 
+                                id="investimento" 
                                 name="investimento" 
-                                id="investimento"
                                 #investimento="ngModel"
+                                [class.form-control-loading]="loadingInvestimentos" 
+                                [disabled]="loadingRiscos"
+                                [options]="investimentos" 
                                 [(ngModel)]="objeto.investimento"
-                                [ngbPopover]="campoObrigatorio" 
-                                popoverClass="popover-danger"
-                                [disablePopover]="investimento.errors == null" 
-                                triggers="mouseenter:mouseleave"
-                                required>
-                                <option [ngValue]="undefined">Selecione</option>
-                                <option [ngValue]="item" *ngFor="let item of investimentos">{{item.descricao}}</option>
-                            </select>
+                                optionLabel="descricao"
+                                optionDisabled="dataDesativado" 
+                                [filter]="true" 
+                                filterBy="descricao" 
+                                [showClear]="true"
+                                placeholder="Selecione"
+                                (ngModelChange)="objeto.investimento_Id = investimento.value ? investimento.value.id : undefined"
+                                [required]="true">
+                                <ng-template let-item pTemplate="item">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <p class="mb-0">{{item.descricao}}</p>
+                                            <p class="mb-0"><strong>Risco:</strong> {{item.tipoRisco.nome}}</p>
+                                        </div>
+                                        <span class="flag flag-red" *ngIf="item.dataDesativado" [ngbPopover]="ativo">
+                                            Inativo </span>
+                                        <ng-template #ativo>
+                                            <div class="py-2 px-3">Desativado em {{item.dataDesativado | date :
+                                                "dd/MM/yyyy" : 'UTC' }} </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
                             <div *ngIf="investimento.errors && investimento.touched">
                                 <p class="text-danger" *ngIf="investimento.errors['required']">Esse campo é obrigatório</p>
                             </div>

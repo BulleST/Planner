@@ -24,7 +24,8 @@
                                            id="nome"
                                            class="form-control"
                                            [ngModel]="planner.cliente.nome"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                     <label for="perfilInvestidor">Perfil de Investidor:</label>
@@ -33,7 +34,8 @@
                                            id="perfilInvestidor"
                                            class="form-control"
                                            [ngModel]="planner.cliente.perfilInvestidor?.descricao"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                     <label for="estadoCivil">Estado Civil:</label>
@@ -42,7 +44,8 @@
                                            id="estadoCivil"
                                            class="form-control"
                                            [ngModel]="planner.cliente.estadoCivil?.descricao"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -55,7 +58,8 @@
                                            [ngModel]="planner.cliente.cpf"
                                            mask="000.000.000-00"
                                            placeholder="000.000.000-00"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6">
                                     <label for="rg">RG:</label>
@@ -66,7 +70,8 @@
                                            [ngModel]="planner.cliente.rg"
                                            mask="00.000.000-0"
                                            placeholder="00.000.000-0"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-6">
                                     <label for="dataNascimento">Data de Nascimento:</label>
@@ -75,7 +80,8 @@
                                            id="dataNascimento"
                                            class="form-control"
                                            [ngModel]="planner.cliente.dataNascimento"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                                 <div class="form-group col-lg-2 col-md-2 col-sm-6 col-6">
                                     <label for="idade">Idade:</label>
@@ -86,7 +92,8 @@
                                            [ngModel]="planner.cliente.idade"
                                            mask="0*"
                                            suffix=" anos"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -97,7 +104,8 @@
                                            id="email"
                                            class="form-control"
                                            [ngModel]="planner.cliente.email"
-                                           readonly>
+                                           readonly
+                                           disabled>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +129,8 @@
                                                thousandSeparator="."
                                                decimalMarker=","
                                                prefix="R$ "
-                                               readonly>
+                                               readonly
+                                               disabled>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="despesa">Despesas:</label>
@@ -134,7 +143,8 @@
                                                thousandSeparator="."
                                                decimalMarker=","
                                                prefix="R$ "
-                                               readonly>
+                                               readonly
+                                               disabled>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +167,8 @@
                                                thousandSeparator="."
                                                decimalMarker=","
                                                suffix="%"
-                                               readonly>
+                                               readonly
+                                               disabled>
                                     </div>
                                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                         <label for="taxaIpca">Taxa IPCA:</label>
@@ -170,7 +181,8 @@
                                                thousandSeparator="."
                                                decimalMarker=","
                                                suffix="%"
-                                               readonly>
+                                               readonly
+                                               disabled>
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +211,8 @@
                                                        decimalMarker=","
                                                        placeholder="R$ 00,00"
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
                                                 <label for="rE_Planejado"> Planejada:</label>
@@ -213,7 +226,8 @@
                                                        decimalMarker=","
                                                        placeholder="R$ 00,00"
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -234,7 +248,8 @@
                                                        decimalMarker=","
                                                        placeholder="R$ 00,00"
                                                        suffix="%"
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-sm-6 pr-0">
                                                 <label for="riscoTolerado"> Tolerado:</label>
@@ -248,7 +263,8 @@
                                                        decimalMarker=","
                                                        placeholder="R$ 00,00" suffix="%"
                                                        suffix="%"
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -272,7 +288,8 @@
                                               id="descricao"
                                               class="form-control"
                                               [ngModel]="planner.descricao"
-                                              readonly>
+                                              readonly
+                                              disabled>
                                         </textarea>
                                 </div>
                             </div>
@@ -293,7 +310,8 @@
                                             name="account"
                                             #_account="ngModel"
                                             [(ngModel)]="planner.account.name"
-                                            readonly>
+                                            readonly
+                                            disabled>
                                 </div>
                             </div>
                         </div>
@@ -321,7 +339,8 @@
                                                    [ngModel]="planner.cliente.idadeAposentadoria"
                                                    mask="0*"
                                                    suffix=" anos"
-                                                   readonly>
+                                                   readonly
+                                                   disabled>
                                         </td>
                                     </tr>
                                     <tr>
@@ -339,7 +358,8 @@
                                                    decimalMarker=","
                                                    prefix="R$ "
                                                    placeholder="R$ 00,00"
-                                                   readonly>
+                                                   readonly
+                                                   disabled>
                                         </td>
                                     </tr>
                                     <tr>
@@ -357,7 +377,8 @@
                                                    decimalMarker=","
                                                    suffix="%"
                                                    placeholder="0,00%"
-                                                   readonly>
+                                                   readonly
+                                                   disabled>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -390,7 +411,8 @@
                                                    [ngModel]="item.idade"
                                                    mask="0*"
                                                    suffix=" anos"
-                                                   readonly>
+                                                   readonly
+                                                   disabled>
                                         </td>
                                         <td>
                                             <input type="text"
@@ -403,7 +425,8 @@
                                                    decimalMarker=","
                                                    placeholder="R$ 00,00"
                                                    prefix="R$ "
-                                                   readonly>
+                                                   readonly
+                                                   disabled>
                                         </td>
                                         <td class="text-center"></td>
                                     </tr>
@@ -449,7 +472,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -461,7 +485,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -473,7 +498,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -485,7 +511,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -497,7 +524,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -509,7 +537,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -521,7 +550,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                         </tr>
                                         <tr>
@@ -536,7 +566,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -548,7 +579,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -560,7 +592,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -572,7 +605,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -584,7 +618,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -596,7 +631,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -608,7 +644,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -630,81 +667,111 @@
                                          emptyMessage="Nenhum registro">
                                     <ng-template pTemplate="header">
                                         <tr class="primary">
-                                            <th class="text-right">Investimento</th>
+                                            <th class="text-right px-3 pe-0" >Risco |</th>
+                                            <th class="text-left px-3 ps-1 position-sticky" >Investimento</th>
                                             <th style="white-space: nowrap;">Custos/Taxas</th>
                                             <th style="white-space: nowrap;">Rentab. Bruta</th>
                                             <th style="white-space: nowrap;">Rentab. Liquida</th>
                                             <th style="white-space: nowrap;">Montante Atual</th>
+                                            <th></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-item let-index="rowIndex">
                                         <tr>
-                                            <td class="px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <span class="small font-weight-bold">{{ item.investimento.descricao}}</span>
+                                            <td class="px-3 pe-0 bg-light text-right">
+                                                <small><b>{{item.investimento.tipoRisco.nome}}</b> |</small>
+                                            </td>
+                                            <td class="px-3 ps-1 bg-light text-left position-sticky">
+                                                <small><b>{{ item.investimento.descricao }}</b> </small>
                                             </td>
                                             <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-custosTaxas-'{{index}}"
-                                                       name="investimento-custosTaxas-'{{index}}"
-                                                       [ngModel]="item.custosTaxas"
-                                                       mask="separator.2"
-                                                       suffix="%"
-                                                       decimalMarker=","
-                                                       readonly>
+                                                <app-input-number [valueInput]="item.custosTaxas"
+                                                                  (valueChanges)="item.custosTaxas = $event"
+                                                                  [inputId]="'investimento-custosTaxas-' + item.investimento_Id"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [required]="true"
+                                                                  [autoReplaceValue]="true"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
                                             </td>
                                             <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-rentabilidade-'{{index}}"
-                                                       name="investimento-rentabilidade-'{{index}}"
-                                                       [ngModel]="item.rentabilidade"
-                                                       mask="separator.2"
-                                                       suffix="%"
-                                                       decimalMarker=","
-                                                       readonly>
+                                                <app-input-number [valueInput]="item.rentabilidade"
+                                                                  (valueChanges)="item.rentabilidade = $event"
+                                                                  [inputId]="'investimento-rentabilidade-' + item.investimento_Id"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [required]="true"
+                                                                  [autoReplaceValue]="true"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
                                             </td>
                                             <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-rentabilidadeLiquida-'{{index}}"
-                                                       name="investimento-rentabilidadeLiquida-'{{index}}"
-                                                       [ngModel]="item.rentabilidadeLiquida"
-                                                       mask="separator.2"
-                                                       suffix="%"
-                                                       decimalMarker=","
-                                                       readonly>
+                                                <app-input-number [valueInput]="item.rentabilidadeLiquida"
+                                                                  (valueChanges)="item.rentabilidadeLiquida = $event"
+                                                                  [inputId]="'investimento-rentabilidadeLiquida-' + item.investimento_Id"
+                                                                  [mask]="'separator.2'"
+                                                                  suffix="%"
+                                                                  [min]="0"
+                                                                  [max]="100"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="investimento-montanteAtual-'{{index}}"
-                                                       name="investimento-montanteAtual-'{{index}}"
-                                                       [ngModel]="item.montanteAtual"
-                                                       mask="separator.2"
-                                                       prefix="R$ "
-                                                       decimalMarker=","
-                                                       readonly>
-                                                    </td>
-                                            <td></td>
+                                            <td [title]="'Líquido ' + formatReais(item.valorLiquido_MontanteAtual)">
+                                                <app-input-number [valueInput]="item.montanteAtual"
+                                                                  (valueChanges)="item.montanteAtual = $event"
+                                                                  [inputId]="'investimento-montanteAtual-' + item.investimento_Id"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [min]="1"
+                                                                  [required]="true"
+                                                                  [showErrorMessage]="false"
+                                                                  [allowNegativeNumbers]="false"
+                                                                  [autoReplaceValue]="true"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"></app-input-number>
+                                            </td>
+                                            <td class="td-actions"></td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="footer">
-                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light" [class.bg-danger]="somaInvestimentos.somaSugerido < 0 || somaInvestimentos.somaPlanoAcao < 0 ">
+                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light" [class.bg-danger]="somaInvestimentos.somaMontanteAtual < 0">
+                                            <td></td>
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td class="p-2 ps-3">R$ {{ somaInvestimentos.somaMontanteAtual | mask : 'separator.2' : '.' }}</td>
+                                            <td [title]="'Líquido ' + formatReais(somaInvestimentos.somaMontanteAtualLiquido)">
+                                                <app-input-number [valueInput]="somaInvestimentos.somaMontanteAtual"
+                                                                  [inputId]="'somaMontanteAtual'"
+                                                                  [mask]="'separator.2'"
+                                                                  prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
+                                            </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
                                             <td></td>
-                                            <td [attr.colspan]="3" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                            <td [attr.colspan]="5" class="py-2 px-2 text-grey"> Nenhum registro </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -718,127 +785,284 @@
                             <div class="home__container-header mb-2">
                                 <h6>Produtos</h6>
                                 <div class="d-flex justify-content-end align-items-center w-100">
-                                    <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
+                                    <div class="d-flex align-items-center col-lg-4 col-md-6 col-sm-8 col-8 px-0">
+                                        <span style="white-space: nowrap;">Carteira Setup: </span>
                                         <input type="text"
                                                name="carteirasSetup"
                                                id="carteirasSetup"
-                                               class="form-control bg-white"
+                                               class="form-control bg-white ms-2"
                                                [ngModel]="planner.carteiraSetup.nome"
-                                               readonly>
+                                               readonly
+                                               disabled>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
+                                <div class="w-100">
+                                    <div class="w-100 d-flex flex-wrap my-2">
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="custosTaxas" 
+                                                        name="custosTaxas" 
+                                                        #custosTaxas="ngModel" 
+                                                        [(ngModel)]="colsProdutos.custosTaxas">
+                                            <label for="custosTaxas" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="custosTaxas.value" [class.text-white]="custosTaxas.value" [class.bg-light.text-dark]="!custosTaxas.value"><small>Custos/Taxas</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="rentabLiquida" 
+                                                        name="rentabLiquida" 
+                                                        #rentabLiquida="ngModel" 
+                                                        [(ngModel)]="colsProdutos.rentabLiquida">
+                                            <label for="rentabLiquida" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="rentabLiquida.value" [class.text-white]="rentabLiquida.value" [class.bg-light.text-dark]="!rentabLiquida.value"><small>Rentab. Liquida</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="rentabBruta" 
+                                                        name="rentabBruta" 
+                                                        #rentabBruta="ngModel" 
+                                                        [(ngModel)]="colsProdutos.rentabBruta">
+                                            <label for="rentabBruta" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="rentabBruta.value" [class.text-white]="rentabBruta.value" [class.bg-light.text-dark]="!rentabBruta.value"><small>Rentab. Bruta</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="montanteSugerido" 
+                                                        name="montanteSugerido" 
+                                                        #montanteSugerido="ngModel" 
+                                                        [(ngModel)]="colsProdutos.montanteSugerido">
+                                            <label for="montanteSugerido" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="montanteSugerido.value" [class.text-white]="montanteSugerido.value" [class.bg-light.text-dark]="!montanteSugerido.value"><small>Montante Sugerido</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="planoAcao" 
+                                                        name="planoAcao" 
+                                                        #planoAcao="ngModel" 
+                                                        [(ngModel)]="colsProdutos.planoAcao">
+                                            <label for="planoAcao" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="planoAcao.value" [class.text-white]="planoAcao.value" [class.bg-light.text-dark]="!planoAcao.value"><small>Plano Ação</small></label>
+                                        </div>
+                                        <div class="d-flex align-items-center me-2">
+                                            <input type="checkbox" hidden 
+                                                        id="percentual" 
+                                                        name="percentual" 
+                                                        #percentual="ngModel" 
+                                                        [(ngModel)]="colsProdutos.percentual">
+                                            <label for="percentual" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="percentual.value" [class.text-white]="percentual.value" [class.bg-light.text-dark]="!percentual.value"><small>Percentual</small></label>
+                                        </div>
+                                    </div>
+                                </div>
                                 <p-table [value]="planner.planejamentoProduto"
                                          [responsive]="true"
                                          responsiveLayout="scroll"
                                          class="table table-editable"
-                                         emptyMessage="Nenhum registro">
-                                    <ng-template pTemplate="header" let-columns>
-                                        <tr class="primary">
-                                            <th class="text-right position-sticky" style="white-space: nowrap;">Produto</th>
-                                            <th style="white-space: nowrap;">Custos/Taxas</th>
-                                            <th style="white-space: nowrap;">Percentual</th>
-                                            <th style="white-space: nowrap;">Rentabilidade</th>
-                                            <th style="white-space: nowrap;">Rentab. Liquida</th>
-                                            <th style="white-space: nowrap;">Montante Sugerido</th>
-                                            <th style="white-space: nowrap;">Plano de Ação</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-item let-index="rowIndex">
-                                        <tr>
-                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
-                                                <small><b>{{ item.produto.descricao }}</b></small>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-custosTaxas-'{{index}}"
-                                                       name="produto-custosTaxas-'{{index}}"
-                                                       [ngModel]="item.custosTaxas"
-                                                       mask="separator.2"
-                                                       suffix="%"
-                                                       decimalMarker=","
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-percentual-'{{index}}"
-                                                       name="produto-percentual-'{{index}}"
-                                                       [ngModel]="item.percentual"
-                                                       mask="separator.2"
-                                                       suffix="%"
-                                                       decimalMarker=","
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-rentabilidade-'{{index}}"
-                                                       name="produto-rentabilidade-'{{index}}"
-                                                       [ngModel]="item.rentabilidade"
-                                                       mask="separator.2"
-                                                       suffix="%"
-                                                       decimalMarker=","
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-rentabilidadeLiquida-'{{index}}"
-                                                       name="produto-rentabilidadeLiquida-'{{index}}"
-                                                       [ngModel]="item.rentabilidadeLiquida"
-                                                       mask="separator.2"
-                                                       suffix="%"
-                                                       decimalMarker=","
-                                                       readonly>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-sugerido-'{{index}}"
-                                                       name="produto-sugerido-'{{index}}"
-                                                       [ngModel]="item.sugerido"
-                                                       mask="separator.2"
-                                                       prefix="R$ "
-                                                       decimalMarker=","
-                                                       readonly>
-                                            </td>
-                                            <td style="white-space: nowrap">
-                                                <input type="text"
-                                                       class="form-control form-control-number"
-                                                       id="produto-planoAcao-'{{index}}"
-                                                       name="produto-planoAcao-'{{index}}"
-                                                       [ngModel]="item.planoAcao"
-                                                       mask="separator.2"
-                                                       prefix="R$ "
-                                                       decimalMarker=","
-                                                       readonly>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="footer">
-                                        <tr *ngIf="planner.planejamentoProduto.length > 0" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 " >
-                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
-                                                <small><b>Total</b></small>
-                                            </td>
-                                            <td></td>
-                                            <td class="p-2" style="white-space: nowrap">{{ somaProdutos.somaPercentual | mask : 'separator.2' : '.' }}%</td>
-                                            <td></td>
-                                            <td></td>
-                                            <!-- <td></td> -->
-                                            <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaSugerido | mask : 'separator.2' : '.' }}</td>
-                                            <td class="p-2" style="white-space: nowrap">R$ {{ somaProdutos.somaPlanoAcao | mask : 'separator.2' : '.' }}</td>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td></td>
-                                            <td [attr.colspan]="5" class="py-2 px-2 text-grey"> Nenhum registro </td>
-                                            <td></td>
-                                        </tr>
-                                    </ng-template>
+                                         emptyMessage="Nenhum registro"
+                                         [resizableColumns]="true"
+                                         columnResizeMode="expand">
+                                         <ng-template pTemplate="header" let-columns>
+                                             <tr class="primary">
+                                                 <th pResizableColumn class="text-right px-3 pe-0" >Risco |</th>
+                                                 <th pResizableColumn class="text-left px-3 ps-1 position-sticky" >Produto</th>
+                                                 <th pResizableColumn  *ngIf="custosTaxas.value">Custos/Taxas</th>
+                                                 <th pResizableColumn  *ngIf="rentabBruta.value">Rentab. Bruta</th>
+                                                 <th pResizableColumn  *ngIf="rentabLiquida.value">Rentab. Liquida</th>
+                                                 <th pResizableColumn  *ngIf="montanteSugerido.value">Montante Sugerido</th>
+                                                 <th pResizableColumn  *ngIf="planoAcao.value">Plano de Ação</th>
+                                                 <th pResizableColumn  *ngIf="percentual.value">Percentual (~)</th>
+                                                 <th class="td-actions"></th>
+                                             </tr>
+                                         </ng-template>
+                                         <ng-template pTemplate="body" let-item let-index="rowIndex">
+                                             <tr>
+                                                 <td pResizableColumn class="px-3 pe-0 bg-light text-right">
+                                                     <small><b>{{item.produto.tipoRisco.nome}}</b> |</small>
+                                                 </td>
+                                                 <td pResizableColumn class="px-3 ps-1 bg-light text-left position-sticky">
+                                                     <small><b>{{ item.produto.descricao }}</b> </small>
+                                                 </td>
+                                                 <td pResizableColumn *ngIf="custosTaxas.value">
+                                                     <app-input-number *ngIf="item.produto_Id != 61"
+                                                                       [valueInput]="item.custosTaxas"
+                                                                       (valueChanges)="item.custosTaxas = $event; "
+                                                                       [inputId]="'produto-custosTaxas-' + item.produto_Id"
+                                                                       [mask]="'separator.2'"
+                                                                       suffix="%"
+                                                                       [min]="0"
+                                                                       [max]="100"
+                                                                       [required]="true"
+                                                                       [showErrorMessage]="false"
+                                                                       [allowNegativeNumbers]="false"
+                                                                       [autoReplaceValue]="true"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"></app-input-number>
+                                                     <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
+                                                 </td>
+                                                 <td pResizableColumn *ngIf="rentabBruta.value">
+                                                     <app-input-number *ngIf="item.produto_Id != 61"
+                                                                       [valueInput]="item.rentabilidade"
+                                                                       (valueChanges)="item.rentabilidade = $event; "
+                                                                       [inputId]="'produto-rentabilidade-' + item.produto_Id"
+                                                                       [mask]="'separator.2'"
+                                                                       suffix="%"
+                                                                       [min]="0"
+                                                                       [max]="100"
+                                                                       [required]="true"
+                                                                       [showErrorMessage]="false"
+                                                                       [allowNegativeNumbers]="false"
+                                                                       [autoReplaceValue]="true"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"></app-input-number>
+                                                     <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
+                                                 </td>
+                                                 <td pResizableColumn *ngIf="rentabLiquida.value">
+                                                     <app-input-number *ngIf="item.produto_Id != 61"
+                                                                       [valueInput]="item.rentabilidadeLiquida"
+                                                                       (valueChanges)="item.rentabilidadeLiquida = $event"
+                                                                       [inputId]="'produto-rentabilidadeLiquida-' + item.produto_Id"
+                                                                       [mask]="'separator.2'"
+                                                                       suffix="%"
+                                                                       [min]="0"
+                                                                       [max]="100"
+                                                                       [showErrorMessage]="false"
+                                                                       [allowNegativeNumbers]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                     <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
+                                                 </td>
+                                                 <td pResizableColumn *ngIf="montanteSugerido.value" [title]="'Líquido ' + formatReais(item.valorLiquido_MontanteAtual)">
+                                                     <app-input-number [valueInput]="item.sugerido"
+                                                                       (valueChanges)="item.sugerido = $event"
+                                                                       [inputId]="'produto-sugerido-' + item.produto_Id"
+                                                                       [mask]="'separator.2'"
+                                                                       prefix="R$ "
+                                                                       [min]="0"
+                                                                       [showErrorMessage]="false"
+                                                                       [allowNegativeNumbers]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                 </td>
+                                                 <td pResizableColumn *ngIf="planoAcao.value" [title]="'Líquido ' + formatReais(item.valorLiquido_PlanoAcao)">
+                                                     <app-input-number [valueInput]="item.planoAcao"
+                                                                       (valueChanges)="item.planoAcao = $event; "
+                                                                       [inputId]="'produto-planoAcao-' + item.produto_Id"
+                                                                       [mask]="'separator.2'"
+                                                                       prefix="R$ "
+                                                                       [min]="0"
+                                                                       [required]="true"
+                                                                       [showErrorMessage]="false"
+                                                                       [allowNegativeNumbers]="false"
+                                                                       [readonly]="item.produto_Id == 61"
+                                                                       [disabled]="item.produto_Id == 61"
+                                                                       [autoReplaceValue]="true"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"></app-input-number>
+                                                 </td>
+                                                 <td pResizableColumn *ngIf="percentual.value">
+                                                     <app-input-number [valueInput]="item.percentual"
+                                                                       (valueChanges)="item.percentual = $event"
+                                                                       [inputId]="'produto-percentual-' + item.produto_Id"
+                                                                       [mask]="'separator'"
+                                                                       suffix="%"
+                                                                       [min]="0"
+                                                                       [max]="100"
+                                                                       [showErrorMessage]="false"
+                                                                       [allowNegativeNumbers]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                 </td>
+                                                 <td class="td-actions"></td>
+                                             </tr>
+                                         </ng-template>
+                                         <ng-template pTemplate="footer">
+                                             <tr *ngIf="planner.planejamentoProduto.length > 0" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                                 <td></td>
+                                                 <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                                     <small><b>Total</b></small>
+                                                 </td>
+                                                 <td *ngIf="custosTaxas.value"></td>
+                                                 <td *ngIf="rentabBruta.value"></td>
+                                                 <td *ngIf="rentabLiquida.value"></td>
+                                                 <td *ngIf="montanteSugerido.value" [title]="'Liquido ' + formatReais(somaProdutos.somaSugeridoLiquido)">
+                                                     <app-input-number [valueInput]="somaProdutos.somaSugerido"
+                                                                       (valueChanges)="somaProdutos.somaSugerido = $event"
+                                                                       [inputId]="'somaSugerido'"
+                                                                       [mask]="'separator.2'"
+                                                                       prefix="R$ "
+                                                                       [required]="false"
+                                                                       [showErrorMessage]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                 </td>
+                                                 <td *ngIf="planoAcao.value" [title]="'Liquido ' + formatReais(somaProdutos.somaPlanoAcaoLiquido)">
+                                                     <app-input-number [valueInput]="somaProdutos.somaPlanoAcao"
+                                                                       (valueChanges)="somaProdutos.somaPlanoAcao = $event"
+                                                                       [inputId]="'somaPlanoAcao'"
+                                                                       [mask]="'separator.2'"
+                                                                       prefix="R$ "
+                                                                       [required]="false"
+                                                                       [showErrorMessage]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                 </td>
+                                                 <td *ngIf="percentual.value">
+                                                     <app-input-number [valueInput]="somaProdutos.somaPercentual"
+                                                                       (valueChanges)="somaProdutos.somaPercentual = $event"
+                                                                       [inputId]="'somaPercentual'"
+                                                                       [mask]="'separator.2'"
+                                                                       suffix="%"
+                                                                       [required]="false"
+                                                                       [showErrorMessage]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                 </td>
+                                                 <td></td>
+                                             </tr>
+                                             <tr *ngIf="somaProdutos.somaPercentual > 100" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                                 <td></td>
+                                                 <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                                     <small><b>Diferença</b></small>
+                                                 </td>
+                                                 <td colspan="4"></td>
+                                                 <td>
+                                                     <app-input-number [valueInput]="somaProdutos.diferencaPlanoAcao"
+                                                                       (valueChanges)="somaProdutos.diferencaPlanoAcao = $event"
+                                                                       [inputId]="'diferencaPlanoAcao'"
+                                                                       [mask]="'separator.2'"
+                                                                       prefix="R$ "
+                                                                       [required]="false"
+                                                                       [showErrorMessage]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [allowNegativeNumbers]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                 </td>
+                                                 <td>
+                                                     <app-input-number [valueInput]="somaProdutos.diferencaPercentual"
+                                                                       (valueChanges)="somaProdutos.diferencaPercentual = $event"
+                                                                       [inputId]="'diferencaPercentual'"
+                                                                       [mask]="'separator.2'"
+                                                                       suffix="%"
+                                                                       [required]="false"
+                                                                       [showErrorMessage]="false"
+                                                                       [readonly]="true"
+                                                                       [disabled]="true"
+                                                                       [allowNegativeNumbers]="true"
+                                                                       [autoReplaceValue]="true"></app-input-number>
+                                                 </td>
+                                                 <td></td>
+                                             </tr>
+                                         </ng-template>
+                                         <ng-template pTemplate="emptymessage">
+                                             <tr>
+                                                 <td></td>
+                                                 <td [attr.colspan]="9" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                                 <td></td>
+                                             </tr>
+                                         </ng-template>
                                 </p-table>
                             </div>
                         </div>
@@ -869,7 +1093,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </th>
                                             <th class="primary">Exposição a Risco</th>
                                             <th class="p-0" colspan="2">
@@ -882,12 +1107,13 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </th>
                                         </tr>
                                         <tr class="subheader" class="primary">
                                             <th style="white-space: nowrap;" class="text-right">Carteira</th>
-                                            <th style="white-space: nowrap;">Rent. Atual <small>(ano)</small></th>
+                                            <th style="white-space: nowrap;">Rentabilidade Anual</th>
                                             <th style="white-space: nowrap;">Retorno Anual</th>
                                             <th style="white-space: nowrap;">Retorno Mensal</th>
                                             <th style="white-space: nowrap;">Patrimônio Máximo</th>
@@ -909,7 +1135,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -921,7 +1148,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -933,7 +1161,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -945,7 +1174,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -956,7 +1186,8 @@
                                                        mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                         </tr>
                                         <tr>
@@ -973,7 +1204,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -985,7 +1217,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -997,7 +1230,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1009,7 +1243,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1020,7 +1255,8 @@
                                                        mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                         </tr>
                                         <tr>
@@ -1037,7 +1273,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1049,7 +1286,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td>
                                                 <input type="text"
@@ -1061,7 +1299,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td class="border-primary border-left border-top">
                                                 <input type="text"
@@ -1073,7 +1312,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        prefix="R$ "
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td class="border-primary border">
                                                 <input type="text"
@@ -1084,14 +1324,15 @@
                                                        mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="px-3 bg-light text-right" style="white-space: nowrap;">
                                             </td>
                                             <td class="px-3 bg-light text-center" style="white-space: nowrap;" colspan="2">
-                                                <span><b>Melhora de Desempenho</b></span>
+                                                <span><b>Melhoria de Desempenho</b></span>
                                             </td>
                                             <td class="px-3 bg-light text-left">
                                                 <span>
@@ -1109,7 +1350,8 @@
                                                        thousandSeparator="."
                                                        decimalMarker=","
                                                        suffix="%"
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                             <td class="border-primary border">
                                                 <input type="text"
@@ -1121,7 +1363,8 @@
                                                        mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       readonly>
+                                                       readonly
+                                                       disabled>
                                             </td>
                                         </tr>
                                     </tbody>

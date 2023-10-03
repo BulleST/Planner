@@ -823,20 +823,22 @@
                                          emptyMessage="Nenhum registro">
                                     <ng-template pTemplate="header">
                                         <tr class="primary">
-                                            <th class="text-right">Investimento</th>
-                                            <th style="white-space: nowrap;">Custos/Taxas</th>
-                                            <th style="white-space: nowrap;">Rentab. Bruta</th>
-                                            <th style="white-space: nowrap;">Rentab. Liquida</th>
-                                            <th style="white-space: nowrap;">Montante Atual</th>
-                                            <!-- <th style="white-space: nowrap;">Montante Sugerido</th>
-                                            <th style="white-space: nowrap;">Plano de Ação</th> -->
+                                            <th class="text-right px-3 pe-0" >Risco |</th>
+                                            <th class="text-left px-3 ps-1 position-sticky" >Investimento</th>
+                                            <th>Custos/Taxas</th>
+                                            <th>Rentab. Bruta</th>
+                                            <th>Rentab. Liquida</th>
+                                            <th>Montante Atual</th>
                                             <th class="td-actions"></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-item let-index="rowIndex">
                                         <tr>
-                                            <td class=" px-3 bg-light text-right" style="white-space: nowrap;">
-                                                <span class="small font-weight-bold">{{ item.investimento.descricao}}</span>
+                                            <td class="px-3 pe-0 bg-light text-right">
+                                                <small><b>{{item.investimento.tipoRisco.nome}}</b> |</small>
+                                            </td>
+                                            <td class="px-3 ps-1 bg-light text-left position-sticky">
+                                                <small><b>{{ item.investimento.descricao }}</b> </small>
                                             </td>
                                             <td>
                                                 <app-input-number [valueInput]="item.custosTaxas"
@@ -898,14 +900,15 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="footer">
-                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light" [class.bg-danger]="somaInvestimentos.somaSugerido < 0 || somaInvestimentos.somaPlanoAcao < 0 ">
+                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light" [class.bg-danger]="somaInvestimentos.somaMontanteAtual < 0">
+                                            <td></td>
                                             <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>
+                                            <td [title]="'Líquido ' + formatReais(somaInvestimentos.somaMontanteAtualLiquido)">
                                                 <app-input-number [valueInput]="somaInvestimentos.somaMontanteAtual"
                                                                   [inputId]="'somaMontanteAtual'"
                                                                   [mask]="'separator.2'"
@@ -922,7 +925,7 @@
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
                                             <td></td>
-                                            <td [attr.colspan]="4" class="py-2 px-2 text-grey"> Nenhum registro </td>
+                                            <td [attr.colspan]="5" class="py-2 px-2 text-grey"> Nenhum registro </td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -1048,12 +1051,12 @@
                                         <tr class="primary">
                                             <th pResizableColumn class="text-right px-3 pe-0" >Risco |</th>
                                             <th pResizableColumn class="text-left px-3 ps-1 position-sticky" >Produto</th>
-                                            <th pResizableColumn  *ngIf="custosTaxas.value">Custos/Taxas</th>
-                                            <th pResizableColumn  *ngIf="rentabBruta.value">Rentab. Bruta</th>
-                                            <th pResizableColumn  *ngIf="rentabLiquida.value">Rentab. Liquida</th>
-                                            <th pResizableColumn  *ngIf="montanteSugerido.value">Montante Sugerido</th>
-                                            <th pResizableColumn  *ngIf="planoAcao.value">Plano de Ação</th>
-                                            <th pResizableColumn  *ngIf="percentual.value">Percentual (~)</th>
+                                            <th pResizableColumn *ngIf="custosTaxas.value">Custos/Taxas</th>
+                                            <th pResizableColumn *ngIf="rentabBruta.value">Rentab. Bruta</th>
+                                            <th pResizableColumn *ngIf="rentabLiquida.value">Rentab. Liquida</th>
+                                            <th pResizableColumn *ngIf="montanteSugerido.value">Montante Sugerido</th>
+                                            <th pResizableColumn *ngIf="planoAcao.value">Plano de Ação</th>
+                                            <th pResizableColumn *ngIf="percentual.value">Percentual (~)</th>
                                             <th class="td-actions"></th>
                                         </tr>
                                     </ng-template>
@@ -1168,7 +1171,7 @@
                                             <td *ngIf="custosTaxas.value"></td>
                                             <td *ngIf="rentabBruta.value"></td>
                                             <td *ngIf="rentabLiquida.value"></td>
-                                            <td *ngIf="montanteSugerido.value">
+                                            <td *ngIf="montanteSugerido.value" [title]="'Liquido ' + formatReais(somaProdutos.somaSugeridoLiquido)">
                                                 <app-input-number [valueInput]="somaProdutos.somaSugerido"
                                                                   (valueChanges)="somaProdutos.somaSugerido = $event"
                                                                   [inputId]="'somaSugerido'"
@@ -1180,7 +1183,7 @@
                                                                   [disabled]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td *ngIf="planoAcao.value">
+                                            <td *ngIf="planoAcao.value" [title]="'Liquido ' + formatReais(somaProdutos.somaPlanoAcaoLiquido)">
                                                 <app-input-number [valueInput]="somaProdutos.somaPlanoAcao"
                                                                   (valueChanges)="somaProdutos.somaPlanoAcao = $event"
                                                                   [inputId]="'somaPlanoAcao'"
@@ -1298,7 +1301,7 @@
                                         </tr>
                                         <tr class="subheader" class="primary">
                                             <th style="white-space: nowrap;" class="text-right">Carteira</th>
-                                            <th style="white-space: nowrap;">Rent. Atual <small>(ano)</small></th>
+                                            <th style="white-space: nowrap;">Rentabilidade Anual</th>
                                             <th style="white-space: nowrap;">Retorno Anual</th>
                                             <th style="white-space: nowrap;">Retorno Mensal</th>
                                             <th style="white-space: nowrap;">Patrimônio Máximo</th>
@@ -1529,7 +1532,7 @@
                                             <td class="px-3 bg-light text-right" style="white-space: nowrap;">
                                             </td>
                                             <td class="px-3 bg-light text-center" style="white-space: nowrap;" colspan="2">
-                                                <span><b>Melhora de Desempenho</b></span>
+                                                <span><b>Melhoria de Desempenho</b></span>
                                             </td>
                                             <td class="px-3 bg-light text-left">
                                                 <span>

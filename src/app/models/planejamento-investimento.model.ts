@@ -6,12 +6,12 @@ export class PlanejamentoInvestimento {
     rentabilidade: number = '' as unknown as number;
     rentabilidadeLiquida: number = '' as unknown as number;
     montanteAtual: number = '' as unknown as number;
-    sugerido: number = '' as unknown as number;
-    planoAcao: number = '' as unknown as number;
+    valorLiquido_MontanteAtual: number = 0 
+    // sugerido: number = '' as unknown as number;
+    // planoAcao: number = '' as unknown as number;
     custosTaxas: number = '' as unknown as number;
     investimento: Investimento = new Investimento;
     investimento_Id: number = undefined as unknown as number;
-    valorLiquido_MontanteAtual: number = 0 
 }
 
 export class PlanejamentoInvestimentoRequest {

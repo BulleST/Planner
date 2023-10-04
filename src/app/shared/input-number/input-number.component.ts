@@ -70,14 +70,14 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
         setTimeout(() => {
             this.validate();
-        }, 400);
+        }, 400);    
     }
 
     ngAfterViewInit(): void {
         this.viewInit = true;
     }
 
-    setErrors(errors: ValidationErrors) {
+    setErrors(errors: ValidationErrors | null) {
         this.error = errors;
     }
 
@@ -120,7 +120,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         this.ngModelChanged.emit(this.input)
     }
 
-    arrowUp(value: number, skip = 1, min = 0, max = 100000000, allowNegativeNumbers = this.allowNegativeNumbers) {
+    arrowUp(value: number, skip = 1, min = undefined, max = undefined, allowNegativeNumbers = this.allowNegativeNumbers) {
         var newValue = arrowUp({
             value: value,
             skip: skip,
@@ -133,7 +133,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         return newValue;
     }
 
-    arrowDown(value: number, skip = 1, min = 0, max = 100000000, allowNegativeNumbers = this.allowNegativeNumbers) {
+    arrowDown(value: number, skip = 1, min = undefined, max = undefined, allowNegativeNumbers = this.allowNegativeNumbers) {
         var newValue = arrowDown({
             value: value,
             skip: skip,
@@ -165,8 +165,8 @@ function arrowDown(model: FormatNumber) {
 
 class FormatNumber {
     value: number = 0;
-    min: number = 0;
-    max: number = 0;
+    min?: number;
+    max?: number;
     skip: number = 0;
     allowNegativeNumbers: boolean = true;
 }

@@ -9,10 +9,10 @@ export class Crypto {
 
 	encrypt(data: any) {
 		try {
-            if (!data) {
-                return null;
-            }
-            var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), this.encryptSecretKey).toString(); while(encrypted.includes('/')) {
+            if (data === undefined || data === null || data === '') return null;
+			
+            var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), this.encryptSecretKey).toString(); 
+			while(encrypted.includes('/')) {
                 encrypted = encrypted.replace('/', 'slash'); // Removendo barras para aplicar encrypt em rotas
             }
 			return encrypted;

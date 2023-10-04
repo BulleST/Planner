@@ -368,15 +368,41 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <!-- Data de Cadastro -->
+                    <div class="form-row mb-2">
+                        <div class="card card-body">
+                            <div class="home__container-header mb-2">
+                                <h6><label for="data" class="mb-0">Data de Cadastro <span class="text-danger">*</span></label></h6>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                                    <input type="date" 
+                                           class="form-control"
+                                           id="data"
+                                           name="data"
+                                           #_data="ngModel"
+                                           [(ngModel)]="planner.data"
+                                           readonly
+                                           disabled>
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" 
+                                           class="form-control"
+                                           [value]="calculaIdadeCadastro()"
+                                           readonly
+                                           disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Descrição -->
                     <div class="form-row mb-2">
                         <div class="card card-body">
                             <div class="home__container-header mb-2">
-                                <h6>Descrição</h6>
+                                <h6><label for="descricao" class="mb-0">Observações do planner <span class="text-danger">*</span></label></h6>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                    <label for="descricao">Observações do planner: <span class="text-danger">*</span></label>
                                     <textarea type="text"
                                               name="descricao"
                                               id="descricao"
@@ -404,11 +430,10 @@
                     <div class="form-row mb-2">
                         <div class="card card-body">
                             <div class="home__container-header mb-2">
-                                <h6>Analista responsável</h6>
+                                <h6><label for="account" class="mb-0">Analista responsável <span class="text-danger">*</span></label></h6>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                    <label for="account">Analista responsável: <span class="text-danger">*</span></label>
                                     <div *ngIf="account?.perfilAcesso_Id != 3">
                                         <p-dropdown
                                                     class="form-control"
@@ -533,7 +558,73 @@
                     <!-- Fluxos Pontuais -->
                     <div class="form-row mb-2">
                         <div class="home__container table-responsive mb-2">
-                            <table class="table table-editable w-100 mb-0">
+                            <p-table [value]="planner.planejamentoFluxosPontuais"
+                            [responsive]="true"
+                            responsiveLayout="scroll"
+                            class="table table-editable w-100 mb-0"
+                            emptyMessage="Nenhum registro">
+                       <ng-template pTemplate="header">
+                           <tr class="primary">
+                                <th colspan="3" class="pl-4 text-white">
+                                    <p class="text-center d-flex align-items-center"> 
+                                        <span>Fluxos Pontuais</span>
+                                        <a class="btn p-0 ml-auto text-white" (click)="adicionarFLuxoPontual()" title="Adicionar">
+                                            <fa-icon [icon]="faPlus"></fa-icon>
+                                        </a>
+                                    </p>
+                                </th>
+                           </tr>
+                           <tr class="primary text-white">
+                               <th class="pl-4">Idade</th>
+                               <th>Valor <small>(R$)</small></th>
+                               <th></th>
+                           </tr>
+                       </ng-template>
+                       <ng-template pTemplate="body" let-item let-index="rowIndex">
+                        <tr>
+                            <td class="pl-4">
+                                <app-input-number #input 
+                                                [valueInput]="item.idade"
+                                                  (valueChanges)="item.idade = $event; saveData(); validateIdade(input, item)"
+                                                  [inputId]="'idade-' + (item.id == 0 ? item.idEncrypted : item.id) "
+                                                  [mask]="'0*'"
+                                                  [suffix]="' anos'"
+                                                  [min]="1"
+                                                  [max]="100"
+                                                  [required]="true"
+                                                  [showErrorMessage]="false"
+                                                  [allowNegativeNumbers]="false"
+                                                  [autoReplaceValue]="true"></app-input-number>
+                            </td>
+                            <td>
+                                <app-input-number [valueInput]="item.valor"
+                                                  (valueChanges)="item.valor = $event; saveData();"
+                                                  [inputId]="'valor-' + (item.id == 0 ? item.idEncrypted : item.id) "
+                                                  [mask]="'separator'"
+                                                  placeholder="R$ 00,00"
+                                                  prefix="R$ "
+                                                  [required]="true"
+                                                  [showErrorMessage]="false"
+                                                  [allowNegativeNumbers]="true"
+                                                  [showErrorMessage]="false"
+                                                  [autoReplaceValue]="true"></app-input-number>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-trash d-inline" (click)="removerFluxoPontual(item)" title="Remover linha">
+                                    <fa-icon [icon]="faTrash"></fa-icon>
+                                </button>
+                            </td>
+                        </tr>
+                       </ng-template>
+                       <ng-template pTemplate="emptymessage">
+                           <tr>
+                               <td></td>
+                               <td [attr.colspan]="3" class="py-2 ps-4 pe-2 text-grey"> Nenhum registro </td>
+                               <td></td>
+                           </tr>
+                       </ng-template>
+                            </p-table>
+                            <!-- <table class="table table-editable w-100 mb-0">
                                 <thead class="primary">
                                     <tr>
                                         <th colspan="3" class="pl-4">
@@ -587,7 +678,7 @@
                                         <td class="py-2 pl-4 text-grey" colspan="3">Nenhum registro</td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> -->
                         </div>
                     </div>
                 </div>
@@ -859,10 +950,10 @@
                                                                   [inputId]="'investimento-rentabilidade-' + item.investimento_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
-                                                                  [min]="0"
+                                                                  [min]="undefined"
                                                                   [max]="100"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"
+                                                                  [allowNegativeNumbers]="true"
                                                                   [required]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
@@ -870,12 +961,12 @@
                                                 <app-input-number [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
                                                                   [inputId]="'investimento-rentabilidadeLiquida-' + item.investimento_Id"
-                                                                  [mask]="'separator.2'"
+                                                                  [mask]="'separator.4'"
                                                                   suffix="%"
-                                                                  [min]="0"
+                                                                  [min]="undefined"
                                                                   [max]="100"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"
+                                                                  [allowNegativeNumbers]="true"
                                                                   [readonly]="true"
                                                                   [disabled]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
@@ -1090,11 +1181,11 @@
                                                                   [inputId]="'produto-rentabilidade-' + item.produto_Id"
                                                                   [mask]="'separator.2'"
                                                                   suffix="%"
-                                                                  [min]="0"
+                                                                  [min]="undefined"
                                                                   [max]="100"
                                                                   [required]="true"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"
+                                                                  [allowNegativeNumbers]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>
                                                 <span *ngIf="item.produto_Id == 61" class="d-block w-100 text-center">-</span>
                                             </td>
@@ -1103,12 +1194,12 @@
                                                                   [valueInput]="item.rentabilidadeLiquida"
                                                                   (valueChanges)="item.rentabilidadeLiquida = $event"
                                                                   [inputId]="'produto-rentabilidadeLiquida-' + item.produto_Id"
-                                                                  [mask]="'separator.2'"
+                                                                  [mask]="'separator.4'"
                                                                   suffix="%"
-                                                                  [min]="0"
+                                                                  [min]="undefined"
                                                                   [max]="100"
                                                                   [showErrorMessage]="false"
-                                                                  [allowNegativeNumbers]="false"
+                                                                  [allowNegativeNumbers]="true"
                                                                   [readonly]="true"
                                                                   [disabled]="true"
                                                                   [autoReplaceValue]="true"></app-input-number>

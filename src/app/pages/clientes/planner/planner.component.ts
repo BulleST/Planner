@@ -27,7 +27,7 @@ import { getError } from 'src/app/utils/error';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { InputNumberComponent } from 'src/app/shared/input-number/input-number.component';
 import { validaCPF } from 'src/app/utils/validate-cpf';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-planner',
@@ -139,6 +139,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         private usuarioService: UsuarioService,
         private empresaService: EmpresaService,
         private currency: CurrencyPipe,
+        private datepipe: DatePipe,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
 
@@ -211,25 +212,28 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 lastValueFrom(this.plannerService.getByClienteId(this.planner.cliente_Id))
                     .then(res => {
                         this.loading = false;
-                        if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id){
-                            console.log('voltar 1')
-                            this.voltar();
-                        }
+                        if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar();
+
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
+                        res.data = new Date(res.data).toISOString().substring(0, 10) as unknown as Date;
+                        res.cliente.dataNascimento = new Date(res.cliente.dataNascimento).toISOString().substring(0, 10) as unknown as Date;
+                     
+
                         this.planner = res;
                         this.plannerService.planejamentoBackup.next(Object.assign({}, res));
                         this.carteiraSetupInalterada = res.carteiraSetup;
                         var empresa_Id: number;
                         if (this.account?.perfilAcesso_Id == 1) empresa_Id = this.empresaService.object.id;
                         else empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
-
+                        this.calculaIdadeCadastro();
                         this.validateDataNascimento();
                         this.validaRG_CPF(this.rg, this.planner.cliente.rg);
                         this.validaRG_CPF(this.cpf, this.planner.cliente.cpf);
 
                         var getObject = this.plannerService.objeto.subscribe(res => {
+                           
                             this.planner = res;
                             this.calculaPercentualProdutos();
                             this.calculaPercentualInvestimentos();
@@ -240,7 +244,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
                     })
                     .catch(res => {
-                        console.log('voltar 2', res)
+                        console.error('voltar 2', res)
                         this.voltar();
                     })
                     .finally(() => this.loading = false);
@@ -261,6 +265,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 this.planner.cliente.empresa_Id = empresa_Id;
 
                 var getObject = this.plannerService.objeto.subscribe(res => {
+                  
                     this.planner = res;
                     this.calculaPercentualInvestimentos();
                     this.calculaPercentualProdutos();
@@ -280,7 +285,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     voltar() {
-        console.log('voltar 3')
         this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
@@ -324,7 +328,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             var contaCorrente = list.splice(contaCorrenteIndex, 1);
             list.push(contaCorrente[0])
 
-            var maxDecimalLength = 2
+            var maxDecimalLength = 2;
             // Calcula percentuais e calcula valor da sobra para conta corrente
             list = list.map(x => {
                 var decimalLength = 2;
@@ -355,20 +359,20 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
                     // Calcula rentabilidade líquida
                     var rentabilidadeLiquida = (x.rentabilidade * (100 - x.custosTaxas)) / 100;
-                    x.rentabilidadeLiquida = round(rentabilidadeLiquida, 2);
+                    x.rentabilidadeLiquida = rentabilidadeLiquida; // round(rentabilidadeLiquida, 2);
 
                     var liquidoSugerido = (x.sugerido * rentabilidadeLiquida) / 100
-                    x.valorLiquido_MontanteAtual = round(liquidoSugerido, 2);
+                    x.valorLiquido_MontanteAtual = liquidoSugerido; // round(liquidoSugerido, 2);
 
                     var liquido_PlanoAcao = (x.planoAcao * rentabilidadeLiquida) / 100
-                    x.valorLiquido_PlanoAcao = round(liquido_PlanoAcao, 2);
+                    x.valorLiquido_PlanoAcao = liquido_PlanoAcao; // round(liquido_PlanoAcao, 2);
                 }
                 somaPercentual += x.percentual;
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
                 somaPlanoAcao_Liquido += x.valorLiquido_PlanoAcao; 
                 somaSugerido_Liquido += x.valorLiquido_MontanteAtual; 
-                return x
+                return x;
             });
 
 
@@ -415,9 +419,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 // Calcula rentabilidade líquida
                 var rentabilidadeLiquida = (x.rentabilidade * (100 - x.custosTaxas)) / 100;
                 var liquidoSugerido = (x.montanteAtual * rentabilidadeLiquida) / 100
-                
-                x.rentabilidadeLiquida = round(rentabilidadeLiquida, 2);
-                x.valorLiquido_MontanteAtual = round(liquidoSugerido, 2);
+            
+                x.rentabilidadeLiquida = rentabilidadeLiquida // round(rentabilidadeLiquida, 2);
+                x.valorLiquido_MontanteAtual = liquidoSugerido // round(liquidoSugerido, 2);
                 
                 somaMontanteAtual += x.montanteAtual;
                 somaMontanteAtual_Liquido += x.valorLiquido_MontanteAtual;
@@ -445,6 +449,13 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
     }
 
+    calculaIdadeCadastro() {
+        var anoCadastro = new Date(this.planner.data).getFullYear()
+        var anoNascimento = new Date(this.planner.cliente.dataNascimento).getFullYear();
+        var calc = anoCadastro - anoNascimento;
+        return (calc != NaN && calc) ? calc + ' anos' : '';
+    }
+
     carteiraSetupChange(model: NgModel) {
         if (model.value) {
             let carteiraSetup = this.carteirasSetup.find(x => x.id == model.value) as CarteiraSetup;
@@ -464,7 +475,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     adicionarFLuxoPontual() {
-        this.planner.planejamentoFluxosPontuais.push(new FluxosPontuais)
+        var obj = new FluxosPontuais;
+        obj.idEncrypted = this.crypto.encrypt(0) as string;
+        this.planner.planejamentoFluxosPontuais.push(obj);
         this.saveData();
     }
 
@@ -507,8 +520,25 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    saveData() {
+    saveData() { 
+        this.planner.planejamentoFluxosPontuais = this.planner.planejamentoFluxosPontuais.sort((x, y) => Number(y.idade) - Number(x.idade));
+        var idadeBlock = this.planner.planejamentoFluxosPontuais.map(x => x.idade);
         this.plannerService.setObject(this.planner);
+    }
+
+    validateIdade(input: InputNumberComponent, ponto: FluxosPontuais) {
+        var invalidOne = this.planner.planejamentoFluxosPontuais.find(x => x.idade == ponto.idade && x.id != ponto.id);
+        var invalid  = this.planner.planejamentoFluxosPontuais.filter(x => x.idade == ponto.idade && x.id == 0);
+        console.log(invalidOne)
+        console.log(invalid)
+        if (invalidOne || invalid.length > 1) {
+            input.setErrors({
+                invalid: 'Essa idade já foi preenchida'
+            });
+            this.toastr.error('Essa idade já foi preenchida');
+        } else {
+            input.setErrors(null);
+        }
     }
 
     validaRG_CPF(input: NgModel, doc: number) {
@@ -680,7 +710,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     formatReais(valor: number) {
         const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
         valor = round(valor, 2)
-        var newValue = this.currency.transform(valor, 'BRL', 'R$', '1.2')
+        var newValue =  'R$ ' + this.currency.transform(valor, 'BRL', '', '1.2')
         return newValue;
     }
 
@@ -689,6 +719,11 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         valor = round(valor, 2)
         var newValue = this.currency.transform(valor, 'BRL', '', '1.2') + '%'
         return newValue;
+    }
+
+    encrypt(value: any) {
+        console.log(value)
+        return this.crypto.encrypt(value)
     }
     
 }

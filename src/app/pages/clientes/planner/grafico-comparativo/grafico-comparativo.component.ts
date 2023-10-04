@@ -107,7 +107,6 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
         };
 
         this.plannerService.objeto.subscribe(res => {
-            console.log('changes', this.viewInit, this.plannerChanged, res)
             if (this.viewInit && this.plannerChanged) {
                 this.planner = res;
                 if (this.planner.planejamentoProduto.length > 0)
@@ -230,9 +229,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
                     return this.formatReais(value.reais);
                 },
                 label: (ctx) => {
-                    console.log(ctx)
                     var value = ctx.parsed;
-                    console.log(ctx.parsed)
                     return this.formatPorcentagem(value);
                 }
             }
@@ -296,9 +293,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
                     return this.formatReais(value.reais);
                 },
                 label: (ctx) => {
-                    console.log(ctx.raw.percentual)
                     var value = ctx.parsed;
-                    console.log(ctx.parsed)
                     return this.formatPorcentagem(value);
                 }
             }

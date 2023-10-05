@@ -6,6 +6,7 @@ import { Crypto } from '../utils/crypto';
 import { environment } from 'src/environments/environment';
 import { AccountService } from './account.service';
 import { Table } from '../utils/table';
+import { UrlBackendService } from './url-backend.service';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,9 @@ export class EmpresaService {
         private http: HttpClient,
         private crypto: Crypto,
         private table: Table,
+        private urlBackendService: UrlBackendService,
     ) {
+        this.urlBackendService.url.subscribe(res => this.url = res);
 		this.empresaObject = new BehaviorSubject<Empresa>(new Empresa);
 		this.empresa = this.empresaObject.asObservable();
     }

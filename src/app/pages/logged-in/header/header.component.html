@@ -2,6 +2,16 @@
     <div class="header-logo">
         <img src="assets/img/logo-planner.png" alt="Logo Planner">
     </div>
+    <div class="d-flex align-items-center ml-auto">
+        <input type="search" *ngIf="userLogado?.perfilAcesso_Id == 1" 
+                class="form-control"
+                (search)="setUrl(urlBackend.value)" 
+                #urlBackend="ngModel" 
+                ngModel 
+                required
+                placeholder="Insira a url do backend desejada"
+                >
+    </div>
     <div class="header__userLogado ml-auto">
         <div class="header__userLogado-content" [class.header__userLogado-submenu--open]="menuHeaderOpen"
              (click)="toggleMenuHeader()">

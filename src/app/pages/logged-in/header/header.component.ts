@@ -7,6 +7,7 @@ import { Account } from 'src/app/models/account.model';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/parts/alert/alert.service';
+import { UrlBackendService } from 'src/app/services/url-backend.service';
 
 @Component({
     selector: 'app-header',
@@ -29,6 +30,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     constructor(
         private modoEscuro: ModoEscuro,
         private accountService: AccountService,
+        private urlBackendService: UrlBackendService,
         private header: Header,
         private alertService: AlertService,
         
@@ -83,5 +85,8 @@ ngAfterViewInit(): void {
         this.accountService.logout();
     }
 
+    setUrl(url: string) {
+        this.urlBackendService.setUrl(url);
+    }
 
 }

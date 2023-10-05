@@ -6,6 +6,7 @@ import { BehaviorSubject, map } from 'rxjs';
 import { Investimento } from '../models/investimento.model';
 import { environment } from 'src/environments/environment';
 import { AccountService } from './account.service';
+import { UrlBackendService } from './url-backend.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,10 @@ export class InvestimentoService {
 
     constructor(
         private http: HttpClient,
-    ) { }
+        private urlBackendService: UrlBackendService,
+    ) {
+        this.urlBackendService.url.subscribe(res => this.url = res);
+     }
 
     getAll() {
         return this.http.get<Investimento[]>(`${this.url}/investimento/getAll`)    

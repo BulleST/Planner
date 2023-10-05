@@ -9,6 +9,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { EmpresaService } from './empresa.service';
 import { Role } from '../models/account-perfil.model';
 import { Buffer } from 'buffer';
+import { UrlBackendService } from './url-backend.service';
 
 @Injectable({
     providedIn: 'root'
@@ -25,7 +26,9 @@ export class AccountService {
         private http: HttpClient,
         private crypto: Crypto,
         private empresaService: EmpresaService,
+        private urlBackendService: UrlBackendService,
     ) {
+        this.urlBackendService.url.subscribe(res => this.url = res);
         this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
         this.account = this.accountSubject.asObservable();
     }

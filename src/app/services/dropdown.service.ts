@@ -11,6 +11,7 @@ import { TipoLiquidez } from "../models/tipoLiquidez.model";
 import { TipoRisco } from "../models/tipoRisco.model";
 import { PerfilAcesso } from "../models/account-perfil.model";
 import { EmpresaService } from "./empresa.service";
+import { UrlBackendService } from "./url-backend.service";
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +32,9 @@ export class DropdownService {
     constructor(
         private http: HttpClient,
         private empresaService: EmpresaService,
+        private urlBackendService: UrlBackendService,
     ) {
+        this.urlBackendService.url.subscribe(res => this.url = res);
         this.empresaService.empresa.subscribe(res => this.empresa = res);
     }
 

@@ -14,6 +14,7 @@ import { CarteiraRiscoRel } from '../models/carteira-risco-rel.model';
 import { Role } from '../models/account-perfil.model';
 import { Account } from '../models/account.model';
 import { AccountService } from './account.service';
+import { UrlBackendService } from './url-backend.service';
 
 @Injectable({
     providedIn: 'root'
@@ -32,7 +33,9 @@ export class CarteiraSetupService {
         private crypto: Crypto,
         private empresaService: EmpresaService,
         private accountService: AccountService,
+        private urlBackendService: UrlBackendService,
     ) {
+        this.urlBackendService.url.subscribe(res => this.url = res);
         this.empresa = this.empresaService.object;
         this.empresaService.empresa.subscribe(res => this.empresa = res);
         this.accountService.account.subscribe(res => this.account = res ?? new Account);

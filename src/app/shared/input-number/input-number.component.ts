@@ -79,6 +79,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
     setErrors(errors: ValidationErrors | null) {
         this.error = errors;
+        this.input.control.setErrors(this.error)
     }
 
 

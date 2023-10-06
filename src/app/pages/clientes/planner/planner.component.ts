@@ -213,30 +213,26 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     .then(res => {
                         this.loading = false;
                         if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar();
-
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
                         res.data = new Date(res.data).toISOString().substring(0, 10) as unknown as Date;
                         res.cliente.dataNascimento = new Date(res.cliente.dataNascimento).toISOString().substring(0, 10) as unknown as Date;
-                     
-
                         this.planner = res;
                         this.plannerService.planejamentoBackup.next(Object.assign({}, res));
+                        this.saveData();
+
                         this.carteiraSetupInalterada = res.carteiraSetup;
                         var empresa_Id: number;
                         if (this.account?.perfilAcesso_Id == 1) empresa_Id = this.empresaService.object.id;
                         else empresa_Id = this.planner.cliente.empresa_Id ?? this.planner.account.empresa_Id;
-                        this.calculaIdadeCadastro();
-                        this.validateDataNascimento();
-                        this.validaRG_CPF(this.rg, this.planner.cliente.rg);
-                        this.validaRG_CPF(this.cpf, this.planner.cliente.cpf);
 
                         var getObject = this.plannerService.objeto.subscribe(res => {
-                           
                             this.planner = res;
-                            this.calculaPercentualProdutos();
                             this.calculaPercentualInvestimentos();
+                            this.calculaPercentualProdutos();
+                            this.calculaIdadeCadastro();
+                            this.calculaIdade();
                             this.formIsValid = this.validaForm(this.form);
 
                         });
@@ -252,7 +248,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             } else {
                 this.routerBack = ['../'];
                 var plannerInitial = this.plannerService.getObject().value;
-
                 if (plannerInitial.account_Id == 0) {
                     plannerInitial.account_Id = this.account?.id ?? 0;
                     plannerInitial.account = this.account as Account;
@@ -261,19 +256,22 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
                 var empresa_Id: number;
                 if (this.account?.perfilAcesso_Id == 1) empresa_Id = this.empresaService.object.id;
-                else empresa_Id = this.planner.account.empresa_Id;
-                this.planner.cliente.empresa_Id = empresa_Id;
+                else empresa_Id = plannerInitial.account.empresa_Id;
+
+                plannerInitial.cliente.empresa_Id = empresa_Id;
+                plannerInitial.data = new Date(plannerInitial.cliente.dataNascimento).toISOString().substring(0, 10) as unknown as Date;
+                this.planner = plannerInitial;
+                
+                this.saveData();
 
                 var getObject = this.plannerService.objeto.subscribe(res => {
-                  
                     this.planner = res;
                     this.calculaPercentualInvestimentos();
                     this.calculaPercentualProdutos();
+                    this.calculaIdadeCadastro();
                     this.formIsValid = this.validaForm(this.form);
                 })
                 this.subscription.push(getObject);
-                this.validaRG_CPF(this.rg, this.planner.cliente.rg);
-                this.validaRG_CPF(this.cpf, this.planner.cliente.cpf);
             }
         });
 
@@ -451,9 +449,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
     calculaIdadeCadastro() {
         var anoCadastro = new Date(this.planner.data).getFullYear()
-        var anoNascimento = new Date(this.planner.cliente.dataNascimento).getFullYear();
-        var calc = anoCadastro - anoNascimento;
-        return (calc != NaN && calc) ? calc + ' anos' : '';
+        var anoHoje = new Date().getFullYear();
+        var calc =  anoHoje - anoCadastro;
+        return (!Number.isNaN(calc) && calc) ? calc + ' anos' : '';
     }
 
     carteiraSetupChange(model: NgModel) {
@@ -503,7 +501,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     removerInvestimento(item: PlanejamentoInvestimento) {
-        let index = this.planner.planejamentoInvestimento.findIndex(x => x == item);
+        let index = this.planner.planejamentoInvestimento.findIndex(x => x.investimento_Id == item.investimento_Id);
         if (index != -1) {
             this.planner.planejamentoInvestimento.splice(index, 1);
             this.saveData();
@@ -512,7 +510,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
 
     removerProduto(item: PlanejamentoProduto) {
         if (item.produto_Id != 61) {
-            let index = this.planner.planejamentoProduto.findIndex(x => x == item);
+            let index = this.planner.planejamentoProduto.findIndex(x => x.produto_Id == item.produto_Id);
             if (index != -1) {
                 this.planner.planejamentoProduto.splice(index, 1);
                 this.saveData();
@@ -521,16 +519,13 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     saveData() { 
-        this.planner.planejamentoFluxosPontuais = this.planner.planejamentoFluxosPontuais.sort((x, y) => Number(y.idade) - Number(x.idade));
-        var idadeBlock = this.planner.planejamentoFluxosPontuais.map(x => x.idade);
+        this.planner.planejamentoFluxosPontuais = this.planner.planejamentoFluxosPontuais.sort((x, y) => Number(x.idade) - Number(y.idade));
         this.plannerService.setObject(this.planner);
     }
 
-    validateIdade(input: InputNumberComponent, ponto: FluxosPontuais) {
+    validaIdade(input: InputNumberComponent, ponto: FluxosPontuais) {
         var invalidOne = this.planner.planejamentoFluxosPontuais.find(x => x.idade == ponto.idade && x.id != ponto.id);
         var invalid  = this.planner.planejamentoFluxosPontuais.filter(x => x.idade == ponto.idade && x.id == 0);
-        console.log(invalidOne)
-        console.log(invalid)
         if (invalidOne || invalid.length > 1) {
             input.setErrors({
                 invalid: 'Essa idade já foi preenchida'
@@ -539,6 +534,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         } else {
             input.setErrors(null);
         }
+
+        this.formIsValid = this.validaForm(this.form)
     }
 
     validaRG_CPF(input: NgModel, doc: number) {
@@ -562,6 +559,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         lastValueFrom(this.clienteService.getByDoc(this.planner.cliente_Id, doc))
             .then(res => { 
                 this.saveData();
+                this.formIsValid = this.validaForm(this.form);
+
             })
             .catch(res => {
                 input.control.setErrors({
@@ -574,60 +573,59 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     validaForm(form: NgForm) {
         this.erro = [];
         if (form.touched && form.invalid) {
+            console.log('form.invalid')
             this.erro.push('Campos inválidos!');
             return false;
         }
 
         if (this.loading == true) {
+            console.log('loading', this.loading)
             return false;
         }
 
         if (this.planner.planejamentoInvestimento.length == 0) {
+            console.log('this.planner.planejamentoInvestimento.length == 0', this.planner.planejamentoInvestimento.length )
             this.erro.push('Insira um ou mais investimentos no planner.');
             return false;
         }
         if (this.planner.planejamentoProduto.length == 0) {
+            console.log('this.planner.planejamentoProduto.length == 0', this.planner.planejamentoProduto.length )
             this.erro.push('Insira um ou mais produtos no planner.');
             return false;
         }
 
-        if (this.planner.planejamentoProduto.find(x => x.planoAcao < 0) != undefined) {
-            this.erro.push('Plano de ação em produto não pode ser inferior a zero.');
-            return false;
-        }
-
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
+            console.log('soma x montante', this.somaProdutos.somaPlanoAcao,this.planner.planejamentoAgregandoValor.montante)
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
             return false;
         }
 
         if (this.planner.cliente.receita < this.planner.cliente.despesa) {
+            console.log('this.planner.cliente.receita < this.planner.cliente.despesa', this.planner.cliente.receita < this.planner.cliente.despesa)
             this.erro.push('Receita deve ser maior que despesas');
             return false;
         }
-
         return true;
     }
-
-    // Receita deve ser maior que despesa
-    validaReceitaDespesa(input: NgModel) {
+   
+    validaReceitaDespesa(input: NgModel) { // Receita deve ser maior que despesa
         if (this.planner.cliente.receita < this.planner.cliente.despesa) {
             if (input.name == 'despesa') {
-                this.despesa.error = {message: 'Despesa não pode ser maior que receita.'};
+                this.despesa.setErrors({message: 'Despesa não pode ser maior que receita.'});
             } else if (input.name == 'receita'){
-                this.receita.error = {message: 'Receita não pode ser menor que despesa.'};
-            }
+                this.receita.setErrors({message: 'Receita não pode ser menor que despesa.'});
+            } 
         } else {
-            this.receita.error = null;
-            this.despesa.error = null;
+            this.receita.setErrors(null);
+            this.despesa.setErrors(null);
             this.receita.validate();
             this.despesa.validate();
         }
-        
+        this.formIsValid = this.validaForm(this.form);
         return input;
     }
 
-    validateDataNascimento() {
+    validaDataNascimento() {
         var data = new Date(this.planner.cliente.dataNascimento);
         var dataNascimentoMin = new Date(this.dataNascimentoMin);
         var dataNascimentoMax = new Date(this.dataNascimentoMax);
@@ -638,9 +636,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             }
             else if (data < dataNascimentoMin) {
                 this.dataNascimento.control.setErrors({ min: true })
-
             }
         }
+        this.formIsValid = this.validaForm(this.form);
     }
 
     carregarProdutos(form: NgForm) {
@@ -649,7 +647,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         if (!this.isEditPage || (this.isEditPage && (this.account?.perfilAcesso_Id != 3 || this.account?.id == this.planner.account_Id))) {
             this.saveData();
             this.erro = [];
-            if (form.invalid) {
+            this.formIsValid = this.validaForm(this.form);
+
+            if (!this.formIsValid) {
                 this.erro.push('Campos inválidos!');
                 this.toastr.error('Campos inválidos!');
                 this.loading = false;
@@ -683,8 +683,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         // Ai sim ele pode editar o planner.
 
         this.saveData();
-        let valid = this.validaForm(form);
-        if (!valid) {
+        this.formIsValid = this.validaForm(form);
+        if (!this.formIsValid) {
             this.toastr.error('Campos inválidos')
             return;
         }

@@ -142,7 +142,7 @@
                                            #dataNascimento="ngModel"
                                            [(ngModel)]="planner.cliente.dataNascimento"
                                            (ngModelChange)="calculaIdade()"
-                                           (change)="saveData(); validateDataNascimento()"
+                                           (change)="saveData(); validaDataNascimento()"
                                            [min]="  "
                                            [max]="dataNascimentoMax"
                                            [ngbPopover]="campoObrigatorio"
@@ -585,7 +585,7 @@
                             <td class="pl-4">
                                 <app-input-number #input 
                                                 [valueInput]="item.idade"
-                                                  (valueChanges)="item.idade = $event; saveData(); validateIdade(input, item)"
+                                                  (valueChanges)="item.idade = $event; saveData(); validaIdade(input, item)"
                                                   [inputId]="'idade-' + (item.id == 0 ? item.idEncrypted : item.id) "
                                                   [mask]="'0*'"
                                                   [suffix]="' anos'"
@@ -993,7 +993,7 @@
                                     <ng-template pTemplate="footer">
                                         <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light" [class.bg-danger]="somaInvestimentos.somaMontanteAtual < 0">
                                             <td></td>
-                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
+                                            <td class="px-0 bg-light position-sticky" style="white-space: nowrap;">
                                                 <small><b>Total</b></small>
                                             </td>
                                             <td></td>
@@ -1004,6 +1004,48 @@
                                                                   [inputId]="'somaMontanteAtual'"
                                                                   [mask]="'separator.2'"
                                                                   prefix="R$ "
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light">
+                                            <td></td>
+                                            <td class="px-0 bg-light position-sticky" style="white-space: nowrap;">
+                                                <small><b>Rentabilidade Média</b></small>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <app-input-number [valueInput]="planner.atual_RentabilidadeMedia"
+                                                                  [inputId]="'atual_RentabilidadeMedia'"
+                                                                  [mask]="'separator'"
+                                                                  suffix="%"
+                                                                  [required]="false"
+                                                                  [showErrorMessage]="false"
+                                                                  [readonly]="true"
+                                                                  [disabled]="true"
+                                                                  [autoReplaceValue]="true"></app-input-number>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr *ngIf="planner.planejamentoInvestimento.length > 0" class="bg-light">
+                                            <td></td>
+                                            <td class="px-0 bg-light position-sticky" style="white-space: nowrap;">
+                                                <small><b>Rentabilidade Real</b></small>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <app-input-number [valueInput]="planner.atual_RentabilidadeReal"
+                                                                  [inputId]="'atual_RentabilidadeReal'"
+                                                                  [mask]="'separator'"
+                                                                  suffix="%"
                                                                   [required]="false"
                                                                   [showErrorMessage]="false"
                                                                   [readonly]="true"
@@ -1062,9 +1104,8 @@
                                             </ng-template>
                                         </p-dropdown>
                                     </div>
-                                    <!-- || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61 && planner.carteiraSetup.carteiraProdutoRel.length == 1 && planner.carteiraSetup.carteiraProdutoRel[0].produto_Id != 61) -->
                                     <div *ngIf="planner.carteiraSetup_Id != 0">
-                                        <button type="button" *ngIf="mudouCarteiraSetup || planner.planejamentoProduto[0].produto_Id == 61"
+                                        <button type="button" *ngIf="mudouCarteiraSetup || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61)"
                                                 triggers="mouseenter:mouseleave"
                                                 class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
                                                 (click)="carregarProdutos(form)"
@@ -1256,9 +1297,7 @@
                                     <ng-template pTemplate="footer">
                                         <tr *ngIf="planner.planejamentoProduto.length > 0" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
                                             <td></td>
-                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
-                                                <small><b>Total</b></small>
-                                            </td>
+                                            <td class="px-0 bg-light position-sticky" style="white-space: nowrap;"><small><b>Total</b></small></td>
                                             <td *ngIf="custosTaxas.value"></td>
                                             <td *ngIf="rentabBruta.value"></td>
                                             <td *ngIf="rentabLiquida.value"></td>
@@ -1300,38 +1339,48 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr *ngIf="somaProdutos.somaPercentual > 100" class="bg-light" [class.bg-danger]="somaProdutos.somaPercentual < 0 || somaProdutos.somaPercentual > 100 ">
+                                        <tr *ngIf="planner.planejamentoProduto.length > 0" class="bg-light">
                                             <td></td>
-                                            <td class="px-3 bg-light text-right position-sticky" style="white-space: nowrap;">
-                                                <small><b>Diferença</b></small>
+                                            <td class="px-0 bg-light position-sticky" style="white-space: nowrap;"><small><b>Rentabilidade Média</b></small></td>
+                                            <td *ngIf="custosTaxas.value"></td>
+                                            <td *ngIf="rentabBruta.value"></td>
+                                            <td *ngIf="rentabLiquida.value"></td>
+                                            <td *ngIf="montanteSugerido.value"></td>
+                                            <td *ngIf="planoAcao.value">
+                                                <app-input-number [valueInput]="planner.planoAcao_RentabilidadeMedia"
+                                                    (valueChanges)="planner.planoAcao_RentabilidadeMedia = $event"
+                                                    [inputId]="'planoAcao_RentabilidadeMedia'"
+                                                    [mask]="'separator'"
+                                                    suffix="%"
+                                                    [required]="false"
+                                                    [showErrorMessage]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"
+                                                    [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td colspan="4"></td>
-                                            <td>
-                                                <app-input-number [valueInput]="somaProdutos.diferencaPlanoAcao"
-                                                                  (valueChanges)="somaProdutos.diferencaPlanoAcao = $event"
-                                                                  [inputId]="'diferencaPlanoAcao'"
-                                                                  [mask]="'separator.2'"
-                                                                  prefix="R$ "
-                                                                  [required]="false"
-                                                                  [showErrorMessage]="false"
-                                                                  [readonly]="true"
-                                                                  [disabled]="true"
-                                                                  [allowNegativeNumbers]="true"
-                                                                  [autoReplaceValue]="true"></app-input-number>
+                                            <td *ngIf="percentual.value"></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr *ngIf="planner.planejamentoProduto.length > 0" class="bg-light">
+                                            <td></td>
+                                            <td class="px-0 bg-light position-sticky" style="white-space: nowrap;"><small><b>Rentabilidade Real</b></small></td>
+                                            <td *ngIf="custosTaxas.value"></td>
+                                            <td *ngIf="rentabBruta.value"></td>
+                                            <td *ngIf="rentabLiquida.value"></td>
+                                            <td *ngIf="montanteSugerido.value"></td>
+                                            <td *ngIf="planoAcao.value">
+                                                <app-input-number [valueInput]="planner.planoAcao_RentabilidadeReal"
+                                                    (valueChanges)="planner.planoAcao_RentabilidadeReal = $event"
+                                                    [inputId]="'planoAcao_RentabilidadeReal'"
+                                                    [mask]="'separator'"
+                                                    suffix="%"
+                                                    [required]="false"
+                                                    [showErrorMessage]="false"
+                                                    [readonly]="true"
+                                                    [disabled]="true"
+                                                    [autoReplaceValue]="true"></app-input-number>
                                             </td>
-                                            <td>
-                                                <app-input-number [valueInput]="somaProdutos.diferencaPercentual"
-                                                                  (valueChanges)="somaProdutos.diferencaPercentual = $event"
-                                                                  [inputId]="'diferencaPercentual'"
-                                                                  [mask]="'separator.2'"
-                                                                  suffix="%"
-                                                                  [required]="false"
-                                                                  [showErrorMessage]="false"
-                                                                  [readonly]="true"
-                                                                  [disabled]="true"
-                                                                  [allowNegativeNumbers]="true"
-                                                                  [autoReplaceValue]="true"></app-input-number>
-                                            </td>
+                                            <td *ngIf="percentual.value"></td>
                                             <td></td>
                                         </tr>
                                     </ng-template>
@@ -1346,6 +1395,8 @@
                             </div>
                         </div>
                     </div>
+
+
                     <!-- Solução Inicial -->
                     <div class="form-row mb-2">
                         <div class="home__container">

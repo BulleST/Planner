@@ -50,6 +50,7 @@ export class Planejamento {
     atual_RentabilidadeMedia: number = 0;
     atual_RentabilidadeReal: number = 0;
     sugerido_Total: number = 0;
+    
     planoAcao_Total: number = 0;
     planoAcao_RentabilidadeMedia: number = 0;
     planoAcao_RentabilidadeReal: number = 0;

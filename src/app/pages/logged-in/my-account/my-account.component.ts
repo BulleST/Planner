@@ -22,7 +22,7 @@ export class MyAccountComponent implements OnDestroy {
     subscription: Subscription[] = [];
     loading = false;
     mensagemErro = '';
-    erro: string[] = [];
+    erro: string = '';
 
     constructor(
         private router: Router,
@@ -55,11 +55,11 @@ export class MyAccountComponent implements OnDestroy {
     }
 
     editAccount(form: NgForm) {
-        this.erro = [];
+        this.erro = '';
         this.loading = true;
         this.loadingUtils.loading.next(true);
         if (form.invalid) {
-            this.erro.push('Formulário inválido');
+            this.erro = 'Formulário inválido';
             this.toastr.error('Formulário inválido');
             return;
         }
@@ -76,7 +76,7 @@ export class MyAccountComponent implements OnDestroy {
             })
             .catch(res => {
                 var e = getError(res);
-                this.erro.push(e);
+                this.erro = e;
                 this.toastr.error(e);
             })
             .finally(() => {

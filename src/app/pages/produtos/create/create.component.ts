@@ -86,7 +86,7 @@ export class CreateComponent implements OnDestroy {
             }
             lastValueFrom(this.produtoService.create(model))
                 .then((res) => {
-                    this.modal.voltar(this.routerBack, this.routeBackOptions);
+                    this.voltar();
                     lastValueFrom(this.produtoService.getList());
                 })
                 .catch(res => {

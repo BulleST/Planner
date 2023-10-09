@@ -75,10 +75,42 @@
 }
 
 ::ng-deep .aside-navigation-sm .p-toggleable-content {
-    position: absolute;
+    position: relative;
     width: 100%;
     transition: .5s;
     z-index: 2;
     min-width: 80%;
-    max-width: 330px;
+    max-width: unset;
+    margin: 0;
+}
+
+.aside-navigation-sm {
+    position: relative;
+    width: 100%!important;
+    max-width: unset!important;
+    flex: 0 1 100%!important;
+    padding-right: 0px!important;
+}
+
+.aside-navigation-sm .p-toggleable-content {
+    position: relative;
+    width: 100%;
+    max-width: unset;
+}
+
+.aside-navigation-header .btn {
+    padding: 0;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin: 0 11px 0px;
+    width: 30px;
+    height: 30px;
+    background-color: #2a718b;
+}
+
+.aside-navigation-sm.open .aside-navigation-header .btn {
+    margin-bottom: 10px;
 }

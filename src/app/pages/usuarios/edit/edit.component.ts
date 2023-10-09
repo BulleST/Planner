@@ -96,7 +96,6 @@ export class EditComponent implements OnDestroy {
                     this.modal.voltar(this.routerBack, this.routeBackOptions);
                 })
                 .catch(res => {
-                    console.error(res)
                     this.erro.push(getError(res));
                 })
             .finally(() => this.loading = false);

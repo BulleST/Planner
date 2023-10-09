@@ -1,19 +1,20 @@
-<div class="p-2">
-    <p *ngIf="list.length == 0 && !loading">Nenhum registro encontrado. <a *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Clique aqui para adicionar</a></p>
-    <p *ngIf="loading"> 
-        <span class="spinner-border spinner-border-sm mr-1"></span>
-        <span>Carregando... </span>
-     </p>
-</div>
+<p class="p-2" *ngIf="list.length == 0 && !loading">
+    <span>Nenhum registro encontrado.</span> 
+    <a *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Clique aqui para adicionar</a>
+</p>
+<p class="p-2" *ngIf="loading"> 
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+    <span>Carregando... </span>
+</p>
 <div class="content" *ngIf="list.length > 0" #aa>
     <p-table
              class="table"
              #dt
              [columns]="columns"
              [value]="list"
-             [rows]="10"
+             [rows]="100"
              [rowHover]="true"
-             [rowsPerPageOptions]="[10, 25, 50]"
+             [rowsPerPageOptions]="[10, 25, 50, 100]"
              responsiveLayout="scroll"
              [paginator]="paginator && list.length > 0"
              [showCurrentPageReport]="true"
@@ -31,11 +32,11 @@
                         <small> {{ list.length }} resultado(s) </small>
                     </p>
                 </div>
-                <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0  mb-sm-0 mb-2">
-                    <div class="mx-1 col-sm-2 col-12 px-0 ">
+                <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
+                    <div class="mx-1 col-sm-2 col-12 px-0 mb-2">
                         <a class="btn btn-primary d-block" *ngIf="canCreate" [routerLink]="createLink" (click)="create()">Adicionar</a>
                     </div>
-                    <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 my-2" *ngIf="list.length > 0 && filterTable">
+                    <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 mb-2" *ngIf="list.length > 0 && filterTable">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" class="form-control "
                             (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />

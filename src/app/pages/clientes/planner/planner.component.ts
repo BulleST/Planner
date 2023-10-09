@@ -28,6 +28,7 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 import { InputNumberComponent } from 'src/app/shared/input-number/input-number.component';
 import { validaCPF } from 'src/app/utils/validate-cpf';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 
 @Component({
     selector: 'app-planner',
@@ -124,7 +125,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    
+    idadeCadastro = '';
+    screen: ScreenWidth = ScreenWidth.lg;
+
     constructor(
         private modal: ModalOpen,
         private toastr: ToastrService,
@@ -140,8 +143,12 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         private empresaService: EmpresaService,
         private currency: CurrencyPipe,
         private datepipe: DatePipe,
+        private isMobile: IsMobile,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
+
+        var get = this.isMobile.get().subscribe(res => this.screen = res);
+        this.subscription.push(get);
 
         var data = new Date();
         this.dataNascimentoMax = data.toJSON().substring(0, 10);
@@ -216,8 +223,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                         res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
                         res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
                         res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
-                        res.data = new Date(res.data).toISOString().substring(0, 10) as unknown as Date;
-                        res.cliente.dataNascimento = new Date(res.cliente.dataNascimento).toISOString().substring(0, 10) as unknown as Date;
+                        res.data = this.datepipe.transform(res.data, 'yyyy-MM-dd') as unknown as Date;
+                        res.cliente.dataNascimento = this.datepipe.transform(res.cliente.dataNascimento, 'yyyy-MM-dd') as unknown as Date;
                         this.planner = res;
                         this.plannerService.planejamentoBackup.next(Object.assign({}, res));
                         this.saveData();
@@ -259,7 +266,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 else empresa_Id = plannerInitial.account.empresa_Id;
 
                 plannerInitial.cliente.empresa_Id = empresa_Id;
-                plannerInitial.data = new Date(plannerInitial.cliente.dataNascimento).toISOString().substring(0, 10) as unknown as Date;
+                plannerInitial.data = this.datepipe.transform(plannerInitial.data, 'yyyy-MM-dd') as unknown as Date;
                 this.planner = plannerInitial;
                 
                 this.saveData();
@@ -448,10 +455,14 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     calculaIdadeCadastro() {
-        var anoCadastro = new Date(this.planner.data).getFullYear()
-        var anoHoje = new Date().getFullYear();
-        var calc =  anoHoje - anoCadastro;
-        return (!Number.isNaN(calc) && calc) ? calc + ' anos' : '';
+        this.idadeCadastro = '';
+        if (this.planner.data && this.planner.cliente.dataNascimento) {
+            var anoCadastro = new Date(this.planner.data).getFullYear();
+            var anoNascimento = new Date(this.planner.cliente.dataNascimento).getFullYear();
+            var calc =  anoCadastro - anoNascimento;
+            this.idadeCadastro = (!Number.isNaN(calc) && calc) ? calc + ' anos' : '';
+        }
+        return this.idadeCadastro;
     }
 
     carteiraSetupChange(model: NgModel) {

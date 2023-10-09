@@ -31,6 +31,7 @@ export class MenuItemsComponent implements OnDestroy {
         private router: Router,
         private activatedRoute: ActivatedRoute,
     ) {
+
         var get = this.isMobile.get().subscribe(res => this.screen = res);
         this.subscription.push(get);
 

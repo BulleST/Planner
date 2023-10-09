@@ -48,7 +48,7 @@ export class DeactivatedComponent implements OnDestroy {
                         }, 200);
                     })
                     .catch(res => {
-                        this.modal.voltar(this.routerBack, this.routeBackOptions);
+                        this.voltar();
                     })
                     .finally(() => {});
                 

@@ -95,7 +95,7 @@ export class EditComponent implements OnDestroy {
             lastValueFrom(this.clienteService.edit(model))
                 .then((res) => {
                     lastValueFrom(this.clienteService.getList());
-                    this.modal.voltar(this.routerBack, this.routeBackOptions);
+                    this.voltar();
                 })
                 .catch(res => {
                     this.erro.push(getError(res));

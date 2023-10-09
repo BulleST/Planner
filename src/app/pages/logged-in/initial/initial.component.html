@@ -1,9 +1,12 @@
-<app-navigation [ngStyle]="{ 'z-index': modalOpen ? '2' : '1', 'position': 'relative'}"></app-navigation>
+<div (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
 
-<div class="main" [ngStyle]="{ 'z-index': modalOpen ? '3' : '0', 'position': 'relative'}">
-    <div class="main-content" [class.navigation-open]="navigationOpen">
-        <app-header [ngStyle]="{ 'z-index': modalOpen ? '0' : '1', 'position': 'relative'}"></app-header>
-        <router-outlet></router-outlet>
+    <app-navigation [ngStyle]="{ 'z-index': modalOpen ? '2' : '1', 'position': 'relative'}"></app-navigation>
+    
+    <div class="main" [ngStyle]="{ 'z-index': modalOpen ? '3' : '0', 'position': 'relative'}">
+        <div class="main-content" [class.navigation-open]="navigationOpen">
+            <app-header [ngStyle]="{ 'z-index': modalOpen ? '0' : '1', 'position': 'relative'}"></app-header>
+            <router-outlet></router-outlet>
+        </div>
     </div>
+    <app-footer></app-footer>
 </div>
-<app-footer></app-footer>

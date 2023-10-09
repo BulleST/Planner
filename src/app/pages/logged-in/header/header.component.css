@@ -178,3 +178,13 @@ p.header__userLogado-submenu-link {
     color: #484848;
     background: #fff;
 }
+@media (max-width: 430px) {
+    .header__userLogado-content {
+        overflow: hidden!important;
+        padding: 0!important;
+        width: 160px;
+    }
+    
+    .header__userLogado-text {overflow: hidden;flex: 0 1 60%;}
+    
+}

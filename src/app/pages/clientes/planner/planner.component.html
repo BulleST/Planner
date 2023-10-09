@@ -141,7 +141,7 @@
                                            class="form-control"
                                            #dataNascimento="ngModel"
                                            [(ngModel)]="planner.cliente.dataNascimento"
-                                           (ngModelChange)="calculaIdade()"
+                                           (ngModelChange)="calculaIdade(); calculaIdadeCadastro()"
                                            (change)="saveData(); validaDataNascimento()"
                                            [min]="  "
                                            [max]="dataNascimentoMax"
@@ -388,9 +388,10 @@
                                 <div class="form-group col-lg-6 col-md-6 col-sm-6">
                                     <input type="text" 
                                            class="form-control"
-                                           [value]="calculaIdadeCadastro()"
+                                           [value]="idadeCadastro"
                                            readonly
-                                           disabled>
+                                           disabled
+                                           [title]="planner.cliente.nome && idadeCadastro ? planner.cliente.nome + ' tinha ' + idadeCadastro + ' em ' + (planner.data | date : 'dd/MM/yyyy') : ''">
                                 </div>
                             </div>
                         </div>
@@ -1069,11 +1070,11 @@
                     <!-- Produto -->
                     <div class="form-row mb-2">
                         <div class="home__container">
-                            <div class="home__container-header mb-2">
-                                <h6>Portifólio</h6>
+                            <div class="home__container-header mb-2 flex-wrap">
+                                <h6 class="col-1 px-0">Portifólio</h6>
                                 <div *ngIf="planner.planejamentoInvestimento.length > 0"
-                                     class="d-flex justify-content-end align-items-center w-100">
-                                    <div class="col-lg-4 col-md-5 col-sm-6 col-8 px-0">
+                                     class="d-flex flex-wrap justify-content-end align-items-center col-lg-10 col-md-8 col-sm-12 px-0">
+                                    <div class="col-lg-4 col-md-5 col-sm-12 col-12 px-0 mt-md-0 mt-2">
                                         <p-dropdown class="form-control"
                                                     id="carteirasSetup"
                                                     name="carteirasSetup"
@@ -1104,15 +1105,18 @@
                                             </ng-template>
                                         </p-dropdown>
                                     </div>
-                                    <div *ngIf="planner.carteiraSetup_Id != 0">
+                                    <div *ngIf="planner.carteiraSetup_Id != 0" 
+                                        class="mt-2 mb-1 ms-md-2 me-md-0 mx-auto px-0 text-center"
+                                        [class.w-100]="screen == 'sm'">
                                         <button type="button" *ngIf="mudouCarteiraSetup || (planner.planejamentoProduto.length == 1 && planner.planejamentoProduto[0].produto_Id == 61)"
                                                 triggers="mouseenter:mouseleave"
-                                                class="btn btn-primary ml-1 d-flex align-items-center {{form.invalid || loading ? 'disabled-button' : ''}}"
+                                                class="btn btn-primary text-center col-12"
+                                                [class.disabled-button]="form.invalid || loading"
                                                 (click)="carregarProdutos(form)"
                                                 [disabled]="form.invalid || loading">
                                             <span>Carregar setup e salvar</span>
                                         </button>
-                                        <a class="link ml-3" [routerLink]="['produto']"
+                                        <a class="link" [routerLink]="['produto']"
                                            *ngIf="planner.planejamentoProduto.length > 1 && !mudouCarteiraSetup"> Adicionar outros produtos </a>
                                     </div>
                                 </div>
@@ -1121,7 +1125,7 @@
                                 <p class="text-danger px-2" *ngIf="planner.planejamentoInvestimento.length == 0">* Insira um investimento para adicionar um produto</p>
                                 <div class="w-100">
                                     <div class="w-100 d-flex flex-wrap my-2">
-                                        <div class="d-flex align-items-center me-2">
+                                        <div class="d-flex align-items-center me-2 columns-item">
                                             <input type="checkbox" hidden 
                                                         id="custosTaxas" 
                                                         name="custosTaxas" 
@@ -1129,7 +1133,7 @@
                                                         [(ngModel)]="colsProdutos.custosTaxas">
                                             <label for="custosTaxas" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="custosTaxas.value" [class.text-white]="custosTaxas.value" [class.bg-light.text-dark]="!custosTaxas.value"><small>Custos/Taxas</small></label>
                                         </div>
-                                        <div class="d-flex align-items-center me-2">
+                                        <div class="d-flex align-items-center me-2 columns-item">
                                             <input type="checkbox" hidden 
                                                         id="rentabLiquida" 
                                                         name="rentabLiquida" 
@@ -1137,7 +1141,7 @@
                                                         [(ngModel)]="colsProdutos.rentabLiquida">
                                             <label for="rentabLiquida" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="rentabLiquida.value" [class.text-white]="rentabLiquida.value" [class.bg-light.text-dark]="!rentabLiquida.value"><small>Rentab. Liquida</small></label>
                                         </div>
-                                        <div class="d-flex align-items-center me-2">
+                                        <div class="d-flex align-items-center me-2 columns-item">
                                             <input type="checkbox" hidden 
                                                         id="rentabBruta" 
                                                         name="rentabBruta" 
@@ -1145,7 +1149,7 @@
                                                         [(ngModel)]="colsProdutos.rentabBruta">
                                             <label for="rentabBruta" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="rentabBruta.value" [class.text-white]="rentabBruta.value" [class.bg-light.text-dark]="!rentabBruta.value"><small>Rentab. Bruta</small></label>
                                         </div>
-                                        <div class="d-flex align-items-center me-2">
+                                        <div class="d-flex align-items-center me-2 columns-item">
                                             <input type="checkbox" hidden 
                                                         id="montanteSugerido" 
                                                         name="montanteSugerido" 
@@ -1153,7 +1157,7 @@
                                                         [(ngModel)]="colsProdutos.montanteSugerido">
                                             <label for="montanteSugerido" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="montanteSugerido.value" [class.text-white]="montanteSugerido.value" [class.bg-light.text-dark]="!montanteSugerido.value"><small>Montante Sugerido</small></label>
                                         </div>
-                                        <div class="d-flex align-items-center me-2">
+                                        <div class="d-flex align-items-center me-2 columns-item">
                                             <input type="checkbox" hidden 
                                                         id="planoAcao" 
                                                         name="planoAcao" 
@@ -1161,7 +1165,7 @@
                                                         [(ngModel)]="colsProdutos.planoAcao">
                                             <label for="planoAcao" class="d-block py-1 px-2" style="cursor: pointer" [class.bg-dark]="planoAcao.value" [class.text-white]="planoAcao.value" [class.bg-light.text-dark]="!planoAcao.value"><small>Plano Ação</small></label>
                                         </div>
-                                        <div class="d-flex align-items-center me-2">
+                                        <div class="d-flex align-items-center me-2 columns-item">
                                             <input type="checkbox" hidden 
                                                         id="percentual" 
                                                         name="percentual" 

@@ -1,9 +1,10 @@
 <div class="d-flex flex-wrap step-container">
-    <div class="aside-navigation aside-navigation-{{screen}} " [class.open]="!menu.collapsed" >
+    <div class="aside-navigation aside-navigation-{{screen}} " *ngIf="isEditPage"
+        [class.open]="!menu.collapsed" >
         <p-panel #menu
-                 [toggleable]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)"
-                 [collapsed]="false"
-                 [showHeader]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)"
+                 [toggleable]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen) && isEditPage"
+                 [collapsed]="true"
+                 [showHeader]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen) && isEditPage"
                  [toggler]="'header'"
                  headerTemplate="header"
                  contentTemplate="content"
@@ -29,7 +30,8 @@
             </ng-template>
         </p-panel>
     </div>
-    <div class="step-content step-content-{{screen}}" [class.step-content-margin]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)">
+    <div class="step-content step-content-{{screen}}" 
+        [class.step-content-margin]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)">
         <router-outlet></router-outlet>
     </div>
 </div>

@@ -62,7 +62,6 @@ export class AccountService {
                 return of(account);
             }),
             catchError((err => {
-                console.error(err)
                 this.setAccount(undefined);
                 // return throwError(() => new Error(err));
                 return throwError(err);

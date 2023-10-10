@@ -486,6 +486,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     adicionarFLuxoPontual() {
         var obj = new FluxosPontuais;
         obj.idEncrypted = this.crypto.encrypt(0) as string;
+        obj.planejamento_Id = this.planner.id;
         this.planner.planejamentoFluxosPontuais.push(obj);
         this.saveData();
     }

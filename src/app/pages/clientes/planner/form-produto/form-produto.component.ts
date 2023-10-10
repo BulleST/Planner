@@ -123,13 +123,13 @@ export class FormProdutoComponent implements OnDestroy {
         var backup = this.plannerService.planejamentoBackup.value;
         var existe = backup.planejamentoProduto.find(x =>  x.produto_Id == this.objeto.produto_Id); 
         if (existe) {
-            this.objeto.planejamento_Id = existe.planejamento_Id;
             this.objeto.id = existe.id;
             this.objeto.sugerido = existe.sugerido;
         } else {
             this.objeto.sugerido = 0;
         }
-
+        
+        this.objeto.planejamento_Id = this.planner.id;
         this.planner.planejamentoProduto.push(this.objeto);
         this.plannerService.setObject(this.planner);
         this.voltar();

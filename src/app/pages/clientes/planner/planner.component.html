@@ -388,7 +388,7 @@
                                 <div class="form-group col-lg-6 col-md-6 col-sm-6">
                                     <input type="text" 
                                            class="form-control"
-                                           [value]="idadeCadastro"
+                                           [value]="idadeCadastro ? (idadeCadastro + ' anos') : ''"
                                            readonly
                                            disabled
                                            [title]="planner.cliente.nome && idadeCadastro ? planner.cliente.nome + ' tinha ' + idadeCadastro + ' em ' + (planner.data | date : 'dd/MM/yyyy') : ''">
@@ -504,10 +504,10 @@
                                                               [inputId]="'idadeAposentadoria'"
                                                               [mask]="'0*'"
                                                               [suffix]="' anos'"
-                                                              [min]="planner.cliente.idade ? planner.cliente.idade : 20"
+                                                              [min]="idadeCadastro ? idadeCadastro : 20"
                                                               [max]="100"
                                                               [required]="true"
-                                                              placeholder="Entre {{planner.cliente.idade ? planner.cliente.idade : 20}} e 100 anos"
+                                                              placeholder="Entre {{idadeCadastro ? idadeCadastro : 20}} e 100 anos"
                                                               [showErrorMessage]="false"
                                                               [allowNegativeNumbers]="false"
                                                               [autoReplaceValue]="true"></app-input-number>
@@ -1022,15 +1022,15 @@
                                             <td></td>
                                             <td></td>
                                             <td>
-                                                <app-input-number [valueInput]="planner.atual_RentabilidadeMedia"
-                                                                  [inputId]="'atual_RentabilidadeMedia'"
-                                                                  [mask]="'separator'"
-                                                                  suffix="%"
-                                                                  [required]="false"
-                                                                  [showErrorMessage]="false"
-                                                                  [readonly]="true"
-                                                                  [disabled]="true"
-                                                                  [autoReplaceValue]="true"></app-input-number>
+                                                    <app-input-number [valueInput]="planner.atual_RentabilidadeMedia"
+                                                                      [inputId]="'atual_RentabilidadeMedia'"
+                                                                      [mask]="'separator'"
+                                                                      suffix="%"
+                                                                      [required]="false"
+                                                                      [showErrorMessage]="false"
+                                                                      [readonly]="true"
+                                                                      [disabled]="true"
+                                                                      [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -1198,11 +1198,12 @@
                                     </ng-template>
                                     <ng-template pTemplate="body" let-item let-index="rowIndex">
                                         <tr>
-                                            <td pResizableColumn class="px-3 pe-0 bg-light text-right">
+                                            <td pResizableColumn class="px-3 pe-0 bg-light text-right" [title]="item.pertenceSetup ? 'Produto incluso no setup' : ''">
                                                 <small><b>{{item.produto.tipoRisco.nome}}</b> |</small>
                                             </td>
-                                            <td pResizableColumn class="px-3 ps-1 bg-light text-left position-sticky">
+                                            <td pResizableColumn class="px-3 ps-1 bg-light text-left position-sticky" [title]="item.pertenceSetup ? 'Produto incluso no setup' : ''">
                                                 <small><b>{{ item.produto.descricao }}</b> </small>
+                                                <span class="text-danger" *ngIf="item.pertenceSetup">*</span>
                                             </td>
                                             <td pResizableColumn *ngIf="custosTaxas.value">
                                                 <app-input-number *ngIf="item.produto_Id != 61"
@@ -1292,9 +1293,10 @@
                                                                   [autoReplaceValue]="true"></app-input-number>
                                             </td>
                                             <td class="td-actions">
-                                                <a class="btn btn-trash" *ngIf="item.produto.id != 61" (click)="removerProduto(item)" title="Remover linha"> <!--  Conta corrente não pode ser excluido-->
+                                                <!--  Conta corrente não pode ser excluido-->
+                                                <!-- <a class="btn btn-trash" *ngIf="item.produto.id != 61" (click)="removerProduto(item)" title="Remover linha"> 
                                                     <fa-icon [icon]="faTrash"></fa-icon>
-                                                </a>
+                                                </a> -->
                                             </td>
                                         </tr>
                                     </ng-template>
@@ -1349,7 +1351,20 @@
                                             <td *ngIf="custosTaxas.value"></td>
                                             <td *ngIf="rentabBruta.value"></td>
                                             <td *ngIf="rentabLiquida.value"></td>
-                                            <td *ngIf="montanteSugerido.value"></td>
+                                            <td *ngIf="montanteSugerido.value">
+                                                <div *ngIf="montanteSugerido.value && !planoAcao.value">
+                                                    <app-input-number [valueInput]="planner.planoAcao_RentabilidadeMedia"
+                                                        (valueChanges)="planner.planoAcao_RentabilidadeMedia = $event"
+                                                        [inputId]="'planoAcao_RentabilidadeMedia'"
+                                                        [mask]="'separator'"
+                                                        suffix="%"
+                                                        [required]="false"
+                                                        [showErrorMessage]="false"
+                                                        [readonly]="true"
+                                                        [disabled]="true"
+                                                        [autoReplaceValue]="true"></app-input-number>
+                                                </div>
+                                            </td>
                                             <td *ngIf="planoAcao.value">
                                                 <app-input-number [valueInput]="planner.planoAcao_RentabilidadeMedia"
                                                     (valueChanges)="planner.planoAcao_RentabilidadeMedia = $event"
@@ -1371,7 +1386,20 @@
                                             <td *ngIf="custosTaxas.value"></td>
                                             <td *ngIf="rentabBruta.value"></td>
                                             <td *ngIf="rentabLiquida.value"></td>
-                                            <td *ngIf="montanteSugerido.value"></td>
+                                            <td *ngIf="montanteSugerido.value">
+                                                <div *ngIf="montanteSugerido.value && !planoAcao.value">
+                                                    <app-input-number [valueInput]="planner.planoAcao_RentabilidadeReal"
+                                                        (valueChanges)="planner.planoAcao_RentabilidadeReal = $event"
+                                                        [inputId]="'planoAcao_RentabilidadeReal'"
+                                                        [mask]="'separator'"
+                                                        suffix="%"
+                                                        [required]="false"
+                                                        [showErrorMessage]="false"
+                                                        [readonly]="true"
+                                                        [disabled]="true"
+                                                        [autoReplaceValue]="true"></app-input-number>
+                                                </div>
+                                            </td>
                                             <td *ngIf="planoAcao.value">
                                                 <app-input-number [valueInput]="planner.planoAcao_RentabilidadeReal"
                                                     (valueChanges)="planner.planoAcao_RentabilidadeReal = $event"
@@ -1521,10 +1549,10 @@
                                                        name="solucao_idadeMax_Atual"
                                                        #solucao_idadeMax_Atual="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Atual"
-                                                       mask="separator.2"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
                                                        [readOnly]="true">
+                                                       <!--   mask="separator.2"
+                                                       thousandSeparator="."
+                                                       decimalMarker="," -->
                                             </td>
                                         </tr>
                                         <tr>
@@ -1593,10 +1621,10 @@
                                                        name="solucao_idadeMax_Sugerido"
                                                        #solucao_idadeMax_Sugerido="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Sugerido"
-                                                       mask="separator.2"
-                                                       thousandSeparator="."
-                                                       decimalMarker=","
                                                        [readOnly]="true">
+                                                       <!--   mask="separator.2"
+                                                       thousandSeparator="."
+                                                       decimalMarker="," -->
                                             </td>
                                         </tr>
                                         <tr>
@@ -1667,10 +1695,10 @@
                                                        name="solucao_idadeMax_Diferenca"
                                                        #solucao_idadeMax_Diferenca="ngModel"
                                                        [(ngModel)]="planner.planejamentoAgregandoValor!.idadeMax_Diferenca"
+                                                       [readOnly]="true"
                                                        mask="separator.2"
                                                        thousandSeparator="."
                                                        decimalMarker=","
-                                                       [readOnly]="true"
                                                        [allowNegativeNumbers]="true">
                                             </td>
                                         </tr>

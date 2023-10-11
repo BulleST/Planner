@@ -93,7 +93,7 @@ export class FormProdutoComponent implements OnDestroy {
     }
 
     setProdutos() {
-        console.log(this.produtos)
+        // console.log(this.produtos)
         this.loadingProdutos = true;
         var produtosExistentes = this.planner.planejamentoProduto.map(x => x.produto_Id)
         this.produtos = this.produtoService.list.value;
@@ -113,7 +113,7 @@ export class FormProdutoComponent implements OnDestroy {
         this.objeto.produto = undefined as unknown as Produto;
         this.objeto.produto_Id = undefined as unknown as number;
         this.loadingProdutos = false;
-        console.log(this.produtos)
+        // console.log(this.produtos)
     }
 
     send(model: NgForm) {
@@ -122,6 +122,7 @@ export class FormProdutoComponent implements OnDestroy {
         this.objeto.rentabilidadeLiquida = 0;
         var backup = this.plannerService.planejamentoBackup.value;
         var existe = backup.planejamentoProduto.find(x =>  x.produto_Id == this.objeto.produto_Id); 
+        // console.log('existe', existe)
         if (existe) {
             this.objeto.id = existe.id;
             this.objeto.sugerido = existe.sugerido;
@@ -130,8 +131,11 @@ export class FormProdutoComponent implements OnDestroy {
         }
         
         this.objeto.planejamento_Id = this.planner.id;
+        // console.log('objeto', this.objeto)
+
         this.planner.planejamentoProduto.push(this.objeto);
         this.plannerService.setObject(this.planner);
+        // console.log('this.planner', this.planner.planejamentoProduto)
         this.voltar();
         this.loading = false;
     }

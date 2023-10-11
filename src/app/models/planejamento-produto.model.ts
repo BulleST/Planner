@@ -14,5 +14,8 @@ export class PlanejamentoProduto {
     produto_Id: number = undefined as unknown as number;
 
     valorLiquido_MontanteAtual: number = 0; // Liquido do plano de acao
-    valorLiquido_PlanoAcao: number = 0 
+    valorLiquido_PlanoAcao: number = 0;
+
+    @jsonIgnore()
+    pertenceSetup: boolean = false;
 }

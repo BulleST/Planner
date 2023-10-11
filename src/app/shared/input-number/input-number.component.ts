@@ -46,7 +46,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         if (changes['valueInput']) {
             this.valueInput = changes['valueInput'].currentValue;
             if (this.viewInit) {
-                this.validate();
+                // this.validate('ngOnChanges');
             }
         };
         if (changes['mask']) this.mask = changes['mask'].currentValue;
@@ -68,9 +68,6 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         if (changes['autoReplaceValue']) this.autoReplaceValue = changes['autoReplaceValue'].currentValue;
 
 
-        setTimeout(() => {
-            this.validate();
-        }, 400);    
     }
 
     ngAfterViewInit(): void {
@@ -83,7 +80,8 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
     }
 
 
-    validate() {
+    validate(where?: string ) {
+        // console.log('validate', where, this.autoReplaceValue)
         this.input.control.setValue(this.valueInput)
         if (this.required == true && !this.valueInput.toString().trim()) {
             this.input.control.setErrors(Object.assign({}, { required: true }));
@@ -101,7 +99,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         }
         else if (this.min != undefined && (this.valueInput < this.min)) {
             this.toastrService.error('O valor mínimo é ' + this.min);
-            if (this.autoReplaceValue) {
+            if (this.autoReplaceValue == true) {
                 this.input.control.setValue(this.min);
                 this.inputChanged();
             } else {
@@ -117,6 +115,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
 
     inputChanged() {
+        // console.log('inputChanged')
         this.valueChanges.emit(this.valueInput);
         this.ngModelChanged.emit(this.input)
     }
@@ -130,7 +129,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
             allowNegativeNumbers: allowNegativeNumbers ?? false
         });
         this.valueInput = parseFloat(newValue as unknown as string);
-        setTimeout(() => this.validate(), 500);
+        setTimeout(() => this.validate('arrowUp'), 500);
         return newValue;
     }
 
@@ -143,7 +142,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
             allowNegativeNumbers: allowNegativeNumbers ?? false
         });
         this.valueInput = parseFloat(newValue as unknown as string);
-        setTimeout(() => this.validate(), 500);
+        setTimeout(() => this.validate('arrowDown'), 500);
         return value;
     }
 }

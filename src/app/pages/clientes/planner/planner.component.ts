@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs';
 import { CarteiraSetup } from 'src/app/models/carteiraSetup.model';
 import { EstadoCivil } from 'src/app/models/estadoCivil.model';
 import { FluxosPontuais } from 'src/app/models/fluxosPontuais.model';
-import { PrincipaisObjetivos } from 'src/app/models/objetivos.model';
 import { PerfilInvestidor } from 'src/app/models/perfilInvestidor.model';
 import { PlanejamentoInvestimento } from 'src/app/models/planejamento-investimento.model';
 import { PlanejamentoProduto } from 'src/app/models/planejamento-produto.model';
@@ -29,6 +28,7 @@ import { InputNumberComponent } from 'src/app/shared/input-number/input-number.c
 import { validaCPF } from 'src/app/utils/validate-cpf';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
+import { MaskApplierService, MaskService } from 'ngx-mask';
 
 @Component({
     selector: 'app-planner',
@@ -125,7 +125,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    idadeCadastro = '';
+    idadeCadastro?: number;
     screen: ScreenWidth = ScreenWidth.lg;
 
     constructor(
@@ -144,6 +144,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         private currency: CurrencyPipe,
         private datepipe: DatePipe,
         private isMobile: IsMobile,
+        private mask: MaskApplierService
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
 
@@ -220,11 +221,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     .then(res => {
                         this.loading = false;
                         if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar();
-                        res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
-                        res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
-                        res.principaisObjetivos = res.principaisObjetivos ? res.principaisObjetivos : [];
-                        res.data = this.datepipe.transform(res.data, 'yyyy-MM-dd') as unknown as Date;
-                        res.cliente.dataNascimento = this.datepipe.transform(res.cliente.dataNascimento, 'yyyy-MM-dd') as unknown as Date;
+                       
+                        res = this.formatPlanner(res);
+
                         this.planner = res;
                         this.plannerService.planejamentoBackup.next(Object.assign({}, res));
                         this.saveData();
@@ -266,7 +265,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 else empresa_Id = plannerInitial.account.empresa_Id;
 
                 plannerInitial.cliente.empresa_Id = empresa_Id;
-                plannerInitial.data = this.datepipe.transform(plannerInitial.data, 'yyyy-MM-dd') as unknown as Date;
+                plannerInitial = this.formatPlanner(plannerInitial);
                 this.planner = plannerInitial;
                 
                 this.saveData();
@@ -455,12 +454,12 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     calculaIdadeCadastro() {
-        this.idadeCadastro = '';
+        this.idadeCadastro = undefined;
         if (this.planner.data && this.planner.cliente.dataNascimento) {
             var anoCadastro = new Date(this.planner.data).getFullYear();
             var anoNascimento = new Date(this.planner.cliente.dataNascimento).getFullYear();
             var calc =  anoCadastro - anoNascimento;
-            this.idadeCadastro = (!Number.isNaN(calc) && calc) ? calc + ' anos' : '';
+            this.idadeCadastro = (!Number.isNaN(calc) && calc) ? calc : undefined;
         }
         return this.idadeCadastro;
     }
@@ -495,19 +494,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         let index = this.planner.planejamentoFluxosPontuais.findIndex(x => x == item);
         if (index != -1) {
             this.planner.planejamentoFluxosPontuais.splice(index, 1);
-            this.saveData();
-        }
-    }
-
-    adicionarObjetivo() {
-        this.planner.principaisObjetivos.push(new PrincipaisObjetivos)
-        this.saveData();
-    }
-
-    removerObjetivo(item: PrincipaisObjetivos) {
-        let index = this.planner.principaisObjetivos.findIndex(x => x == item);
-        if (index != -1) {
-            this.planner.principaisObjetivos.splice(index, 1);
             this.saveData();
         }
     }
@@ -673,8 +659,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     if (!this.isEditPage) {
                         this.router.navigate([this.clienteIdEncrypted], { relativeTo: this.activatedRoute });
                     }
-                    res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
-                    res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
+                    res = this.formatPlanner(res);
                     this.plannerService.setObject(res);
                     this.mudouCarteiraSetup = false;
                     if (res.carteiraSetup) {
@@ -707,8 +692,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     if (!this.isEditPage) {
                         this.router.navigate([this.clienteIdEncrypted], { relativeTo: this.activatedRoute });
                     }
-                    res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
-                    res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
+                    res = this.formatPlanner(res);
                     this.plannerService.setObject(res);
                     this.mudouCarteiraSetup = false;
                     if (res.carteiraSetup) {
@@ -734,8 +718,32 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     encrypt(value: any) {
-        console.log(value)
+        // console.log(value)
         return this.crypto.encrypt(value)
+    }
+
+    formatPlanner(res: Planejamento)  { 
+        res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
+        res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
+        res.data = this.datepipe.transform(res.data, 'yyyy-MM-dd') as unknown as Date;
+        res.cliente.dataNascimento = this.datepipe.transform(res.cliente.dataNascimento, 'yyyy-MM-dd') as unknown as Date;
+
+        res.planejamentoAgregandoValor.idadeMax_Atual = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Atual?.toString(), 'separator.2') as unknown as number; 
+        var idadeMax = res.planejamentoGrafico.reduce((x, y) => x.idade == 120 || x.idade > y.id  ? y : x)
+        // console.log('idadeMax', idadeMax)
+        if (idadeMax.valorAtual != 0) res.planejamentoAgregandoValor.idadeMax_Atual = '+' + res.planejamentoAgregandoValor.idadeMax_Atual as unknown as number; 
+        
+        res.planejamentoAgregandoValor.idadeMax_Sugerido = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Sugerido?.toString(), 'separator.2') as unknown as number; 
+        if (idadeMax.valorPlanejado != 0) res.planejamentoAgregandoValor.idadeMax_Sugerido = '+' + res.planejamentoAgregandoValor.idadeMax_Sugerido as unknown as number; 
+        
+        
+        var produtosSetup = res.carteiraSetup.carteiraProdutoRel.map(x => x.produto_Id);
+        res.planejamentoProduto = res.planejamentoProduto.map(x => {
+            x.pertenceSetup = produtosSetup.includes(x.produto_Id);
+            return x;
+        });
+        return res
+
     }
     
 }

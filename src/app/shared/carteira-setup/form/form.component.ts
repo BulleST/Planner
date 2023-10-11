@@ -73,6 +73,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         private setupService: CarteiraSetupService,
         private dropdown: DropdownService,
     ) {
+        // console.log('constructor')
         var params = this.activatedRoute.params.subscribe(item => this.isEditPage = !!item['setup_id']);
         this.subscription.push(params);
 
@@ -103,10 +104,12 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     ngOnDestroy(): void {
+        // console.log('ngOnDestroy(): void {')
         this.subscription.forEach(item => item.unsubscribe());
     }
 
     async ngOnChanges(changes: SimpleChanges): Promise<void> {
+        // console.log('ngOnChanges(changes: SimpleChanges): Promise<void> {')
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
             if (this.hasViewInit) {
@@ -129,6 +132,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     ngAfterViewInit(): void {
+        // console.log('ngAfterViewInit(): void {')
         this.hasViewInit = true;
         var windowWidth = window.innerWidth;
         var container = $('.chart-container').width() ?? 0;
@@ -140,13 +144,16 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
 
     @HostListener('window:resize', ['$event'])
     onResize(event: any) {
+        // console.log('onResize')
         var windowWidth = window.innerWidth;
         var container = $('.chart-container').width() ?? 0;
         var viewport = 100 / windowWidth;
         this.chartWidth = (viewport * container).toString() + 'vw';
+        this.setChartProduto();
     }
 
     send(form: NgForm) {
+        // console.log('send')
         if (form.invalid) {
             this.toastr.error('Campos inválidos');
             this.erro = ['Campos inválidos'];
@@ -164,6 +171,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     setChartProduto() {
+        // console.log('setChartProduto')
         let index = 0;
         let tipoRiscos = this.objeto.carteiraProdutoRel.filter(x => x.produto.tipoRisco != undefined).map(x => x.produto.tipoRisco);
         tipoRiscos = tipoRiscos.filter((value: any, index: any, self: any) => index === self.findIndex((x: any) => (x.id === value.id)));
@@ -247,6 +255,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     async getRiscos() {
+        // console.log('getRiscos')
         this.loading = true;
         await lastValueFrom(this.dropdown.getRisco())
             .then((res) => {
@@ -263,6 +272,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     riscoChange(model: NgModel) {
+        // console.log('riscoChange(model: NgModel)')
         this.selectedRisco = {
             id: model.value.id,
             nome: model.value.nome,
@@ -273,6 +283,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     async calculaPercentualDisponivel() {
+        // console.log('calculaPercentualDisponivel')
         if (this.tipoRiscos.length == 0) {
             await this.getRiscos();
         }
@@ -289,6 +300,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     setProdutos() {
+        // console.log('setProdutos')
         let produtosExistentes = this.objeto.carteiraProdutoRel.map(x => x.produto_Id);
         this.produtosRisco = this.allProdutos.filter(x => x.tipoRisco_Id == this.selectedRisco.id
             && x.dataDesativado == null
@@ -298,6 +310,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     sortProdutos(produtos: Produto[]) {
+        // console.log('sortProdutos(produtos: Produto[]) {')
         produtos = produtos.sort((x, y) => {
             if (x.tipoRisco_Id > y.tipoRisco_Id) return -1;
             else if (x.tipoRisco_Id < y.tipoRisco_Id)  return 1;
@@ -310,6 +323,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
     
     async adicionarProduto() {
+        // console.log('adicionarProduto')
         if (!this.produto)
             this.toastr.error('Selecione um produto para adicionar');
         else {
@@ -339,6 +353,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     async removeProduto(item: CarteiraProdutoRel) {
+        // console.log('removeProduto(item: CarteiraProdutoRel) {')
         let index = this.objeto.carteiraProdutoRel.findIndex(x => x.id == item.id && x.produto_Id == item.produto.id);
         if (index != -1) {
             this.objeto.carteiraProdutoRel.splice(index, 1);
@@ -351,6 +366,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     validatePercentual() {
+        // console.log('validatePercentual()')
         this.erro = [];
         if (this.objeto.carteiraProdutoRel.length == 0) {
             this.erro.push('Você deve selecionar pelo menos um produto.');
@@ -373,6 +389,7 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
     }
 
     async percentualChange(percentualComponent: InputNumberComponent, produtoRel: CarteiraProdutoRel) {
+        // console.log('percentualChange', percentualComponent, produtoRel)
         await this.calculaPercentualDisponivel();
         this.validatePercentual();
         var tipoRisco = this.tipoRiscos.find(x => x.id == produtoRel.produto.tipoRisco_Id) as TipoRisco;
@@ -381,7 +398,13 @@ export class FormCarteiraSetupComponent implements OnDestroy, OnChanges {
         var somaPercentual = percentuais.length > 0 ? percentuais.reduce((x, y) => x + y) : 0;
         var maxPercentualInputAtual = 100 - somaPercentual;
         percentualComponent.max = maxPercentualInputAtual;
-        var a = percentualComponent.input.valid
+        // console.log('maxPercentualInputAtual', maxPercentualInputAtual)
+
+        if (maxPercentualInputAtual == 0) {
+            percentualComponent.min = 0;
+        }
+
+        var a = percentualComponent.input.valid;
         if (a) {
             this.setChartProduto();
         }

@@ -346,7 +346,12 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     if (sobra > 0) {
                         x.planoAcao = sobra;
                         var total: number[] | number = this.planner.planejamentoProduto.filter(x => x.produto_Id != 61).map(x => x.percentual);
-                        total = total.length > 0 ? total.reduce((x, y) => x + y) : 0;
+                        if (total.length > 0) {
+                            total = total.length > 0 ? total.reduce((x, y) => x + y) : 0;
+                        } 
+                        else {
+                            total = 0;
+                        }
                         percentual = 100 - total;
                     } else {
                         x.planoAcao, percentual = 0
@@ -729,21 +734,29 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         res.cliente.dataNascimento = this.datepipe.transform(res.cliente.dataNascimento, 'yyyy-MM-dd') as unknown as Date;
 
         res.planejamentoAgregandoValor.idadeMax_Atual = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Atual?.toString(), 'separator.2') as unknown as number; 
-        var idadeMax = res.planejamentoGrafico.reduce((x, y) => x.idade == 120 || x.idade > y.id  ? y : x)
-        // console.log('idadeMax', idadeMax)
-        if (idadeMax.valorAtual != 0) res.planejamentoAgregandoValor.idadeMax_Atual = '+' + res.planejamentoAgregandoValor.idadeMax_Atual as unknown as number; 
         
-        res.planejamentoAgregandoValor.idadeMax_Sugerido = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Sugerido?.toString(), 'separator.2') as unknown as number; 
-        if (idadeMax.valorPlanejado != 0) res.planejamentoAgregandoValor.idadeMax_Sugerido = '+' + res.planejamentoAgregandoValor.idadeMax_Sugerido as unknown as number; 
+        if (res.planejamentoGrafico.length > 0) {
+            var idadeMax = res.planejamentoGrafico.reduce((x, y) => x.idade == 120 || x.idade > y.id  ? y : x)
+            if (idadeMax.valorAtual != 0) {
+                res.planejamentoAgregandoValor.idadeMax_Atual = '+' + res.planejamentoAgregandoValor.idadeMax_Atual as unknown as number; 
+            }
+            
+            res.planejamentoAgregandoValor.idadeMax_Sugerido = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Sugerido?.toString(), 'separator.2') as unknown as number; 
+            if (idadeMax.valorPlanejado != 0){
+                res.planejamentoAgregandoValor.idadeMax_Sugerido = '+' + res.planejamentoAgregandoValor.idadeMax_Sugerido as unknown as number; 
+            } 
+        }
+        
+        if (res.carteiraSetup && res.planejamentoProduto.length > 0) {
+            var produtosSetup = res.carteiraSetup.carteiraProdutoRel.map(x => x.produto_Id);
+            res.planejamentoProduto = res.planejamentoProduto.map(x => {
+                x.pertenceSetup = produtosSetup.includes(x.produto_Id);
+                return x;
+            });
+        }
         
         
-        var produtosSetup = res.carteiraSetup.carteiraProdutoRel.map(x => x.produto_Id);
-        res.planejamentoProduto = res.planejamentoProduto.map(x => {
-            x.pertenceSetup = produtosSetup.includes(x.produto_Id);
-            return x;
-        });
         return res
-
     }
     
 }

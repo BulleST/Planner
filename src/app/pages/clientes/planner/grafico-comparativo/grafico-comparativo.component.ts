@@ -175,7 +175,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
         var investimento: any[] = []; 
         this.colorsRisco.forEach(risco => {
             var relsProduto = this.planner.planejamentoProduto.filter(x => x.produto.tipoRisco_Id == risco.id);
-            var reaisProduto = relsProduto.length ? relsProduto.map(x => x.sugerido).reduce((x, y )=> x + y) : 0;
+            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.sugerido).reduce((x, y) => x + y) : 0;
             var percentualProduto = (reaisProduto / this.produtoTotal) * 100;
             
             produtos.push({
@@ -188,7 +188,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
             });
 
             var relsInvestimento = this.planner.planejamentoInvestimento.filter(x => x.investimento.tipoRisco_Id == risco.id);
-            var reaisInvestimento = relsInvestimento.length ? relsInvestimento.map(x => x.montanteAtual).reduce((x, y )=> x + y) : 0;
+            var reaisInvestimento = relsInvestimento.length > 0 ? relsInvestimento.map(x => x.montanteAtual).reduce((x, y )=> x + y) : 0;
             var percentualInvestimento = (reaisInvestimento / this.produtoTotal) * 100;
             
             investimento.push({
@@ -240,7 +240,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
         var investimento: any[] = []; 
         this.colorsLiquidez.forEach(liquidez => {
             var relsProduto = this.planner.planejamentoProduto.filter(x => x.produto.tipoLiquidez_Id == liquidez.id);
-            var reaisProduto = relsProduto.length ? relsProduto.map(x => x.sugerido).reduce((x, y )=> x + y) : 0;
+            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.sugerido).reduce((x, y )=> x + y) : 0;
             var percentualProduto = (reaisProduto / this.produtoTotal) * 100;
             produtos.push({
                 percentual: percentualProduto,
@@ -252,7 +252,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
             });
 
             var relsInvestimento = this.planner.planejamentoInvestimento.filter(x => x.investimento.tipoLiquidez_Id == liquidez.id);
-            var reaisInvestimento = relsInvestimento.length ? relsInvestimento.map(x => x.montanteAtual).reduce((x, y )=> x + y) : 0;
+            var reaisInvestimento = relsInvestimento.length > 0 ? relsInvestimento.map(x => x.montanteAtual).reduce((x, y )=> x + y) : 0;
             var percentualInvestimento = (reaisInvestimento / this.produtoTotal) * 100;
             
             investimento.push({
@@ -304,7 +304,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
         var investimento: any[] = []; 
         this.colorsAtivo.forEach(ativo => {
             var relsProduto = this.planner.planejamentoProduto.filter(x => x.produto.tipoAtivo_Id == ativo.id);
-            var reaisProduto = relsProduto.length ? relsProduto.map(x => x.sugerido).reduce((x, y )=> x + y) : 0;
+            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.sugerido).reduce((x, y) => x + y) : 0;
             var percentualProduto = (reaisProduto / this.produtoTotal) * 100;
             produtos.push({
                 percentual: percentualProduto,
@@ -316,7 +316,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
             });
 
             var relsInvestimento = this.planner.planejamentoInvestimento.filter(x => x.investimento.tipoAtivo_Id == ativo.id);
-            var reaisInvestimento = relsInvestimento.length ? relsInvestimento.map(x => x.montanteAtual).reduce((x, y )=> x + y) : 0;
+            var reaisInvestimento = relsInvestimento.length > 0 ? relsInvestimento.map(x => x.montanteAtual).reduce((x, y) => x + y) : 0;
             var percentualInvestimento = (reaisInvestimento / this.produtoTotal) * 100;
             
             investimento.push({

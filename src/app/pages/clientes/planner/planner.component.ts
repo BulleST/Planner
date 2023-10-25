@@ -728,8 +728,21 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     formatPlanner(res: Planejamento)  { 
-        res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
-        res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
+        if (res.cliente.rg) {
+            res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
+            this.validaRG_CPF(this.rg, res.cliente.rg)
+        }
+        else 
+            res.cliente.rg = '' as unknown as number
+
+        if (res.cliente.cpf) {
+            res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
+            this.validaRG_CPF(this.rg, res.cliente.rg)
+        }
+        else 
+            res.cliente.cpf = '' as unknown as number
+
+
         res.data = this.datepipe.transform(res.data, 'yyyy-MM-dd') as unknown as Date;
         res.cliente.dataNascimento = this.datepipe.transform(res.cliente.dataNascimento, 'yyyy-MM-dd') as unknown as Date;
 

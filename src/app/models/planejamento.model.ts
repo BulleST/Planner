@@ -16,7 +16,7 @@ export class Planejamento {
     account: Account = new Account;
     carteiraSetup_Id: number = undefined as unknown as number;
     carteiraSetup: CarteiraSetup = undefined as unknown as CarteiraSetup;
-    data: Date  = '' as unknown as Date;
+    data: Date = new Date;
     descricao: string = '';
     
     taxaSelic: number = '' as unknown as number;

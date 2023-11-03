@@ -111,7 +111,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     routerBack: string[] = ['../../'];
     routeBackOptions: any;
 
-    
+
     @ViewChild('receita') receita: InputNumberComponent;
     @ViewChild('despesa') despesa: InputNumberComponent;
 
@@ -190,7 +190,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 if (x.nome < y.nome) return -1
                 else if (x.nome > y.nome) return 1
                 else return 0
-        }));
+            }));
         this.subscription.push(list);
         var usuarios = this.usuarioService.list.subscribe(res => this.listUsuarios = res
             .sort((x, y) => {
@@ -199,7 +199,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 if (x.name < y.name) return -1;
                 else if (x.name > y.name) return 1
                 else return 0;
-        }));
+            }));
         this.subscription.push(usuarios);
 
         var estadoCivil = this.dropdown.estadoCivil.subscribe(res => this.estadoCivil = res);
@@ -221,7 +221,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     .then(res => {
                         this.loading = false;
                         if (this.account?.perfilAcesso_Id == 3 && res.account_Id != this.account.id) this.voltar();
-                       
                         res = this.formatPlanner(res);
 
                         this.planner = res;
@@ -267,7 +266,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 plannerInitial.cliente.empresa_Id = empresa_Id;
                 plannerInitial = this.formatPlanner(plannerInitial);
                 this.planner = plannerInitial;
-                
+
                 this.saveData();
 
                 var getObject = this.plannerService.objeto.subscribe(res => {
@@ -317,17 +316,17 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             // Ordena os produtos e deixa conta corrente por ultimo
             var list = this.planner.planejamentoProduto;
             list = list.sort((x, y) => {
-                
+
                 if (x.produto.tipoRisco_Id > y.produto.tipoRisco_Id) return -1;
-                else if (x.produto.tipoRisco_Id < y.produto.tipoRisco_Id)  return 1;
-               
+                else if (x.produto.tipoRisco_Id < y.produto.tipoRisco_Id) return 1;
+
                 // Else go to the 2nd item
                 if (x.produto.descricao.toLowerCase() < y.produto.descricao.toLowerCase()) return -1;
                 else if (x.produto.descricao.toLowerCase() > y.produto.descricao.toLowerCase()) return 1;
                 else return 0;  // nothing to split them
             });
-            
-            
+
+
             var contaCorrenteIndex = list.findIndex(x => x.produto_Id == 61);
             var contaCorrente = list.splice(contaCorrenteIndex, 1);
             list.push(contaCorrente[0])
@@ -342,13 +341,13 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 if (x.produto_Id == 61) { // Se for conta corrente calcula a sobra
                     var sobra = montanteTotal - somaPlanoAcao;
                     x.sugerido = x.sugerido;
-                    x.planoAcao = sobra > 0 ? sobra: 0;
+                    x.planoAcao = sobra > 0 ? sobra : 0;
                     if (sobra > 0) {
                         x.planoAcao = sobra;
                         var total: number[] | number = this.planner.planejamentoProduto.filter(x => x.produto_Id != 61).map(x => x.percentual);
                         if (total.length > 0) {
                             total = total.length > 0 ? total.reduce((x, y) => x + y) : 0;
-                        } 
+                        }
                         else {
                             total = 0;
                         }
@@ -357,7 +356,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                         x.planoAcao, percentual = 0
                     }
                     x.percentual = round(percentual, maxDecimalLength);
-                    
+
                 } else {
                     percentual = x.planoAcao / montanteTotal;
                     x.percentual = round(percentual * 100, decimalLength);
@@ -379,8 +378,8 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 somaPercentual += x.percentual;
                 somaPlanoAcao += x.planoAcao;
                 somaSugerido += x.sugerido;
-                somaPlanoAcao_Liquido += x.valorLiquido_PlanoAcao; 
-                somaSugerido_Liquido += x.valorLiquido_MontanteAtual; 
+                somaPlanoAcao_Liquido += x.valorLiquido_PlanoAcao;
+                somaSugerido_Liquido += x.valorLiquido_MontanteAtual;
                 return x;
             });
 
@@ -395,7 +394,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             this.somaProdutos.diferencaPercentual = round(100 - this.somaProdutos.somaPercentual, 2);
             this.somaProdutos.diferencaPlanoAcao = round(montanteTotal - this.somaProdutos.somaPlanoAcao, 2);
             this.somaProdutos.diferencaSugerido = round(montanteTotal - this.somaProdutos.somaSugerido, 2);
-            
+
             setTimeout(() => { // espera atualizar html
                 this.planner.planejamentoProduto = Object.assign([], list); // Força a mudança na model
                 this.somaProdutos = Object.assign({}, this.somaProdutos) // Força a mudança na model
@@ -411,27 +410,27 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             var somaMontanteAtual = 0;
             var somaMontanteAtual_Liquido = 0;
 
-           
+
             // Ordena os investimentos por risco
             var list = this.planner.planejamentoInvestimento;
             list = list.sort((x, y) => {
                 if (x.investimento.tipoRisco_Id > y.investimento.tipoRisco_Id) return -1;
-                else if (x.investimento.tipoRisco_Id < y.investimento.tipoRisco_Id)  return 1;
-               
+                else if (x.investimento.tipoRisco_Id < y.investimento.tipoRisco_Id) return 1;
+
                 // Else go to the 2nd item
                 if (x.investimento.descricao.toLowerCase() < y.investimento.descricao.toLowerCase()) return -1;
                 else if (x.investimento.descricao.toLowerCase() > y.investimento.descricao.toLowerCase()) return 1;
                 else return 0;  // nothing to split them
             });
-            
+
             list = list.map(x => {
                 // Calcula rentabilidade líquida
                 var rentabilidadeLiquida = (x.rentabilidade * (100 - x.custosTaxas)) / 100;
                 var liquidoSugerido = (x.montanteAtual * rentabilidadeLiquida) / 100
-            
+
                 x.rentabilidadeLiquida = rentabilidadeLiquida // round(rentabilidadeLiquida, 2);
                 x.valorLiquido_MontanteAtual = liquidoSugerido // round(liquidoSugerido, 2);
-                
+
                 somaMontanteAtual += x.montanteAtual;
                 somaMontanteAtual_Liquido += x.valorLiquido_MontanteAtual;
 
@@ -439,7 +438,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             })
             this.somaInvestimentos.somaMontanteAtual = round(somaMontanteAtual, 2);
             this.somaInvestimentos.somaMontanteAtualLiquido = round(somaMontanteAtual_Liquido, 2);
-            
+
             setTimeout(() => { // espera atualizar html
                 this.planner.planejamentoInvestimento = Object.assign([], list); // Força a mudança na model
                 this.somaInvestimentos = Object.assign({}, this.somaInvestimentos) // Força a mudança na model
@@ -461,10 +460,15 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     calculaIdadeCadastro() {
         this.idadeCadastro = undefined;
         if (this.planner.data && this.planner.cliente.dataNascimento) {
-            var anoCadastro = new Date(this.planner.data).getFullYear();
-            var anoNascimento = new Date(this.planner.cliente.dataNascimento).getFullYear();
-            var calc =  anoCadastro - anoNascimento;
-            this.idadeCadastro = (!Number.isNaN(calc) && calc) ? calc : undefined;
+            var dataCadastro = new Date(this.planner.data);
+            var dataNascimento = new Date(this.planner.cliente.dataNascimento);
+            var idade = dataCadastro.getFullYear() - dataNascimento.getFullYear();
+            var m = dataCadastro.getMonth() - dataNascimento.getMonth();
+
+            if (m < 0 || (m === 0 && dataCadastro.getDate() < dataNascimento.getDate())) {
+                idade--;
+            }
+            this.idadeCadastro = idade;
         }
         return this.idadeCadastro;
     }
@@ -476,7 +480,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         } else {
             this.planner.carteiraSetup = undefined as unknown as CarteiraSetup;
         }
-        
+
         this.mudouCarteiraSetup = !(this.planner.carteiraSetup_Id == this.carteiraSetupInalterada.id);
         this.saveData();
     }
@@ -521,14 +525,14 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    saveData() { 
+    saveData() {
         this.planner.planejamentoFluxosPontuais = this.planner.planejamentoFluxosPontuais.sort((x, y) => Number(x.idade) - Number(y.idade));
         this.plannerService.setObject(this.planner);
     }
 
     validaIdade(input: InputNumberComponent, ponto: FluxosPontuais) {
         var invalidOne = this.planner.planejamentoFluxosPontuais.find(x => x.idade == ponto.idade && x.id != ponto.id);
-        var invalid  = this.planner.planejamentoFluxosPontuais.filter(x => x.idade == ponto.idade && x.id == 0);
+        var invalid = this.planner.planejamentoFluxosPontuais.filter(x => x.idade == ponto.idade && x.id == 0);
         if (invalidOne || invalid.length > 1) {
             input.setErrors({
                 invalid: 'Essa idade já foi preenchida'
@@ -560,7 +564,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
             }
         }
         lastValueFrom(this.clienteService.getByDoc(this.planner.cliente_Id, doc))
-            .then(res => { 
+            .then(res => {
                 this.saveData();
                 this.formIsValid = this.validaForm(this.form);
 
@@ -570,6 +574,32 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                     jaExiste: getError(res)
                 });
             });
+
+    }
+
+    validaForm_Post(form: NgForm) {
+        this.erro = [];
+        if (form.touched && form.invalid) {
+            console.log('form.invalid')
+            this.erro.push('Campos inválidos!');
+            return false;
+        }
+
+        if (this.loading == true) {
+            console.log('loading', this.loading)
+            return false;
+        }
+        if (this.planner.planejamentoInvestimento.length == 0) {
+            console.log('this.planner.planejamentoInvestimento.length == 0', this.planner.planejamentoInvestimento.length)
+            this.erro.push('Insira um ou mais investimentos no planner.');
+            return false;
+        }
+        if (this.planner.cliente.receita < this.planner.cliente.despesa) {
+            console.log('this.planner.cliente.receita < this.planner.cliente.despesa', this.planner.cliente.receita < this.planner.cliente.despesa)
+            this.erro.push('Receita deve ser maior que despesas');
+            return false;
+        }
+        return true;
 
     }
 
@@ -587,18 +617,13 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
 
         if (this.planner.planejamentoInvestimento.length == 0) {
-            console.log('this.planner.planejamentoInvestimento.length == 0', this.planner.planejamentoInvestimento.length )
+            console.log('this.planner.planejamentoInvestimento.length == 0', this.planner.planejamentoInvestimento.length)
             this.erro.push('Insira um ou mais investimentos no planner.');
-            return false;
-        }
-        if (this.planner.planejamentoProduto.length == 0) {
-            console.log('this.planner.planejamentoProduto.length == 0', this.planner.planejamentoProduto.length )
-            this.erro.push('Insira um ou mais produtos no planner.');
             return false;
         }
 
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
-            console.log('soma x montante', this.somaProdutos.somaPlanoAcao,this.planner.planejamentoAgregandoValor.montante)
+            console.log('soma x montante', this.somaProdutos.somaPlanoAcao, this.planner.planejamentoAgregandoValor.montante)
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
             return false;
         }
@@ -610,14 +635,14 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         }
         return true;
     }
-   
+
     validaReceitaDespesa(input: NgModel) { // Receita deve ser maior que despesa
         if (this.planner.cliente.receita < this.planner.cliente.despesa) {
             if (input.name == 'despesa') {
-                this.despesa.setErrors({message: 'Despesa não pode ser maior que receita.'});
-            } else if (input.name == 'receita'){
-                this.receita.setErrors({message: 'Receita não pode ser menor que despesa.'});
-            } 
+                this.despesa.setErrors({ message: 'Despesa não pode ser maior que receita.' });
+            } else if (input.name == 'receita') {
+                this.receita.setErrors({ message: 'Receita não pode ser menor que despesa.' });
+            }
         } else {
             this.receita.setErrors(null);
             this.despesa.setErrors(null);
@@ -650,7 +675,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         if (!this.isEditPage || (this.isEditPage && (this.account?.perfilAcesso_Id != 3 || this.account?.id == this.planner.account_Id))) {
             this.saveData();
             this.erro = [];
-            this.formIsValid = this.validaForm(this.form);
+            this.formIsValid = this.validaForm_Post(this.form);
 
             if (!this.formIsValid) {
                 this.erro.push('Campos inválidos!');
@@ -711,7 +736,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     formatReais(valor: number) {
         const round = (n, d) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
         valor = round(valor, 2)
-        var newValue =  'R$ ' + this.currency.transform(valor, 'BRL', '', '1.2')
+        var newValue = 'R$ ' + this.currency.transform(valor, 'BRL', '', '1.2')
         return newValue;
     }
 
@@ -727,39 +752,39 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         return this.crypto.encrypt(value)
     }
 
-    formatPlanner(res: Planejamento)  { 
+    formatPlanner(res: Planejamento) {
         if (res.cliente.rg) {
             res.cliente.rg = res.cliente.rg.toString().padStart(9, '0') as unknown as number;
             this.validaRG_CPF(this.rg, res.cliente.rg)
         }
-        else 
+        else
             res.cliente.rg = '' as unknown as number
 
         if (res.cliente.cpf) {
             res.cliente.cpf = res.cliente.cpf.toString().padStart(11, '0') as unknown as number;
             this.validaRG_CPF(this.rg, res.cliente.rg)
         }
-        else 
+        else
             res.cliente.cpf = '' as unknown as number
 
 
         res.data = this.datepipe.transform(res.data, 'yyyy-MM-dd') as unknown as Date;
         res.cliente.dataNascimento = this.datepipe.transform(res.cliente.dataNascimento, 'yyyy-MM-dd') as unknown as Date;
 
-        res.planejamentoAgregandoValor.idadeMax_Atual = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Atual?.toString(), 'separator.2') as unknown as number; 
-        
+        res.planejamentoAgregandoValor.idadeMax_Atual = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Atual?.toString(), 'separator.2') as unknown as number;
+
         if (res.planejamentoGrafico.length > 0) {
-            var idadeMax = res.planejamentoGrafico.reduce((x, y) => x.idade == 120 || x.idade > y.id  ? y : x)
+            var idadeMax = res.planejamentoGrafico.reduce((x, y) => x.idade == 120 || x.idade > y.id ? y : x)
             if (idadeMax.valorAtual != 0) {
-                res.planejamentoAgregandoValor.idadeMax_Atual = '+' + res.planejamentoAgregandoValor.idadeMax_Atual as unknown as number; 
+                res.planejamentoAgregandoValor.idadeMax_Atual = '+' + res.planejamentoAgregandoValor.idadeMax_Atual as unknown as number;
             }
-            
-            res.planejamentoAgregandoValor.idadeMax_Sugerido = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Sugerido?.toString(), 'separator.2') as unknown as number; 
-            if (idadeMax.valorPlanejado != 0){
-                res.planejamentoAgregandoValor.idadeMax_Sugerido = '+' + res.planejamentoAgregandoValor.idadeMax_Sugerido as unknown as number; 
-            } 
+
+            res.planejamentoAgregandoValor.idadeMax_Sugerido = this.mask.applyMask(res.planejamentoAgregandoValor.idadeMax_Sugerido?.toString(), 'separator.2') as unknown as number;
+            if (idadeMax.valorPlanejado != 0) {
+                res.planejamentoAgregandoValor.idadeMax_Sugerido = '+' + res.planejamentoAgregandoValor.idadeMax_Sugerido as unknown as number;
+            }
         }
-        
+
         if (res.carteiraSetup && res.planejamentoProduto.length > 0) {
             var produtosSetup = res.carteiraSetup.carteiraProdutoRel.map(x => x.produto_Id);
             res.planejamentoProduto = res.planejamentoProduto.map(x => {
@@ -767,9 +792,9 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                 return x;
             });
         }
-        
-        
+
+
         return res
     }
-    
+
 }

@@ -17,7 +17,6 @@ import { ModalOpen } from 'src/app/utils/modal-open';
     styleUrls: ['./deactivated.component.css'],
 })
 export class DeactivatedComponent implements OnChanges {
-    faTimes = faTimes;
     @Input() objeto: any;
     @Input() service: any;
     @Input() isUser: boolean = false;

@@ -77,7 +77,26 @@
                                     class="btn mr-2" >
                                     <i [class]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
                                 </button>
+                                <div *ngIf="item.capacidadeRisco_Id == 1" title="Soma do montante é menor que a reserva de emergência sugerida">
                                     <b>Capacidade de Risco - {{item.capacidadeRisco_Id}}</b>
+                                </div>
+                                <div *ngIf="item.capacidadeRisco_Id == 2" title="Soma do montante é menor ou igual a soma da despesa de 12 meses">
+                                    <b>Capacidade de Risco - {{item.capacidadeRisco_Id}}</b>
+                                </div>
+                                <div *ngIf="item.capacidadeRisco_Id == 3" title="Soma do montante é menor ou igual a soma da despesa de 24 meses">
+                                    <b>Capacidade de Risco - {{item.capacidadeRisco_Id}}</b>
+                                </div>
+                                <div *ngIf="item.capacidadeRisco_Id == 4" title="Soma do montante é menor ou igual a soma da despesa de 42 meses">
+                                    <b>Capacidade de Risco - {{item.capacidadeRisco_Id}}</b>
+                                </div>
+                                <div *ngIf="item.capacidadeRisco_Id == 5" title="Soma do montante é menor ou igual a soma da despesa de 60 meses">
+                                    <b>Capacidade de Risco - {{item.capacidadeRisco_Id}}</b>
+                                </div>
+                                <div *ngIf="item.capacidadeRisco_Id == 6" title="Soma do montante é maior que a soma da despesa de 60 meses">
+                                    <b>Capacidade de Risco - {{item.capacidadeRisco_Id}}</b>
+                                </div>
+
+
                             </div>
                         </td>
                     </tr>

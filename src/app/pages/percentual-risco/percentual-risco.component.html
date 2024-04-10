@@ -1,0 +1,237 @@
+<div class="page">
+    <div class="page__header">
+        <span class="title-icon">
+            <fa-icon [icon]="faPercentage"></fa-icon>
+        </span>
+        <div class="mr-auto">
+            <h3 class="page__header-title">Percentual de risco</h3>
+            <p class="page__header-subtitle"><small>Cadastrados em <strong>{{empresaSelected.nome}}</strong></small></p>
+        </div>
+        <div class="ml-auto mb-0 col-xl-3 col-lg-4 col-md-5 col-sm-5 col-12 px-0">
+            <app-empresa-select *ngIf="account && account.perfilAcesso_Id == 1"></app-empresa-select>
+        </div>
+    </div>
+    <div class="page__body">
+        <p class="p-2" *ngIf="list.length == 0 && !loading">
+            <span>Nenhum registro encontrado.</span>
+            <button class="link" (click)="create()" [disabled]="loading"> Clique aqui para adicionar</button>
+        </p>
+        <p class="p-2" *ngIf="loading">
+            <span class="spinner-border spinner-border-sm mr-1"></span>
+            <span>Carregando... </span>
+        </p>
+        <div class="content" *ngIf="list.length > 0" #aa>
+            <p-table
+                     class="table"
+                     #dt
+                     [value]="list"
+                     [rows]="100"
+                     [rowHover]="true"
+                     [rowsPerPageOptions]="[10, 25, 50, 100]"
+                     responsiveLayout="scroll"
+                     [paginator]="false"
+                     [showCurrentPageReport]="true"
+                     currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)"
+                     [globalFilterFields]="filters"
+                     [filterDelay]="100"
+                     rowGroupMode="subheader" 
+                     dataKey="capacidadeRisco_Id"
+                     groupRowsBy="capacidadeRisco_Id">
+                <ng-template pTemplate="caption">
+                    <div class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 p-0 mb-sm-0 mb-2">
+                            <p *ngIf="!loading">
+                                <small> {{ list.length }} resultado(s) </small>
+                            </p>
+                        </div>
+                        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
+                            <div class="mx-1 px-0 mb-2">
+                                <button class="btn btn-primary" (click)="edit()" [disabled]="loading" *ngIf="list.length > 0">Salvar alterações</button>
+                            </div>
+                            <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 mb-2" *ngIf="list.length > 0">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" class="form-control "
+                                       (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns *ngIf="list.length > 0">
+                    <tr class="grey">
+                        <th>Perfil Investidor</th>
+                        <th>Baixíssimo</th>
+                        <th>Baixo</th>
+                        <th>Moderado</th>
+                        <th>Arrojado</th>
+                        <th>Super Arrojado</th>
+                        <th>Hedge</th>
+                        <th>Total</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="groupheader" let-item let-expanded="expanded">
+                    <tr pRowGroupHeader>
+                        <td colspan="8">
+                            <div class="d-flex align-items-center">
+                                <button type="button" 
+                                    [pRowToggler]="item" 
+                                    class="btn mr-2" >
+                                    <i [class]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                                </button>
+                                    <b>Capacidade de Risco - {{item.capacidadeRisco_Id}}</b>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-item let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{item.perfilInvestidor.descricao}}</td>
+                        <td [pEditableColumn]="item.baixissimo" pEditableColumnField="baixissimo">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber 
+                                        inputStyleClass="form-control"
+                                        [(ngModel)]="item.baixissimo" 
+                                        inputId="baixissimo" 
+                                        name="baixissimo"
+                                        mode="decimal" 
+                                        [minFractionDigits]="2" 
+                                        [maxFractionDigits]="2"
+                                        locale="pt-BR"
+                                        suffix="%"
+                                        [required]="true"
+                                        (onBlur)="calculaTotalItem(item)"
+                                        > 
+                                    </p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>{{ item.baixissimo | currency : 'BRL' : '' : '1.2' }}%</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>  
+                        <td [pEditableColumn]="item.baixo" pEditableColumnField="baixo">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber 
+                                        inputStyleClass="form-control"
+                                        [(ngModel)]="item.baixo" 
+                                        inputId="baixo" 
+                                        name="baixo"
+                                        mode="decimal" 
+                                        [minFractionDigits]="2" 
+                                        [maxFractionDigits]="2"
+                                        locale="pt-BR"
+                                        suffix="%"
+                                        [required]="true"
+                                        (onBlur)="calculaTotalItem(item)"
+                                        > 
+                                    </p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>{{ item.baixo | currency : 'BRL' : '' : '1.2' }}%</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td [pEditableColumn]="item.moderado" pEditableColumnField="moderado">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber 
+                                        inputStyleClass="form-control"
+                                        [(ngModel)]="item.moderado" 
+                                        inputId="moderado" 
+                                        name="moderado"
+                                        mode="decimal" 
+                                        [minFractionDigits]="2" 
+                                        [maxFractionDigits]="2"
+                                        locale="pt-BR"
+                                        suffix="%"
+                                        [required]="true"
+                                        (onBlur)="calculaTotalItem(item)"
+                                        > 
+                                    </p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>{{ item.moderado | currency : 'BRL' : '' : '1.2' }}%</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td [pEditableColumn]="item.arrojado" pEditableColumnField="arrojado">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber 
+                                        inputStyleClass="form-control"
+                                        [(ngModel)]="item.arrojado" 
+                                        inputId="arrojado" 
+                                        name="arrojado"
+                                        mode="decimal" 
+                                        [minFractionDigits]="2" 
+                                        [maxFractionDigits]="2"
+                                        locale="pt-BR"
+                                        suffix="%"
+                                        [required]="true"
+                                        (onBlur)="calculaTotalItem(item)"
+                                        > 
+                                    </p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>{{ item.arrojado | currency : 'BRL' : '' : '1.2' }}%</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td [pEditableColumn]="item.superArrojado" pEditableColumnField="superArrojado">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber 
+                                        inputStyleClass="form-control"
+                                        [(ngModel)]="item.superArrojado" 
+                                        inputId="superArrojado" 
+                                        name="superArrojado"
+                                        mode="decimal" 
+                                        [minFractionDigits]="2" 
+                                        [maxFractionDigits]="2"
+                                        locale="pt-BR"
+                                        suffix="%"
+                                        [required]="true"
+                                        (onBlur)="calculaTotalItem(item)"
+                                        > 
+                                    </p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>{{ item.superArrojado | currency : 'BRL' : '' : '1.2' }}%</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td [pEditableColumn]="item.hedge" pEditableColumnField="hedge">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber 
+                                        inputStyleClass="form-control"
+                                        [(ngModel)]="item.hedge" 
+                                        inputId="hedge" 
+                                        name="hedge"
+                                        mode="decimal" 
+                                        [minFractionDigits]="2" 
+                                        [maxFractionDigits]="2"
+                                        locale="pt-BR"
+                                        suffix="%"
+                                        [required]="true"
+                                        (onBlur)="calculaTotalItem(item)"
+                                        > 
+                                    </p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>{{ item.hedge | currency : 'BRL' : '' : '1.2' }}%</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <span [class.text-warning]="item.total != 100" [title]="item.total > 100 ? 'Perigo: o valor passou 100%' : ''">
+                                {{ item.total | currency : 'BRL' : '' : '1.2' }}%
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

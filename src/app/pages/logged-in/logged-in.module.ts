@@ -15,6 +15,11 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Router } from '@angular/router';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { PercentualRiscoComponent } from '../percentual-risco/percentual-risco.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
     declarations: [
@@ -25,6 +30,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
         NavigationComponent,
         MinhaEmpresaComponent,
         ChangePasswordComponent,
+        PercentualRiscoComponent,
     ],
     imports: [
         CommonModule,
@@ -32,6 +38,10 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
         NgxMaskModule.forChild(),
         FormsModule,
         FontAwesomeModule,
+        SharedModule,
+        TableModule,
+        ButtonModule,
+        InputNumberModule,
     ],
     bootstrap: [InitialComponent],
     providers: [

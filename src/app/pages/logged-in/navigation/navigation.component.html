@@ -38,27 +38,27 @@
                 </span>
                 Produtos
             </a>
-            <!-- -->
+            <!-- Setup -->
             <a class="navigation__links-item" [routerLink]="['carteira-setup']" *ngIf="account?.role == Role.Admin || account?.role == Role.Master" >
                 <span class="navigation__item-icon">
                     <i class="pi pi-wallet"></i>
                 </span>
                 Setup
             </a>
-            <!-- -->
+            <!-- Usuários -->
             <a class="navigation__links-item" [routerLink]="['usuarios']" *ngIf="account?.role == Role.Admin || account?.role == Role.Master">
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faUsers"></fa-icon>
                 </span>
                 Usuários
             </a>
-            <!-- -->
-            <!-- <a class="navigation__links-item" [routerLink]="['percentual-risco']" *ngIf="account?.role == Role.Admin || account?.role == Role.Master" >
+            <!-- Percentual de Risco -->
+            <a class="navigation__links-item" [routerLink]="['percentual-risco']" >
                 <span class="navigation__item-icon">
                     <fa-icon [icon]="faPercent"></fa-icon>
                 </span>
                Percentual de Risco
-            </a> -->
+            </a>
         </div>
     </div>
 </aside>

@@ -82,9 +82,10 @@ hr {
     margin-bottom: 5px;
 }
 
-.btn-check:focus+.btn, .btn:focus {
+.btn-check:focus+.btn,
+.btn:focus {
     outline: none;
-    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
 }
 
 .page {
@@ -1874,9 +1875,12 @@ body {
 .text-wrap-balance {
     text-wrap: balance;
 }
-.p-component, .p-component * {
+
+.p-component,
+.p-component * {
     box-sizing: border-box;
 }
+
 .p-radiobutton {
     display: inline-flex;
     cursor: pointer;
@@ -1885,6 +1889,7 @@ body {
     vertical-align: bottom;
     position: relative;
 }
+
 .p-hidden-accessible {
     border: 0;
     clip: rect(0 0 0 0);
@@ -1895,9 +1900,12 @@ body {
     position: absolute;
     width: 1px;
 }
-.p-hidden-accessible input, .p-hidden-accessible select {
+
+.p-hidden-accessible input,
+.p-hidden-accessible select {
     transform: scale(0);
 }
+
 .p-radiobutton .p-radiobutton-box {
     border: 2px solid #ced4da;
     background: #ffffff;
@@ -1907,10 +1915,12 @@ body {
     border-radius: 50%;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
+
 .p-radiobutton .p-radiobutton-box.p-highlight {
     border-color: #3B82F6;
     background: #3B82F6;
 }
+
 .p-radiobutton-icon {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
@@ -1918,14 +1928,21 @@ body {
     border-radius: 50%;
     visibility: hidden;
 }
+
 .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
-   
     width: 8px;
     height: 8px;
     transition-duration: 0.2s;
     background-color: #ffffff;
 }
+
 .p-radiobutton-box.p-highlight .p-radiobutton-icon {
     transform: translateZ(0) scale(1);
     visibility: visible;
+}
+
+.text-warning {
+    --warning: #f72d0d;
+    color: var(--warning) !important;
+    text-shadow: 0px 0px var(--warning) !important;
 }

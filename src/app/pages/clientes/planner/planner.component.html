@@ -36,8 +36,7 @@
                                            [disablePopover]="nome.errors == null"
                                            triggers="mouseenter:mouseleave"
                                            required
-                                           (change)="planner.cliente.nome = nome.value.trim(); saveData()"
-                                           pattern="\S(.*\S)?">
+                                           (change)="planner.cliente.nome = nome.value.trim(); saveData()">
                                     <div *ngIf="nome.errors">
                                         <p class="text-danger" *ngIf="nome.errors['required']">Esse campo é obrigatório</p>
                                         <p class="text-danger" *ngIf="nome.errors['pattern']">
@@ -416,7 +415,7 @@
                                               triggers="mouseenter:mouseleave"
                                               (change)="planner.descricao = descricao.value.trim(); saveData()"
                                               required
-                                              pattern="\S(.*\S)?">
+                                              >
                                         </textarea>
                                     <div *ngIf="descricao.errors">
                                         <p class="text-danger" *ngIf="descricao.errors['pattern']">

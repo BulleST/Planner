@@ -6,6 +6,7 @@ import { MinhaEmpresaComponent } from './minha-empresa/minha-empresa.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { RoleGuard } from 'src/app/guards/role.guard';
+import { PercentualRiscoComponent } from '../percentual-risco/percentual-risco.component';
 
 const clientes = () => import('./../clientes/clientes.module').then(res => res.ClientesModule);
 const empresas = () => import('./../empresas/empresas.module').then(res => res.EmpresasModule);
@@ -51,6 +52,12 @@ const routes: Routes = [
                 loadChildren: empresas,
                 canActivate: [RoleGuard],
                 data: { roles: [Role.Admin] }
+            },
+            {
+                path: 'percentual-risco',
+                component: PercentualRiscoComponent,
+                canActivate: [RoleGuard],
+                data: { roles: [Role.Admin, Role.Master, Role.Backoffice] }
             },
         ]
     },

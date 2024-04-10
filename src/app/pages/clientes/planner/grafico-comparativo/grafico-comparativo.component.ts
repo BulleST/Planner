@@ -175,7 +175,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
         var investimento: any[] = []; 
         this.colorsRisco.forEach(risco => {
             var relsProduto = this.planner.planejamentoProduto.filter(x => x.produto.tipoRisco_Id == risco.id);
-            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.sugerido).reduce((x, y) => x + y) : 0;
+            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.planoAcao).reduce((x, y) => x + y) : 0;
             var percentualProduto = (reaisProduto / this.produtoTotal) * 100;
             
             produtos.push({
@@ -240,7 +240,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
         var investimento: any[] = []; 
         this.colorsLiquidez.forEach(liquidez => {
             var relsProduto = this.planner.planejamentoProduto.filter(x => x.produto.tipoLiquidez_Id == liquidez.id);
-            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.sugerido).reduce((x, y )=> x + y) : 0;
+            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.planoAcao).reduce((x, y )=> x + y) : 0;
             var percentualProduto = (reaisProduto / this.produtoTotal) * 100;
             produtos.push({
                 percentual: percentualProduto,
@@ -304,7 +304,7 @@ export class GraficoComparativoComponent implements OnChanges, AfterViewInit {
         var investimento: any[] = []; 
         this.colorsAtivo.forEach(ativo => {
             var relsProduto = this.planner.planejamentoProduto.filter(x => x.produto.tipoAtivo_Id == ativo.id);
-            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.sugerido).reduce((x, y) => x + y) : 0;
+            var reaisProduto = relsProduto.length > 0 ? relsProduto.map(x => x.planoAcao).reduce((x, y) => x + y) : 0;
             var percentualProduto = (reaisProduto / this.produtoTotal) * 100;
             produtos.push({
                 percentual: percentualProduto,

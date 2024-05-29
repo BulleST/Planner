@@ -1,20 +1,20 @@
 <div class="d-flex flex-wrap step-container">
-    <div class="aside-navigation aside-navigation-{{screen}} " *ngIf="isEditPage"
-        [class.open]="!menu.collapsed" >
+    <div class="aside-navigation aside-navigation-{{screen}} open" *ngIf="isEditPage"
+        [class.open]="!menu.collapsed" > 
+         
         <p-panel #menu
-                 [toggleable]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen) && isEditPage"
-                 [collapsed]="true"
-                 [showHeader]="![ScreenWidth.lg, ScreenWidth.xl].includes(screen) && isEditPage"
+                 [toggleable]="isMobile && isEditPage"
+                 [collapsed]="false"
+                 [showHeader]="isMobile && isEditPage"
                  [toggler]="'header'"
                  headerTemplate="header"
                  contentTemplate="content"
                  expandIcon="none"
                  collapseIcon="none">
-            <ng-template pTemplate="header" #header *ngIf="![ScreenWidth.lg, ScreenWidth.xl].includes(screen)">
-                <div class="aside-navigation-header">
+            <ng-template pTemplate="header" >
+                <div class="aside-navigation-header" *ngIf="isMobile">
                     <button (click)="menu.toggle($event); " class="btn btn-primary" label="Show">
-                        <i class="pi pi-bars" *ngIf="menu.collapsed"></i>
-                        <i class="pi pi-times" *ngIf="!menu.collapsed"></i>
+                        <i class="pi pi-bars" ></i> 
                     </button>
                 </div>
             </ng-template>

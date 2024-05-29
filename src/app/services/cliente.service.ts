@@ -181,7 +181,7 @@ export class ClienteService {
     }
 
     edit(request: Cliente) {
-        return this.http.put<Cliente>(`${this.url}/cliente/${request.id}`, request);
+        return this.http.put<Cliente>(`${this.url}/cliente`, request);
     }
 
     delete(id: number) {

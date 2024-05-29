@@ -213,10 +213,12 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
         var params = this.activatedRoute.params.subscribe(item => {
             this.isEditPage = !!item['cliente_id'];
             if (this.isEditPage) {
+                console.group('isEditPage')
                 this.loading = true;
                 this.clienteIdEncrypted = item['cliente_id']
                 this.planner.cliente_Id = this.crypto.decrypt(item['cliente_id'])
                 this.routerBack = ['../../'];
+                console.log()
                 lastValueFrom(this.plannerService.getByClienteId(this.planner.cliente_Id))
                     .then(res => {
                         this.loading = false;
@@ -249,7 +251,7 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
                         this.voltar();
                     })
                     .finally(() => this.loading = false);
-
+console.groupEnd();
             } else {
                 this.routerBack = ['../'];
                 var plannerInitial = this.plannerService.getObject().value;
@@ -580,22 +582,18 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     validaForm_Post(form: NgForm) {
         this.erro = [];
         if (form.touched && form.invalid) {
-            console.log('form.invalid')
             this.erro.push('Campos inválidos!');
             return false;
         }
 
         if (this.loading == true) {
-            console.log('loading', this.loading)
             return false;
         }
         if (this.planner.planejamentoInvestimento.length == 0) {
-            console.log('this.planner.planejamentoInvestimento.length == 0', this.planner.planejamentoInvestimento.length)
             this.erro.push('Insira um ou mais investimentos no planner.');
             return false;
         }
         if (this.planner.cliente.receita < this.planner.cliente.despesa) {
-            console.log('this.planner.cliente.receita < this.planner.cliente.despesa', this.planner.cliente.receita < this.planner.cliente.despesa)
             this.erro.push('Receita deve ser maior que despesas');
             return false;
         }
@@ -606,30 +604,25 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     validaForm(form: NgForm) {
         this.erro = [];
         if (form.touched && form.invalid) {
-            console.log('form.invalid')
             this.erro.push('Campos inválidos!');
             return false;
         }
 
         if (this.loading == true) {
-            console.log('loading', this.loading)
             return false;
         }
 
         if (this.planner.planejamentoInvestimento.length == 0) {
-            console.log('this.planner.planejamentoInvestimento.length == 0', this.planner.planejamentoInvestimento.length)
             this.erro.push('Insira um ou mais investimentos no planner.');
             return false;
         }
 
         if (this.somaProdutos.somaPlanoAcao > this.planner.planejamentoAgregandoValor.montante || this.somaProdutos.somaPlanoAcao < this.planner.planejamentoAgregandoValor.montante) {
-            console.log('soma x montante', this.somaProdutos.somaPlanoAcao, this.planner.planejamentoAgregandoValor.montante)
             this.erro.push('Soma de plano de ação em produtos deve ser igual ao montante');
             return false;
         }
 
         if (this.planner.cliente.receita < this.planner.cliente.despesa) {
-            console.log('this.planner.cliente.receita < this.planner.cliente.despesa', this.planner.cliente.receita < this.planner.cliente.despesa)
             this.erro.push('Receita deve ser maior que despesas');
             return false;
         }
@@ -748,7 +741,6 @@ export class PlannerComponent implements OnDestroy, AfterViewInit {
     }
 
     encrypt(value: any) {
-        // console.log(value)
         return this.crypto.encrypt(value)
     }
 

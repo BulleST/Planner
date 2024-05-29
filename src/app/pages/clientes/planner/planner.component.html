@@ -371,7 +371,7 @@
                     <div class="form-row mb-2">
                         <div class="card card-body">
                             <div class="home__container-header mb-2">
-                                <h6><label for="data" class="mb-0">Data de Cadastro <span class="text-danger">*</span></label></h6>
+                                <h6><label for="data" class="mb-0">Data de Cadastro </label></h6>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-6 col-md-6 col-sm-6">
@@ -399,7 +399,7 @@
                     <div class="form-row mb-2">
                         <div class="card card-body">
                             <div class="home__container-header mb-2">
-                                <h6><label for="descricao" class="mb-0">Observações do planner <span class="text-danger">*</span></label></h6>
+                                <h6><label for="descricao" class="mb-0">Observações do planner </label></h6>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
@@ -413,9 +413,7 @@
                                               popoverClass="popover-danger"
                                               [disablePopover]="descricao.errors == null"
                                               triggers="mouseenter:mouseleave"
-                                              (change)="planner.descricao = descricao.value.trim(); saveData()"
-                                              required
-                                              >
+                                              (change)="planner.descricao = descricao.value.trim(); saveData()">
                                         </textarea>
                                     <div *ngIf="descricao.errors">
                                         <p class="text-danger" *ngIf="descricao.errors['pattern']">

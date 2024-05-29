@@ -104,9 +104,12 @@ export class DeleteComponent implements OnDestroy {
             if (this.url.includes('empresas/editar')) {
             }
             lastValueFrom(this.clienteService.delete(this.objeto.id))
-                .then(res => {
-                    lastValueFrom(this.clienteService.getList())
+                .then(async res => {
+                    if (this.url.includes('empresas/editar')) {
+                         await lastValueFrom(this.empresaService.get(this.objeto.empresa_Id));
+                    }
                     this.voltar();
+                    lastValueFrom(this.clienteService.getList());
                     this.clienteService.setObject(new Cliente);
                 })
                 .catch(res => this.erro.push(getError(res)))

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Cliente } from 'src/app/models/cliente.model';
 import { ClienteService } from 'src/app/services/cliente.service';
+import { EmpresaService } from 'src/app/services/empresa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { ModalOpen } from 'src/app/utils/modal-open';
@@ -32,6 +33,7 @@ export class CreateComponent implements OnDestroy {
         private modal: ModalOpen,
         private clienteService: ClienteService,
         private crypto: Crypto,
+        private empresaService: EmpresaService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
 
@@ -73,7 +75,7 @@ export class CreateComponent implements OnDestroy {
         this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
-    send(model: Cliente) {
+     send(model: Cliente) {
         this.loading = true;
         this.erro = [];
         if (this.url.includes('empresas/cadastrar')) {
@@ -84,12 +86,13 @@ export class CreateComponent implements OnDestroy {
             }
             this.loading = false;
         }
-        else { // Enviar para a API
-            if (this.url.includes('empresas/editar')) {
-            }
-
+        else { // Enviar para a APIs
+            model.empresa = undefined;
             lastValueFrom(this.clienteService.create(model))
-                .then(res => {
+                .then(async res => {
+                    if (this.url.includes('empresas/editar')) {
+                         await lastValueFrom(this.empresaService.get(this.objeto.empresa_Id));
+                    }
                     this.voltar();
                     lastValueFrom(this.clienteService.getList());
                 })

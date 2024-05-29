@@ -23,16 +23,21 @@ export class MenuItemsComponent implements OnDestroy {
     subscription: Subscription[] = [];
     url = '';
     isEditPage = false;
+    isMobile = false;
+
     constructor(
         private table: Table,
         private toastr: ToastrService,
-        private isMobile: IsMobile,
+        private mobile: IsMobile,
         private empresaService: EmpresaService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
     ) {
 
-        var get = this.isMobile.get().subscribe(res => this.screen = res);
+        var get = this.mobile.get().subscribe(res => {
+            this.screen = res;
+            this.isMobile = ![ScreenWidth.lg, ScreenWidth.xl].includes(res);
+        });
         this.subscription.push(get);
 
         this.url = this.activatedRoute.snapshot.pathFromRoot.map(x => x.routeConfig?.path).join('/');

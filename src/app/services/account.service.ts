@@ -54,7 +54,8 @@ export class AccountService {
     login(model: Login) {
         return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
             tap((account) => {
-                this.empresaService.setObject(account.empresa, 'login')
+                console.log(account)
+                this.empresaService.setObject(account.empresa, 'login');
                 this.setAccount(account);
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
                 this.router.navigateByUrl(returnUrl);

@@ -93,7 +93,10 @@ export class EditComponent implements OnDestroy {
             if (this.url.includes('empresas/editar')) {
             }
             lastValueFrom(this.clienteService.edit(model))
-                .then((res) => {
+                .then(async (res) => {
+                    if (this.url.includes('empresas/editar')) {
+                         await lastValueFrom(this.empresaService.get(this.objeto.empresa_Id));
+                    }
                     lastValueFrom(this.clienteService.getList());
                     this.voltar();
                 })

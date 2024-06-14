@@ -90,8 +90,6 @@ export class EditComponent implements OnDestroy {
             this.loading = false;
         }
         else { // Enviar para a API
-            if (this.url.includes('empresas/editar')) {
-            }
             lastValueFrom(this.clienteService.edit(model))
                 .then(async (res) => {
                     if (this.url.includes('empresas/editar')) {

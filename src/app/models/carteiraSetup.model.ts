@@ -42,8 +42,9 @@ export var setupColumns: Column[] = [
     { 
         field: 'nome', 
         header: 'Carteira', 
-        maskType: MaskType.substring,
-        substringLength: 22,
+        maskType: MaskType.undefined,
+        // maskType: MaskType.substring,
+        // substringLength: 22,
         filterType: FilterType.text, 
         filterDisplay: FilterDisplay.menu,
         filterShowMatchMode: true,

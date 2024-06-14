@@ -46,8 +46,9 @@ export var userColumns = [
         header: 'Nome',
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        maskType: MaskType.substring,
-        substringLength: 22,
+        maskType: MaskType.undefined,
+        // maskType: MaskType.substring,
+        // substringLength: 22,
     },
     {
         field: 'email',
